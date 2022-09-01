@@ -11,20 +11,55 @@ CREATE TABLE IF NOT EXISTS users (
   user_created DATE NOT NULL DEFAULT NOW()
 );
 
+-- information for all the available languages, language IDs in ISO 639-1
+CREATE TABLE IF NOT EXISTS countries (
+  id SERIAL PRIMARY KEY,
+  language_id CHAR(2) NOT NULL UNIQUE,
+  country_en TEXT NOT NULL UNIQUE,
+  country_native TEXT NOT NULL UNIQUE,
+  language_en TEXT NOT NULL UNIQUE,
+  language_native TEXT NOT NULL UNIQUE
+); 
+
+INSERT INTO countries (language_id, country_en, country_native, language_en, language_native) VALUES ('en', 'England', 'England', 'English', 'English');
+INSERT INTO countries (language_id, country_en, country_native, language_en, language_native) VALUES ('fi', 'Finland', 'Suomi', 'Finnish', 'Suomeksi');
+
+-- kanji and its relevant information, JLPT levels are from 1 to 5
+CREATE TABLE IF NOT EXISTS kanji (
+  id SERIAL PRIMARY KEY,
+  kanji CHAR(1) NOT NULL UNIQUE,
+  jlpt_level INTEGER CHECK( jlpt_level IN ( 1, 2, 3, 4, 5 ) )
+  onyomi TEXT,
+  kunyomi TEXT,
+  strokes INTEGER
+);
+
+-- translation for the kanji in different languages
+CREATE TABLE IF NOT EXISTS translation_kanji (
+  id SERIAL PRIMARY KEY,
+  kanji_id NOT NULL INTEGER,
+  language_id NOT NULL CHAR(2),
+  story TEXT,
+  hint TEXT,
+  FOREIGN KEY (kanji_id) REFERENCES kanji(id),
+  FOREIGN KEY (language_id) REFERENCES countries(language_id)
+);
+
 -- Example words for the kanji in question
 CREATE TABLE IF NOT EXISTS example_words (
   id SERIAL PRIMARY KEY,
-  word TEXT UNIQUE,
-  furigana TEXT,
-  jlpt_level INTEGER
+  word TEXT NOT NULL UNIQUE,
+  furigana TEXT NOT NULL,
+  jlpt_level INTEGER CHECK( jlpt_level IN ( 1, 2, 3, 4, 5 ) )
 );
 
--- Translation for the word, multiple languages (e.g. 'fi', 'en'), country IDs in ISO 639-1
+-- Translation for the word, multiple languages (e.g. 'fi', 'en')
 CREATE TABLE IF NOT EXISTS example_word_translations (
   id SERIAL PRIMARY KEY,
-  word_id INTEGER,
-  language CHAR(2),
-  translation TEXT,
+  word_id INTEGER NOT NULL,
+  language_id CHAR(2) NOT NULL,
+  translation TEXT NOT NULL,
   description TEXT,
-  FOREIGN KEY (word_id) REFERENCES example_words(id)
+  FOREIGN KEY (word_id) REFERENCES example_words(id),
+  FOREIGN KEY (language_id) REFERENCES countries(language_id)
 );
