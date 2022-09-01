@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS example_word_translations (
 
 -- Radicals for kanji
 CREATE TABLE IF NOT EXISTS radicals (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   radical CHAR(1) NOT NULL UNIQUE,
   reading TEXT NOT NULL,
   stroke_count INTEGER
