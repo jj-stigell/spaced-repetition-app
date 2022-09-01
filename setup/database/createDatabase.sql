@@ -21,9 +21,6 @@ CREATE TABLE IF NOT EXISTS countries (
   language_native TEXT NOT NULL UNIQUE
 ); 
 
-INSERT INTO countries (language_id, country_en, country_native, language_en, language_native) VALUES ('en', 'England', 'England', 'English', 'English');
-INSERT INTO countries (language_id, country_en, country_native, language_en, language_native) VALUES ('fi', 'Finland', 'Suomi', 'Finnish', 'Suomeksi');
-
 -- kanji and its relevant information, JLPT levels are from 1 to 5
 CREATE TABLE IF NOT EXISTS kanji (
   id SERIAL PRIMARY KEY,
