@@ -2,6 +2,6 @@
 
 | date | time | worked on  |
 | :----:|:-----| :-----|
-| 1.9. | xx    | Setting up the project for the backend, creating SQL database schemas |
+| 1.9. | 4    | Setting up the project for the backend, creating SQL database schemas |
 |  |     |  |
-| yht   | 0   | | 
+| yht   | 4   | | 
