@@ -1,5 +1,8 @@
 CREATE EXTENSION IF NOT EXISTS CITEXT;
 
+-- Enum for review difficulty
+CREATE TYPE result AS ENUM ('again', 'hard', 'easy');
+
 -- DOMAIN email makes constraint check that the users email is valid
 CREATE DOMAIN valid_email AS CITEXT CHECK ( VALUE ~ '^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$' );
 
@@ -85,5 +88,17 @@ CREATE TABLE IF NOT EXISTS kanji_radicals (
   radical_id INTEGER NOT NULL,
   kanji_id INTEGER NOT NULL,
   FOREIGN KEY (radical_id) REFERENCES radicals(id),
+  FOREIGN KEY (kanji_id) REFERENCES kanji(id)
+);
+
+
+-- Keep track of each review done by the user
+CREATE TABLE IF NOT EXISTS kanji_review_history (
+  user_id INTEGER NOT NULL,
+  kanji_id INTEGER NOT NULL,
+  reviewed DATE NOT NULL DEFAULT now() PRIMARY KEY,
+  extra_review BOOLEAN NOT NULL DEFAULT FALSE,
+  review_result result NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (kanji_id) REFERENCES kanji(id)
 );

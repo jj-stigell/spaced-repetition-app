@@ -1,5 +1,6 @@
 -- For purging the whole database
 DROP DOMAIN valid_email CASCADE;
+DROP TYPE result CASCADE;
 DROP TABLE users CASCADE;
 DROP TABLE countries CASCADE;
 DROP TABLE example_words CASCADE;
