@@ -102,3 +102,17 @@ CREATE TABLE IF NOT EXISTS kanji_review_history (
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (kanji_id) REFERENCES kanji(id)
 );
+
+
+-- User specific information for kanji card
+CREATE TABLE IF NOT EXISTS user_kanji_reviews (
+  user_id INTEGER NOT NULL,
+  kanji_id INTEGER NOT NULL,
+  review_count INTEGER NOT NULL DEFAULT 1,
+  due_date DATE,
+  user_story TEXT,
+  user_hint TEXT,
+  mature BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (kanji_id) REFERENCES kanji(id)
+);
