@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- information for all the available languages, language IDs in ISO 639-1
 CREATE TABLE IF NOT EXISTS countries (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   language_id CHAR(2) NOT NULL UNIQUE,
   country_en TEXT NOT NULL UNIQUE,
   country_native TEXT NOT NULL UNIQUE,
@@ -26,12 +26,14 @@ CREATE TABLE IF NOT EXISTS countries (
 
 -- kanji and its relevant information, JLPT levels are from 1 to 5
 CREATE TABLE IF NOT EXISTS kanji (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY,
   kanji CHAR(1) NOT NULL UNIQUE,
   learning_order INTEGER NOT NULL UNIQUE,
   jlpt_level INTEGER CHECK( jlpt_level IN ( 1, 2, 3, 4, 5 ) ),
   onyomi TEXT,
+  onyomi_romaji TEXT,
   kunyomi TEXT,
+  kunyomi_romaji TEXT,
   stroke_count INTEGER
 );
 
@@ -40,8 +42,10 @@ CREATE TABLE IF NOT EXISTS translation_kanji (
   id SERIAL PRIMARY KEY,
   kanji_id INTEGER,
   language_id CHAR(2),
+  keyword TEXT NOT NULL,
   story TEXT,
   hint TEXT,
+  other_meanings TEXT,
   FOREIGN KEY (kanji_id) REFERENCES kanji(id),
   FOREIGN KEY (language_id) REFERENCES countries(language_id)
 );
@@ -51,6 +55,7 @@ CREATE TABLE IF NOT EXISTS example_words (
   id SERIAL PRIMARY KEY,
   word TEXT NOT NULL UNIQUE,
   furigana TEXT NOT NULL,
+  romaji TEXT NOT NULL,
   jlpt_level INTEGER CHECK( jlpt_level IN ( 1, 2, 3, 4, 5 ) )
 );
 
@@ -60,6 +65,7 @@ CREATE TABLE IF NOT EXISTS example_word_translations (
   word_id INTEGER NOT NULL,
   language_id CHAR(2) NOT NULL,
   translation TEXT NOT NULL,
+  type TEXT,  -- verb, noun, transitive-, intrasitive verb, adjective etc.
   description TEXT,
   FOREIGN KEY (word_id) REFERENCES example_words(id),
   FOREIGN KEY (language_id) REFERENCES countries(language_id)
@@ -70,6 +76,7 @@ CREATE TABLE IF NOT EXISTS radicals (
   id INTEGER PRIMARY KEY,
   radical CHAR(1) NOT NULL UNIQUE,
   reading TEXT NOT NULL,
+  reading_romaji TEXT,
   stroke_count INTEGER
 );
 

@@ -5,3 +5,25 @@ Backend for a [SRS](https://en.wikipedia.org/wiki/Spaced_repetition) app
 Project's record of working hours is in the file workinghours.md.
 This file includes only hours spent developing the backend.
 Frontend time keeping is in the frontend GitHub repository
+
+# Planned tech stack, backend
+- Express using typescript
+- PostgreSQL database
+- GraphQL
+- Auth/access using JWT
+
+# TODOs
+- [ ] Project base
+    - [ ] Design database for holding kanji, user, review and word information
+    - [ ] Create minimal amount of data for the db to be able to proceed with development
+    - [ ] Set up Express backend server
+    - [ ] Set clear project structure and organize accordingly
+    - [ ] Set styling rules on lint etc.
+- [ ] Development
+    - [ ] User creation, validation of usert input and error handling
+    - [ ] User login, on succesful login generate JWT, otherwise error message
+    - [ ] Fetching cards for the user that are due today
+    - [ ] Rescheduling reviewed card
+- [ ] Testing
+    - [ ] Unit testing
+    - [ ] E2E testing
