@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
   email valid_email NOT NULL UNIQUE,
   password CHAR(60) NOT NULL,
   username CITEXT NOT NULL UNIQUE,
+  admin BOOLEAN NOT NULL DEFAULT FALSE,
   user_created DATE NOT NULL DEFAULT NOW(),
   last_signin DATE NOT NULL DEFAULT NOW()
 );
