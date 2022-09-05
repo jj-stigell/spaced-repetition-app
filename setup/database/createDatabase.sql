@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
   email valid_email NOT NULL UNIQUE,
   password CHAR(60) NOT NULL,
   username CITEXT NOT NULL UNIQUE,
-  user_created DATE NOT NULL DEFAULT NOW()
+  user_created DATE NOT NULL DEFAULT NOW(),
+  last_signin DATE NOT NULL DEFAULT NOW()
 );
 
 -- information for all the available languages, language IDs in ISO 639-1
@@ -30,11 +31,11 @@ CREATE TABLE IF NOT EXISTS kanji (
   kanji CHAR(1) NOT NULL UNIQUE,
   learning_order INTEGER NOT NULL UNIQUE,
   jlpt_level INTEGER CHECK( jlpt_level IN ( 1, 2, 3, 4, 5 ) ),
-  onyomi TEXT,
+  onyomi TEXT,  -- Do not enforce readings as not all kanji have both onyomi and kunyomi
   onyomi_romaji TEXT,
   kunyomi TEXT,
   kunyomi_romaji TEXT,
-  stroke_count INTEGER
+  stroke_count INTEGER NOT NULL
 );
 
 -- translation for the kanji in different languages
@@ -116,6 +117,7 @@ CREATE TABLE IF NOT EXISTS user_kanji_reviews (
   user_id INTEGER NOT NULL,
   kanji_id INTEGER NOT NULL,
   review_count INTEGER NOT NULL DEFAULT 1,
+  easy_factor REAL DEFAULT 2.5,
   due_date DATE,
   user_story TEXT,
   user_hint TEXT,
