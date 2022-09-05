@@ -29,18 +29,17 @@ CREATE TABLE IF NOT EXISTS countries (
 CREATE TABLE IF NOT EXISTS kanji (
   id INTEGER PRIMARY KEY,
   kanji CHAR(1) NOT NULL UNIQUE,
-  learning_order INTEGER NOT NULL UNIQUE,
+  learning_order INTEGER UNIQUE,
   jlpt_level INTEGER CHECK( jlpt_level IN ( 1, 2, 3, 4, 5 ) ),
   onyomi TEXT,  -- Do not enforce readings as not all kanji have both onyomi and kunyomi
   onyomi_romaji TEXT,
   kunyomi TEXT,
   kunyomi_romaji TEXT,
-  stroke_count INTEGER NOT NULL
+  stroke_count INTEGER
 );
 
 -- translation for the kanji in different languages
 CREATE TABLE IF NOT EXISTS translation_kanji (
-  id SERIAL PRIMARY KEY,
   kanji_id INTEGER,
   language_id CHAR(2),
   keyword TEXT NOT NULL,
