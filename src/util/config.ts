@@ -1,7 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-var-requires
-require('dotenv').config();
-const POSTGRE_URL = process.env.POSTGRE_URL;
+/** Load and export all the environment variables */
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default {
-  POSTGRE_URL
+  POSTGRE_URL: process.env.POSTGRE_URL,
+  PORT: process.env.PORT || 3001
 };
