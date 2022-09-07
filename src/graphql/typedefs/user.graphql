@@ -1,0 +1,7 @@
+type User implements Timestamps { 
+  id: ID!
+  email: String!
+  username: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
