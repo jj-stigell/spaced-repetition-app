@@ -8,7 +8,7 @@ Frontend time keeping is in the frontend GitHub repository
 
 # Planned tech stack, backend
 - Express using typescript
-- PostgreSQL database
+- PostgreSQL database, with Sequelize
 - GraphQL
 - Auth/access using JWT
 
@@ -16,14 +16,16 @@ Frontend time keeping is in the frontend GitHub repository
 - [ ] Project base
     - [ ] Design database for holding kanji, user, review and word information
     - [ ] Create minimal amount of data for the db to be able to proceed with development
-    - [ ] Set up Express backend server
+    - [X] Set up Express backend server
     - [ ] Set clear project structure and organize accordingly
-    - [ ] Set styling rules on lint etc.
+    - [X] Set styling rules on lint etc.
 - [ ] Development
-    - [ ] User creation, validation of usert input and error handling
+    - [ ] User signup
+    - [ ] Validation of user input and error handling
     - [ ] User login, on succesful login generate JWT, otherwise error message
     - [ ] Fetching cards for the user that are due today
     - [ ] Rescheduling reviewed card
+    - [ ] Serving react app production build from /app
 - [ ] Testing
     - [ ] Unit testing
     - [ ] E2E testing
