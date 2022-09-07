@@ -1,14 +1,15 @@
-import express, { Request, Response } from "express";
-import POSTGRE_URL from "./util/config";
-const app = express();
+import { PORT } from './util/config';
+import { info, error } from './util/logger';
+import app from './app';
 
-app.get('/', (_req: Request, res: Response) => {
-  res.send('hello');
-});
+const start = () => {
+  try {
+    app.listen(PORT, () => {
+      info(`Server running on port ${PORT}`);
+    });
+  } catch(e) {
+    error(e);
+  }
+};
 
-const PORT = 3003;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(POSTGRE_URL);
-});
+start();
