@@ -1,7 +1,7 @@
-import Express from 'express';
-const router = Express.Router();
+import express from 'express';
+const router = express.Router();
 
-router.get('/', (_req: Express.Request, res: Express.Response) => {
+router.get('/', (_req: express.Request, res: express.Response) => {
   res.send('ok');
 });
 
