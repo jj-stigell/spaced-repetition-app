@@ -1,14 +1,33 @@
 /** Load and export all the environment variables */
 import 'dotenv/config';
 
-const POSTGRE_URL = process.env.POSTGRE_URL;
+let POSTGRE_URL;
+
+switch(process.env.NODE_ENV) {
+  case 'production': {
+    POSTGRE_URL = process.env.POSTGRE_URL;
+    break;
+  }
+  case 'test': {
+    POSTGRE_URL = process.env.TEST_POSTGRE_URL;
+    break;
+  }
+  default: {
+    POSTGRE_URL = process.env.DEV_POSTGRE_URL;
+  }
+}
+
 const PORT = process.env.PORT || 3001;
-const DEVELOPMENT: boolean = process.env.NODE_ENV === 'development';
-const PRODUCTION: boolean = process.env.NODE_ENV === 'production';
+
+const ENVIRONMENT = {
+  DEVELOPMENT: process.env.NODE_ENV === 'development',
+  TEST: process.env.NODE_ENV === 'test',
+  STAGING: process.env.NODE_ENV === 'staging',
+  PRODUCTION: process.env.NODE_ENV === 'production',
+};
 
 export {
   POSTGRE_URL,
   PORT,
-  DEVELOPMENT,
-  PRODUCTION
+  ENVIRONMENT
 };
