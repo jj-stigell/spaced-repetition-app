@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS users (
   password CHAR(60) NOT NULL,
   username CITEXT NOT NULL UNIQUE,
   admin BOOLEAN NOT NULL DEFAULT FALSE,
-  user_created DATE NOT NULL DEFAULT NOW(),
+  created_at DATE NOT NULL DEFAULT NOW(),
+  updated_at DATE NOT NULL DEFAULT NOW(),
   last_signin DATE NOT NULL DEFAULT NOW()
 );
 
