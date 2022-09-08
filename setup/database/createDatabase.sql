@@ -10,14 +10,16 @@ CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   email valid_email NOT NULL UNIQUE,
   password CHAR(60) NOT NULL,
-  username CITEXT NOT NULL UNIQUE,
+  username VARCHAR(15) NOT NULL UNIQUE CHECK( LENGTH(username) > 5 ), -- Length between 5 - 15 chars
+  member BOOLEAN NOT NULL DEFAULT TRUE,
+  email_verified BOOLEAN NOT NULL DEFAULT FALSE,
   admin BOOLEAN NOT NULL DEFAULT FALSE,
-  created_at DATE NOT NULL DEFAULT NOW(),
-  updated_at DATE NOT NULL DEFAULT NOW(),
-  last_signin DATE NOT NULL DEFAULT NOW()
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  last_signin TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
--- information for all the available languages, language IDs in ISO 639-1
+-- information for all the available languages, language_id in ISO 639-1
 CREATE TABLE IF NOT EXISTS countries (
   id INTEGER PRIMARY KEY,
   language_id CHAR(2) NOT NULL UNIQUE,
@@ -44,7 +46,7 @@ CREATE TABLE IF NOT EXISTS kanji (
 CREATE TABLE IF NOT EXISTS translation_kanji (
   kanji_id INTEGER,
   language_id CHAR(2),
-  keyword TEXT NOT NULL,
+  keyword TEXT,
   story TEXT,
   hint TEXT,
   other_meanings TEXT,
@@ -100,18 +102,16 @@ CREATE TABLE IF NOT EXISTS kanji_radicals (
   FOREIGN KEY (kanji_id) REFERENCES kanji(id)
 );
 
-
 -- Keep track of each review done by the user
 CREATE TABLE IF NOT EXISTS kanji_review_history (
   user_id INTEGER NOT NULL,
   kanji_id INTEGER NOT NULL,
-  reviewed DATE NOT NULL DEFAULT now() PRIMARY KEY,
+  reviewed TIMESTAMP NOT NULL DEFAULT NOW() PRIMARY KEY,
   extra_review BOOLEAN NOT NULL DEFAULT FALSE,
   review_result result NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (kanji_id) REFERENCES kanji(id)
 );
-
 
 -- User specific information for kanji card
 CREATE TABLE IF NOT EXISTS user_kanji_reviews (
