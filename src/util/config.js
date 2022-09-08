@@ -1,20 +1,20 @@
 /** Load and export all the environment variables */
 require('dotenv').config();
 
-let POSTGRE_URL;
+let DATABASE_URL;
 const NODE_ENV = process.env.NODE_ENV;
 
 switch (NODE_ENV) {
 case 'production': {
-  POSTGRE_URL = process.env.PROD_POSTGRE_URL;
+  DATABASE_URL = process.env.PROD_POSTGRE_URL;
   break;
 }
 case 'test': {
-  POSTGRE_URL = process.env.TEST_POSTGRE_URL;
+  DATABASE_URL = process.env.TEST_POSTGRE_URL;
   break;
 }
 default: {
-  POSTGRE_URL = process.env.DEV_POSTGRE_URL;
+  DATABASE_URL = process.env.DEV_POSTGRE_URL;
 }
 }
 
@@ -29,7 +29,7 @@ const ENVIRONMENT = {
 };
 
 module.exports = {
-  POSTGRE_URL,
+  DATABASE_URL,
   PORT,
   NODE_ENV,
   JWT_SECRET,
