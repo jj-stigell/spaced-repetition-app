@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   email valid_email NOT NULL UNIQUE,
   password CHAR(60) NOT NULL,
-  username VARCHAR(15) NOT NULL UNIQUE CHECK( LENGTH(username) > 5 ), -- Length between 5 - 15 chars
+  username VARCHAR(12) NOT NULL UNIQUE CHECK( LENGTH(username) > 4 ), -- Length between 4 - 12 chars
   member BOOLEAN NOT NULL DEFAULT TRUE,
   email_verified BOOLEAN NOT NULL DEFAULT FALSE,
   admin BOOLEAN NOT NULL DEFAULT FALSE,
