@@ -17,7 +17,7 @@ const typeDef = `
   }
 
   type Query {
-    userEmail(username: String!): String!
+    userInformation: User!
   }
 
   type Mutation {
@@ -28,7 +28,7 @@ const typeDef = `
       passwordConfirmation: String!
     ): User
 
-    signIn(
+    login(
       email: String!
       password: String!
     ): Token
@@ -37,9 +37,16 @@ const typeDef = `
 
 const resolvers = {
   Query: {
-    userEmail: async (root, { username }) => {
-      console.log('userEmail, email is: test@google.fi, username is:', username);
-      return 'test@google.fi';
+    userInformation: async (root, args) => {
+      // temp placeholder
+      const user = {
+        id: 12345,
+        email: 'test@google.com',
+        username: 'username',
+        password: 'password',
+      };
+
+      return user;
     },
   },
   Mutation: {
@@ -72,7 +79,7 @@ const resolvers = {
 
       return user;
     },
-    signIn: async (root, { email, password }) => {
+    login: async (root, { email, password }) => {
 
       // Confirm that email and password not empty
       if (!email || !password) {
