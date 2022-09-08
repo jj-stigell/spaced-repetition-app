@@ -109,7 +109,7 @@ const resolvers = {
         id: user.id,
       };
 
-      return { value: jwt.sign(userForToken, JWT_SECRET) }
+      return { value: jwt.sign(userForToken, JWT_SECRET) };
     },
   }
 };
