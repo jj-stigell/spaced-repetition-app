@@ -6,10 +6,14 @@ Project's record of working hours is in the file workinghours.md.
 This file includes only hours spent developing the backend.
 Frontend time keeping is in the frontend GitHub repository
 
-# Planned tech stack, backend
-- GraphQL
-- PostgreSQL database, with Sequelize
-- [JSON web token](https://www.npmjs.com/package/jsonwebtoken) for authentication
+# Tech stack
+- [GraphQL](https://graphql.org/)
+- [PostgreSQL](https://www.postgresql.org/) database, with [Sequelize](https://sequelize.org/)
+
+# Libraries
+- [JSON web token](https://www.npmjs.com/package/jsonwebtoken) or [JWT](https://jwt.io/) for user authorization.
+- [bcrypt](https://www.npmjs.com/package/bcrypt) for hashing user passwords.
+- [validator.js](https://www.npmjs.com/package/validator), validating user input on the server side.
 
 # TODOs
 - [X] Project base
@@ -21,6 +25,7 @@ Frontend time keeping is in the frontend GitHub repository
     - [ ] User related
         - [ ] User registration
         - [ ] User login, JWT on succesful login, otherwise error
+        - [ ] Track sessions?
         - [ ] User logout
         - [ ] Validation of user input, including error messages
     - [ ] Card related
