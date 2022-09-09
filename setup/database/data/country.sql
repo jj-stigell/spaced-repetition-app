@@ -1,0 +1,2 @@
+INSERT INTO country(id, language_id, country_en, country_native, language_en, language_native) VALUES (1, 'en', 'England', 'England', 'English', 'English');
+INSERT INTO country(id, language_id, country_en, country_native, language_en, language_native) VALUES (2, 'fi', 'Finland', 'Suomi', 'Finnish', 'Suomeksi');
