@@ -6,4 +6,7 @@
 | 5.9. | 1 | SQL tables for kanji and translations |
 | 7.9. | 4 | Working express app with health check, creating utils and graphQL base |
 | 8.9. | 5 | Redesign the project to only include GraphQL server, switch to JavaScript for faster prototyping. Create user schema. Add postgre db and sequelize |
-| total | 15 |  | 
+| 9.9. | 2 | User sequelize model, validation |
+|  |  |  |
+|  |  |  |
+| total | 17 |  | 
