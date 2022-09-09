@@ -14,7 +14,7 @@ User.init({
     unique: true,
     allowNull: false,
     validate: {
-      isEmail: true
+      isEmail: true,
     }
   },
   password: {
@@ -26,7 +26,7 @@ User.init({
     unique: true,
     allowNull: false,
     validate: {
-      len: [4, 12]
+      len: [4, 12],
     }
   },
   member: {
@@ -44,6 +44,11 @@ User.init({
     allowNull: false,
     defaultValue: false
   },
+  lastSignin: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  }
 }, {
   sequelize,
   underscored: true,
