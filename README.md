@@ -24,9 +24,18 @@ Frontend time keeping is in the frontend GitHub repository
 - [ ] GraphQL server
     - [ ] User related
         - [ ] User registration
+            - [ ] Validate input (Validator lib, RegExp)
+            - [ ] Captcha to prevent bots ([reCAPTCHA](https://www.google.com/recaptcha/about/))
+            - [ ] Check that username, email etc not taken
+            - [ ] Create user
+            - [ ] Email verification ([node mailer](https://nodemailer.com/about/) & [Amazon SES](https://aws.amazon.com/ses/))
         - [ ] User login, JWT on succesful login, otherwise error
-        - [ ] Track sessions?
+            - [ ] Validate input
+            - [ ] Error on missing, incorrect input, mismatch with password
+            - [ ] Succesful create and return token
+            - [ ] Keep track of sessions
         - [ ] User logout
+            - [ ] Delete session
         - [ ] Validation of user input, including error messages
     - [ ] Card related
         - [ ] Get cards based on user ID
@@ -34,5 +43,6 @@ Frontend time keeping is in the frontend GitHub repository
 - [ ] PostgreSQL / Sequelize
     - [ ] Translate db to Sequelize
 - [ ] Testing
-    - [ ] Unit testing
+    - [ ] Unit testing for functions
+    - [ ] Integration tests
     
