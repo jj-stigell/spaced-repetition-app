@@ -7,7 +7,10 @@
     "start": "NODE_ENV=production node src/index.js",
     "dev": "NODE_ENV=development nodemon src/index.js",
     "test": "NODE_ENV=test",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prod:migration:down": "NODE_ENV=production node src/util/rollback.js",
+    "dev:migration:down": "NODE_ENV=development node src/util/rollback.js",
+    "test:migration:down": "NODE_ENV=test node src/util/rollback.js"
   },
   "repository": {
     "type": "git",
