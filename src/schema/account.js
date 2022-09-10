@@ -3,9 +3,10 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { JWT_SECRET } = require('../util/config');
+const { Account } = require('../models');
 
 const typeDef = `
-  type User {
+  type Account {
     id: ID!
     email: String
     username: String
@@ -17,16 +18,16 @@ const typeDef = `
   }
 
   type Query {
-    userInformation: User!
+    accountInformation: Account!
   }
 
   type Mutation {
-    createUser(
+    createAccount(
       email: String!
       username: String!
       password: String!
       passwordConfirmation: String!
-    ): User
+    ): Account
 
     login(
       email: String!
@@ -37,23 +38,24 @@ const typeDef = `
 
 const resolvers = {
   Query: {
-    userInformation: async (root, args) => {
+    // eslint-disable-next-line no-unused-vars
+    accountInformation: async (_, args) => {
       // temp placeholder
-      const user = {
+      const account = {
         id: 12345,
         email: 'test@google.com',
         username: 'username',
         password: 'password',
       };
 
-      return user;
+      return account;
     },
   },
   Mutation: {
-    createUser: async (root, { email, username, password, passwordConfirmation }) => {
+    createAccount: async (_, { email, username, password, passwordConfirmation }) => {
 
       /**
-       * Validate new user input:
+       * Validate new account input:
        * - check email is valid and not in use
        * - check username is correct length (4-12 char), not in use and sanitized
        * - check password matches with confirmation, correct length and includes required symbols
@@ -69,17 +71,18 @@ const resolvers = {
         throw new UserInputError('Password and confirmation do not match');
       }
 
-      // temp placeholder
-      const user = {
-        id: 12345,
-        email: 'test@google.com',
-        username: username,
-        password: password,
-      };
-
-      return user;
+      try {
+        const account = await Account.create({
+          email: email.toLowerCase(),
+          username: username,
+          password: password,
+        });
+        return account;
+      } catch(error) {
+        console.log(error.errors);
+      }
     },
-    login: async (root, { email, password }) => {
+    login: async (_, { email, password }) => {
 
       // Confirm that email and password not empty
       if (!email || !password) {
@@ -91,32 +94,32 @@ const resolvers = {
         throw new UserInputError('Email is not a valid email');
       }
 
-      // const user = await User.findOne({ email: email });
+      // const user = await User.findOne({ email: email.toLowerCase() });
       // temp placeholder
-      const user = {
+      const account = {
         id: 12345,
         username: 'mr.test',
         passwordHash: 'examplehashthisissaidyodawhendrinkingbeerwithobiwan'
       };
 
       // If user is found, compare the crypted password to the hash fetched from database
-      const passwordCorrect = user === null
+      const passwordCorrect = account === null
         ? false
-        : await bcrypt.compare(password, user.passwordHash);
+        : await bcrypt.compare(password, account.passwordHash);
 
-      console.log('user is ok:', user !== null);
+      console.log('account is ok:', account !== null);
       console.log('password is correct:', passwordCorrect);
     
-      if (!user || !passwordCorrect) {
+      if (!account || !passwordCorrect) {
         throw new UserInputError('Username or password invalid');
       }
     
-      const userForToken = {
-        username: user.username,
-        id: user.id,
+      const accountForToken = {
+        username: account.username,
+        id: account.id,
       };
 
-      return { value: jwt.sign(userForToken, JWT_SECRET) };
+      return { value: jwt.sign(accountForToken, JWT_SECRET) };
     },
   }
 };

@@ -1,16 +1,16 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../util/database');
 
-class User extends Model {}
+class Account extends Model {}
 
-User.init({
+Account.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
   email: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(255),
     unique: true,
     allowNull: false,
     validate: {
@@ -22,11 +22,11 @@ User.init({
     allowNull: false
   },
   username: {
-    type: DataTypes.STRING(12),
+    type: DataTypes.STRING(14),
     unique: true,
     allowNull: false,
     validate: {
-      len: [4, 12],
+      len: [1, 14],
     }
   },
   member: {
@@ -44,16 +44,14 @@ User.init({
     allowNull: false,
     defaultValue: false
   },
-  lastSignin: {
-    type: DataTypes.BOOLEAN,
+  lastLogin: {
+    type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: false
+    defaultValue: DataTypes.NOW
   }
 }, {
   sequelize,
-  underscored: true,
-  timestamps: true,
-  modelName: 'user'
+  modelName: 'account'
 });
 
-module.exports = User;
+module.exports = Account;
