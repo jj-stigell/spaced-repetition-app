@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { JWT_SECRET } = require('../util/config');
 const { Account } = require('../models');
+const { Op } = require('sequelize');
 
 const typeDef = `
   type Account {
@@ -57,7 +58,7 @@ const resolvers = {
       /**
        * Validate new account input:
        * - check email is valid and not in use
-       * - check username is correct length (4-12 char), not in use and sanitized
+       * - check username is correct length (1-14 char), not in use and sanitized
        * - check password matches with confirmation, correct length and includes required symbols
        */
 
@@ -66,20 +67,54 @@ const resolvers = {
         throw new UserInputError('Email is not a valid email');
       }
 
+      // Check that email not reserved, emails stored in lowercase
+      const emailInUse = await Account.findOne({ where: { email: email.toLowerCase() } });
+      if (emailInUse) {
+        throw new UserInputError('Email is already in use');
+      }
+
+      // Check that username is according to rules, length 1-14, and alphanumeric
+      if (!validator.isAlphanumeric(username) || !validator.isLength(username, { min: 1, max: 14 })) {
+        throw new UserInputError('Username must be 1 to 14 characters and contain only letters a-z and numbers 1-9');
+      }
+
+      // Check that username is not in use, case insensitive
+      const usernameInUse = await Account.findOne({
+        where: {
+          username: {
+            [Op.iLike]: username
+          }
+        }
+      });
+      if (usernameInUse) {
+        throw new UserInputError('Username is already in use');
+      }
+
       // Check that confirmation matches to password
       if (password !== passwordConfirmation) {
         throw new UserInputError('Password and confirmation do not match');
       }
 
+      // Password must contain min 8 chars, at least one lower, upper and number character
+      if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false })) {
+        throw new UserInputError('Password must contain minimum 8 characters, at least one lower, upper and number character');
+      }
+
+      // Create a new account is all validations pass
       try {
+        // Hash password
+        const saltRounds = 10;
+        const passwordHash = await bcrypt.hash(password, saltRounds);
+
         const account = await Account.create({
           email: email.toLowerCase(),
           username: username,
-          password: password,
+          passwordHash: passwordHash,
         });
         return account;
       } catch(error) {
         console.log(error.errors);
+        throw new UserInputError('Something went wrong, pleasy try again');
       }
     },
     login: async (_, { email, password }) => {
@@ -94,22 +129,13 @@ const resolvers = {
         throw new UserInputError('Email is not a valid email');
       }
 
-      // const user = await User.findOne({ email: email.toLowerCase() });
-      // temp placeholder
-      const account = {
-        id: 12345,
-        username: 'mr.test',
-        passwordHash: 'examplehashthisissaidyodawhendrinkingbeerwithobiwan'
-      };
+      const account = await Account.findOne({ where: { email: email.toLowerCase() } });
 
       // If user is found, compare the crypted password to the hash fetched from database
       const passwordCorrect = account === null
         ? false
         : await bcrypt.compare(password, account.passwordHash);
 
-      console.log('account is ok:', account !== null);
-      console.log('password is correct:', passwordCorrect);
-    
       if (!account || !passwordCorrect) {
         throw new UserInputError('Username or password invalid');
       }
