@@ -11,9 +11,9 @@ Frontend time keeping is in the frontend GitHub repository
 - [PostgreSQL](https://www.postgresql.org/) database, with [Sequelize](https://sequelize.org/)
 
 ## Libraries
-- [JSON web token](https://www.npmjs.com/package/jsonwebtoken) or [JWT](https://jwt.io/) for user authorization.
-- [bcrypt](https://www.npmjs.com/package/bcrypt) for hashing user passwords.
-- [validator.js](https://www.npmjs.com/package/validator), validating user input on the server side.
+- [JSON web token](https://www.npmjs.com/package/jsonwebtoken) or [JWT](https://jwt.io/) for user authorization. [MIT License](https://github.com/auth0/node-jsonwebtoken/blob/HEAD/LICENSE)
+- [bcrypt](https://www.npmjs.com/package/bcrypt) for hashing user passwords. [MIT License](https://github.com/kelektiv/node.bcrypt.js/blob/master/LICENSE)
+- [validator.js](https://www.npmjs.com/package/validator), validating user input on the server side. [MIT License](https://github.com/validatorjs/validator.js/blob/master/LICENSE)
 
 ## TODOs
 - [X] Project base
@@ -24,15 +24,15 @@ Frontend time keeping is in the frontend GitHub repository
 - [ ] GraphQL server
     - [ ] User related
         - [ ] User registration
-            - [ ] Validate input (Validator lib, RegExp)
+            - [X] Validate input (Validator lib, RegExp)
             - [ ] Captcha to prevent bots ([reCAPTCHA](https://www.google.com/recaptcha/about/))
-            - [ ] Check that username, email etc not taken
-            - [ ] Create user
+            - [X] Check that username, email etc not taken
+            - [X] Create user
             - [ ] Email verification ([node mailer](https://nodemailer.com/about/) & [Amazon SES](https://aws.amazon.com/ses/))
         - [ ] User login, JWT on succesful login, otherwise error
-            - [ ] Validate input
-            - [ ] Error on missing, incorrect input, mismatch with password
-            - [ ] Succesful create and return token
+            - [X] Validate input
+            - [X] Error on missing, incorrect input, mismatch with password
+            - [X] Succesfully create and return token
             - [ ] Keep track of sessions
         - [ ] User logout
             - [ ] Delete session

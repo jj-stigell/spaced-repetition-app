@@ -7,6 +7,6 @@
 | 7.9. | 4 | Working express app with health check, creating utils and graphQL base |
 | 8.9. | 5 | Redesign the project to only include GraphQL server, switch to JavaScript for faster prototyping. Create user schema. Add postgre db and sequelize |
 | 9.9. | 2 | User sequelize model, validation |
+| 10.9. | 3 | Working first version of account creation and user login with validation and JWT |
 |  |  |  |
-|  |  |  |
-| total | 17 |  | 
+| total | 20 |  | 
