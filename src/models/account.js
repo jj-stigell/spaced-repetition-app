@@ -17,7 +17,7 @@ Account.init({
       isEmail: true,
     }
   },
-  password: {
+  passwordHash: {
     type: DataTypes.CHAR(60),
     allowNull: false
   },

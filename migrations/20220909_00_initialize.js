@@ -16,7 +16,7 @@ module.exports = {
           isEmail: true,
         }
       },
-      password: {
+      password_hash: {
         type: DataTypes.CHAR(60),
         allowNull: false
       },
@@ -33,7 +33,7 @@ module.exports = {
         allowNull: false,
         defaultValue: true
       },
-      emailVerified: {
+      email_verified: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
@@ -53,7 +53,7 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       },
-      lastLogin: {
+      last_login: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW

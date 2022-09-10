@@ -4,7 +4,7 @@ CREATE TYPE result AS ENUM ('again', 'hard', 'easy');
 CREATE TABLE IF NOT EXISTS account (
   id SERIAL PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
-  password CHAR(60) NOT NULL,
+  password_hash CHAR(60) NOT NULL,
   username VARCHAR(14) NOT NULL UNIQUE CHECK( LENGTH(username) > 1 ), -- Length between 1 - 14 chars
   member BOOLEAN NOT NULL DEFAULT TRUE,
   email_verified BOOLEAN NOT NULL DEFAULT FALSE,
