@@ -19,7 +19,9 @@ const typeDef = `
   }
 
   type Query {
-    accountInformation: Account!
+    usernameAvailable(
+      username: String!
+    ): Boolean!
   }
 
   type Mutation {
@@ -40,16 +42,20 @@ const typeDef = `
 const resolvers = {
   Query: {
     // eslint-disable-next-line no-unused-vars
-    accountInformation: async (_, args) => {
-      // temp placeholder
-      const account = {
-        id: 12345,
-        email: 'test@google.com',
-        username: 'username',
-        password: 'password',
-      };
+    usernameAvailable: async (_, { username }) => {
+      // Check that username is not in use, case insensitive
+      const usernameInUse = await Account.findOne({
+        where: {
+          username: {
+            [Op.iLike]: username
+          }
+        }
+      });
+      if (usernameInUse) {
+        return false;
+      }
 
-      return account;
+      return true;
     },
   },
   Mutation: {
