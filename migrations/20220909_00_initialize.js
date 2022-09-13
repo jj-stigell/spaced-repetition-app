@@ -85,10 +85,44 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false
       },
+    }),
+    await queryInterface.createTable('kanji', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+      },
+      kanji: {
+        type: DataTypes.CHAR(1),
+        unique: true,
+        allowNull: false
+      },
+      learning_order: {
+        type: DataTypes.INTEGER,
+        unique: true
+      },
+      jlpt_level: {
+        type: DataTypes.INTEGER,
+      },
+      onyomi: {
+        type: DataTypes.STRING,
+      },
+      onyomi_romaji: {
+        type: DataTypes.STRING,
+      },
+      kunyomi: {
+        type: DataTypes.STRING,
+      },
+      kunyomi_romaji: {
+        type: DataTypes.STRING,
+      },
+      stroke_count: {
+        type: DataTypes.INTEGER,
+      },
     });
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('account');
     await queryInterface.dropTable('country');
+    await queryInterface.dropTable('kanji');
   },
 };
