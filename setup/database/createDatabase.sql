@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS account_kanji_review (
   id SERIAL PRIMARY KEY,
   account_id INTEGER NOT NULL,
   kanji_id INTEGER NOT NULL,
-  reviewed TIMESTAMP NOT NULL DEFAULT NOW(),
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   extra_review BOOLEAN NOT NULL DEFAULT FALSE,
   review_result result NOT NULL,
   FOREIGN KEY (account_id) REFERENCES account(id),
