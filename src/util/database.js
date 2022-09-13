@@ -12,7 +12,7 @@ const sequelize = new Sequelize(DATABASE_URL, {
   define: {
     timestamps: true,
     freezeTableName: true,        // Freeze names, no plural names
-    underscored: true,
+    underscored: true,            // Underscore everywhere, no need to declare on model level
   },
 });
 
