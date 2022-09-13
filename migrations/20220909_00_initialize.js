@@ -266,6 +266,43 @@ module.exports = {
       description: {
         type: DataTypes.STRING,
       },
+    }),
+    await queryInterface.createTable('account_kanji_review', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      account_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'account',
+          key: 'id'
+        }
+      },
+      kanji_id: {
+        type: DataTypes.CHAR(2),
+        allowNull: false,
+        references: {
+          model: 'kanji',
+          key: 'id'
+        }
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      extra_review: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      review_result: {
+        type: DataTypes.ENUM('again', 'hard', 'easy'),
+        allowNull: false
+      },
     });
   },
   down: async ({ context: queryInterface }) => {
@@ -273,6 +310,7 @@ module.exports = {
     await queryInterface.dropTable('kanji_radical');
     await queryInterface.dropTable('translation_kanji');
     await queryInterface.dropTable('example_word_translation');
+    await queryInterface.dropTable('account_kanji_review');
     await queryInterface.dropTable('account');
     await queryInterface.dropTable('country');
     await queryInterface.dropTable('kanji');
