@@ -18,10 +18,10 @@ CREATE TABLE IF NOT EXISTS account (
 CREATE TABLE IF NOT EXISTS country (
   id INTEGER PRIMARY KEY,
   language_id CHAR(2) NOT NULL UNIQUE,
-  country_en TEXT NOT NULL UNIQUE,
-  country_native TEXT NOT NULL UNIQUE,
-  language_en TEXT NOT NULL UNIQUE,
-  language_native TEXT NOT NULL UNIQUE
+  country_en TEXT NOT NULL,
+  country_native TEXT NOT NULL,
+  language_en TEXT NOT NULL,
+  language_native TEXT NOT NULL
 ); 
 
 -- kanji and its relevant information, JLPT levels are from 1 to 5
