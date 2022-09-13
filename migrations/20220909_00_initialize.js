@@ -175,21 +175,75 @@ module.exports = {
         }
       },
       kanji_id: {
-        type: DataTypes.CHAR(2),
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: 'kanji',
           key: 'id'
         }
       },
+    }),
+    await queryInterface.createTable('translation_kanji', {
+      kanji_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'kanji',
+          key: 'id'
+        }
+      },
+      language_id: {
+        type: DataTypes.CHAR(2),
+        allowNull: false,
+        references: {
+          model: 'country',
+          key: 'language_id'
+        }
+      },
+      keyword: {
+        type: DataTypes.STRING,
+      },
+      story: {
+        type: DataTypes.STRING,
+      },
+      hint: {
+        type: DataTypes.STRING,
+      },
+      other_meanings: {
+        type: DataTypes.STRING,
+      },
+    }),
+    await queryInterface.createTable('example_word', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      word: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      furigana: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      romaji: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      jlpt_level: {
+        type: DataTypes.INTEGER,
+      },
     });
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('radical_translation');
     await queryInterface.dropTable('kanji_radical');
+    await queryInterface.dropTable('translation_kanji');
     await queryInterface.dropTable('account');
     await queryInterface.dropTable('country');
     await queryInterface.dropTable('kanji');
     await queryInterface.dropTable('radical');
+    await queryInterface.dropTable('example_word');
   },
 };
