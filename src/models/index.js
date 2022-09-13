@@ -6,6 +6,7 @@ const Radical = require('./country');
 const RadicalTranslation = require('./radicalTranslation');
 const KanjiRadical = require('./kanjiRadical');
 const TranslationKanji = require('./translationKanji');
+const ExampleWord = require('./exampleWord');
 
 module.exports = {
   Account,
@@ -14,5 +15,6 @@ module.exports = {
   Radical,
   RadicalTranslation,
   KanjiRadical,
-  TranslationKanji
+  TranslationKanji,
+  ExampleWord
 };
