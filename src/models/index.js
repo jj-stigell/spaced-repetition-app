@@ -8,6 +8,7 @@ const KanjiRadical = require('./kanjiRadical');
 const TranslationKanji = require('./translationKanji');
 const ExampleWord = require('./exampleWord');
 const ExampleWordTranslation = require('./exampleWordTranslation');
+const AccountKanjiCard = require('./accountKanjiCard');
 
 module.exports = {
   Account,
@@ -18,5 +19,6 @@ module.exports = {
   KanjiRadical,
   TranslationKanji,
   ExampleWord,
-  ExampleWordTranslation
+  ExampleWordTranslation,
+  AccountKanjiCard
 };
