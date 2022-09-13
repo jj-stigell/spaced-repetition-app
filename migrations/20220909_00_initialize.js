@@ -164,10 +164,29 @@ module.exports = {
       description: {
         type: DataTypes.STRING,
       },
+    }),
+    await queryInterface.createTable('kanji_radical', {
+      radical_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'radical',
+          key: 'id'
+        }
+      },
+      kanji_id: {
+        type: DataTypes.CHAR(2),
+        allowNull: false,
+        references: {
+          model: 'kanji',
+          key: 'id'
+        }
+      },
     });
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('radical_translation');
+    await queryInterface.dropTable('kanji_radical');
     await queryInterface.dropTable('account');
     await queryInterface.dropTable('country');
     await queryInterface.dropTable('kanji');
