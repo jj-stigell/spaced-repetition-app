@@ -41,7 +41,10 @@ Frontend time keeping is in the frontend GitHub repository
         - [ ] Get cards based on user ID
         - [ ] Reschedule card based on user input
 - [ ] PostgreSQL / Sequelize
-    - [ ] Translate db to Sequelize
+    - [X] Translate db to Sequelize
+    - [X] Create models and associations
+    - [X] Load initial sql file containing precompiled data to database when running first migration
+    - [ ] Add constraints to initial database migration
 - [ ] Testing
     - [ ] Unit testing for functions
     - [ ] Integration tests
