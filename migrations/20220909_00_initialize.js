@@ -234,6 +234,38 @@ module.exports = {
       jlpt_level: {
         type: DataTypes.INTEGER,
       },
+    }),
+    await queryInterface.createTable('example_word_translation', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      word_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'example_word',
+          key: 'id'
+        }
+      },
+      language_id: {
+        type: DataTypes.CHAR(2),
+        allowNull: false,
+        references: {
+          model: 'country',
+          key: 'language_id'
+        }
+      },
+      translation: {
+        type: DataTypes.STRING,
+      },
+      type: {
+        type: DataTypes.STRING,
+      },
+      description: {
+        type: DataTypes.STRING,
+      },
     });
   },
   down: async ({ context: queryInterface }) => {
