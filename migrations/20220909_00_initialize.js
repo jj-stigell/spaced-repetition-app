@@ -303,6 +303,49 @@ module.exports = {
         type: DataTypes.ENUM('again', 'hard', 'easy'),
         allowNull: false
       },
+    }),
+    await queryInterface.createTable('account_kanji_card', {
+      account_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'account',
+          key: 'id'
+        }
+      },
+      kanji_id: {
+        type: DataTypes.CHAR(2),
+        allowNull: false,
+        references: {
+          model: 'kanji',
+          key: 'id'
+        }
+      },
+      review_count: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        default: 1
+      },
+      easy_factor: {
+        type: DataTypes.REAL,
+        allowNull: false,
+        default: 2.5
+      },
+      due_date: {
+        type: DataTypes.DATEONLY,
+        defaultValue: DataTypes.NOW
+      },
+      account_story: {
+        type: DataTypes.STRING,
+      },
+      account_hint: {
+        type: DataTypes.STRING,
+      },
+      mature: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
     });
   },
   down: async ({ context: queryInterface }) => {
@@ -311,6 +354,7 @@ module.exports = {
     await queryInterface.dropTable('translation_kanji');
     await queryInterface.dropTable('example_word_translation');
     await queryInterface.dropTable('account_kanji_review');
+    await queryInterface.dropTable('account_kanji_card');
     await queryInterface.dropTable('account');
     await queryInterface.dropTable('country');
     await queryInterface.dropTable('kanji');
