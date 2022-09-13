@@ -282,7 +282,7 @@ module.exports = {
         }
       },
       kanji_id: {
-        type: DataTypes.CHAR(2),
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: 'kanji',
@@ -314,7 +314,7 @@ module.exports = {
         }
       },
       kanji_id: {
-        type: DataTypes.CHAR(2),
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: 'kanji',

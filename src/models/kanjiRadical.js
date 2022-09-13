@@ -13,7 +13,7 @@ KanjiRadical.init({
     }
   },
   kanjiId: {
-    type: DataTypes.CHAR(2),
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: 'kanji',
