@@ -135,14 +135,39 @@ module.exports = {
       },
       reading_romaji: {
         type: DataTypes.STRING,
-        allowNull: false
       },
       stroke_count: {
         type: DataTypes.INTEGER,
       },
+    }),
+    await queryInterface.createTable('radical_translation', {
+      radical_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'radical',
+          key: 'id'
+        }
+      },
+      language_id: {
+        type: DataTypes.CHAR(2),
+        allowNull: false,
+        references: {
+          model: 'country',
+          key: 'language_id'
+        }
+      },
+      translation: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      description: {
+        type: DataTypes.STRING,
+      },
     });
   },
   down: async ({ context: queryInterface }) => {
+    await queryInterface.dropTable('radical_translation');
     await queryInterface.dropTable('account');
     await queryInterface.dropTable('country');
     await queryInterface.dropTable('kanji');
