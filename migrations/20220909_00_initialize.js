@@ -272,6 +272,7 @@ module.exports = {
     await queryInterface.dropTable('radical_translation');
     await queryInterface.dropTable('kanji_radical');
     await queryInterface.dropTable('translation_kanji');
+    await queryInterface.dropTable('example_word_translation');
     await queryInterface.dropTable('account');
     await queryInterface.dropTable('country');
     await queryInterface.dropTable('kanji');
