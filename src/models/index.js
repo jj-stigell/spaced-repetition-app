@@ -9,6 +9,7 @@ const TranslationKanji = require('./translationKanji');
 const ExampleWord = require('./exampleWord');
 const ExampleWordTranslation = require('./exampleWordTranslation');
 const AccountKanjiCard = require('./accountKanjiCard');
+const AccountKanjiReview = require('./accountKanjiReview');
 
 module.exports = {
   Account,
@@ -20,5 +21,6 @@ module.exports = {
   TranslationKanji,
   ExampleWord,
   ExampleWordTranslation,
-  AccountKanjiCard
+  AccountKanjiCard,
+  AccountKanjiReview
 };
