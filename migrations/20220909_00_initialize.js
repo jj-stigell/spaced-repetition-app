@@ -1,4 +1,7 @@
 const { DataTypes } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
+const initialDump = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/initial_dump.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -346,7 +349,8 @@ module.exports = {
         allowNull: false,
         defaultValue: false
       },
-    });
+    }),
+    await queryInterface.sequelize.query(initialDump);
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('radical_translation');
