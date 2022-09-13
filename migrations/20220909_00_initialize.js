@@ -58,9 +58,37 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       }
+    }),
+    await queryInterface.createTable('country', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+      },
+      language_id: {
+        type: DataTypes.CHAR(2),
+        unique: true,
+        allowNull: false
+      },
+      country_en: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      country_native: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      language_en: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      language_native: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
     });
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('account');
+    await queryInterface.dropTable('country');
   },
 };
