@@ -8,5 +8,6 @@
 | 8.9. | 5 | Redesign the project to only include GraphQL server, switch to JavaScript for faster prototyping. Create user schema. Add postgre db and sequelize |
 | 9.9. | 2 | User sequelize model, validation |
 | 10.9. | 3 | Working first version of account creation and user login with validation and JWT |
+| 13.9. | 4 | Add all the remaining database tables to migrations and create models. Add associations between models. Automatic loading of precompiled sql file that has initial database, loaded with first migration. |
 |  |  |  |
-| total | 20 |  | 
+| total | 24 |  | 
