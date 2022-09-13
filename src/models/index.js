@@ -5,6 +5,7 @@ const Country = require('./country');
 const Radical = require('./country');
 const RadicalTranslation = require('./radicalTranslation');
 const KanjiRadical = require('./kanjiRadical');
+const TranslationKanji = require('./translationKanji');
 
 module.exports = {
   Account,
@@ -12,5 +13,6 @@ module.exports = {
   Country,
   Radical,
   RadicalTranslation,
-  KanjiRadical
+  KanjiRadical,
+  TranslationKanji
 };
