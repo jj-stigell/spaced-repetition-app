@@ -36,6 +36,11 @@ Frontend time keeping is in the frontend GitHub repository
             - [ ] Keep track of sessions
         - [ ] User logout
             - [ ] Delete session
+        - [ ] User change password/personal data
+            - [ ] Old password matches hash in DB
+            - [ ] Validate new, confirmation must match, cannot be same as old one
+            - [ ] Email, settings change
+        - [ ] Recover account (e.g. password forgotten)
         - [ ] Validation of user input, including error messages
     - [ ] Card related
         - [ ] Get cards based on user ID
