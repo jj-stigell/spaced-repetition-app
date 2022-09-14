@@ -168,6 +168,9 @@ module.exports = {
         type: DataTypes.STRING,
       },
     }),
+    await queryInterface.addIndex('radical_translation', ['radical_id', 'language_id'], {
+      unique: true,
+    }),
     await queryInterface.createTable('kanji_radical', {
       radical_id: {
         type: DataTypes.INTEGER,
@@ -185,6 +188,9 @@ module.exports = {
           key: 'id'
         }
       },
+    }),
+    await queryInterface.addIndex('kanji_radical', ['radical_id', 'kanji_id'], {
+      unique: true,
     }),
     await queryInterface.createTable('translation_kanji', {
       kanji_id: {
@@ -215,6 +221,9 @@ module.exports = {
       other_meanings: {
         type: DataTypes.STRING,
       },
+    }),
+    await queryInterface.addIndex('translation_kanji', ['kanji_id', 'language_id'], {
+      unique: true,
     }),
     await queryInterface.createTable('example_word', {
       id: {
@@ -269,6 +278,9 @@ module.exports = {
       description: {
         type: DataTypes.STRING,
       },
+    }),
+    await queryInterface.addIndex('example_word_translation', ['word_id', 'language_id'], {
+      unique: true,
     }),
     await queryInterface.createTable('account_kanji_review', {
       id: {
