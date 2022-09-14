@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const initialDump = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/initial_dump.sql'), 'utf8');
@@ -307,7 +307,7 @@ module.exports = {
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: Sequelize.fn('now')
       },
       extra_review: {
         type: DataTypes.BOOLEAN,
@@ -348,7 +348,6 @@ module.exports = {
       },
       due_date: {
         type: DataTypes.DATEONLY,
-        defaultValue: DataTypes.NOW
       },
       account_story: {
         type: DataTypes.STRING,
