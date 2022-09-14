@@ -826,3 +826,19 @@ INSERT INTO radical_translation(radical_id,language_id,translation,description) 
 INSERT INTO radical_translation(radical_id,language_id,translation,description) VALUES (254,'en','dragon',NULL);
 INSERT INTO radical_translation(radical_id,language_id,translation,description) VALUES (255,'en','turtle',NULL);
 INSERT INTO radical_translation(radical_id,language_id,translation,description) VALUES (256,'en','flute',NULL);
+
+INSERT INTO account (email, password_hash, username, created_at, updated_at, last_login) VALUES ('test1@test.com', '$2b$10$GE7OUAW2u2u0WDiJ8nBxIucrIYSV8ZSBU0PCoV.Heg9C5pLnFdqZu', 'test1', NOW(), NOW(), NOW());
+INSERT INTO account (email, password_hash, username, created_at, updated_at, last_login) VALUES ('test2@test.com', '$2b$10$GE7OUAW2u2u0WDiJ8nBxIucrIYSV8ZSBU0PCoV.Heg9C5pLnFdqZu', 'test2', NOW(), NOW(), NOW());
+
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 1, 5, 2.5, '2022-10-01', 'this is my story for kanji mouth', 'this is my hint for mouth kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 2, 5, 2.5, '2022-09-01', 'this is my story for kanji up', 'this is my hint for up kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 3, 1, 2.5, '2022-09-22', 'this is my story for kanji go in', 'this is my hint for go in kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (2, 1, 5, 2.5, '2022-10-01', 'this is my story for kanji mouth', 'this is my hint for mouth kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (2, 2, 5, 2.5, '2022-09-01', 'this is my story for kanji up', 'this is my hint for up kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (2, 3, 1, 2.5, '2022-09-22', 'this is my story for kanji go in', 'this is my hint for go in kanji');
+
+INSERT INTO account_kanji_review (account_id, kanji_id, review_result) VALUES (1, 1, 'easy');
+INSERT INTO account_kanji_review (account_id, kanji_id, review_result) VALUES (1, 1, 'hard');
+INSERT INTO account_kanji_review (account_id, kanji_id, review_result) VALUES (1, 1, 'again');
+INSERT INTO account_kanji_review (account_id, kanji_id, review_result) VALUES (1, 2, 'easy');
+INSERT INTO account_kanji_review (account_id, kanji_id, review_result) VALUES (1, 3, 'easy');

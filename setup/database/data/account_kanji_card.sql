@@ -1,0 +1,6 @@
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 1, 5, 2.5, '2022-10-01', 'this is my story for kanji mouth', 'this is my hint for mouth kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 2, 5, 2.5, '2022-09-01', 'this is my story for kanji up', 'this is my hint for up kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 3, 1, 2.5, '2022-09-22', 'this is my story for kanji go in', 'this is my hint for go in kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (2, 1, 5, 2.5, '2022-10-01', 'this is my story for kanji mouth', 'this is my hint for mouth kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (2, 2, 5, 2.5, '2022-09-01', 'this is my story for kanji up', 'this is my hint for up kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (2, 3, 1, 2.5, '2022-09-22', 'this is my story for kanji go in', 'this is my hint for go in kanji');
