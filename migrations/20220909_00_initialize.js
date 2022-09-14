@@ -350,6 +350,9 @@ module.exports = {
         defaultValue: false
       },
     }),
+    await queryInterface.addIndex('account_kanji_card', ['account_id', 'kanji_id'], {
+      unique: true,
+    }),
     await queryInterface.sequelize.query(initialDump);
   },
   down: async ({ context: queryInterface }) => {
