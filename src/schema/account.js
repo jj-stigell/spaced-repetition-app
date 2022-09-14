@@ -36,6 +36,12 @@ const typeDef = `
       email: String!
       password: String!
     ): Token
+
+    changePassword(
+      currentPassword: String!
+      newPassword: String!
+      newPasswordConfirmation: String!
+    ): Boolean!
   }
 `;
 
@@ -106,7 +112,7 @@ const resolvers = {
         throw new UserInputError('Password must contain minimum 8 characters, at least one lower, upper and number character');
       }
 
-      // Create a new account is all validations pass
+      // Create a new account if all validations pass
       try {
         // Hash password
         const saltRounds = 10;
@@ -152,6 +158,48 @@ const resolvers = {
       };
 
       return { value: jwt.sign(accountForToken, JWT_SECRET) };
+    },
+    changePassword: async (_, { currentPassword, newPassword, newPasswordConfirmation }, { currentUser }) => {
+
+      if (!currentUser) {
+        throw new UserInputError('Not authenticated');
+      }
+
+      // Check that confirmation matches to password
+      if (newPassword !== newPasswordConfirmation) {
+        throw new UserInputError('New password and confirmation do not match');
+      }
+
+      // Check that new password is not same ass old one
+      if (newPassword === currentPassword) {
+        throw new UserInputError('New password cannot be same with the old one');
+      }
+
+      const account = await Account.findByPk(currentUser.id);
+
+      // If user is found, compare the crypted password to the hash fetched from database
+      const passwordCorrect = account === null
+        ? false
+        : await bcrypt.compare(currentPassword, account.passwordHash);
+
+      if (!passwordCorrect) {
+        throw new UserInputError('Current password invalid');
+      }
+
+      // Update password if all validations pass
+      try {
+        // Hash password
+        const saltRounds = 10;
+        const passwordHash = await bcrypt.hash(newPassword, saltRounds);
+
+        // Update new password hash to account and save
+        account.passwordHash = passwordHash;
+        await account.save();
+        return true;
+      } catch(error) {
+        console.log(error.errors);
+        throw new UserInputError('Something went wrong, pleasy try again');
+      }
     },
   }
 };
