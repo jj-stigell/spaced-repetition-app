@@ -9,5 +9,5 @@
 | 9.9. | 2 | User sequelize model, validation |
 | 10.9. | 3 | Working first version of account creation and user login with validation and JWT |
 | 13.9. | 4 | Add all the remaining database tables to migrations and create models. Add associations between models. Automatic loading of precompiled sql file that has initial database, loaded with first migration. |
-|  |  |  |
-| total | 24 |  | 
+| 14.9. | 4 | Set database constraints on foreign keys with initial migration, work on raw sql queries for fetching cards, create more mock data for db |
+| total | 28 |  | 
