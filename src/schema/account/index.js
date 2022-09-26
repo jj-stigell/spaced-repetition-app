@@ -11,7 +11,6 @@ const typeDef = `
     id: ID!
     email: String
     username: String
-    password: String
   }
 
   type Token {
