@@ -74,20 +74,30 @@ const resolvers = {
        * - check password matches with confirmation, correct length and includes required symbols
        */
 
+      // Check that confirmation matches to password
+      if (password !== passwordConfirmation) {
+        throw new UserInputError('Password and confirmation do not match');
+      }
+
+      // Password must contain min 8 chars, at least one lower, upper and number character
+      if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false })) {
+        throw new UserInputError('Password must contain minimum 8 characters, at least one lower, upper and number character');
+      }
+
       // Check for valid email
       if (!validator.isEmail(email)) {
         throw new UserInputError('Email is not a valid email');
+      }
+
+      // Check that username is according to rules, length 1-14, and alphanumeric
+      if (!validator.isAlphanumeric(username) || !validator.isLength(username, { min: 1, max: 14 })) {
+        throw new UserInputError('Username must be 1 to 14 characters and contain only letters a-z and numbers 1-9');
       }
 
       // Check that email not reserved, emails stored in lowercase
       const emailInUse = await Account.findOne({ where: { email: email.toLowerCase() } });
       if (emailInUse) {
         throw new UserInputError('Email is already in use');
-      }
-
-      // Check that username is according to rules, length 1-14, and alphanumeric
-      if (!validator.isAlphanumeric(username) || !validator.isLength(username, { min: 1, max: 14 })) {
-        throw new UserInputError('Username must be 1 to 14 characters and contain only letters a-z and numbers 1-9');
       }
 
       // Check that username is not in use, case insensitive
@@ -100,16 +110,6 @@ const resolvers = {
       });
       if (usernameInUse) {
         throw new UserInputError('Username is already in use');
-      }
-
-      // Check that confirmation matches to password
-      if (password !== passwordConfirmation) {
-        throw new UserInputError('Password and confirmation do not match');
-      }
-
-      // Password must contain min 8 chars, at least one lower, upper and number character
-      if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false })) {
-        throw new UserInputError('Password must contain minimum 8 characters, at least one lower, upper and number character');
       }
 
       // Create a new account if all validations pass
