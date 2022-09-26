@@ -1,4 +1,4 @@
-const { UserInputError } = require('apollo-server');
+const { UserInputError, AuthenticationError, ForbiddenError } = require('apollo-server');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -75,28 +75,38 @@ const resolvers = {
 
       // Check that confirmation matches to password
       if (password !== passwordConfirmation) {
-        throw new UserInputError('Password and confirmation do not match');
+        throw new UserInputError('Password and confirmation do not match', {
+          errorName: 'passwordMismatchError'
+        });
       }
 
       // Password must contain min 8 chars, at least one lower, upper and number character
       if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false })) {
-        throw new UserInputError('Password must contain minimum 8 characters, at least one lower, upper and number character');
+        throw new UserInputError('Password validation error', {
+          errorName: 'passwordValidationError'
+        });
       }
 
       // Check for valid email
       if (!validator.isEmail(email)) {
-        throw new UserInputError('Email is not a valid email');
+        throw new UserInputError('Email is not a valid email', {
+          errorName: 'notEmailError'
+        });
       }
 
       // Check that username is according to rules, length 1-14, and alphanumeric
       if (!validator.isAlphanumeric(username) || !validator.isLength(username, { min: 1, max: 14 })) {
-        throw new UserInputError('Username must be 1 to 14 characters and contain only letters a-z and numbers 1-9');
+        throw new UserInputError('Username validation error', {
+          errorName: 'usernameValidationError'
+        });
       }
 
       // Check that email not reserved, emails stored in lowercase
       const emailInUse = await Account.findOne({ where: { email: email.toLowerCase() } });
       if (emailInUse) {
-        throw new UserInputError('Email is already in use');
+        throw new UserInputError('Email in use already', {
+          errorName: 'emailInUseError'
+        });
       }
 
       // Check that username is not in use, case insensitive
@@ -108,7 +118,9 @@ const resolvers = {
         }
       });
       if (usernameInUse) {
-        throw new UserInputError('Username is already in use');
+        throw new UserInputError('Username in use already', {
+          errorName: 'usernameInUseError'
+        });
       }
 
       // Create a new account if all validations pass
@@ -125,19 +137,25 @@ const resolvers = {
         return account;
       } catch(error) {
         console.log(error.errors);
-        throw new UserInputError('Something went wrong, pleasy try again');
+        throw new ForbiddenError('Something went wrong, pleasy try again', {
+          errorName: 'somethingWrongTryAgainError'
+        });
       }
     },
     login: async (_, { email, password }) => {
 
       // Confirm that email and password not empty
       if (!email || !password) {
-        throw new UserInputError('Email and/or password is missing');
+        throw new UserInputError('Email and/or password is missing', {
+          errorName: 'inputValueMissingError'
+        });
       }
 
       // Confirm for valid email
       if (!validator.isEmail(email)) {
-        throw new UserInputError('Email is not a valid email');
+        throw new UserInputError('Email is not a valid email', {
+          errorName: 'notEmailError'
+        });
       }
 
       const account = await Account.findOne({ where: { email: email.toLowerCase() } });
@@ -148,7 +166,9 @@ const resolvers = {
         : await bcrypt.compare(password, account.passwordHash);
 
       if (!account || !passwordCorrect) {
-        throw new UserInputError('Username or password invalid');
+        throw new UserInputError('Username or password invalid', {
+          errorName: 'userOrPassIncorrectError'
+        });
       }
     
       const accountForToken = {
@@ -161,17 +181,23 @@ const resolvers = {
     changePassword: async (_, { currentPassword, newPassword, newPasswordConfirmation }, { currentUser }) => {
 
       if (!currentUser) {
-        throw new UserInputError('Not authenticated');
+        throw new AuthenticationError('Not authenticated', {
+          errorName: 'notAuthError'
+        });
       }
 
       // Check that confirmation matches to password
       if (newPassword !== newPasswordConfirmation) {
-        throw new UserInputError('New password and confirmation do not match');
+        throw new UserInputError('Password and confirmation do not match', {
+          errorName: 'passwordMismatchError'
+        });
       }
 
       // Check that new password is not same ass old one
       if (newPassword === currentPassword) {
-        throw new UserInputError('New password cannot be same with the old one');
+        throw new UserInputError('Old and new passwords cannot be equal', {
+          errorName: 'oldAndNewPassEqual'
+        });
       }
 
       const account = await Account.findByPk(currentUser.id);
@@ -182,7 +208,9 @@ const resolvers = {
         : await bcrypt.compare(currentPassword, account.passwordHash);
 
       if (!passwordCorrect) {
-        throw new UserInputError('Current password invalid');
+        throw new AuthenticationError('Current password invalid', {
+          errorName: 'currentPasswordIncorrect'
+        });
       }
 
       // Update password if all validations pass
@@ -197,7 +225,9 @@ const resolvers = {
         return true;
       } catch(error) {
         console.log(error.errors);
-        throw new UserInputError('Something went wrong, pleasy try again');
+        throw new ForbiddenError('Something went wrong, pleasy try again', {
+          errorName: 'somethingWrongTryAgainError'
+        });
       }
     },
   }
