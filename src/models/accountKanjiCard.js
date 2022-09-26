@@ -4,7 +4,12 @@ const { sequelize } = require('../util/database');
 class AccountKanjiCard extends Model {}
 
 AccountKanjiCard.init({
-  account_id: {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  accountId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -12,7 +17,7 @@ AccountKanjiCard.init({
       key: 'id'
     }
   },
-  kanji_id: {
+  kanjiId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -20,24 +25,24 @@ AccountKanjiCard.init({
       key: 'id'
     }
   },
-  review_count: {
+  reviewCount: {
     type: DataTypes.INTEGER,
     allowNull: false,
     default: 1
   },
-  easy_factor: {
+  easyFactor: {
     type: DataTypes.REAL,
     allowNull: false,
     default: 2.5
   },
-  due_date: {
+  dueDate: {
     type: DataTypes.DATEONLY,
     defaultValue: DataTypes.NOW
   },
-  account_story: {
+  accountStory: {
     type: DataTypes.STRING,
   },
-  account_hint: {
+  accountHint: {
     type: DataTypes.STRING,
   },
   mature: {
@@ -45,9 +50,19 @@ AccountKanjiCard.init({
     allowNull: false,
     defaultValue: false
   },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
 }, {
   sequelize,
-  modelName: 'accountKanjiCard'
+  modelName: 'account_kanji_card'
 });
 
 module.exports = AccountKanjiCard;

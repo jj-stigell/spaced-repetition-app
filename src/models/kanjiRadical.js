@@ -22,7 +22,7 @@ KanjiRadical.init({
   },
 }, {
   sequelize,
-  modelName: 'kanjiRadical'
+  modelName: 'kanji_radical'
 });
 
 module.exports = KanjiRadical;

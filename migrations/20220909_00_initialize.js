@@ -1,4 +1,4 @@
-const { DataTypes, Sequelize } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const initialDump = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/initial_dump.sql'), 'utf8');
@@ -306,8 +306,9 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.fn('now')
+      },
+      updated_at: {
+        type: DataTypes.DATE,
       },
       extra_review: {
         type: DataTypes.BOOLEAN,
@@ -320,6 +321,11 @@ module.exports = {
       },
     }),
     await queryInterface.createTable('account_kanji_card', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
       account_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -359,6 +365,12 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
+      },
+      created_at: {
+        type: DataTypes.DATE,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
       },
     }),
     await queryInterface.addIndex('account_kanji_card', ['account_id', 'kanji_id'], {

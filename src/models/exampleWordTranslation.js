@@ -36,7 +36,7 @@ ExampleWordTranslation.init({
   },
 }, {
   sequelize,
-  modelName: 'exampleWordTranslation'
+  modelName: 'example_word_translation'
 });
 
 module.exports = ExampleWordTranslation;

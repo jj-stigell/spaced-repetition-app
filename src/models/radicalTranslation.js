@@ -29,7 +29,7 @@ RadicalTranslation.init({
   },
 }, {
   sequelize,
-  modelName: 'radicalTranslation'
+  modelName: 'radical_translation'
 });
 
 module.exports = RadicalTranslation;

@@ -30,6 +30,11 @@ AccountKanjiReview.init({
     allowNull: false,
     defaultValue: DataTypes.NOW
   },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
   extraReview: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
@@ -41,7 +46,7 @@ AccountKanjiReview.init({
   },
 }, {
   sequelize,
-  modelName: 'accountKanjiReview'
+  modelName: 'account_kanji_review'
 });
 
 module.exports = AccountKanjiReview;

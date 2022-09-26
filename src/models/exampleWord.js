@@ -26,7 +26,7 @@ ExampleWord.init({
   },
 }, {
   sequelize,
-  modelName: 'exampleWord'
+  modelName: 'example_word'
 });
 
 module.exports = ExampleWord;

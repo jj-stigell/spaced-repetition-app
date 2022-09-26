@@ -34,7 +34,7 @@ TranslationKanji.init({
   },
 }, {
   sequelize,
-  modelName: 'translationKanji'
+  modelName: 'translation_kanji'
 });
 
 module.exports = TranslationKanji;
