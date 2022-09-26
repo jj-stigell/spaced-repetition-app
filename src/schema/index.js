@@ -2,10 +2,11 @@
 const { merge } = require('lodash');
 const { makeExecutableSchema } = require('@graphql-tools/schema');
 const { typeDef: Account, resolvers: accountResolvers } = require('./account/');
+const { typeDef: Card, resolvers: cardResolvers } = require('./card/');
 
 const schema = makeExecutableSchema({
-  typeDefs: [ Account ],
-  resolvers: merge(accountResolvers),
+  typeDefs: [ Account, Card ],
+  resolvers: merge(accountResolvers, cardResolvers),
 });
 
 module.exports = schema;
