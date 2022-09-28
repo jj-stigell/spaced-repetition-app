@@ -176,7 +176,7 @@ const resolvers = {
         id: account.id,
       };
 
-      return { value: jwt.sign(accountForToken, JWT_SECRET) };
+      return { value: jwt.sign(accountForToken, JWT_SECRET, { expiresIn: 60*60 }) };
     },
     changePassword: async (_, { currentPassword, newPassword, newPasswordConfirmation }, { currentUser }) => {
 
