@@ -17,6 +17,17 @@ const typeDef = `
     value: String!
   }
 
+  type AccountToken {
+    token: Token!
+    user: Account!
+  }
+
+  type ErrorList {
+    errorCodes: [String]!
+  }
+
+  union LoginPayload = AccountToken | ErrorList
+
   type Query {
     usernameAvailable(
       username: String!
@@ -34,7 +45,7 @@ const typeDef = `
     login(
       email: String!
       password: String!
-    ): Token
+    ): LoginPayload
 
     changePassword(
       currentPassword: String!
@@ -65,6 +76,8 @@ const resolvers = {
   },
   Mutation: {
     createAccount: async (_, { email, username, password, passwordConfirmation }) => {
+
+      const errorCodes = [];
 
       /**
        * Validate new account input:
@@ -171,12 +184,24 @@ const resolvers = {
         });
       }
     
-      const accountForToken = {
+      const payload = {
         username: account.username,
         id: account.id,
       };
 
-      return { value: jwt.sign(accountForToken, JWT_SECRET, { expiresIn: 60*60 }) };
+      const accountAndToken = {
+        token: { value: jwt.sign(payload, JWT_SECRET, { expiresIn: 60*60 })},
+        user: {
+          id: account.id,
+          email: account.email,
+          username: account.username
+        }
+      };
+
+      return { 
+        __typename: 'AccountToken',
+        accountAndToken
+      };
     },
     changePassword: async (_, { currentPassword, newPassword, newPasswordConfirmation }, { currentUser }) => {
 
