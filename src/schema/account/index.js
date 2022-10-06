@@ -27,6 +27,7 @@ const typeDef = `
   }
 
   union LoginPayload = AccountToken | Error
+  union RegisterResult = Account | Error
 
   type Query {
     usernameAvailable(
@@ -40,7 +41,7 @@ const typeDef = `
       username: String!
       password: String!
       passwordConfirmation: String!
-    ): Account
+    ): RegisterResult!
 
     login(
       email: String!
@@ -77,9 +78,6 @@ const resolvers = {
   Mutation: {
     createAccount: async (_, { email, username, password, passwordConfirmation }) => {
 
-      // eslint-disable-next-line no-unused-vars
-      const errorCodes = [];
-
       /**
        * Validate new account input:
        * - check email is valid and not in use
@@ -87,9 +85,25 @@ const resolvers = {
        * - check password matches with confirmation, correct length and includes required symbols
        */
 
+      // Confirm that no value is empty
+      if (!email || !username || !password || !passwordConfirmation) {
+        return { 
+          __typename: 'Error',
+          errorCode: 'inputValueMissingError'
+        };
+        /*
+        throw new UserInputError('Email and/or password is missing', {
+          errorName: 'inputValueMissingError'
+        });
+        */
+      }
+
       // Check that confirmation matches to password
       if (password !== passwordConfirmation) {
-        errorCodes.push('passwordMismatchError');
+        return { 
+          __typename: 'Error',
+          errorCode: 'passwordMismatchError'
+        };
         /*
         throw new UserInputError('Password and confirmation do not match', {
           errorName: 'passwordMismatchError'
@@ -99,7 +113,10 @@ const resolvers = {
 
       // Password must contain min 8 chars, at least one lower, upper and number character
       if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false })) {
-        errorCodes.push('passwordValidationError');
+        return { 
+          __typename: 'Error',
+          errorCode: 'passwordValidationError'
+        };
         /*
         throw new UserInputError('Password validation error', {
           errorName: 'passwordValidationError'
@@ -109,7 +126,10 @@ const resolvers = {
 
       // Check for valid email
       if (!validator.isEmail(email)) {
-        errorCodes.push('notEmailError');
+        return { 
+          __typename: 'Error',
+          errorCode: 'notEmailError'
+        };
         /*
         throw new UserInputError('Email is not a valid email', {
           errorName: 'notEmailError'
@@ -119,7 +139,10 @@ const resolvers = {
 
       // Check that username is according to rules, length 1-14, and alphanumeric
       if (!validator.isAlphanumeric(username) || !validator.isLength(username, { min: 1, max: 14 })) {
-        errorCodes.push('usernameValidationError');
+        return { 
+          __typename: 'Error',
+          errorCode: 'usernameValidationError'
+        };
         /*
         throw new UserInputError('Username validation error', {
           errorName: 'usernameValidationError'
@@ -130,7 +153,10 @@ const resolvers = {
       // Check that email not reserved, emails stored in lowercase
       const emailInUse = await Account.findOne({ where: { email: email.toLowerCase() } });
       if (emailInUse) {
-        errorCodes.push('emailInUseError');
+        return { 
+          __typename: 'Error',
+          errorCode: 'emailInUseError'
+        };
         /*
         throw new UserInputError('Email in use already', {
           errorName: 'emailInUseError'
@@ -147,7 +173,10 @@ const resolvers = {
         }
       });
       if (usernameInUse) {
-        errorCodes.push('usernameInUseError');
+        return { 
+          __typename: 'Error',
+          errorCode: 'usernameInUseError'
+        };
         /*
         throw new UserInputError('Username in use already', {
           errorName: 'usernameInUseError'
@@ -166,10 +195,19 @@ const resolvers = {
           username: username,
           passwordHash: passwordHash,
         });
-        return account;
+        return {
+          __typename: 'Account',
+          id: account.id,
+          email: account.email,
+          username: account.username
+        };
       } catch(error) {
         console.log(error.errors);
-        errorCodes.push('somethingWrongTryAgainError');
+
+        return { 
+          __typename: 'Error',
+          errorCode: 'connectionError'
+        };
         /*
         throw new ForbiddenError('Something went wrong, pleasy try again', {
           errorName: 'somethingWrongTryAgainError'
@@ -177,6 +215,12 @@ const resolvers = {
         */
       }
     },
+
+
+
+
+
+
     login: async (_, { email, password }) => {
 
       // Confirm that email and password not empty
@@ -291,7 +335,7 @@ const resolvers = {
       } catch(error) {
         console.log(error.errors);
         throw new ForbiddenError('Something went wrong, pleasy try again', {
-          errorName: 'somethingWrongTryAgainError'
+          errorName: 'connectionError'
         });
       }
     },
