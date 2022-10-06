@@ -22,11 +22,11 @@ const typeDef = `
     user: Account!
   }
 
-  type ErrorList {
-    errorCodes: [String]!
+  type Error {
+    errorCode: String
   }
 
-  union LoginPayload = AccountToken | ErrorList
+  union LoginPayload = AccountToken | Error
 
   type Query {
     usernameAvailable(
@@ -45,7 +45,7 @@ const typeDef = `
     login(
       email: String!
       password: String!
-    ): LoginPayload
+    ): LoginPayload!
 
     changePassword(
       currentPassword: String!
@@ -77,6 +77,7 @@ const resolvers = {
   Mutation: {
     createAccount: async (_, { email, username, password, passwordConfirmation }) => {
 
+      // eslint-disable-next-line no-unused-vars
       const errorCodes = [];
 
       /**
@@ -88,38 +89,53 @@ const resolvers = {
 
       // Check that confirmation matches to password
       if (password !== passwordConfirmation) {
+        errorCodes.push('passwordMismatchError');
+        /*
         throw new UserInputError('Password and confirmation do not match', {
           errorName: 'passwordMismatchError'
         });
+        */
       }
 
       // Password must contain min 8 chars, at least one lower, upper and number character
       if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false })) {
+        errorCodes.push('passwordValidationError');
+        /*
         throw new UserInputError('Password validation error', {
           errorName: 'passwordValidationError'
         });
+        */
       }
 
       // Check for valid email
       if (!validator.isEmail(email)) {
+        errorCodes.push('notEmailError');
+        /*
         throw new UserInputError('Email is not a valid email', {
           errorName: 'notEmailError'
         });
+        */
       }
 
       // Check that username is according to rules, length 1-14, and alphanumeric
       if (!validator.isAlphanumeric(username) || !validator.isLength(username, { min: 1, max: 14 })) {
+        errorCodes.push('usernameValidationError');
+        /*
         throw new UserInputError('Username validation error', {
           errorName: 'usernameValidationError'
         });
+        */
       }
 
       // Check that email not reserved, emails stored in lowercase
       const emailInUse = await Account.findOne({ where: { email: email.toLowerCase() } });
       if (emailInUse) {
+        errorCodes.push('emailInUseError');
+        /*
         throw new UserInputError('Email in use already', {
           errorName: 'emailInUseError'
         });
+        */
       }
 
       // Check that username is not in use, case insensitive
@@ -131,9 +147,12 @@ const resolvers = {
         }
       });
       if (usernameInUse) {
+        errorCodes.push('usernameInUseError');
+        /*
         throw new UserInputError('Username in use already', {
           errorName: 'usernameInUseError'
         });
+        */
       }
 
       // Create a new account if all validations pass
@@ -150,25 +169,40 @@ const resolvers = {
         return account;
       } catch(error) {
         console.log(error.errors);
+        errorCodes.push('somethingWrongTryAgainError');
+        /*
         throw new ForbiddenError('Something went wrong, pleasy try again', {
           errorName: 'somethingWrongTryAgainError'
         });
+        */
       }
     },
     login: async (_, { email, password }) => {
 
       // Confirm that email and password not empty
       if (!email || !password) {
+        return { 
+          __typename: 'Error',
+          errorCode: 'inputValueMissingError'
+        };
+        /*
         throw new UserInputError('Email and/or password is missing', {
           errorName: 'inputValueMissingError'
         });
+        */
       }
 
       // Confirm for valid email
       if (!validator.isEmail(email)) {
+        return { 
+          __typename: 'Error',
+          errorCode: 'notEmailError'
+        };
+        /*
         throw new UserInputError('Email is not a valid email', {
           errorName: 'notEmailError'
         });
+        */
       }
 
       const account = await Account.findOne({ where: { email: email.toLowerCase() } });
@@ -179,9 +213,15 @@ const resolvers = {
         : await bcrypt.compare(password, account.passwordHash);
 
       if (!account || !passwordCorrect) {
+        return { 
+          __typename: 'Error',
+          errorCode: 'userOrPassIncorrectError'
+        };
+        /*
         throw new UserInputError('Username or password invalid', {
           errorName: 'userOrPassIncorrectError'
         });
+        */
       }
     
       const payload = {
@@ -189,18 +229,18 @@ const resolvers = {
         id: account.id,
       };
 
-      const accountAndToken = {
-        token: { value: jwt.sign(payload, JWT_SECRET, { expiresIn: 60*60 })},
-        user: {
-          id: account.id,
-          email: account.email,
-          username: account.username
-        }
+      const accountInfo = {
+        id: account.id,
+        email: account.email,
+        username: account.username
       };
+
+      console.log(accountInfo);
 
       return { 
         __typename: 'AccountToken',
-        accountAndToken
+        token: { value: jwt.sign(payload, JWT_SECRET, { expiresIn: 60*60 })},
+        user: accountInfo
       };
     },
     changePassword: async (_, { currentPassword, newPassword, newPasswordConfirmation }, { currentUser }) => {
