@@ -10,4 +10,7 @@
 | 10.9. | 3 | Working first version of account creation and user login with validation and JWT |
 | 13.9. | 4 | Add all the remaining database tables to migrations and create models. Add associations between models. Automatic loading of precompiled sql file that has initial database, loaded with first migration. |
 | 14.9. | 4 | Set database constraints on foreign keys with initial migration, work on raw sql queries for fetching cards, create more mock data for db |
-| total | 28 |  | 
+| 6.10. | 1 | Add separate error type and union to login and register mutations. |
+|  |  | |
+|  |  | |
+| total | 29 |  | 
