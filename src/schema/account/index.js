@@ -215,12 +215,6 @@ const resolvers = {
         */
       }
     },
-
-
-
-
-
-
     login: async (_, { email, password }) => {
 
       // Confirm that email and password not empty
