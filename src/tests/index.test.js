@@ -42,8 +42,8 @@ describe('Account tests', () => {
   const account = {
     username: 'testing123',
     email: 'testing@test.com',
-    password: 'Qwerty1234',
-    passwordConfirmation: 'Qwerty1234'
+    password: 'ThisIsValid123',
+    passwordConfirmation: 'ThisIsValid123'
   };
 
   // before the tests spin up an Apollo Server
@@ -123,6 +123,94 @@ describe('Account tests', () => {
     expect(response.errors).toBeUndefined();
     expect(response.body.data.createAccount.email).toBeUndefined();
     expect(response.body.data?.createAccount.errorCode).toBe('inputValueMissingError');
+  });
+
+  it('Error when missing value, email', async () => {
+    const newAccount = {...account, email: ''};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('inputValueMissingError');
+  });
+
+  it('Error when missing value, password', async () => {
+    const newAccount = {...account, password: ''};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('inputValueMissingError');
+  });
+
+  it('Error when missing value, password confirmation', async () => {
+    const newAccount = {...account, passwordConfirmation: ''};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('inputValueMissingError');
+  });
+
+  it('Error when password and password confirmation do not match', async () => {
+    const newAccount = {...account, password: 'NotMatching456', passwordConfirmation: 'Matching456'};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('passwordMismatchError');
+  });
+
+  it('Error when password not long enough', async () => {
+    const newAccount = {...account, password: '1234Len', passwordConfirmation: '1234Len'};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('passwordValidationError');
+  });
+
+  it('Error when password does not contain numbers', async () => {
+    const newAccount = {...account, password: 'noNumbersInThisOne', passwordConfirmation: 'noNumbersInThisOne'};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('passwordValidationError');
+  });
+
+  it('Error when password does not contain uppercase', async () => {
+    const newAccount = {...account, password: 'thisisnotvalid123', passwordConfirmation: 'thisisnotvalid123'};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('passwordValidationError');
+  });
+
+  it('Error when password does not contain lowercase', async () => {
+    const newAccount = {...account, password: 'THISISNOTVALID123', passwordConfirmation: 'THISISNOTVALID123'};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('passwordValidationError');
   });
   
 });
