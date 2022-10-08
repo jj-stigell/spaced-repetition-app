@@ -78,6 +78,15 @@ describe('Account tests', () => {
     newPasswordConfirmation: 'ThisIsNewPass123'
   };
 
+  const availableEmail = 'emailnottaken@test.com';
+  const noNumbersPass = 'noNumbersInThisOne';
+  const notLongEnoughPass = '1234Len';
+  const noUpperCasePass = 'thisisnotvalid123';
+  const noLowerCasePass = 'THISISNOTVALID123';
+  const nonValidEmail = 'emailgoogle.com';
+  const nonAlphaNumeric = 'Len_Is_;OK';
+  const tooLongUsername = 'LenIsMoreThan14';
+
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
@@ -97,7 +106,7 @@ describe('Account tests', () => {
     it('New account created succesfully', async () => {
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: account });
+        .send({ query: mutations.registerMutation, variables: account });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.errorCode).toBeUndefined();
@@ -106,10 +115,9 @@ describe('Account tests', () => {
     });
 
     it('Error when email already taken', async () => {
-      const newAccount = {...account}; 
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: account });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -117,10 +125,10 @@ describe('Account tests', () => {
     });
 
     it('Error when email already taken, uppercase', async () => {
-      const newAccount = {...account, email: account.email.toUpperCase()};
+      const newAccount = { ...account, email: account.email.toUpperCase() };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -128,10 +136,10 @@ describe('Account tests', () => {
     });
 
     it('Error when username already taken', async () => {
-      const newAccount = {...account, email: 'emailnottaken@test.com'};
+      const newAccount = { ...account, email: 'emailnottaken@test.com' };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
     
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -139,10 +147,14 @@ describe('Account tests', () => {
     });
 
     it('Error when username already taken, uppercase', async () => {
-      const newAccount = {...account, email: 'emailnottaken@test.com', username: account.username.toUpperCase()};
+      const newAccount = {
+        ...account,
+        email: availableEmail,
+        username: account.username.toUpperCase()
+      };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -150,10 +162,10 @@ describe('Account tests', () => {
     });
 
     it('Error when missing value, username', async () => {
-      const newAccount = {...account, username: ''};
+      const newAccount = { ...account, username: '' };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -161,10 +173,10 @@ describe('Account tests', () => {
     });
 
     it('Error when missing value, email', async () => {
-      const newAccount = {...account, email: ''};
+      const newAccount = { ...account, email: '' };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -172,10 +184,10 @@ describe('Account tests', () => {
     });
 
     it('Error when missing value, password', async () => {
-      const newAccount = {...account, password: ''};
+      const newAccount = { ...account, password: '' };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -183,10 +195,10 @@ describe('Account tests', () => {
     });
 
     it('Error when missing value, password confirmation', async () => {
-      const newAccount = {...account, passwordConfirmation: ''};
+      const newAccount = { ...account, passwordConfirmation: '' };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -194,10 +206,14 @@ describe('Account tests', () => {
     });
 
     it('Error when password and password confirmation do not match', async () => {
-      const newAccount = {...account, password: 'NotMatching456', passwordConfirmation: 'Matching456'};
+      const newAccount = {
+        ...account,
+        password: 'NotMatching456',
+        passwordConfirmation: 'Matching456'
+      };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -205,10 +221,14 @@ describe('Account tests', () => {
     });
 
     it('Error when password not long enough', async () => {
-      const newAccount = {...account, password: '1234Len', passwordConfirmation: '1234Len'};
+      const newAccount = {
+        ...account,
+        password: notLongEnoughPass,
+        passwordConfirmation: notLongEnoughPass
+      };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -216,10 +236,14 @@ describe('Account tests', () => {
     });
 
     it('Error when password does not contain numbers', async () => {
-      const newAccount = {...account, password: 'noNumbersInThisOne', passwordConfirmation: 'noNumbersInThisOne'};
+      const newAccount = {
+        ...account,
+        password: noNumbersPass,
+        passwordConfirmation: noNumbersPass
+      };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -227,10 +251,14 @@ describe('Account tests', () => {
     });
 
     it('Error when password does not contain uppercase', async () => {
-      const newAccount = {...account, password: 'thisisnotvalid123', passwordConfirmation: 'thisisnotvalid123'};
+      const newAccount = {
+        ...account,
+        password: noUpperCasePass,
+        passwordConfirmation: noUpperCasePass
+      };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -238,10 +266,14 @@ describe('Account tests', () => {
     });
 
     it('Error when password does not contain lowercase', async () => {
-      const newAccount = {...account, password: 'THISISNOTVALID123', passwordConfirmation: 'THISISNOTVALID123'};
+      const newAccount = {
+        ...account,
+        password: noLowerCasePass,
+        passwordConfirmation: noLowerCasePass
+      };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -249,10 +281,10 @@ describe('Account tests', () => {
     });
 
     it('Error when email not valid', async () => {
-      const newAccount = {...account, email: 'emailgoogle.com'};
+      const newAccount = { ...account, email: nonValidEmail };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -260,10 +292,10 @@ describe('Account tests', () => {
     });
 
     it('Error when username over char limit', async () => {
-      const newAccount = {...account, username: 'LenIsMoreThan14'};
+      const newAccount = { ...account, username: tooLongUsername };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -271,10 +303,10 @@ describe('Account tests', () => {
     });
 
     it('Error when username not alphanumeric', async () => {
-      const newAccount = {...account, username: 'Len_Is_;OK'};
+      const newAccount = { ...account, username: nonAlphaNumeric };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.registerMutation, variables: newAccount });
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
@@ -287,7 +319,7 @@ describe('Account tests', () => {
     it('Login succesfully to an existing account', async () => {
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.loginMutation, variables: account });
+        .send({ query: mutations.loginMutation, variables: account });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.login.errorCode).toBeUndefined();
@@ -298,10 +330,10 @@ describe('Account tests', () => {
     });
 
     it('Error when missing value, email', async () => {
-      const newAccount = {...account, email: ''};
+      const newAccount = { ...account, email: '' };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.loginMutation, variables: newAccount });
+        .send({ query: mutations.loginMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.login.errorCode).toBeDefined();
@@ -311,10 +343,10 @@ describe('Account tests', () => {
     });
 
     it('Error when missing value, password', async () => {
-      const newAccount = {...account, password: ''};
+      const newAccount = { ...account, password: '' };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.loginMutation, variables: newAccount });
+        .send({ query: mutations.loginMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.login.errorCode).toBeDefined();
@@ -324,10 +356,10 @@ describe('Account tests', () => {
     });
 
     it('Error when email not valid', async () => {
-      const newAccount = {...account, email: 'emailgoogle.com'};
+      const newAccount = { ...account, email: 'emailgoogle.com' };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.loginMutation, variables: newAccount });
+        .send({ query: mutations.loginMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.login.errorCode).toBeDefined();
@@ -337,10 +369,10 @@ describe('Account tests', () => {
     });
 
     it('Error when account not found', async () => {
-      const newAccount = {...account, email: 'nonExistingEmail@test.com'};
+      const newAccount = { ...account, email: 'nonExistingEmail@test.com' };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.loginMutation, variables: newAccount });
+        .send({ query: mutations.loginMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.login.errorCode).toBeDefined();
@@ -350,10 +382,10 @@ describe('Account tests', () => {
     });
 
     it('Error when password incorrect', async () => {
-      const newAccount = {...account, password: 'ThisIsNotCorrect'};
+      const newAccount = { ...account, password: 'ThisIsNotCorrect' };
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.loginMutation, variables: newAccount });
+        .send({ query: mutations.loginMutation, variables: newAccount });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.login.errorCode).toBeDefined();
@@ -364,12 +396,13 @@ describe('Account tests', () => {
   });
 
   describe('Changing password', () => {
+    let authToken;
 
     it('Login and change password succesfully', async () => {
       //login and receive token
       let response = await request(testUrl)
         .post('/')
-        .send({query: mutations.loginMutation, variables: account });
+        .send({ query: mutations.loginMutation, variables: account });
       
       expect(response.errors).toBeUndefined();
       expect(response.body.data.login.errorCode).toBeUndefined();
@@ -378,12 +411,12 @@ describe('Account tests', () => {
       expect(response.body.data.login.user.email).toBe(account.email);
       expect(response.body.data.login.user.username).toBe(account.username);
 
-      const token = response.body.data.login.token.value;
+      authToken = response.body.data.login.token.value;
       //set token as auth header and change password
       response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${token}`)
-        .send({query: mutations.changePasswordMutation, variables: passwordData });
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: passwordData });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeUndefined();
@@ -392,8 +425,9 @@ describe('Account tests', () => {
       //login with new password
       response = await request(testUrl)
         .post('/')
-        .send({query: mutations.loginMutation, variables: {...account, password: passwordData.newPassword} });
+        .send({ query: mutations.loginMutation, variables: {...account, password: passwordData.newPassword} });
 
+      authToken = response.body.data.login.token.value;
       expect(response.errors).toBeUndefined();
       expect(response.body.data.login.errorCode).toBeUndefined();
       expect(response.body.data.login.token).toBeDefined();
@@ -402,10 +436,10 @@ describe('Account tests', () => {
       expect(response.body.data.login.user.username).toBe(account.username);
     });
 
-    it('Error when no token (not logged in to any account)', async () => {
+    it('Error when no token, not authenticated', async () => {
       const response = await request(testUrl)
         .post('/')
-        .send({query: mutations.changePasswordMutation, variables: passwordData });
+        .send({ query: mutations.changePasswordMutation, variables: passwordData });
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
@@ -413,7 +447,154 @@ describe('Account tests', () => {
       expect(response.body.data.changePassword.errorCode).toBe('notAuthError');
     });
     
-  });
+    it('Error when missing value, current password', async () => {
+      const data = { ...passwordData, currentPassword: '' };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
 
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('changePasswordValueMissingError');
+    });
+
+    it('Error when missing value, new password', async () => {
+      const data = { ...passwordData, newPassword: '' };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+      
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('changePasswordValueMissingError');
+    });
+
+    it('Error when missing value, new password confirmation', async () => {
+      const data = { ...passwordData, newPasswordConfirmation: '' };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('changePasswordValueMissingError');
+    });
+
+    it('Error when password and password confirmation do not match', async () => {
+      const data = { ...passwordData, newPassword: 'DoesNotMatchWithConfirmation123' };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('passwordMismatchError');
+    });
+
+    it('Error when new password is same as the old one', async () => {
+      const data = {
+        ...passwordData,
+        newPassword: passwordData.currentPassword,
+        newPasswordConfirmation: passwordData.currentPassword
+      };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('currAndNewPassEqualError');
+    });
+
+    it('Error when authorized but current password does not match with DB hash', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: passwordData });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('currentPasswordIncorrect');
+    });
+
+    it('Error when new password not long enough', async () => {
+      const data = {
+        ...passwordData,
+        newPassword: notLongEnoughPass,
+        newPasswordConfirmation: notLongEnoughPass
+      };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('passwordValidationError');
+    });
+
+    it('Error when new password does not contain numbers', async () => {
+      const data = {
+        ...passwordData,
+        newPassword: noNumbersPass,
+        newPasswordConfirmation: noNumbersPass
+      };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('passwordValidationError');
+    });
+
+    it('Error when new password does not contain uppercase', async () => {
+      const data = {
+        ...passwordData,
+        newPassword: noUpperCasePass,
+        newPasswordConfirmation: noUpperCasePass
+      };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('passwordValidationError');
+    });
+
+    it('Error when new password does not contain lowercase', async () => {
+      const data = {
+        ...passwordData,
+        newPassword: noLowerCasePass,
+        newPasswordConfirmation: noLowerCasePass
+      };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('passwordValidationError');
+    });
+  });
 
 });
