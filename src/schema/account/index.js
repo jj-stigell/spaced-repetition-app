@@ -118,7 +118,7 @@ const resolvers = {
       }
 
       // Password must contain min 8 chars, at least one lower, upper and number character
-      if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false })) {
+      if (!validator.isStrongPassword(password, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false }) || password.length > 50) {
         return { 
           __typename: 'Error',
           errorCode: 'passwordValidationError'
@@ -339,7 +339,7 @@ const resolvers = {
       }
 
       // Password must contain min 8 chars, at least one lower, upper and number character
-      if (!validator.isStrongPassword(newPassword, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false })) {
+      if (!validator.isStrongPassword(newPassword, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false }) || newPassword.length > 50) {
         return { 
           __typename: 'Error',
           errorCode: 'passwordValidationError'

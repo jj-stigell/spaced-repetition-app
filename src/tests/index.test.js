@@ -66,7 +66,7 @@ describe('Account tests', () => {
   let testServer, testUrl;
 
   const account = {
-    username: 'testing123',
+    username: 'Testing123',
     email: 'testing@test.com',
     password: 'ThisIsValid123',
     passwordConfirmation: 'ThisIsValid123'
@@ -81,6 +81,7 @@ describe('Account tests', () => {
   const availableEmail = 'emailnottaken@test.com';
   const noNumbersPass = 'noNumbersInThisOne';
   const notLongEnoughPass = '1234Len';
+  const tooLongPassword = 'LenIsMoreThan50WhichIsTheCurrentLimitDidUUnderstand';
   const noUpperCasePass = 'thisisnotvalid123';
   const noLowerCasePass = 'THISISNOTVALID123';
   const nonValidEmail = 'emailgoogle.com';
@@ -161,6 +162,21 @@ describe('Account tests', () => {
       expect(response.body.data.createAccount.errorCode).toBe('usernameInUseError');
     });
 
+    it('Error when username already taken, lowercase', async () => {
+      const newAccount = {
+        ...account,
+        email: availableEmail,
+        username: account.username.toLowerCase()
+      };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.createAccount.email).toBeUndefined();
+      expect(response.body.data.createAccount.errorCode).toBe('usernameInUseError');
+    });
+
     it('Error when missing value, username', async () => {
       const newAccount = { ...account, username: '' };
       const response = await request(testUrl)
@@ -225,6 +241,21 @@ describe('Account tests', () => {
         ...account,
         password: notLongEnoughPass,
         passwordConfirmation: notLongEnoughPass
+      };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.createAccount.email).toBeUndefined();
+      expect(response.body.data.createAccount.errorCode).toBe('passwordValidationError');
+    });
+
+    it('Error when password too long', async () => {
+      const newAccount = {
+        ...account,
+        password: tooLongPassword,
+        passwordConfirmation: tooLongPassword
       };
       const response = await request(testUrl)
         .post('/')
@@ -533,6 +564,23 @@ describe('Account tests', () => {
         ...passwordData,
         newPassword: notLongEnoughPass,
         newPasswordConfirmation: notLongEnoughPass
+      };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+
+      expect(response.errors).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword.status).toBeUndefined();
+      expect(response.body.data.changePassword.errorCode).toBe('passwordValidationError');
+    });
+
+    it('Error when new password is too long', async () => {
+      const data = {
+        ...passwordData,
+        newPassword: tooLongPassword,
+        newPasswordConfirmation: tooLongPassword
       };
       const response = await request(testUrl)
         .post('/')
