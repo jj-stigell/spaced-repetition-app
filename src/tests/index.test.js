@@ -69,7 +69,7 @@ describe('Account tests', () => {
     expect(response.body.data?.createAccount.email).toBe(account.email);
   });
 
-  it('Email taken error', async () => {
+  it('Error when email already taken', async () => {
     const newAccount = {...account}; 
     const response = await request(testUrl)
       .post('/')
@@ -81,7 +81,7 @@ describe('Account tests', () => {
     expect(response.body.data?.createAccount.errorCode).toBe('emailInUseError');
   });
 
-  it('Email taken error, when in uppercase', async () => {
+  it('Error when email already taken, uppercase', async () => {
     const newAccount = {...account, email: account.email.toUpperCase()};
     const response = await request(testUrl)
       .post('/')
@@ -92,7 +92,7 @@ describe('Account tests', () => {
     expect(response.body.data?.createAccount.errorCode).toBe('emailInUseError');
   });
 
-  it('Username taken error', async () => {
+  it('Error when username already taken', async () => {
     const newAccount = {...account, email: 'emailnottaken@test.com'};
     const response = await request(testUrl)
       .post('/')
@@ -103,7 +103,7 @@ describe('Account tests', () => {
     expect(response.body.data?.createAccount.errorCode).toBe('usernameInUseError');
   });
 
-  it('Username taken error, when in uppercase', async () => {
+  it('Error when username already taken, uppercase', async () => {
     const newAccount = {...account, email: 'emailnottaken@test.com', username: account.username.toUpperCase()};
     const response = await request(testUrl)
       .post('/')
@@ -212,5 +212,38 @@ describe('Account tests', () => {
     expect(response.body.data.createAccount.email).toBeUndefined();
     expect(response.body.data?.createAccount.errorCode).toBe('passwordValidationError');
   });
-  
+
+  it('Error when email not valid', async () => {
+    const newAccount = {...account, email: 'emailgoogle.com'};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('notEmailError');
+  });
+
+  it('Error when username over char limit', async () => {
+    const newAccount = {...account, username: 'LenIsMoreThan14'};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('usernameValidationError');
+  });
+
+  it('Error when username not alphanumeric', async () => {
+    const newAccount = {...account, username: 'Len_Is_;OK'};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('usernameValidationError');
+  });
+
 });
