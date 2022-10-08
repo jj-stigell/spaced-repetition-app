@@ -1,4 +1,3 @@
-
 const { ApolloServer } = require('apollo-server');
 const { JWT_SECRET, ENVIRONMENT } = require('./util/config');
 const { connectToDatabase } = require('./util/database');
