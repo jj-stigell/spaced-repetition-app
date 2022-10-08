@@ -48,7 +48,6 @@ describe('Account tests', () => {
 
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
-    //await rollbackMigration();
     await connectToDatabase();
     const serverInfo = await server.listen({ port: 4000 });
     testServer = serverInfo.server;
@@ -61,7 +60,6 @@ describe('Account tests', () => {
   });
   
   it('New account created succesfully', async () => {
-    // send our request to the url of the test server
     const response = await request(testUrl)
       .post('/')
       .send({query: mutations.registerMutation, variables: account });
@@ -69,8 +67,62 @@ describe('Account tests', () => {
     expect(response.errors).toBeUndefined();
     expect(response.body.data.errorCode).toBeUndefined();
     expect(response.body.data?.createAccount.email).toBe(account.email);
-    //{ errorCode: 'emailInUseError' }
+  });
 
+  it('Email taken error', async () => {
+    const newAccount = {...account}; 
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    console.log(response.body.data);
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('emailInUseError');
+  });
+
+  it('Email taken error, when in uppercase', async () => {
+    const newAccount = {...account, email: account.email.toUpperCase()};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('emailInUseError');
+  });
+
+  it('Username taken error', async () => {
+    const newAccount = {...account, email: 'emailnottaken@test.com'};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+    
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('usernameInUseError');
+  });
+
+  it('Username taken error, when in uppercase', async () => {
+    const newAccount = {...account, email: 'emailnottaken@test.com', username: account.username.toUpperCase()};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('usernameInUseError');
+  });
+
+  it('Error when missing value, username', async () => {
+    const newAccount = {...account, username: ''};
+    const response = await request(testUrl)
+      .post('/')
+      .send({query: mutations.registerMutation, variables: newAccount });
+
+    expect(response.errors).toBeUndefined();
+    expect(response.body.data.createAccount.email).toBeUndefined();
+    expect(response.body.data?.createAccount.errorCode).toBe('inputValueMissingError');
   });
   
 });
