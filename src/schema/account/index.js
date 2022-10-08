@@ -338,6 +338,19 @@ const resolvers = {
         */
       }
 
+      // Password must contain min 8 chars, at least one lower, upper and number character
+      if (!validator.isStrongPassword(newPassword, { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 0, returnScore: false })) {
+        return { 
+          __typename: 'Error',
+          errorCode: 'passwordValidationError'
+        };
+        /*
+        throw new UserInputError('Password validation error', {
+          errorName: 'passwordValidationError'
+        });
+        */
+      }
+
       const account = await Account.findByPk(currentUser.id);
 
       // If user is found, compare the crypted password to the hash fetched from database
