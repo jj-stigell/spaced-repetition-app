@@ -53,4 +53,10 @@ Frontend time keeping is in the frontend GitHub repository
 - [ ] Testing
     - [ ] Unit testing for functions
     - [ ] Integration tests
+        - [X] Account creation
+        - [X] Login
+        - [X] Password changing
+        - [ ] Logout
+        - [ ] Fetch cards
+        - [ ] Reschedule card
     
