@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 const { UserInputError, AuthenticationError, ForbiddenError } = require('apollo-server');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
@@ -22,12 +23,17 @@ const typeDef = `
     user: Account!
   }
 
+  type Success {
+    status: Boolean!
+  }
+
   type Error {
-    errorCode: String
+    errorCode: String!
   }
 
   union LoginPayload = AccountToken | Error
   union RegisterResult = Account | Error
+  union ChangePasswordResult = Success | Error
 
   type Query {
     usernameAvailable(
@@ -52,7 +58,7 @@ const typeDef = `
       currentPassword: String!
       newPassword: String!
       newPasswordConfirmation: String!
-    ): Boolean!
+    ): ChangePasswordResult!
   }
 `;
 
@@ -273,8 +279,6 @@ const resolvers = {
         username: account.username
       };
 
-      console.log(accountInfo);
-
       return { 
         __typename: 'AccountToken',
         token: { value: jwt.sign(payload, JWT_SECRET, { expiresIn: 60*60 })},
@@ -284,23 +288,54 @@ const resolvers = {
     changePassword: async (_, { currentPassword, newPassword, newPasswordConfirmation }, { currentUser }) => {
 
       if (!currentUser) {
+        return { 
+          __typename: 'Error',
+          errorCode: 'notAuthError'
+        };
+        /*
         throw new AuthenticationError('Not authenticated', {
           errorName: 'notAuthError'
         });
+        */
+      }
+
+      // Confirm that currentPassword, newPassword, newPasswordConfirmation not empty
+      if (!currentPassword || !newPassword || !newPasswordConfirmation) {
+        return { 
+          __typename: 'Error',
+          errorCode: 'changePasswordValueMissingError'
+        };
+        /*
+        throw new UserInputError('Current password, new password or confirmation is missing', {
+          errorName: 'inputValueMissingError'
+        });
+        */
       }
 
       // Check that confirmation matches to password
       if (newPassword !== newPasswordConfirmation) {
+        return { 
+          __typename: 'Error',
+          errorCode: 'passwordMismatchError'
+        };
+        /*
         throw new UserInputError('Password and confirmation do not match', {
           errorName: 'passwordMismatchError'
         });
+        */
       }
 
       // Check that new password is not same ass old one
       if (newPassword === currentPassword) {
+        return { 
+          __typename: 'Error',
+          errorCode: 'currAndNewPassEqualError'
+        };
+        /*
         throw new UserInputError('Old and new passwords cannot be equal', {
-          errorName: 'oldAndNewPassEqual'
+          errorName: 'currAndNewPassEqualError'
         });
+        */
       }
 
       const account = await Account.findByPk(currentUser.id);
@@ -311,9 +346,15 @@ const resolvers = {
         : await bcrypt.compare(currentPassword, account.passwordHash);
 
       if (!passwordCorrect) {
+        return { 
+          __typename: 'Error',
+          errorCode: 'currentPasswordIncorrect'
+        };
+        /*
         throw new AuthenticationError('Current password invalid', {
           errorName: 'currentPasswordIncorrect'
         });
+        */
       }
 
       // Update password if all validations pass
@@ -325,12 +366,21 @@ const resolvers = {
         // Update new password hash to account and save
         account.passwordHash = passwordHash;
         await account.save();
-        return true;
+        return { 
+          __typename: 'Success',
+          status: true
+        };
       } catch(error) {
         console.log(error.errors);
+        return { 
+          __typename: 'Error',
+          errorCode: 'connectionError'
+        };
+        /*
         throw new ForbiddenError('Something went wrong, pleasy try again', {
           errorName: 'connectionError'
         });
+        */
       }
     },
   }
