@@ -2,7 +2,7 @@ const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
 const { ApolloServer } = require('apollo-server');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET, ENVIRONMENT} = require('../util/config');
+const { JWT_SECRET, ENVIRONMENT, PORT } = require('../util/config');
 const { connectToDatabase } = require('../util/database');
 const { account, passwordData, stringData } = require('./constants'); 
 const { Account } = require('../models');
@@ -30,7 +30,7 @@ describe('Account tests', () => {
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
-    const serverInfo = await server.listen({ port: 4000 });
+    const serverInfo = await server.listen({ port: PORT });
     testServer = serverInfo.server;
     testUrl = serverInfo.url;
   });
