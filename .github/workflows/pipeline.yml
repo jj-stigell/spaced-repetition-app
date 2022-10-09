@@ -16,7 +16,6 @@ jobs:
       - name: npm install
         run: npm install
       - name: run integration tests
-        run: node src/util/rollback.js
+        run: npm test
         env:
           TEST_POSTGRE_URL: ${{ secrets.TEST_POSTGRE_URL }}
-          NODE_ENV: test
