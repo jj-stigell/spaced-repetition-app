@@ -22,6 +22,10 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
       - name: Push to Production
         if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ','), '#deploy') }}
-        run: |
-          echo "Hello PRODUCTION!"
-
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: production # push to production branch
+          FOLDER: main # The directory where your assets are generated
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
+          MESSAGE: "Pushed to production: ({sha}) {msg}" # The commit message

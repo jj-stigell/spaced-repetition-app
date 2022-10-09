@@ -583,5 +583,4 @@ describe('Account tests', () => {
       expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
   });
-
 });
