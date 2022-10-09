@@ -21,7 +21,13 @@ Frontend time keeping is in the frontend GitHub repository
     - [X] Create minimal amount of data for the db to be able to proceed with development
     - [X] Set clear project structure
     - [X] Set styling rules on lint etc.
+- [ ] Deployment pipeline
+    - [ ] Tests
+    - [ ] Version numbering
+    - [ ] Skip push/version release
 - [ ] GraphQL server
+    - [ ] Limit query depth
+    - [ ] Set request limit
     - [ ] User related
         - [ ] User registration
             - [X] Validate input (Validator lib, RegExp)
