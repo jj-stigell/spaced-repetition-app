@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { Umzug, SequelizeStorage } = require('umzug');
-const { DATABASE_URL } = require('./config');
+const { DATABASE_URL, ENVIRONMENT, NODE_ENV } = require('./config');
 
 const sequelize = new Sequelize(DATABASE_URL, {
   dialectOptions: {
@@ -14,6 +14,7 @@ const sequelize = new Sequelize(DATABASE_URL, {
     freezeTableName: true,        // Freeze names, no plural names
     underscored: true,            // Underscore everywhere, no need to declare on model level
   },
+  logging: ENVIRONMENT.DEVELOPMENT
 });
 
 const migrationConf = {
@@ -44,7 +45,7 @@ const connectToDatabase = async () => {
   try {
     await sequelize.authenticate();
     await runMigrations();
-    console.log('database connected');
+    console.log('database connected to:', NODE_ENV);
   } catch (err) {
     console.log('connecting database failed', err);
     return process.exit(1);
