@@ -577,6 +577,7 @@ describe('Account tests', () => {
         .set('Authorization', `bearer ${authToken}`)
         .send({ query: mutations.changePasswordMutation, variables: data });
 
+      console.log(response.body.data);
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
