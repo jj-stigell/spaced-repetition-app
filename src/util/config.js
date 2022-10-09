@@ -1,7 +1,7 @@
 /** Load and export all the environment variables */
 require('dotenv').config();
 
-let DATABASE_URL = process.env.TEST_POSTGRE_URL;
+let DATABASE_URL;
 const NODE_ENV = process.env.NODE_ENV;
 
 switch (NODE_ENV) {
