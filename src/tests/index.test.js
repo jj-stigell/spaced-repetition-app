@@ -292,7 +292,7 @@ describe('Account tests', () => {
         .send({ query: mutations.loginMutation, variables: account });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.login.errorCode).toBeUndefined();
+      expect(response.body.data.login?.errorCode).toBeUndefined();
       expect(response.body.data.login.token).toBeDefined();
       expect(response.body.data.login.user).toBeDefined();
       expect(response.body.data.login.user.email).toBe(account.email);
@@ -375,7 +375,7 @@ describe('Account tests', () => {
         .send({ query: mutations.loginMutation, variables: account });
       
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.login.errorCode).toBeUndefined();
+      expect(response.body.data.login?.errorCode).toBeUndefined();
       expect(response.body.data.login.token).toBeDefined();
       expect(response.body.data.login.user).toBeDefined();
       expect(response.body.data.login.user.email).toBe(account.email);
@@ -425,7 +425,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.changePasswordValueMissingError);
     });
@@ -438,7 +438,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
       
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.changePasswordValueMissingError);
     });
@@ -451,7 +451,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.changePasswordValueMissingError);
     });
@@ -464,7 +464,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.passwordMismatchError);
     });
@@ -481,7 +481,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.currAndNewPassEqualError);
     });
@@ -493,7 +493,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: passwordData });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.currentPasswordIncorrect);
     });
@@ -510,7 +510,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
@@ -527,7 +527,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
@@ -544,7 +544,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
@@ -561,7 +561,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
@@ -578,7 +578,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
