@@ -76,7 +76,7 @@ describe('Account tests', () => {
     });
 
     it('Error when username already taken', async () => {
-      const newAccount = { ...account, email: 'emailnottaken@test.com' };
+      const newAccount = { ...account, email: stringData.availableEmail };
       const response = await request(testUrl)
         .post('/')
         .send({ query: mutations.registerMutation, variables: newAccount });
