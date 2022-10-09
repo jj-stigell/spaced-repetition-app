@@ -20,3 +20,7 @@ jobs:
         env:
           TEST_POSTGRE_URL: ${{ secrets.TEST_POSTGRE_URL }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      - name: Push to Production
+        if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ','), '#deploy') }}
+        run: |
+          echo "Hello PRODUCTION!"
