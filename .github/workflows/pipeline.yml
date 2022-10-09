@@ -24,3 +24,4 @@ jobs:
         if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ','), '#deploy') }}
         run: |
           echo "Hello PRODUCTION!"
+
