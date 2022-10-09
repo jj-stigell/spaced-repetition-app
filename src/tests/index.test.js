@@ -4,10 +4,10 @@ const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET, ENVIRONMENT} = require('../util/config');
 const { connectToDatabase } = require('../util/database');
-// eslint-disable-next-line no-unused-vars
 const { account, passwordData, stringData } = require('./constants'); 
 const { Account } = require('../models');
 const mutations = require('./mutations');
+const errors = require('../util/errors');
 const schema = require('../schema');
 
 const server = new ApolloServer({
@@ -61,7 +61,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('emailInUseError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.emailInUseError);
     });
 
     it('Error when email already taken, uppercase', async () => {
@@ -72,7 +72,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('emailInUseError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.emailInUseError);
     });
 
     it('Error when username already taken', async () => {
@@ -83,7 +83,7 @@ describe('Account tests', () => {
     
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('usernameInUseError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.usernameInUseError);
     });
 
     it('Error when username already taken, uppercase', async () => {
@@ -98,7 +98,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('usernameInUseError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.usernameInUseError);
     });
 
     it('Error when username already taken, lowercase', async () => {
@@ -113,7 +113,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('usernameInUseError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.usernameInUseError);
     });
 
     it('Error when missing value, username', async () => {
@@ -124,7 +124,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('inputValueMissingError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.inputValueMissingError);
     });
 
     it('Error when missing value, email', async () => {
@@ -135,7 +135,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('inputValueMissingError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.inputValueMissingError);
     });
 
     it('Error when missing value, password', async () => {
@@ -146,7 +146,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('inputValueMissingError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.inputValueMissingError);
     });
 
     it('Error when missing value, password confirmation', async () => {
@@ -157,7 +157,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('inputValueMissingError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.inputValueMissingError);
     });
 
     it('Error when password and password confirmation do not match', async () => {
@@ -172,7 +172,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('passwordMismatchError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.passwordMismatchError);
     });
 
     it('Error when password not long enough', async () => {
@@ -187,7 +187,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('passwordValidationError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.passwordValidationError);
     });
 
     it('Error when password too long', async () => {
@@ -202,7 +202,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('passwordValidationError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.passwordValidationError);
     });
 
     it('Error when password does not contain numbers', async () => {
@@ -217,7 +217,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('passwordValidationError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.passwordValidationError);
     });
 
     it('Error when password does not contain uppercase', async () => {
@@ -232,7 +232,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('passwordValidationError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.passwordValidationError);
     });
 
     it('Error when password does not contain lowercase', async () => {
@@ -247,7 +247,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('passwordValidationError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.passwordValidationError);
     });
 
     it('Error when email not valid', async () => {
@@ -258,7 +258,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('notEmailError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.notEmailError);
     });
 
     it('Error when username over char limit', async () => {
@@ -269,7 +269,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('usernameValidationError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.usernameValidationError);
     });
 
     it('Error when username not alphanumeric', async () => {
@@ -280,7 +280,7 @@ describe('Account tests', () => {
 
       expect(response.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCode).toBe('usernameValidationError');
+      expect(response.body.data.createAccount.errorCode).toBe(errors.usernameValidationError);
     });
   });
 
@@ -309,7 +309,7 @@ describe('Account tests', () => {
       expect(response.body.data.login.errorCode).toBeDefined();
       expect(response.body.data.login.token).toBeUndefined();
       expect(response.body.data.login.user).toBeUndefined();
-      expect(response.body.data.login.errorCode).toBe('inputValueMissingError');
+      expect(response.body.data.login.errorCode).toBe(errors.inputValueMissingError);
     });
 
     it('Error when missing value, password', async () => {
@@ -322,11 +322,11 @@ describe('Account tests', () => {
       expect(response.body.data.login.errorCode).toBeDefined();
       expect(response.body.data.login.token).toBeUndefined();
       expect(response.body.data.login.user).toBeUndefined();
-      expect(response.body.data.login.errorCode).toBe('inputValueMissingError');
+      expect(response.body.data.login.errorCode).toBe(errors.inputValueMissingError);
     });
 
     it('Error when email not valid', async () => {
-      const newAccount = { ...account, email: 'emailgoogle.com' };
+      const newAccount = { ...account, email: stringData.nonValidEmail };
       const response = await request(testUrl)
         .post('/')
         .send({ query: mutations.loginMutation, variables: newAccount });
@@ -335,11 +335,11 @@ describe('Account tests', () => {
       expect(response.body.data.login.errorCode).toBeDefined();
       expect(response.body.data.login.token).toBeUndefined();
       expect(response.body.data.login.user).toBeUndefined();
-      expect(response.body.data.login.errorCode).toBe('notEmailError');
+      expect(response.body.data.login.errorCode).toBe(errors.notEmailError);
     });
 
     it('Error when account not found', async () => {
-      const newAccount = { ...account, email: 'nonExistingEmail@test.com' };
+      const newAccount = { ...account, email: stringData.nonExistingEmail };
       const response = await request(testUrl)
         .post('/')
         .send({ query: mutations.loginMutation, variables: newAccount });
@@ -348,11 +348,11 @@ describe('Account tests', () => {
       expect(response.body.data.login.errorCode).toBeDefined();
       expect(response.body.data.login.token).toBeUndefined();
       expect(response.body.data.login.user).toBeUndefined();
-      expect(response.body.data.login.errorCode).toBe('userOrPassIncorrectError');
+      expect(response.body.data.login.errorCode).toBe(errors.userOrPassIncorrectError);
     });
 
     it('Error when password incorrect', async () => {
-      const newAccount = { ...account, password: 'ThisIsNotCorrect' };
+      const newAccount = { ...account, password: stringData.incorrectPassword };
       const response = await request(testUrl)
         .post('/')
         .send({ query: mutations.loginMutation, variables: newAccount });
@@ -361,7 +361,7 @@ describe('Account tests', () => {
       expect(response.body.data.login.errorCode).toBeDefined();
       expect(response.body.data.login.token).toBeUndefined();
       expect(response.body.data.login.user).toBeUndefined();
-      expect(response.body.data.login.errorCode).toBe('userOrPassIncorrectError');
+      expect(response.body.data.login.errorCode).toBe(errors.userOrPassIncorrectError);
     });
   });
 
@@ -414,7 +414,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('notAuthError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.notAuthError);
     });
     
     it('Error when missing value, current password', async () => {
@@ -427,7 +427,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('changePasswordValueMissingError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.changePasswordValueMissingError);
     });
 
     it('Error when missing value, new password', async () => {
@@ -440,7 +440,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('changePasswordValueMissingError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.changePasswordValueMissingError);
     });
 
     it('Error when missing value, new password confirmation', async () => {
@@ -453,11 +453,11 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('changePasswordValueMissingError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.changePasswordValueMissingError);
     });
 
     it('Error when password and password confirmation do not match', async () => {
-      const data = { ...passwordData, newPassword: 'DoesNotMatchWithConfirmation123' };
+      const data = { ...passwordData, newPassword: stringData.incorrectPassword };
       const response = await request(testUrl)
         .post('/')
         .set('Authorization', `bearer ${authToken}`)
@@ -466,7 +466,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('passwordMismatchError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.passwordMismatchError);
     });
 
     it('Error when new password is same as the old one', async () => {
@@ -483,7 +483,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('currAndNewPassEqualError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.currAndNewPassEqualError);
     });
 
     it('Error when authorized but current password does not match with DB hash', async () => {
@@ -495,7 +495,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('currentPasswordIncorrect');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.currentPasswordIncorrect);
     });
 
     it('Error when new password not long enough', async () => {
@@ -512,7 +512,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('passwordValidationError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
 
     it('Error when new password is too long', async () => {
@@ -529,7 +529,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('passwordValidationError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
 
     it('Error when new password does not contain numbers', async () => {
@@ -546,7 +546,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('passwordValidationError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
 
     it('Error when new password does not contain uppercase', async () => {
@@ -563,7 +563,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('passwordValidationError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
 
     it('Error when new password does not contain lowercase', async () => {
@@ -580,7 +580,7 @@ describe('Account tests', () => {
       expect(response.errors).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBeDefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCode).toBe('passwordValidationError');
+      expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
   });
 

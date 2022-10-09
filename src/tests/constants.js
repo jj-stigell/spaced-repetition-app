@@ -12,15 +12,17 @@ const passwordData = {
 };
 
 const stringData = {
-  availableEmail : 'emailnottaken@test.com',
-  noNumbersPass : 'noNumbersInThisOne',
-  notLongEnoughPass : '1234Len',
-  tooLongPassword : 'LenIsMoreThan50WhichIsTheCurrentLimitDidUUnderstand',
-  noUpperCasePass : 'thisisnotvalid123',
-  noLowerCasePass : 'THISISNOTVALID123',
-  nonValidEmail : 'emailgoogle.com',
-  nonAlphaNumeric : 'Len_Is_;OK',
-  tooLongUsername : 'LenIsMoreThan14'
+  availableEmail: 'emailnottaken@test.com',
+  nonExistingEmail: 'nonExistingEmail@test.com',
+  incorrectPassword: 'ThisIsNotCorrect123',
+  noNumbersPass: 'noNumbersInThisOne',
+  notLongEnoughPass: '1234Len',
+  tooLongPassword: 'LenIsMoreThan50WhichIsTheCurrentLimitDidUUnderstand',
+  noUpperCasePass: 'thisisnotvalid123',
+  noLowerCasePass: 'THISISNOTVALID123',
+  nonValidEmail: 'emailgoogle.com',
+  nonAlphaNumeric: 'Len_Is_;OK',
+  tooLongUsername: 'LenIsMoreThan14'
 };
 
 module.exports = {
