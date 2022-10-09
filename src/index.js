@@ -1,5 +1,5 @@
 const { ApolloServer } = require('apollo-server');
-const { JWT_SECRET, ENVIRONMENT } = require('./util/config');
+const { JWT_SECRET, ENVIRONMENT, PORT } = require('./util/config');
 const { connectToDatabase } = require('./util/database');
 const schema = require('./schema');
 const jwt = require('jsonwebtoken');
@@ -22,7 +22,7 @@ const server = new ApolloServer({
 
 const start = async () => {
   await connectToDatabase();
-  server.listen().then(({ url }) => {
+  server.listen({ port: PORT }).then(({ url }) => {
     console.log(`Server ready at ${url}`);
   });
 };
