@@ -4,6 +4,8 @@ const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET, ENVIRONMENT} = require('../util/config');
 const { connectToDatabase } = require('../util/database');
+// eslint-disable-next-line no-unused-vars
+const { account, passwordData, stringData } = require('./constants'); 
 const { Account } = require('../models');
 const mutations = require('./mutations');
 const schema = require('../schema');
@@ -25,30 +27,6 @@ const server = new ApolloServer({
 
 describe('Account tests', () => {
   let testServer, testUrl;
-
-  const account = {
-    username: 'Testing123',
-    email: 'testing@test.com',
-    password: 'ThisIsValid123',
-    passwordConfirmation: 'ThisIsValid123'
-  };
-
-  const passwordData = {
-    currentPassword: account.password,
-    newPassword: 'ThisIsNewPass123',
-    newPasswordConfirmation: 'ThisIsNewPass123'
-  };
-
-  const availableEmail = 'emailnottaken@test.com';
-  const noNumbersPass = 'noNumbersInThisOne';
-  const notLongEnoughPass = '1234Len';
-  const tooLongPassword = 'LenIsMoreThan50WhichIsTheCurrentLimitDidUUnderstand';
-  const noUpperCasePass = 'thisisnotvalid123';
-  const noLowerCasePass = 'THISISNOTVALID123';
-  const nonValidEmail = 'emailgoogle.com';
-  const nonAlphaNumeric = 'Len_Is_;OK';
-  const tooLongUsername = 'LenIsMoreThan14';
-
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
@@ -111,7 +89,7 @@ describe('Account tests', () => {
     it('Error when username already taken, uppercase', async () => {
       const newAccount = {
         ...account,
-        email: availableEmail,
+        email: stringData.availableEmail,
         username: account.username.toUpperCase()
       };
       const response = await request(testUrl)
@@ -126,7 +104,7 @@ describe('Account tests', () => {
     it('Error when username already taken, lowercase', async () => {
       const newAccount = {
         ...account,
-        email: availableEmail,
+        email: stringData.availableEmail,
         username: account.username.toLowerCase()
       };
       const response = await request(testUrl)
@@ -200,8 +178,8 @@ describe('Account tests', () => {
     it('Error when password not long enough', async () => {
       const newAccount = {
         ...account,
-        password: notLongEnoughPass,
-        passwordConfirmation: notLongEnoughPass
+        password: stringData.notLongEnoughPass,
+        passwordConfirmation: stringData.notLongEnoughPass
       };
       const response = await request(testUrl)
         .post('/')
@@ -215,8 +193,8 @@ describe('Account tests', () => {
     it('Error when password too long', async () => {
       const newAccount = {
         ...account,
-        password: tooLongPassword,
-        passwordConfirmation: tooLongPassword
+        password: stringData.tooLongPassword,
+        passwordConfirmation: stringData.tooLongPassword
       };
       const response = await request(testUrl)
         .post('/')
@@ -230,8 +208,8 @@ describe('Account tests', () => {
     it('Error when password does not contain numbers', async () => {
       const newAccount = {
         ...account,
-        password: noNumbersPass,
-        passwordConfirmation: noNumbersPass
+        password: stringData.noNumbersPass,
+        passwordConfirmation: stringData.noNumbersPass
       };
       const response = await request(testUrl)
         .post('/')
@@ -245,8 +223,8 @@ describe('Account tests', () => {
     it('Error when password does not contain uppercase', async () => {
       const newAccount = {
         ...account,
-        password: noUpperCasePass,
-        passwordConfirmation: noUpperCasePass
+        password: stringData.noUpperCasePass,
+        passwordConfirmation: stringData.noUpperCasePass
       };
       const response = await request(testUrl)
         .post('/')
@@ -260,8 +238,8 @@ describe('Account tests', () => {
     it('Error when password does not contain lowercase', async () => {
       const newAccount = {
         ...account,
-        password: noLowerCasePass,
-        passwordConfirmation: noLowerCasePass
+        password: stringData.noLowerCasePass,
+        passwordConfirmation: stringData.noLowerCasePass
       };
       const response = await request(testUrl)
         .post('/')
@@ -273,7 +251,7 @@ describe('Account tests', () => {
     });
 
     it('Error when email not valid', async () => {
-      const newAccount = { ...account, email: nonValidEmail };
+      const newAccount = { ...account, email: stringData.nonValidEmail };
       const response = await request(testUrl)
         .post('/')
         .send({ query: mutations.registerMutation, variables: newAccount });
@@ -284,7 +262,7 @@ describe('Account tests', () => {
     });
 
     it('Error when username over char limit', async () => {
-      const newAccount = { ...account, username: tooLongUsername };
+      const newAccount = { ...account, username: stringData.tooLongUsername };
       const response = await request(testUrl)
         .post('/')
         .send({ query: mutations.registerMutation, variables: newAccount });
@@ -295,7 +273,7 @@ describe('Account tests', () => {
     });
 
     it('Error when username not alphanumeric', async () => {
-      const newAccount = { ...account, username: nonAlphaNumeric };
+      const newAccount = { ...account, username: stringData.nonAlphaNumeric };
       const response = await request(testUrl)
         .post('/')
         .send({ query: mutations.registerMutation, variables: newAccount });
@@ -523,8 +501,8 @@ describe('Account tests', () => {
     it('Error when new password not long enough', async () => {
       const data = {
         ...passwordData,
-        newPassword: notLongEnoughPass,
-        newPasswordConfirmation: notLongEnoughPass
+        newPassword: stringData.notLongEnoughPass,
+        newPasswordConfirmation: stringData.notLongEnoughPass
       };
       const response = await request(testUrl)
         .post('/')
@@ -540,8 +518,8 @@ describe('Account tests', () => {
     it('Error when new password is too long', async () => {
       const data = {
         ...passwordData,
-        newPassword: tooLongPassword,
-        newPasswordConfirmation: tooLongPassword
+        newPassword: stringData.tooLongPassword,
+        newPasswordConfirmation: stringData.tooLongPassword
       };
       const response = await request(testUrl)
         .post('/')
@@ -557,8 +535,8 @@ describe('Account tests', () => {
     it('Error when new password does not contain numbers', async () => {
       const data = {
         ...passwordData,
-        newPassword: noNumbersPass,
-        newPasswordConfirmation: noNumbersPass
+        newPassword: stringData.noNumbersPass,
+        newPasswordConfirmation: stringData.noNumbersPass
       };
       const response = await request(testUrl)
         .post('/')
@@ -574,8 +552,8 @@ describe('Account tests', () => {
     it('Error when new password does not contain uppercase', async () => {
       const data = {
         ...passwordData,
-        newPassword: noUpperCasePass,
-        newPasswordConfirmation: noUpperCasePass
+        newPassword: stringData.noUpperCasePass,
+        newPasswordConfirmation: stringData.noUpperCasePass
       };
       const response = await request(testUrl)
         .post('/')
@@ -591,8 +569,8 @@ describe('Account tests', () => {
     it('Error when new password does not contain lowercase', async () => {
       const data = {
         ...passwordData,
-        newPassword: noLowerCasePass,
-        newPasswordConfirmation: noLowerCasePass
+        newPassword: stringData.noLowerCasePass,
+        newPasswordConfirmation: stringData.noLowerCasePass
       };
       const response = await request(testUrl)
         .post('/')
