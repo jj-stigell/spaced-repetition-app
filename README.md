@@ -80,7 +80,7 @@ Frontend time keeping is in the frontend GitHub repository
     
 
 ## Deployment
-Deployment to done from branch `production` only if tests pass succesfully and deployment is indicated in the commit message. Render fetches automatically changes made to the production branch and releases the newest version of the production version.
+Deployment to done from branch `production` only if tests pass succesfully and deployment is indicated in the commit message. Render fetches automatically changes made to the production branch and releases the newest version of the production version. Currently deployed to [Render](https://render.com/)
 
 **Commands:**
 * `#test` runs tests (and deploy if coupled with lower command)
