@@ -29,3 +29,4 @@ jobs:
           FOLDER: ./                                       # The directory where your assets are generated
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}       # GitHub will automatically add this - you don't need to bother getting a token
           MESSAGE: "Pushed to production: ({sha}) {msg}"  # The commit message
+          
