@@ -561,7 +561,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.errors).toBeUndefined();
-      expect(response.body.data.changePassword?.errorCode).toBeDefined();
+      expect(response.body.data.changePassword?.errorCode).toBeUndefined();
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCode).toBe(errors.passwordValidationError);
     });
