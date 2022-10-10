@@ -8,13 +8,13 @@ on:
 jobs:
   deployment_pipeline:
     runs-on: ubuntu-20.04
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ','), '#skip') }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
       - uses: actions/checkout@master
         with:
           node-version: '16'
-        if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ','), '#skip') }}
       - name: npm install
         run: npm install
       - name: run integration tests
