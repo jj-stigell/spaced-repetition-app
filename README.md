@@ -67,3 +67,12 @@ Frontend time keeping is in the frontend GitHub repository
         - [ ] Fetch cards
         - [ ] Reschedule card
     
+
+## Github actions deployment pipeline
+
+Deployment to done from branch `production` only if tests pass succesfully and deployment is indicated in the commit message. Render fetches automatically changes made to the production branch and releases the newest version of the production version.
+
+Commands:
+    * `#test` runs tests (and deploy if coupled with lower command)
+    * `#deploy` deployes the main branch to production if all tests are run and pass
+    * with no `#test` and `#deploy` committed changes are just pushed to the main branch
