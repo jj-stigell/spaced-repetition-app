@@ -1,20 +1,30 @@
 name: Deployment pipeline
-  
+
 on:
-  workflow_run:
-      workflows: [Tests]
-      branches: [main]
-      types:
-        - completed
+  push:
+    branches:
+      - main
 
 jobs:
   deployment_pipeline:
     runs-on: ubuntu-20.04
     steps:
+      if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ','), '#skip') }}
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
       - uses: actions/checkout@master
-      - name: Push to Production
-        if: ${{ github.event.workflow_run.conclusion == 'success' && contains(join(github.event.commits.*.message, ','), '#deploy') }}
+        with:
+          node-version: '16'
+      - name: npm install
+        run: npm install
+      - name: run integration tests
+        id: test
+        run: npm test
+        env:
+          TEST_POSTGRE_URL: ${{ secrets.TEST_POSTGRE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      - name: push to production branch         # if tests pass and #deploy used
+        if: ${{ steps.test.outcome == 'success' && contains(join(github.event.commits.*.message, ','), '#deploy') }}
         uses: devmasx/merge-branch@master
         with:
           type: now
