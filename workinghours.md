@@ -16,4 +16,4 @@
 | 10.10. | 1 | Github actions deployment and testing pipeline |
 |  |  |  |
 |  |  |  |
-| total | 37 |  |
+| total | 37 |  | 
