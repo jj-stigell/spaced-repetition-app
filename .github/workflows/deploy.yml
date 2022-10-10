@@ -1,0 +1,23 @@
+name: Deployment pipeline
+  
+on:
+  workflow_run:
+      workflows: [Tests]
+      branches: [main]
+      types:
+        - completed
+
+jobs:
+  deployment_pipeline:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@master
+      - name: Push to Production
+        if: ${{ github.event.workflow_run.conclusion == 'success' && contains(join(github.event.commits.*.message, ','), '#deploy') }}
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: main
+          target_branch: production
+          github_token: ${{ secrets.GITHUB_TOKEN }}

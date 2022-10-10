@@ -24,7 +24,8 @@ Frontend time keeping is in the frontend GitHub repository
 - [ ] Deployment pipeline
     - [ ] Tests
     - [ ] Version numbering
-    - [ ] Skip push/version release
+    - [ ] Deploy to production with #deploy
+    - [ ] Add version release
 - [ ] GraphQL server
     - [ ] Limit query depth
     - [ ] Set request limit
