@@ -1,4 +1,5 @@
 const { UserInputError } = require('apollo-server');
+// eslint-disable-next-line no-unused-vars
 const validator = require('validator');
 const { AccountKanjiReview, AccountKanjiCard } = require('../../models');
 const matureInterval = 21;
