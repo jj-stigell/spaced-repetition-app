@@ -1,27 +1,31 @@
 # Spaced Repetition System app backend
 Backend for a [SRS](https://en.wikipedia.org/wiki/Spaced_repetition) app.
 
+
 ## Record of working hours for the Full Stack Open project
 Project's record of working hours is in the file workinghours.md.
 This file includes only hours spent developing the backend.
 Frontend time keeping is in the frontend GitHub repository
+
 
 # Table of Contents
 * [Tech stack](#tech-stack)
 * [Libraries](#libraries)
 * [TODOs](#todos)
 * [Deployment](#deployment)
+* [Apollo Server](#apollo-server)
 
-<hr/>
 
 ## Tech stack
 - [GraphQL](https://graphql.org/)
 - [PostgreSQL](https://www.postgresql.org/) database, with [Sequelize](https://sequelize.org/)
 
+
 ## Libraries
 - [JSON web token](https://www.npmjs.com/package/jsonwebtoken) or [JWT](https://jwt.io/) for user authorization. [MIT License](https://github.com/auth0/node-jsonwebtoken/blob/HEAD/LICENSE)
 - [bcrypt](https://www.npmjs.com/package/bcrypt) for hashing user passwords. [MIT License](https://github.com/kelektiv/node.bcrypt.js/blob/master/LICENSE)
 - [validator.js](https://www.npmjs.com/package/validator), validating user input on the server side. [MIT License](https://github.com/validatorjs/validator.js/blob/master/LICENSE)
+
 
 ## TODOs
 - [X] Project base
@@ -76,10 +80,13 @@ Frontend time keeping is in the frontend GitHub repository
     
 
 ## Deployment
-
 Deployment to done from branch `production` only if tests pass succesfully and deployment is indicated in the commit message. Render fetches automatically changes made to the production branch and releases the newest version of the production version.
 
 **Commands:**
 * `#test` runs tests (and deploy if coupled with lower command)
 * `#deploy` deployes the main branch to production if all tests are run and pass
 * with no `#test` and `#deploy` committed changes are just pushed to the main branch
+
+
+## Apollo Server
+[In memory caching](https://www.apollographql.com/docs/apollo-server/performance/cache-backends/)

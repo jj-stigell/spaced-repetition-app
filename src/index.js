@@ -1,4 +1,5 @@
 const { ApolloServer } = require('apollo-server');
+const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
 const { JWT_SECRET, ENVIRONMENT, PORT } = require('./util/config');
 const { connectToDatabase } = require('./util/database');
 const schema = require('./schema');
@@ -6,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const { Account } = require('./models');
 
 const server = new ApolloServer({
+  cache: new InMemoryLRUCache(),
   schema,
   introspection: ENVIRONMENT.DEVELOPMENT,
   context: async ({ req }) => {
