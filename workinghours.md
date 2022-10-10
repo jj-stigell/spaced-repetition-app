@@ -12,6 +12,7 @@
 | 14.9. | 4 | Set database constraints on foreign keys with initial migration, work on raw sql queries for fetching cards, create more mock data for db |
 | 6.10. | 1 | Add separate error type and union to login and register mutations. |
 | 8.10. | 5 | GraphQL endpoint test for account creation, login, password changing |
+| 9.10. | 2 | Github actions deployment and testing pipeline |
+| 10.10. | 1 | Github actions deployment and testing pipeline |
 |  |  | |
-|  |  | |
-| total | 34 |  | 
+| total | 37 |  | 

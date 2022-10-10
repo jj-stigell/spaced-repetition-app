@@ -31,4 +31,3 @@ jobs:
           from_branch: main
           target_branch: production
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          commit_msg: ${{ github.event.head_commit.message }}

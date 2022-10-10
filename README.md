@@ -6,6 +6,14 @@ Project's record of working hours is in the file workinghours.md.
 This file includes only hours spent developing the backend.
 Frontend time keeping is in the frontend GitHub repository
 
+# Table of Contents
+* [Tech stack](#tech-stack)
+* [Libraries](#libraries)
+* [TODOs](#todos)
+* [Deployment](#deployment)
+
+<hr/>
+
 ## Tech stack
 - [GraphQL](https://graphql.org/)
 - [PostgreSQL](https://www.postgresql.org/) database, with [Sequelize](https://sequelize.org/)
@@ -22,10 +30,9 @@ Frontend time keeping is in the frontend GitHub repository
     - [X] Set clear project structure
     - [X] Set styling rules on lint etc.
 - [ ] Deployment pipeline
-    - [ ] Tests
+    - [X] Run tests with #test
     - [ ] Version numbering
-    - [ ] Deploy to production with #deploy
-    - [ ] Add version release
+    - [X] Deploy to production with #deploy
 - [ ] GraphQL server
     - [ ] Limit query depth
     - [ ] Set request limit
@@ -68,11 +75,11 @@ Frontend time keeping is in the frontend GitHub repository
         - [ ] Reschedule card
     
 
-## Github actions deployment pipeline
+## Deployment
 
 Deployment to done from branch `production` only if tests pass succesfully and deployment is indicated in the commit message. Render fetches automatically changes made to the production branch and releases the newest version of the production version.
 
-Commands:
-    * `#test` runs tests (and deploy if coupled with lower command)
-    * `#deploy` deployes the main branch to production if all tests are run and pass
-    * with no `#test` and `#deploy` committed changes are just pushed to the main branch
+**Commands:**
+* `#test` runs tests (and deploy if coupled with lower command)
+* `#deploy` deployes the main branch to production if all tests are run and pass
+* with no `#test` and `#deploy` committed changes are just pushed to the main branch
