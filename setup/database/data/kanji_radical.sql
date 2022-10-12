@@ -1,0 +1,1 @@
+INSERT INTO kanji_radical(radical_id, kanji_id) VALUES (33, 1);
