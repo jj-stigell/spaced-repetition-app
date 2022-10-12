@@ -13,14 +13,36 @@ const typeDef = `
     password: String
   }
 
+  type CustomizedCardData {
+    reviewCount: Int
+    easyFactor: Float
+    accountStory: String
+    accountHint: String
+  }
+
+  type CardSet {
+    id: Int
+    kanji: String
+    learningOrder: Int
+    jlptLevel: Int
+    onyomi: String
+    onyomiRomaji: String
+    kunyomi: String
+    kunyomiRomaji: String
+    strokeCount: Int
+    createdAt: String
+    updatedAt: String
+    account_kanji_cards: CustomizedCardData
+  }
+
   type Query {
     fetchDueCards(
-      type: String!
-      jlptLevel: Int!
+      type: String
+      jlptLevel: Int
       includeLowerLevelCards: Boolean
       limitReviews: Int
       newCards: Boolean
-    ): Boolean
+    ): [CardSet]
   }
 
   type Mutation {
@@ -38,27 +60,29 @@ const typeDef = `
 const resolvers = {
   Query: {
     // eslint-disable-next-line no-unused-vars
-    fetchDueCards: async (_, { type, jlptLevel, includeLowerLevelCards, limitReviews, newCards }, { currentUser }) => {
+    fetchDueCards: async (_, { type, jlptLevel, includeLowerLevelCards, limitReviews, newCards }) => {
       /**
        * Fetch cards that are due or new cards based on the newCards boolean value, defaults to false. 
        */
+      //, { currentUser }
+
+      const userID = 1;
+      // eslint-disable-next-line no-unused-vars
+      const cards = await Kanji.findAll({
+        include: {
+          model: AccountKanjiCard,
+          attributes: ['reviewCount', 'easyFactor', 'accountStory', 'accountHint'],
+          where: {
+            account_id: userID
+          }
+        },
+        raw : true,
+        nest : true
+      });
+      
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      return true;
+      return cards;
     },
   },
   Mutation: {

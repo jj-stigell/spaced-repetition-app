@@ -121,6 +121,12 @@ module.exports = {
       stroke_count: {
         type: DataTypes.INTEGER,
       },
+      created_at: {
+        type: DataTypes.DATE,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+      },
     }),
     await queryInterface.createTable('radical', {
       id: {
