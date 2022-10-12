@@ -123,6 +123,7 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
       },
       updated_at: {
         type: DataTypes.DATE,
@@ -147,6 +148,13 @@ module.exports = {
       },
       stroke_count: {
         type: DataTypes.INTEGER,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
       },
     }),
     await queryInterface.createTable('translation_radical', {
@@ -173,6 +181,13 @@ module.exports = {
       description: {
         type: DataTypes.STRING,
       },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+      },
     }),
     await queryInterface.addIndex('translation_radical', ['radical_id', 'language_id'], {
       unique: true,
@@ -193,6 +208,13 @@ module.exports = {
           model: 'kanji',
           key: 'id'
         }
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
       },
     }),
     await queryInterface.addIndex('kanji_radical', ['radical_id', 'kanji_id'], {
@@ -312,6 +334,7 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
       },
       updated_at: {
         type: DataTypes.DATE,
@@ -374,6 +397,7 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
       },
       updated_at: {
         type: DataTypes.DATE,
