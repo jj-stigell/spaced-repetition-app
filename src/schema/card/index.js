@@ -1,7 +1,8 @@
 const { UserInputError } = require('apollo-server');
 // eslint-disable-next-line no-unused-vars
 const validator = require('validator');
-const { AccountKanjiReview, AccountKanjiCard } = require('../../models');
+// eslint-disable-next-line no-unused-vars
+const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji } = require('../../models');
 const matureInterval = 21;
 
 const typeDef = `
@@ -14,10 +15,11 @@ const typeDef = `
 
   type Query {
     fetchDueCards(
+      type: String!
       jlptLevel: Int!
-      includeLowerJlptLevel: Boolean
+      includeLowerLevelCards: Boolean
       limitReviews: Int
-      limitNewCards: Int
+      newCards: Boolean
     ): Boolean
   }
 
@@ -36,10 +38,26 @@ const typeDef = `
 const resolvers = {
   Query: {
     // eslint-disable-next-line no-unused-vars
-    fetchDueCards: async (_, { jlptLevel, includeLowerJlptLevel, limitReviews, limitNewCards }, { currentUser }) => {
+    fetchDueCards: async (_, { type, jlptLevel, includeLowerLevelCards, limitReviews, newCards }, { currentUser }) => {
       /**
-       * Fetch cards that are due. 
+       * Fetch cards that are due or new cards based on the newCards boolean value, defaults to false. 
        */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       return true;
     },
   },

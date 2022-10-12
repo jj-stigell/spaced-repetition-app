@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS radical (
 );
 
 -- Translation for the radical, multiple languages (e.g. 'fi', 'en', etc.)
-CREATE TABLE IF NOT EXISTS radical_translation (
+CREATE TABLE IF NOT EXISTS translation_radical (
   radical_id INTEGER NOT NULL,
   language_id CHAR(2) NOT NULL,
   translation TEXT NOT NULL,

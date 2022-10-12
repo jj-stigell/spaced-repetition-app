@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../util/database');
 
-class RadicalTranslation extends Model {}
+class TranslationRadical extends Model {}
 
-RadicalTranslation.init({
+TranslationRadical.init({
   radicalId: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -29,7 +29,7 @@ RadicalTranslation.init({
   },
 }, {
   sequelize,
-  modelName: 'radical_translation'
+  modelName: 'translation_radical'
 });
 
-module.exports = RadicalTranslation;
+module.exports = TranslationRadical;

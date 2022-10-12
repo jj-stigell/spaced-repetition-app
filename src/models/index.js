@@ -2,7 +2,7 @@ const Account = require('./account');
 const Kanji = require('./kanji');
 const Country = require('./country');
 const Radical = require('./country');
-const RadicalTranslation = require('./radicalTranslation');
+const TranslationRadical = require('./translationRadical');
 const KanjiRadical = require('./kanjiRadical');
 const TranslationKanji = require('./translationKanji');
 const ExampleWord = require('./exampleWord');
@@ -11,10 +11,10 @@ const AccountKanjiCard = require('./accountKanjiCard');
 const AccountKanjiReview = require('./accountKanjiReview');
 
 // Radical can have multiple translations that are identified with lang id and radical id
-Radical.hasMany(RadicalTranslation, {
+Radical.hasMany(TranslationRadical, {
   foreignKey: 'radical_id'
 });
-Country.hasMany(RadicalTranslation, {
+Country.hasMany(TranslationRadical, {
   foreignKey: 'language_id'
 });
 
@@ -59,7 +59,7 @@ module.exports = {
   Kanji,
   Country,
   Radical,
-  RadicalTranslation,
+  TranslationRadical,
   KanjiRadical,
   TranslationKanji,
   ExampleWord,

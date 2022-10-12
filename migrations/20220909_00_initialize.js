@@ -143,7 +143,7 @@ module.exports = {
         type: DataTypes.INTEGER,
       },
     }),
-    await queryInterface.createTable('radical_translation', {
+    await queryInterface.createTable('translation_radical', {
       radical_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -168,7 +168,7 @@ module.exports = {
         type: DataTypes.STRING,
       },
     }),
-    await queryInterface.addIndex('radical_translation', ['radical_id', 'language_id'], {
+    await queryInterface.addIndex('translation_radical', ['radical_id', 'language_id'], {
       unique: true,
     }),
     await queryInterface.createTable('kanji_radical', {
@@ -379,7 +379,7 @@ module.exports = {
     await queryInterface.sequelize.query(initialDump);
   },
   down: async ({ context: queryInterface }) => {
-    await queryInterface.dropTable('radical_translation');
+    await queryInterface.dropTable('translation_radical');
     await queryInterface.dropTable('kanji_radical');
     await queryInterface.dropTable('translation_kanji');
     await queryInterface.dropTable('example_word_translation');
