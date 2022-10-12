@@ -14,6 +14,6 @@
 | 8.10. | 5 | GraphQL endpoint test for account creation, login, password changing |
 | 9.10. | 2 | Github actions deployment and testing pipeline |
 | 10.10. | 1 | Github actions deployment and testing pipeline |
+| 12.10. | 2 | Write fetch cards query |
 |  |  |  |
-|  |  |  |
-| total | 37 |  | 
+| total | 39 |  | 
