@@ -1,7 +1,7 @@
 const Account = require('./account');
 const Kanji = require('./kanji');
 const Country = require('./country');
-const Radical = require('./country');
+const Radical = require('./radical');
 const TranslationRadical = require('./translationRadical');
 const KanjiRadical = require('./kanjiRadical');
 const TranslationKanji = require('./translationKanji');
@@ -19,8 +19,8 @@ Country.hasMany(TranslationRadical, {
 });
 
 // Radicals that kanji has, the kanji that has multiple radicals attached to it
-Kanji.belongsToMany(Radical, { through: KanjiRadical});
-Radical.belongsToMany(Kanji, { through: KanjiRadical});
+Kanji.belongsToMany(Radical, { through: KanjiRadical });
+Radical.belongsToMany(Kanji, { through: KanjiRadical });
 
 // Kanji and language can have multiple translations, but translation may have only one kanji+lang id combination
 Kanji.hasMany(TranslationKanji, {
