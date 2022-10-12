@@ -2,7 +2,7 @@ const { UserInputError } = require('apollo-server');
 // eslint-disable-next-line no-unused-vars
 const validator = require('validator');
 // eslint-disable-next-line no-unused-vars
-const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji } = require('../../models');
+const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji, Radical, TranslationRadical } = require('../../models');
 const matureInterval = 21;
 
 const typeDef = `
@@ -20,6 +20,13 @@ const typeDef = `
     accountHint: String
   }
 
+  type TranslationKanjiData {
+    keyword: String
+    story: String
+    hint: String
+    otherMeanings: String
+  }
+
   type CardSet {
     id: Int
     kanji: String
@@ -32,6 +39,7 @@ const typeDef = `
     strokeCount: Int
     createdAt: String
     updatedAt: String
+    translation_kanjis: TranslationKanjiData
     account_kanji_cards: CustomizedCardData
   }
 
@@ -60,28 +68,57 @@ const typeDef = `
 const resolvers = {
   Query: {
     // eslint-disable-next-line no-unused-vars
-    fetchDueCards: async (_, { type, jlptLevel, includeLowerLevelCards, limitReviews, newCards }) => {
+    fetchDueCards: async (_, { type, jlptLevel, includeLowerLevelCards, limitReviews, newCards, langId }) => {
       /**
        * Fetch cards that are due or new cards based on the newCards boolean value, defaults to false. 
        */
-      //, { currentUser }
 
       const userID = 1;
-      // eslint-disable-next-line no-unused-vars
+      const lang = 'fi';
+
       const cards = await Kanji.findAll({
-        include: {
-          model: AccountKanjiCard,
-          attributes: ['reviewCount', 'easyFactor', 'accountStory', 'accountHint'],
-          where: {
-            account_id: userID
-          }
-        },
+        include: [
+          {
+            model: AccountKanjiCard,
+            attributes: ['reviewCount', 'easyFactor', 'accountStory', 'accountHint'],
+            where: {
+              account_id: userID
+            }
+          },
+          {
+            model: TranslationKanji,
+            attributes: ['keyword', 'story', 'hint', 'otherMeanings'],
+            where: {
+              language_id: lang
+            }
+          },
+          {
+            model: Radical,
+            //include: [TranslationRadical]
+            //attributes: ['radical', 'reading', 'readingRomaji', 'strokeCount'],
+          },
+          /*
+          {
+            model: TranslationRadical,
+            where: {
+              language_id: lang
+            }
+            //attributes: ['radical', 'reading', 'readingRomaji', 'strokeCount'],
+          }*/
+        ],
         raw : true,
         nest : true
       });
-      
 
-
+      console.log();
+      console.log();
+      console.log();
+      console.log();
+      console.log(cards);
+      console.log();
+      console.log();
+      console.log();
+      console.log();
       return cards;
     },
   },

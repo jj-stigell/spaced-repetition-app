@@ -828,6 +828,7 @@ INSERT INTO translation_radical(radical_id,language_id,translation,description) 
 INSERT INTO translation_radical(radical_id,language_id,translation,description) VALUES (256,'en','flute',NULL);
 
 INSERT INTO kanji_radical(radical_id, kanji_id) VALUES (33, 1);
+INSERT INTO kanji_radical(radical_id, kanji_id) VALUES (34, 1);
 
 INSERT INTO account (email, password_hash, username, created_at, updated_at, last_login) VALUES ('test1@test.com', '$2b$10$GE7OUAW2u2u0WDiJ8nBxIucrIYSV8ZSBU0PCoV.Heg9C5pLnFdqZu', 'test1', NOW(), NOW(), NOW());
 INSERT INTO account (email, password_hash, username, created_at, updated_at, last_login) VALUES ('test2@test.com', '$2b$10$GE7OUAW2u2u0WDiJ8nBxIucrIYSV8ZSBU0PCoV.Heg9C5pLnFdqZu', 'test2', NOW(), NOW(), NOW());
