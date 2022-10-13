@@ -1,4 +1,5 @@
 const { UserInputError } = require('apollo-server');
+const { Op } = require('sequelize');
 // eslint-disable-next-line no-unused-vars
 const validator = require('validator');
 // eslint-disable-next-line no-unused-vars
@@ -90,17 +91,25 @@ const typeDef = `
 const resolvers = {
   Query: {
     // eslint-disable-next-line no-unused-vars
-    fetchDueCards: async (_, { type, jlptLevel, includeLowerLevelCards, limitReviews, newCards, langId }) => {
+    fetchDueCards: async (_, { type, jlptLevel, includeLowerLevelCards, limitReviews, langId }) => {
       /**
        * Fetch cards that are due or new cards based on the newCards boolean value, defaults to false. 
        */
 
+      const typee = 'kanji';
+      const jplevel = 1;
+      const lowerLevel = true;
       const userID = 1;
       const lang = 'en';
-      //const limitter = 35;
+      const limitter = 378;
 
       const cards = await Kanji.findAll({
-        
+        where: {
+          'jlptLevel': {
+            [Op.eq]: jplevel
+          }
+          
+        },
         include: [
           {
             model: AccountKanjiCard,
@@ -128,15 +137,13 @@ const resolvers = {
             },
           },
         ],
-        nest : true,
-        //limit: limitter,
         order: [
           [AccountKanjiCard, 'dueDate', 'ASC']
         ]
       });
 
       console.log(cards.length);
-      return cards;
+      return cards.slice(0, limitter);
     },
   },
   Mutation: {
