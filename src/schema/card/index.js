@@ -27,7 +27,27 @@ const typeDef = `
     otherMeanings: String
   }
 
-  type CardSet {
+  type TranslationRadical {
+    id: Int
+    languageId: String
+    translation: String
+    description: String
+    createdAt: String
+    updatedAt: String
+  }
+
+  type RadicalData {
+    id: Int
+    radical: String
+    reading: String
+    readingRomaji: String
+    strokeCount: Int
+    createdAt: String
+    updatedAt: String
+    translation_radicals: [TranslationRadical]
+  }
+
+  type Card {
     id: Int
     kanji: String
     learningOrder: Int
@@ -39,8 +59,9 @@ const typeDef = `
     strokeCount: Int
     createdAt: String
     updatedAt: String
-    translation_kanjis: TranslationKanjiData
-    account_kanji_cards: CustomizedCardData
+    translation_kanjis: [TranslationKanjiData]
+    account_kanji_cards: [CustomizedCardData]
+    radicals: [RadicalData]
   }
 
   type Query {
@@ -50,7 +71,7 @@ const typeDef = `
       includeLowerLevelCards: Boolean
       limitReviews: Int
       newCards: Boolean
-    ): [CardSet]
+    ): [Card]
   }
 
   type Mutation {
@@ -74,7 +95,7 @@ const resolvers = {
        */
 
       const userID = 1;
-      const lang = 'fi';
+      const lang = 'en';
 
       const cards = await Kanji.findAll({
         include: [
@@ -94,31 +115,19 @@ const resolvers = {
           },
           {
             model: Radical,
-            //include: [TranslationRadical]
-            //attributes: ['radical', 'reading', 'readingRomaji', 'strokeCount'],
+            attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+            include: {
+              model: TranslationRadical,
+              where: {
+                language_id: lang
+              }
+            },
           },
-          /*
-          {
-            model: TranslationRadical,
-            where: {
-              language_id: lang
-            }
-            //attributes: ['radical', 'reading', 'readingRomaji', 'strokeCount'],
-          }*/
         ],
-        raw : true,
         nest : true
       });
 
-      console.log();
-      console.log();
-      console.log();
-      console.log();
-      console.log(cards);
-      console.log();
-      console.log();
-      console.log();
-      console.log();
+      //console.log(cards);
       return cards;
     },
   },
