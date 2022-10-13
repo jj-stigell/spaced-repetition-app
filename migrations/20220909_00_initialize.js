@@ -54,7 +54,6 @@ module.exports = {
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
       },
       last_login: {
         type: DataTypes.DATE,
@@ -87,6 +86,13 @@ module.exports = {
       language_native: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
       },
     }),
     await queryInterface.createTable('kanji', {
@@ -158,6 +164,11 @@ module.exports = {
       },
     }),
     await queryInterface.createTable('translation_radical', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
       radical_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -193,6 +204,11 @@ module.exports = {
       unique: true,
     }),
     await queryInterface.createTable('kanji_radical', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
       radical_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -221,6 +237,11 @@ module.exports = {
       unique: true,
     }),
     await queryInterface.createTable('translation_kanji', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
       kanji_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -249,6 +270,13 @@ module.exports = {
       other_meanings: {
         type: DataTypes.STRING,
       },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+      },
     }),
     await queryInterface.addIndex('translation_kanji', ['kanji_id', 'language_id'], {
       unique: true,
@@ -273,6 +301,13 @@ module.exports = {
       },
       jlpt_level: {
         type: DataTypes.INTEGER,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
       },
     }),
     await queryInterface.createTable('example_word_translation', {
@@ -305,6 +340,13 @@ module.exports = {
       },
       description: {
         type: DataTypes.STRING,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
       },
     }),
     await queryInterface.addIndex('example_word_translation', ['word_id', 'language_id'], {
