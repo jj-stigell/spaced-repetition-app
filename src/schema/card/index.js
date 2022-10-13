@@ -18,6 +18,7 @@ const typeDef = `
     easyFactor: Float
     accountStory: String
     accountHint: String
+    dueDate: String
   }
 
   type TranslationKanjiData {
@@ -96,12 +97,15 @@ const resolvers = {
 
       const userID = 1;
       const lang = 'en';
+      //const limitter = 35;
 
       const cards = await Kanji.findAll({
+        
         include: [
           {
             model: AccountKanjiCard,
-            attributes: ['reviewCount', 'easyFactor', 'accountStory', 'accountHint'],
+            attributes: ['reviewCount', 'easyFactor', 'accountStory', 'accountHint', 'dueDate'],
+            //order: [['account_kanji_cards', 'dueDate', 'ASC']],
             where: {
               account_id: userID
             }
@@ -124,10 +128,14 @@ const resolvers = {
             },
           },
         ],
-        nest : true
+        nest : true,
+        //limit: limitter,
+        order: [
+          [AccountKanjiCard, 'dueDate', 'ASC']
+        ]
       });
 
-      //console.log(cards);
+      console.log(cards.length);
       return cards;
     },
   },
