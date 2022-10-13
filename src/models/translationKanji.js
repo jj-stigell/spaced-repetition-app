@@ -4,6 +4,11 @@ const { sequelize } = require('../util/database');
 class TranslationKanji extends Model {}
 
 TranslationKanji.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   kanjiId: {
     type: DataTypes.INTEGER,
     allowNull: false,

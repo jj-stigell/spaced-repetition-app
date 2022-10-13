@@ -4,6 +4,11 @@ const { sequelize } = require('../util/database');
 class TranslationRadical extends Model {}
 
 TranslationRadical.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   radicalId: {
     type: DataTypes.INTEGER,
     allowNull: false,
