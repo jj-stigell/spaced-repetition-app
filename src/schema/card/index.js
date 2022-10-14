@@ -67,12 +67,11 @@ const typeDef = `
   }
 
   type Query {
-    fetchDueCards(
-      type: String
+    fetchDueKanjiCards(
       jlptLevel: Int
       includeLowerLevelCards: Boolean
       limitReviews: Int
-      newCards: Boolean
+      langId: String
     ): [Card]
   }
 
@@ -91,24 +90,39 @@ const typeDef = `
 const resolvers = {
   Query: {
     // eslint-disable-next-line no-unused-vars
-    fetchDueCards: async (_, { type, jlptLevel, includeLowerLevelCards, limitReviews, langId }) => {
+    fetchDueKanjiCards: async (_, { jlptLevel, includeLowerLevelCards, limitReviews, langId }) => {
       /**
        * Fetch cards that are due or new cards based on the newCards boolean value, defaults to false. 
        */
 
-      const typee = 'kanji';
-      const jplevel = 1;
-      const lowerLevel = true;
+
+      //validation and errors here
+
+
+
+
+
+
+
+
+
+      
+
+
+
       const userID = 1;
-      const lang = 'en';
-      const limitter = 378;
+      let selectLevel = { [Op.eq]: jlptLevel };
+
+      // Set where filter to JLPT level >= jlptLevel, idf lower level cards included
+      if (includeLowerLevelCards) {
+        selectLevel = { [Op.gte]: jlptLevel };
+      }
+
+
 
       const cards = await Kanji.findAll({
         where: {
-          'jlptLevel': {
-            [Op.eq]: jplevel
-          }
-          
+          'jlptLevel': selectLevel
         },
         include: [
           {
@@ -123,7 +137,7 @@ const resolvers = {
             model: TranslationKanji,
             attributes: ['keyword', 'story', 'hint', 'otherMeanings'],
             where: {
-              language_id: lang
+              language_id: langId
             }
           },
           {
@@ -132,7 +146,7 @@ const resolvers = {
             include: {
               model: TranslationRadical,
               where: {
-                language_id: lang
+                language_id: langId
               }
             },
           },
@@ -143,7 +157,7 @@ const resolvers = {
       });
 
       console.log(cards.length);
-      return cards.slice(0, limitter);
+      return cards.slice(0, limitReviews);
     },
   },
   Mutation: {
