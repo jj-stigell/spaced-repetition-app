@@ -1,4 +1,3 @@
-
 const errors = {
   inputValueMissingError: 'inputValueMissingError',
   passwordMismatchError: 'passwordMismatchError',

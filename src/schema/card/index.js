@@ -5,7 +5,9 @@ const validator = require('validator');
 // eslint-disable-next-line no-unused-vars
 const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji, Radical, TranslationRadical } = require('../../models');
 const matureInterval = 21;
-const { errors } = require('../../util/errors');
+const errors = require('../../util/errors');
+// eslint-disable-next-line no-unused-vars
+const constants = require('../../util/constants');
 
 const typeDef = `
   type Account {
@@ -111,17 +113,30 @@ const resolvers = {
        * Fetch cards that are due or new cards based on the newCards boolean value, defaults to false. 
        */
 
+      console.log(errors);
 
       //validation and errors here
 
       // Check that user is logged in
       if (!currentUser) {
-        throw new UserInputError('Not authenticated');
+        return { 
+          __typename: 'Error',
+          errorCode: errors.notAuthError
+        };
       }
+
+
+      // Confirm that jlpt level and language id are not empty
+      if (!jlptLevel || !langId) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.inputValueMissingError
+        };
+      }
+
+
+
       //errors
-
-
-
       /*
 const errors = {
   inputValueMissingError: 'inputValueMissingError',
@@ -138,9 +153,6 @@ const errors = {
   currAndNewPassEqualError: 'currAndNewPassEqualError',
   currentPasswordIncorrect: 'currentPasswordIncorrect',
 };
-
-module.exports = errors;
-
       */
 
 
@@ -192,18 +204,18 @@ module.exports = errors;
         ]
       });
 
-      console.log(cards.length);
-
-      /*
+      
       if (limitReviews) {
-        return cards.slice(0, limitReviews);
-      }*/
+        return {
+          __typename: 'CardSet',
+          Cards: cards.slice(0, limitReviews),
+        };
+      }
+
       return {
         __typename: 'CardSet',
         Cards: cards,
       };
-
-      //return cards.slice(0, limitReviews);
     },
   },
   Mutation: {
