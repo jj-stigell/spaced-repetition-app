@@ -5,6 +5,7 @@ const validator = require('validator');
 // eslint-disable-next-line no-unused-vars
 const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji, Radical, TranslationRadical } = require('../../models');
 const matureInterval = 21;
+const { errors } = require('../../util/errors');
 
 const typeDef = `
   type Account {
@@ -12,6 +13,14 @@ const typeDef = `
     email: String
     username: String
     password: String
+  }
+
+  type Error {
+    errorCode: String!
+  }
+
+  type Success {
+    status: Boolean!
   }
 
   type CustomizedCardData {
@@ -66,13 +75,20 @@ const typeDef = `
     radicals: [RadicalData]
   }
 
+  type CardSet {
+    Cards: [Card]
+  }
+
+  union CardPayload = CardSet | Error
+  union RescheduleResult = Success | Error
+
   type Query {
     fetchDueKanjiCards(
       jlptLevel: Int
       includeLowerLevelCards: Boolean
       limitReviews: Int
       langId: String
-    ): [Card]
+    ): CardPayload!
   }
 
   type Mutation {
@@ -82,7 +98,7 @@ const typeDef = `
       newInterval: Int!
       newEasyFactor: Float!
       extraReview: Boolean
-    ): Boolean!
+    ): RescheduleResult!
 
   }
 `;
@@ -90,7 +106,7 @@ const typeDef = `
 const resolvers = {
   Query: {
     // eslint-disable-next-line no-unused-vars
-    fetchDueKanjiCards: async (_, { jlptLevel, includeLowerLevelCards, limitReviews, langId }) => {
+    fetchDueKanjiCards: async (_, { jlptLevel, includeLowerLevelCards, limitReviews, langId }, { currentUser }) => {
       /**
        * Fetch cards that are due or new cards based on the newCards boolean value, defaults to false. 
        */
@@ -98,6 +114,34 @@ const resolvers = {
 
       //validation and errors here
 
+      // Check that user is logged in
+      if (!currentUser) {
+        throw new UserInputError('Not authenticated');
+      }
+      //errors
+
+
+
+      /*
+const errors = {
+  inputValueMissingError: 'inputValueMissingError',
+  passwordMismatchError: 'passwordMismatchError',
+  passwordValidationError: 'passwordValidationError',
+  notEmailError: 'notEmailError',
+  usernameValidationError: 'usernameValidationError',
+  emailInUseError: 'emailInUseError',
+  usernameInUseError: 'usernameInUseError',
+  connectionError: 'connectionError',
+  userOrPassIncorrectError: 'userOrPassIncorrectError',
+  notAuthError: 'notAuthError',
+  changePasswordValueMissingError: 'changePasswordValueMissingError',
+  currAndNewPassEqualError: 'currAndNewPassEqualError',
+  currentPasswordIncorrect: 'currentPasswordIncorrect',
+};
+
+module.exports = errors;
+
+      */
 
 
 
@@ -106,19 +150,12 @@ const resolvers = {
 
 
 
-      
-
-
-
-      const userID = 1;
       let selectLevel = { [Op.eq]: jlptLevel };
 
       // Set where filter to JLPT level >= jlptLevel, idf lower level cards included
       if (includeLowerLevelCards) {
         selectLevel = { [Op.gte]: jlptLevel };
       }
-
-
 
       const cards = await Kanji.findAll({
         where: {
@@ -128,9 +165,8 @@ const resolvers = {
           {
             model: AccountKanjiCard,
             attributes: ['reviewCount', 'easyFactor', 'accountStory', 'accountHint', 'dueDate'],
-            //order: [['account_kanji_cards', 'dueDate', 'ASC']],
             where: {
-              account_id: userID
+              account_id: currentUser.id
             }
           },
           {
@@ -157,7 +193,17 @@ const resolvers = {
       });
 
       console.log(cards.length);
-      return cards.slice(0, limitReviews);
+
+      /*
+      if (limitReviews) {
+        return cards.slice(0, limitReviews);
+      }*/
+      return {
+        __typename: 'CardSet',
+        Cards: cards,
+      };
+
+      //return cards.slice(0, limitReviews);
     },
   },
   Mutation: {
