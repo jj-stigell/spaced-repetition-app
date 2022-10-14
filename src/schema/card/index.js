@@ -1,12 +1,8 @@
 const { UserInputError } = require('apollo-server');
 const { Op } = require('sequelize');
-// eslint-disable-next-line no-unused-vars
 const validator = require('validator');
-// eslint-disable-next-line no-unused-vars
 const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji, Radical, TranslationRadical } = require('../../models');
-const matureInterval = 21;
 const errors = require('../../util/errors');
-// eslint-disable-next-line no-unused-vars
 const constants = require('../../util/constants');
 
 const typeDef = `
@@ -107,15 +103,8 @@ const typeDef = `
 
 const resolvers = {
   Query: {
-    // eslint-disable-next-line no-unused-vars
+    // Fetch cards that are due or new cards based on the newCards boolean value, defaults to false.
     fetchDueKanjiCards: async (_, { jlptLevel, includeLowerLevelCards, limitReviews, langId }, { currentUser }) => {
-      /**
-       * Fetch cards that are due or new cards based on the newCards boolean value, defaults to false. 
-       */
-
-      console.log(errors);
-
-      //validation and errors here
 
       // Check that user is logged in
       if (!currentUser) {
@@ -125,7 +114,6 @@ const resolvers = {
         };
       }
 
-
       // Confirm that jlpt level and language id are not empty
       if (!jlptLevel || !langId) {
         return { 
@@ -134,37 +122,41 @@ const resolvers = {
         };
       }
 
+      // Chack that language id is one of the available
+      if (!validator.isIn(langId, constants.availableLanguages)) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.invalidLanguageIdError
+        };
+      }
 
+      // Check that type of integer correct
+      if (!Number.isInteger(jlptLevel) || !Number.isInteger(limitReviews)) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.inputValueTypeError
+        };
+      }
 
-      //errors
-      /*
-const errors = {
-  inputValueMissingError: 'inputValueMissingError',
-  passwordMismatchError: 'passwordMismatchError',
-  passwordValidationError: 'passwordValidationError',
-  notEmailError: 'notEmailError',
-  usernameValidationError: 'usernameValidationError',
-  emailInUseError: 'emailInUseError',
-  usernameInUseError: 'usernameInUseError',
-  connectionError: 'connectionError',
-  userOrPassIncorrectError: 'userOrPassIncorrectError',
-  notAuthError: 'notAuthError',
-  changePasswordValueMissingError: 'changePasswordValueMissingError',
-  currAndNewPassEqualError: 'currAndNewPassEqualError',
-  currentPasswordIncorrect: 'currentPasswordIncorrect',
-};
-      */
+      // Check that jlpt level between 1 - 5
+      if (!constants.jltpLevels.includes(jlptLevel)) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.invalidJlptLevelError
+        };
+      }
 
-
-
-
-
-
-
+      // Check that limitReviews in correct range (1 - 9999)
+      if (limitReviews > 9999 || limitReviews < 1) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.limitReviewsRangeError
+        };
+      }
 
       let selectLevel = { [Op.eq]: jlptLevel };
 
-      // Set where filter to JLPT level >= jlptLevel, idf lower level cards included
+      // Set where filter to JLPT level >= jlptLevel, lower level cards included
       if (includeLowerLevelCards) {
         selectLevel = { [Op.gte]: jlptLevel };
       }
@@ -204,7 +196,6 @@ const errors = {
         ]
       });
 
-      
       if (limitReviews) {
         return {
           __typename: 'CardSet',
@@ -241,7 +232,7 @@ const errors = {
         kanjiCardInfo.set({
           easyFactor: newEasyFactor,
           dueDate: '2022-12-01',
-          mature: newInterval > matureInterval ? true : false
+          mature: newInterval > constants.matureInterval ? true : false
         });
         kanjiCardInfo.save();
 
