@@ -839,6 +839,19 @@ INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor,
 INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (2, 1, 5, 2.5, '2022-10-01', 'this is my story for kanji mouth', 'this is my hint for mouth kanji');
 INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (2, 2, 5, 2.5, '2022-09-01', 'this is my story for kanji up', 'this is my hint for up kanji');
 INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (2, 3, 1, 2.5, '2022-09-22', 'this is my story for kanji go in', 'this is my hint for go in kanji');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 5, 6, 1.5, '2022-10-28', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 8, 6, 2.5, '2022-11-25', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 9, 8, 2.2, '2022-07-22', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 14, 5, 0.5, '2022-09-22', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 15, 9, 9.5, '2022-09-28', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 25, 6, 4.5, '2022-09-12', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 35, 9, 2.5, '2022-09-02', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 45, 2, 1.5, '2022-09-12', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 55, 7, 4.5, '2022-09-05', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 56, 45, 7.5, '2022-12-02', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 23, 5, 7.5, '2022-11-04', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 98, 5, 3.5, '2022-12-22', 'this is my story for this particular kanji', 'mu custom hint is this');
+INSERT INTO account_kanji_card (account_id, kanji_id, review_count, easy_factor, due_date, account_story, account_hint) VALUES (1, 67, 5, 8.5, '2022-12-12', 'this is my story for this particular kanji', 'mu custom hint is this');
 
 INSERT INTO account_kanji_review (account_id, kanji_id, review_result) VALUES (1, 1, 'easy');
 INSERT INTO account_kanji_review (account_id, kanji_id, review_result) VALUES (1, 1, 'hard');
