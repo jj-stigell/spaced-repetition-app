@@ -15,5 +15,7 @@
 | 9.10. | 2 | Github actions deployment and testing pipeline |
 | 10.10. | 1 | Github actions deployment and testing pipeline |
 | 12.10. | 2 | Write fetch cards query |
+| 15.10. | 2 | Write fetch new cards query |
 |  |  |  |
-| total | 39 |  | 
+|  |  |  |
+| total | 41 |  | 
