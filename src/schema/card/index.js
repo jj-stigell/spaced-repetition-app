@@ -131,7 +131,7 @@ const resolvers = {
       }
 
       // Check that type of integer correct
-      if (!Number.isInteger(jlptLevel) || !Number.isInteger(limitReviews)) {
+      if (!Number.isInteger(jlptLevel) || (limitReviews && !Number.isInteger(limitReviews))) {
         return { 
           __typename: 'Error',
           errorCode: errors.inputValueTypeError
