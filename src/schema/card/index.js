@@ -6,8 +6,6 @@ const errors = require('../../util/errors');
 const constants = require('../../util/constants');
 const { sequelize } = require('../../util/database');
 
-const Model = require('sequelize/lib/model');
-
 const typeDef = `
   type Account {
     id: ID!
@@ -292,15 +290,16 @@ const resolvers = {
         };
       }
 
-      let selectLevel = { [Op.eq]: jlptLevel };
+      let selectLevel = '=';
 
       // Set where filter to JLPT level >= jlptLevel, lower level cards included
       if (includeLowerLevelCards) {
-        selectLevel = { [Op.gte]: jlptLevel };
+        // eslint-disable-next-line no-unused-vars
+        selectLevel = '>=';
       }
 
       // fetch id of new cards (cards not existing in user cards)
-      const rawQuery = `SELECT id FROM kanji WHERE jlpt_level = :jlptLevel AND NOT EXISTS (
+      const rawQuery = `SELECT id FROM kanji WHERE jlpt_level ${selectLevel} :jlptLevel AND NOT EXISTS (
         SELECT NULL 
         FROM account_kanji_card 
         WHERE account_kanji_card.account_id = :accountId AND kanji.id = account_kanji_card.kanji_id
@@ -318,22 +317,15 @@ const resolvers = {
         raw: true
       });
 
-      const ids = cardIds.map(card => card.id);
-
-      console.log(ids);
+      const idArray = cardIds.map(card => card.id);
 
       const cards = await Kanji.findAll({
         where: {
-          'jlptLevel': selectLevel
+          'id': {
+            [Op.in]: idArray
+          }
         },
         include: [
-          {
-            model: AccountKanjiCard,
-            attributes: ['reviewCount', 'easyFactor', 'accountStory', 'accountHint', 'dueDate'],
-            where: {
-              account_id: currentUser.id
-            }
-          },
           {
             model: TranslationKanji,
             attributes: ['keyword', 'story', 'hint', 'otherMeanings'],
@@ -353,21 +345,13 @@ const resolvers = {
           },
         ],
         order: [
-          [AccountKanjiCard, 'dueDate', 'ASC']
+          ['learningOrder', 'ASC']
         ]
       });
 
-
-      if (limitReviews) {
-        return {
-          __typename: 'CardSet',
-          Cards: cardIds.slice(0, limitReviews),
-        };
-      }
-
       return {
         __typename: 'CardSet',
-        Cards: cardIds,
+        Cards: cards,
       };
     },
   },
