@@ -1,7 +1,17 @@
 const { DataTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
-const initialDump = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/initial_dump.sql'), 'utf8');
+const country = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/country.sql'), 'utf8');
+const kanji = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji.sql'), 'utf8');
+const translation_kanji_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_kanji_en.sql'), 'utf8');
+const translation_kanji_fi = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_kanji_fi.sql'), 'utf8');
+const radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/radical.sql'), 'utf8');
+const translation_radical_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_radical_en.sql'), 'utf8');
+const translation_radical_fi = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_radical_fi.sql'), 'utf8');
+const kanji_radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_radical.sql'), 'utf8');
+const account = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account.sql'), 'utf8');
+const account_kanji_card = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_kanji_card.sql'), 'utf8');
+const account_kanji_review = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_kanji_review.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -448,7 +458,17 @@ module.exports = {
     await queryInterface.addIndex('account_kanji_card', ['account_id', 'kanji_id'], {
       unique: true,
     }),
-    await queryInterface.sequelize.query(initialDump);
+    await queryInterface.sequelize.query(country);
+    await queryInterface.sequelize.query(kanji);
+    await queryInterface.sequelize.query(translation_kanji_en);
+    await queryInterface.sequelize.query(translation_kanji_fi);
+    await queryInterface.sequelize.query(radical);
+    await queryInterface.sequelize.query(translation_radical_en);
+    await queryInterface.sequelize.query(translation_radical_fi);
+    await queryInterface.sequelize.query(kanji_radical);
+    await queryInterface.sequelize.query(account);
+    await queryInterface.sequelize.query(account_kanji_card);
+    await queryInterface.sequelize.query(account_kanji_review);
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('translation_radical');
