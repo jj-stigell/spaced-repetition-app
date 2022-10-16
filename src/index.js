@@ -27,10 +27,14 @@ const server = new ApolloServer({
 });
 
 const start = async () => {
-  await connectToDatabase();
-  server.listen({ port: PORT }).then(({ url }) => {
-    console.log(`Server ready at ${url}`);
-  });
+  try {
+    await connectToDatabase();
+    server.listen({ port: PORT }).then(({ url }) => {
+      console.log(`Server ready at ${url}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 start();
