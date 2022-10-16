@@ -74,34 +74,11 @@ const typeDef = `
     radicals: [RadicalData]
   }
 
-  type NewCard {
-    id: Int
-    kanji: String
-    learningOrder: Int
-    jlptLevel: Int
-    onyomi: String
-    onyomiRomaji: String
-    kunyomi: String
-    kunyomiRomaji: String
-    strokeCount: Int
-    createdAt: String
-    updatedAt: String
-    translation_kanjis: TranslationKanjiData
-    radicals: RadicalData
-  }
-
-  type NewCardSet {
-    NewCards: [NewCard]
-  }
-
   type CardSet {
     Cards: [Card]
   }
 
-  
-
   union CardPayload = CardSet | Error
-  union NewCardPayload = NewCardSet | Error
   union RescheduleResult = Success | Error
 
   type Query {
@@ -178,7 +155,7 @@ const resolvers = {
       }
 
       // Check that limitReviews in correct range (1 - 9999)
-      if (limitReviews > 9999 || limitReviews < 1) {
+      if (limitReviews > 999 || limitReviews < 1) {
         return { 
           __typename: 'Error',
           errorCode: errors.limitReviewsRangeError
@@ -283,7 +260,7 @@ const resolvers = {
       }
 
       // Check that limitReviews in correct range (1 - 9999)
-      if (limitReviews > 9999 || limitReviews < 1) {
+      if (limitReviews > 999 || limitReviews < 1) {
         return { 
           __typename: 'Error',
           errorCode: errors.limitReviewsRangeError
