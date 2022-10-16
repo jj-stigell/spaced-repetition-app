@@ -1,4 +1,3 @@
-const { UserInputError } = require('apollo-server');
 const validator = require('validator');
 const { Op } = require('sequelize');
 const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji, Radical, TranslationRadical } = require('../../models');
@@ -402,12 +401,11 @@ const resolvers = {
         };
       }
 
-
-      let kanjiCardInfo;
+      let accountKanjiCard;
 
       try {
         // Check if card exists for the user for that kanji
-        kanjiCardInfo = await AccountKanjiCard.findOne({ where: { accountId: currentUser.id, kanjiId: kanjiId } });
+        accountKanjiCard = await AccountKanjiCard.findOne({ where: { accountId: currentUser.id, kanjiId: kanjiId } });
       } catch(error) {
         return { 
           __typename: 'Error',
@@ -415,32 +413,72 @@ const resolvers = {
         };
       }
 
+      // Create new custom card for the user, if none found the current user id and kanji id
+      if (!accountKanjiCard) {
+        // Check that kanji actually exists in the database
+        const rawQuery = 'SELECT 1 FROM kanji WHERE id = :kanjiId';
+        try {
+          const kanji = await sequelize.query(rawQuery, {
+            replacements: {
+              kanjiId: kanjiId,
+            },
+            model: Kanji,
+            type: sequelize.QueryTypes.SELECT,
+            raw: true
+          });
 
-      
+          if (!kanji[0]) {
+            return { 
+              __typename: 'Error',
+              errorCode: errors.nonExistingId
+            };
+          }
+          
+          // Create new account kanji card if kanji exists
+          accountKanjiCard = await AccountKanjiCard.create({
+            accountId: currentUser.id,
+            kanjiId: kanjiId,
+            dueDate: '2022-12-01',
+            easyFactor: 2.5,
+            reviewCount: 1,
+          });
+          accountKanjiCard.save();
 
-      if (!kanjiCardInfo) {
-        // Create new custom card for the user
-        return { 
-          __typename: 'Error',
-          errorCode: errors.connectionError
-        };
+          // Add new row to review history
+          // eslint-disable-next-line no-unused-vars
+          const newReviewHistory = await AccountKanjiReview.create({
+            accountId: currentUser.id,
+            kanjiId: kanjiId,
+            reviewResult: reviewResult,
+            extraReview: extraReview ? true : false
+          });
+
+          return { 
+            __typename: 'Success',
+            status: true
+          };
+
+        } catch(error) {
+          console.log(error.errors);
+          return { 
+            __typename: 'Error',
+            errorCode: errors.connectionError
+          };
+        }
       }
 
-
-
-
+      // Update existing user kanji card and add new row to history
       try {
-      // Add one review to the total count
-        kanjiCardInfo.increment('reviewCount');
+        // Add one review to the total count
+        accountKanjiCard.increment('reviewCount');
         
-        // Update and save changes
-        kanjiCardInfo.set({
+        // Update and save changes, card is set to mature if the interval is higher than set maturing interval
+        accountKanjiCard.set({
           easyFactor: newEasyFactor,
-          dueDate: '2022-12-01',
+          dueDate: '2022-12-23',
           mature: newInterval > constants.matureInterval ? true : false
         });
-        kanjiCardInfo.save();
-
+        accountKanjiCard.save();
 
         // Add new row to review history
         await AccountKanjiReview.create({
@@ -449,10 +487,16 @@ const resolvers = {
           reviewResult: reviewResult,
           extraReview: extraReview ? true : false
         });
-        return true;
+        return { 
+          __typename: 'Success',
+          status: true,
+        };
       } catch(error) {
         console.log(error.errors);
-        throw new UserInputError('Something went wrong, pleasy try again');
+        return { 
+          __typename: 'Error',
+          errorCode: errors.connectionError
+        };
       }
     },
   }
