@@ -59,10 +59,18 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] Validate new, confirmation must match, cannot be same as old one
             - [ ] Email, settings change
         - [ ] Recover account (e.g. password forgotten)
+    - [X] Card related
         - [ ] Validation of user input, including error messages
-    - [ ] Card related
-        - [ ] Get cards based on user ID and other inputs
-        - [ ] Reschedule card based on user input
+             - [ ] Fetch due cards
+             - [ ] Fetch new cards
+             - [ ] Reschedule card
+        - [X] Get cards based on user ID and other inputs
+            - [X] New cards
+            - [X] Due cards
+        - [X] Reschedule card based on user input (interval, extrareview, etc.)
+            - [X] Reschedule new card by creating new user card
+            - [X] Reschedule due card
+            - [X] Add row to review history 
 - [ ] PostgreSQL / Sequelize
     - [X] Translate db to Sequelize
     - [X] Create models and associations
@@ -75,7 +83,8 @@ Frontend time keeping is in the frontend GitHub repository
         - [X] Login
         - [X] Password changing
         - [ ] Logout
-        - [ ] Fetch cards
+        - [ ] Fetch due cards
+        - [ ] Fetch new cards
         - [ ] Reschedule a card
     
 
