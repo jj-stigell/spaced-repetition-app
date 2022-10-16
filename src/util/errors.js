@@ -15,9 +15,11 @@ const errors = {
   currentPasswordIncorrect: 'currentPasswordIncorrect',
   invalidJlptLevelError: 'invalidJlptLevelError',
   invalidLanguageIdError: 'invalidLanguageIdError',
+  invalidResultIdError: 'invalidResultIdError',
   limitReviewsRangeError: 'limitReviewsRangeError',
   noDueCardsError: 'noDueCardsError',
-  noNewCardsError: 'noNewCardsError'
+  noNewCardsError: 'noNewCardsError',
+  negativeNumberTypeError: 'negativeNumberTypeError'
 };
 
 module.exports = errors;
