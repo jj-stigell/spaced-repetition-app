@@ -204,6 +204,15 @@ const resolvers = {
         ]
       });
 
+      // If no cards found, return error
+      if (cards.length === 0) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.noDueCardsError
+        };
+      }
+
+      // Slice if review count limited
       if (limitReviews) {
         return {
           __typename: 'CardSet',
@@ -326,6 +335,13 @@ const resolvers = {
           ['learningOrder', 'ASC']
         ]
       });
+
+      if (cards.length === 0) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.noNewCardsError
+        };
+      }
 
       return {
         __typename: 'CardSet',
