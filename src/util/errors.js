@@ -19,7 +19,8 @@ const errors = {
   limitReviewsRangeError: 'limitReviewsRangeError',
   noDueCardsError: 'noDueCardsError',
   noNewCardsError: 'noNewCardsError',
-  negativeNumberTypeError: 'negativeNumberTypeError'
+  negativeNumberTypeError: 'negativeNumberTypeError',
+  nonExistingId: 'nonExistingId'
 };
 
 module.exports = errors;
