@@ -1,10 +1,10 @@
 const { UserInputError } = require('apollo-server');
-const { Op } = require('sequelize');
 const validator = require('validator');
+const { Op } = require('sequelize');
 const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji, Radical, TranslationRadical } = require('../../models');
-const errors = require('../../util/errors');
-const constants = require('../../util/constants');
 const { sequelize } = require('../../util/database');
+const constants = require('../../util/constants');
+const errors = require('../../util/errors');
 
 const typeDef = `
   type Account {
@@ -104,6 +104,7 @@ const typeDef = `
       newInterval: Int!
       newEasyFactor: Float!
       extraReview: Boolean
+      timing: Float
     ): RescheduleResult!
 
   }
@@ -154,7 +155,7 @@ const resolvers = {
         };
       }
 
-      // Check that limitReviews in correct range (1 - 9999)
+      // Check that limitReviews in correct range
       if (limitReviews > constants.maxLimitReviews || limitReviews < constants.minLimitReviews) {
         return { 
           __typename: 'Error',
@@ -163,12 +164,12 @@ const resolvers = {
       }
 
       let selectLevel = { [Op.eq]: jlptLevel };
-
       // Set where filter to JLPT level >= jlptLevel, lower level cards included
       if (includeLowerLevelCards) {
         selectLevel = { [Op.gte]: jlptLevel };
       }
 
+      // Find due cards, order by due date
       const cards = await Kanji.findAll({
         where: {
           'jlptLevel': selectLevel
@@ -277,14 +278,12 @@ const resolvers = {
       }
 
       let selectLevel = '=';
-
       // Set where filter to JLPT level >= jlptLevel, lower level cards included
       if (includeLowerLevelCards) {
-        // eslint-disable-next-line no-unused-vars
         selectLevel = '>=';
       }
 
-      // fetch id of new cards (cards not existing in user cards)
+      // Fetch id of new cards (cards not existing in user cards)
       const rawQuery = `SELECT id FROM kanji WHERE jlpt_level ${selectLevel} :jlptLevel AND NOT EXISTS (
         SELECT NULL 
         FROM account_kanji_card 
@@ -304,6 +303,14 @@ const resolvers = {
       });
 
       const idArray = cardIds.map(card => card.id);
+
+      // If no cards found, return error
+      if (idArray.length === 0) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.noNewCardsError
+        };
+      }
 
       // Fetch cards based on previously found ids, order according the learning order
       const cards = await Kanji.findAll({
@@ -336,13 +343,6 @@ const resolvers = {
         ]
       });
 
-      if (cards.length === 0) {
-        return { 
-          __typename: 'Error',
-          errorCode: errors.noNewCardsError
-        };
-      }
-
       return {
         __typename: 'CardSet',
         Cards: cards,
@@ -350,7 +350,8 @@ const resolvers = {
     },
   },
   Mutation: {
-    rescheduleCard: async (_, { kanjiId, reviewResult, newInterval, newEasyFactor, extraReview }, { currentUser }) => {
+    // eslint-disable-next-line no-unused-vars
+    rescheduleCard: async (_, { kanjiId, reviewResult, newInterval, newEasyFactor, extraReview, timing }, { currentUser }) => {
 
       // Check that user is logged in
       if (!currentUser) {
