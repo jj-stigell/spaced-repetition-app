@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+const constants = require('../src/util/constants');
 const country = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/country.sql'), 'utf8');
 const kanji = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji.sql'), 'utf8');
 const translation_kanji_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_kanji_en.sql'), 'utf8');
@@ -397,7 +398,7 @@ module.exports = {
         defaultValue: false
       },
       review_result: {
-        type: DataTypes.ENUM('again', 'hard', 'easy'),
+        type: DataTypes.ENUM(constants.availableResults),
         allowNull: false
       },
     }),
