@@ -25,6 +25,18 @@ AccountKanjiReview.init({
       key: 'id'
     }
   },
+  extraReview: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
+  timing: {
+    type: DataTypes.REAL,
+  },
+  reviewResult: {
+    type: DataTypes.ENUM('again', 'hard', 'easy'),
+    allowNull: false
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
@@ -34,15 +46,6 @@ AccountKanjiReview.init({
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
-  },
-  extraReview: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false
-  },
-  reviewResult: {
-    type: DataTypes.ENUM('again', 'hard', 'easy'),
-    allowNull: false
   },
 }, {
   sequelize,

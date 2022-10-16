@@ -385,21 +385,24 @@ module.exports = {
           key: 'id'
         }
       },
+      extra_review: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      timing: {
+        type: DataTypes.REAL,
+      },
+      review_result: {
+        type: DataTypes.ENUM(constants.availableResults),
+        allowNull: false
+      },
       created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW
       },
       updated_at: {
         type: DataTypes.DATE,
-      },
-      extra_review: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-      },
-      review_result: {
-        type: DataTypes.ENUM(constants.availableResults),
-        allowNull: false
       },
     }),
     await queryInterface.createTable('account_kanji_card', {

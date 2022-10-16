@@ -386,7 +386,7 @@ const resolvers = {
 
       // TODO
       // Check that type of float correct
-      if (!newEasyFactor) {
+      if (!newEasyFactor || !timing) {
         return { 
           __typename: 'Error',
           errorCode: errors.inputValueTypeError
@@ -453,7 +453,8 @@ const resolvers = {
             accountId: currentUser.id,
             kanjiId: kanjiId,
             reviewResult: reviewResult,
-            extraReview: extraReview ? true : false
+            extraReview: extraReview ? true : false,
+            timing: timing
           });
 
           return { 
@@ -488,7 +489,8 @@ const resolvers = {
           accountId: currentUser.id,
           kanjiId: kanjiId,
           reviewResult: reviewResult,
-          extraReview: extraReview ? true : false
+          extraReview: extraReview ? true : false,
+          timing: timing
         });
         return { 
           __typename: 'Success',
