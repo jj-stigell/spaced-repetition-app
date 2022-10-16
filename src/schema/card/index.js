@@ -132,7 +132,7 @@ const resolvers = {
       }
 
       // Chack that language id is one of the available
-      if (!validator.isIn(langId, constants.availableLanguages)) {
+      if (!validator.isIn(langId.toLowerCase(), constants.availableLanguages)) {
         return { 
           __typename: 'Error',
           errorCode: errors.invalidLanguageIdError
@@ -246,7 +246,7 @@ const resolvers = {
       }
 
       // Chack that language id is one of the available
-      if (!validator.isIn(langId, constants.availableLanguages)) {
+      if (!validator.isIn(langId.toLowerCase(), constants.availableLanguages)) {
         return { 
           __typename: 'Error',
           errorCode: errors.invalidLanguageIdError
@@ -355,15 +355,79 @@ const resolvers = {
 
       // Check that user is logged in
       if (!currentUser) {
-        throw new UserInputError('Not authenticated');
+        return { 
+          __typename: 'Error',
+          errorCode: errors.notAuthError
+        };
       }
 
-      // Find account custom kanji card
-      const kanjiCardInfo = await AccountKanjiCard.findOne({ where: { accountId: currentUser.id, kanjiId: kanjiId } });
+      // Confirm that jlpt level and language id are not empty
+      if (!kanjiId || !reviewResult || !newInterval || !newEasyFactor) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.inputValueMissingError
+        };
+      }
+
+      // Chack that result is one of the available
+      if (!validator.isIn(reviewResult.toLowerCase(), constants.availableResults)) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.invalidResultIdError
+        };
+      }
+
+      // Check that type of integer correct
+      if (!Number.isInteger(kanjiId) || !Number.isInteger(newInterval)) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.inputValueTypeError
+        };
+      }
+
+      // TODO
+      // Check that type of float correct
+      if (!newEasyFactor) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.inputValueTypeError
+        };
+      }
+
+      // Check that integers and floats positive numbers
+      if (kanjiId < 1 || newInterval < 1 || newEasyFactor <= 0.0) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.negativeNumberTypeError
+        };
+      }
+
+
+      let kanjiCardInfo;
+
+      try {
+        // Check if card exists for the user for that kanji
+        kanjiCardInfo = await AccountKanjiCard.findOne({ where: { accountId: currentUser.id, kanjiId: kanjiId } });
+      } catch(error) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.connectionError
+        };
+      }
+
+
+      
 
       if (!kanjiCardInfo) {
-        throw new UserInputError('Card not found, you have not previously reviewed this card');
+        // Create new custom card for the user
+        return { 
+          __typename: 'Error',
+          errorCode: errors.connectionError
+        };
       }
+
+
+
 
       try {
       // Add one review to the total count
