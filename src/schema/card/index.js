@@ -402,6 +402,9 @@ const resolvers = {
       }
 
       let accountKanjiCard;
+      // Create new (due) date object
+      let newDueDate = new Date();
+      newDueDate.setDate(newDueDate.getDate() + newInterval);
 
       try {
         // Check if card exists for the user for that kanji
@@ -438,7 +441,7 @@ const resolvers = {
           accountKanjiCard = await AccountKanjiCard.create({
             accountId: currentUser.id,
             kanjiId: kanjiId,
-            dueDate: '2022-12-01',
+            dueDate: newDueDate,
             easyFactor: 2.5,
             reviewCount: 1,
           });
@@ -475,7 +478,7 @@ const resolvers = {
         // Update and save changes, card is set to mature if the interval is higher than set maturing interval
         accountKanjiCard.set({
           easyFactor: newEasyFactor,
-          dueDate: '2022-12-23',
+          dueDate: newDueDate,
           mature: newInterval > constants.matureInterval ? true : false
         });
         accountKanjiCard.save();
