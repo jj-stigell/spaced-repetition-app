@@ -155,7 +155,7 @@ const resolvers = {
       }
 
       // Check that limitReviews in correct range (1 - 9999)
-      if (limitReviews > 999 || limitReviews < 1) {
+      if (limitReviews > constants.maxLimitReviews || limitReviews < constants.minLimitReviews) {
         return { 
           __typename: 'Error',
           errorCode: errors.limitReviewsRangeError
@@ -260,7 +260,7 @@ const resolvers = {
       }
 
       // Check that limitReviews in correct range (1 - 9999)
-      if (limitReviews > 999 || limitReviews < 1) {
+      if (limitReviews > constants.maxLimitReviews || limitReviews < constants.availableLanguages.minLimitReviews) {
         return { 
           __typename: 'Error',
           errorCode: errors.limitReviewsRangeError
@@ -296,6 +296,7 @@ const resolvers = {
 
       const idArray = cardIds.map(card => card.id);
 
+      // Fetch cards based on previously found ids, order according the learning order
       const cards = await Kanji.findAll({
         where: {
           'id': {
