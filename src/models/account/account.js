@@ -55,3 +55,19 @@ Account.init({
 });
 
 module.exports = Account;
+
+
+/*
+Table account {
+  id int [pk, increment]
+  email varchar [unique]
+  email_verified boolean [default: false]
+  member boolean [default: true]
+  password_hash char(60)
+  language varchar [ref: > country.country_code]
+  timezone varchar
+  last_login timestamp [default: `now()`]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+}
+*/
