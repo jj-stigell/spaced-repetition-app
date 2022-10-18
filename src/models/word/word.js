@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
-const { sequelize } = require('../util/database');
+const { sequelize } = require('../../util/database');
 
-class ExampleWord extends Model {}
+class Word extends Model {}
 
-ExampleWord.init({
+Word.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -29,4 +29,4 @@ ExampleWord.init({
   modelName: 'example_word'
 });
 
-module.exports = ExampleWord;
+module.exports = Word;

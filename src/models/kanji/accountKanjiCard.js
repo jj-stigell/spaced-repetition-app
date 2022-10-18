@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
-const { sequelize } = require('../util/database');
+const { sequelize } = require('../../util/database');
 
-class AccountKanjiReview extends Model {}
+class AccountKanjiCard extends Model {}
 
-AccountKanjiReview.init({
+AccountKanjiCard.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -25,17 +25,30 @@ AccountKanjiReview.init({
       key: 'id'
     }
   },
-  extraReview: {
+  reviewCount: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    default: 1
+  },
+  easyFactor: {
+    type: DataTypes.REAL,
+    allowNull: false,
+    default: 2.5
+  },
+  dueDate: {
+    type: DataTypes.DATEONLY,
+    defaultValue: DataTypes.NOW
+  },
+  accountStory: {
+    type: DataTypes.STRING,
+  },
+  accountHint: {
+    type: DataTypes.STRING,
+  },
+  mature: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false
-  },
-  timing: {
-    type: DataTypes.REAL,
-  },
-  reviewResult: {
-    type: DataTypes.ENUM('again', 'hard', 'easy'),
-    allowNull: false
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -49,7 +62,7 @@ AccountKanjiReview.init({
   },
 }, {
   sequelize,
-  modelName: 'account_kanji_review'
+  modelName: 'account_kanji_card'
 });
 
-module.exports = AccountKanjiReview;
+module.exports = AccountKanjiCard;

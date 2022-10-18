@@ -1,14 +1,14 @@
-const Account = require('./account');
-const Kanji = require('./kanji');
-const Country = require('./country');
-const Radical = require('./radical');
-const TranslationRadical = require('./translationRadical');
-const KanjiRadical = require('./kanjiRadical');
+const Account = require('./account/account');
+const Kanji = require('./kanji/kanji');
+const Country = require('./country/country');
+const Radical = require('./radical/radical');
+const TranslationRadical = require('./radical/translationRadical');
+const KanjiRadical = require('./kanji/kanjiRadical');
 const TranslationKanji = require('./translationKanji');
-const ExampleWord = require('./exampleWord');
-const ExampleWordTranslation = require('./exampleWordTranslation');
-const AccountKanjiCard = require('./accountKanjiCard');
-const AccountKanjiReview = require('./accountKanjiReview');
+const Word = require('./word/word');
+const WordTranslation = require('./word/wordTranslation');
+const AccountKanjiCard = require('./kanji/accountKanjiCard');
+const AccountKanjiReview = require('./kanji/accountKanjiReview');
 
 // Radical can have multiple translations that are identified with lang id and radical id
 Radical.hasMany(TranslationRadical, {
@@ -31,10 +31,10 @@ Country.hasMany(TranslationKanji, {
 });
 
 // Example word has multiple translations based on the lang id
-ExampleWord.hasMany(ExampleWordTranslation, {
+Word.hasMany(WordTranslation, {
   foreignKey: 'word_id'
 });
-Country.hasMany(ExampleWordTranslation, {
+Country.hasMany(WordTranslation, {
   foreignKey: 'language_id'
 });
 
@@ -62,8 +62,8 @@ module.exports = {
   TranslationRadical,
   KanjiRadical,
   TranslationKanji,
-  ExampleWord,
-  ExampleWordTranslation,
+  Word,
+  WordTranslation,
   AccountKanjiCard,
   AccountKanjiReview
 };
