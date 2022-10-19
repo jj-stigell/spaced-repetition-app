@@ -1,4 +1,5 @@
 const Account = require('./account/account');
+const Admin = require('./account/admin');
 const Kanji = require('./kanji/kanji');
 const Country = require('./country/country');
 const Radical = require('./radical/radical');
@@ -10,12 +11,37 @@ const WordTranslation = require('./word/wordTranslation');
 const AccountKanjiCard = require('./kanji/accountKanjiCard');
 const AccountKanjiReview = require('./kanji/accountKanjiReview');
 
+
+
+Account.hasOne(Admin, {
+  onDelete: 'CASCADE'
+});
+Admin.belongsTo(Account, {
+  targetKey: 'id',
+  foreignKey: 'account_id',
+});
+
+
+/*
+Foo.hasOne(Bar, {
+  onDelete: 'RESTRICT',
+  onUpdate: 'RESTRICT'
+});
+
+Foo.hasOne(Bar, { sourceKey: 'name', foreignKey: 'fooName' });
+
+Ship.belongsTo(Captain, { targetKey: 'name', foreignKey: 'captainName' });
+
+ "db.admins.belongsTo(db.users, { foreignKey: "id", targetKey: "id" });" – 
+*/
+
+
 // Radical can have multiple translations that are identified with lang id and radical id
 Radical.hasMany(TranslationRadical, {
   foreignKey: 'radical_id'
 });
 Country.hasMany(TranslationRadical, {
-  foreignKey: 'language_id'
+  foreignKey: 'country_code'
 });
 
 // Radicals that kanji has, the kanji that has multiple radicals attached to it
@@ -27,7 +53,7 @@ Kanji.hasMany(TranslationKanji, {
   foreignKey: 'kanji_id'
 });
 Country.hasMany(TranslationKanji, {
-  foreignKey: 'language_id'
+  foreignKey: 'country_code'
 });
 
 // Example word has multiple translations based on the lang id
@@ -35,7 +61,7 @@ Word.hasMany(WordTranslation, {
   foreignKey: 'word_id'
 });
 Country.hasMany(WordTranslation, {
-  foreignKey: 'language_id'
+  foreignKey: 'country_code'
 });
 
 // Account can have multiple revies of the same kanji (history of reviews)

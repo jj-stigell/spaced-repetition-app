@@ -1,31 +1,26 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../util/database');
-const constants = require('../../util/constants');
 
-class Card extends Model {}
+class Admin extends Model {}
 
-Card.init({
+Admin.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  type: {
-    type: DataTypes.ENUM(constants.cardTypes),
-    allowNull: false
-  },
-  languageId: {
-    type: DataTypes.CHAR(2),
+  accountId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'country',
-      key: 'country_code'
-    }
+      model: 'account',
+      key: 'id'
+    },
   },
-  active: {
+  isAdmin: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: false
+    defaultValue: true
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -39,7 +34,7 @@ Card.init({
   },
 }, {
   sequelize,
-  modelName: 'card'
+  modelName: 'admin'
 });
 
-module.exports = Card;
+module.exports = Admin;

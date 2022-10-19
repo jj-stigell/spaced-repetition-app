@@ -1,28 +1,21 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../util/database');
-const constants = require('../../util/constants');
 
-class Deck extends Model {}
+class DeckTranslation extends Model {}
 
-Deck.init({
+DeckTranslation.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  deckName: {
-    type: DataTypes.STRING(60),
+  deckId: {
+    type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true,
-  },
-  type: {
-    type: DataTypes.ENUM(constants.deckTypes),
-    allowNull: false
-  },
-  subscriberOnly: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false
+    references: {
+      model: 'deck',
+      key: 'id'
+    }
   },
   countryCode: {
     type: DataTypes.CHAR(2),
@@ -31,6 +24,16 @@ Deck.init({
       model: 'country',
       key: 'country_code'
     }
+  },
+  title: {
+    type: DataTypes.STRING(60),
+    allowNull: false,
+    unique: true,
+  },
+  description: {
+    type: DataTypes.STRING(60),
+    allowNull: false,
+    unique: true,
   },
   active: {
     type: DataTypes.BOOLEAN,
@@ -49,7 +52,7 @@ Deck.init({
   },
 }, {
   sequelize,
-  modelName: 'deck'
+  modelName: 'deck_translation'
 });
 
-module.exports = Deck;
+module.exports = DeckTranslation;

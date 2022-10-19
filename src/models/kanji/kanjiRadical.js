@@ -25,6 +25,16 @@ KanjiRadical.init({
       key: 'id'
     }
   },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
 }, {
   sequelize,
   modelName: 'kanji_radical'

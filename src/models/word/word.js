@@ -1,23 +1,31 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../util/database');
 
-class Word extends Model {}
+class JapaneseWord extends Model {}
 
-Word.init({
+JapaneseWord.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
+  cardId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'card',
+      key: 'id'
+    }
+  },
   word: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  furigana: {
+  reading: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  romaji: {
+  readingRomaji: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -26,7 +34,7 @@ Word.init({
   },
 }, {
   sequelize,
-  modelName: 'example_word'
+  modelName: 'japanese_word'
 });
 
-module.exports = Word;
+module.exports = JapaneseWord;

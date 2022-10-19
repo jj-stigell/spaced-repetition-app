@@ -13,10 +13,6 @@ Kanji.init({
     unique: true,
     allowNull: false
   },
-  learningOrder: {
-    type: DataTypes.INTEGER,
-    unique: true
-  },
   jlptLevel: {
     type: DataTypes.INTEGER,
   },

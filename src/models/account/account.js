@@ -17,57 +17,47 @@ Account.init({
       isEmail: true,
     }
   },
+  emailVerified: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
   passwordHash: {
     type: DataTypes.CHAR(60),
     allowNull: false
-  },
-  username: {
-    type: DataTypes.STRING(14),
-    unique: true,
-    allowNull: false,
-    validate: {
-      len: [1, 14],
-    }
   },
   member: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: true
   },
-  emailVerified: {
-    type: DataTypes.BOOLEAN,
+  language: {
+    type: DataTypes.CHAR(2),
     allowNull: false,
-    defaultValue: false
-  },
-  admin: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false
+    defaultValue: 'en',
+    references: {
+      model: 'country',
+      key: 'country_code'
+    }
   },
   lastLogin: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
-  }
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
 }, {
   sequelize,
   modelName: 'account'
 });
 
 module.exports = Account;
-
-
-/*
-Table account {
-  id int [pk, increment]
-  email varchar [unique]
-  email_verified boolean [default: false]
-  member boolean [default: true]
-  password_hash char(60)
-  language varchar [ref: > country.country_code]
-  timezone varchar
-  last_login timestamp [default: `now()`]
-  created_at timestamp [default: `now()`]
-  updated_at timestamp [default: `now()`]
-}
-*/
