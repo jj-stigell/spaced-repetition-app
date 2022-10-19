@@ -7,13 +7,14 @@ Country.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
+    autoIncrement: true,
   },
-  languageId: {
+  countryCode: {
     type: DataTypes.CHAR(2),
     unique: true,
     allowNull: false
   },
-  countryEn: {
+  countryEnglish: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -21,7 +22,7 @@ Country.init({
     type: DataTypes.STRING,
     allowNull: false
   },
-  languageEn: {
+  languageEnglish: {
     type: DataTypes.STRING,
     allowNull: false
   },

@@ -100,7 +100,7 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      language_id: {
+      country_code: {
         type: DataTypes.CHAR(2),
         unique: true,
         allowNull: false
@@ -216,7 +216,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'country',
-          key: 'language_id'
+          key: 'country_code'
         }
       },
       translation: {
@@ -289,7 +289,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'country',
-          key: 'language_id'
+          key: 'country_code'
         }
       },
       keyword: {
@@ -363,7 +363,7 @@ module.exports = {
         allowNull: false,
         references: {
           model: 'country',
-          key: 'language_id'
+          key: 'country_code'
         }
       },
       translation: {
@@ -417,7 +417,7 @@ module.exports = {
         type: DataTypes.REAL,
       },
       review_result: {
-        type: DataTypes.ENUM(constants.availableResults),
+        type: DataTypes.ENUM(constants.resultTypes),
         allowNull: false
       },
       created_at: {
