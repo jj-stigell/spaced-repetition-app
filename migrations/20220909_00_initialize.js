@@ -11,14 +11,53 @@ const deck_translation = fs.readFileSync(path.resolve(__dirname, '../setup/datab
 const card = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/card.sql'), 'utf8');
 const card_list = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/card_list.sql'), 'utf8');
 const radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/radical.sql'), 'utf8');
-const radical_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_radical_en.sql'), 'utf8');
-const kanji_radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_radical.sql'), 'utf8');
+const radical_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/radical_translation_en.sql'), 'utf8');
 const kanji = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji.sql'), 'utf8');
+const kanji_radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_radical.sql'), 'utf8');
 const kanji_translation_fi = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_fi.sql'), 'utf8');
 const kanji_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_en.sql'), 'utf8');
+const japanese_word = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/japanese_word.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
+    await queryInterface.createTable('country', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      country_code: {
+        type: DataTypes.CHAR(2),
+        unique: true,
+        allowNull: false
+      },
+      country_english: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      country_native: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      language_english: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      language_native: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      }
+    }),
     await queryInterface.createTable('account', {
       id: {
         type: DataTypes.INTEGER,
@@ -105,44 +144,6 @@ module.exports = {
     }),
     await queryInterface.addIndex('admin', ['account_id'], {
       unique: true,
-    }),
-    await queryInterface.createTable('country', {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
-      country_code: {
-        type: DataTypes.CHAR(2),
-        unique: true,
-        allowNull: false
-      },
-      country_english: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      country_native: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      language_english: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      language_native: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      created_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW
-      }
     }),
     await queryInterface.createTable('deck', {
       id: {
@@ -477,7 +478,8 @@ module.exports = {
         references: {
           model: 'radical',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       language_id: {
         type: DataTypes.CHAR(2),
@@ -578,12 +580,12 @@ module.exports = {
       other_meanings: {
         type: DataTypes.STRING,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW
@@ -791,10 +793,11 @@ module.exports = {
     await queryInterface.sequelize.query(card_list);
     await queryInterface.sequelize.query(radical);
     await queryInterface.sequelize.query(radical_translation_en);
-    await queryInterface.sequelize.query(kanji_radical);
     await queryInterface.sequelize.query(kanji);
+    await queryInterface.sequelize.query(kanji_radical);
     await queryInterface.sequelize.query(kanji_translation_fi);
     await queryInterface.sequelize.query(kanji_translation_en);
+    await queryInterface.sequelize.query(japanese_word);
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('radical_translation');
@@ -804,11 +807,11 @@ module.exports = {
     await queryInterface.dropTable('japanese_word');
     await queryInterface.dropTable('account_review');
     await queryInterface.dropTable('account_card');
+    await queryInterface.dropTable('account_deck_settings');
     await queryInterface.dropTable('admin');
     await queryInterface.dropTable('account');
     await queryInterface.dropTable('kanji');
     await queryInterface.dropTable('radical');
-    await queryInterface.dropTable('account_deck_settings');
     await queryInterface.dropTable('deck_translation');
     await queryInterface.dropTable('card_list');
     await queryInterface.dropTable('deck');

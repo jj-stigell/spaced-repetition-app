@@ -1,0 +1,1 @@
+INSERT INTO japanese_word (card_id, word, reading, reading_romaji, created_at, updated_at) VALUES (104, '自動車', 'じどうしゃ', 'jidousha', NOW(), NOW());

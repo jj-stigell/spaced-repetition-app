@@ -13,7 +13,7 @@ INSERT INTO country (
 INSERT INTO country (
   country_code, country_english, country_native, language_english, language_native, created_at, updated_at
 ) VALUES (
-  3, 'jp', 'Japan', '日本', 'Japanese', '日本語', NOW(), NOW()
+  'jp', 'Japan', '日本', 'Japanese', '日本語', NOW(), NOW()
 );
 
 INSERT INTO country (
