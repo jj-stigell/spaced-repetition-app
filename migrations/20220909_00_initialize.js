@@ -13,6 +13,8 @@ const kanji_radical = fs.readFileSync(path.resolve(__dirname, '../setup/database
 const account = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account.sql'), 'utf8');
 const account_kanji_card = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_kanji_card.sql'), 'utf8');
 const account_kanji_review = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_kanji_review.sql'), 'utf8');
+const admin = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/admin.sql'), 'utf8');
+const alter_tables = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/alter_tables.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -20,7 +22,7 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       email: {
         type: DataTypes.STRING(255),
@@ -30,32 +32,24 @@ module.exports = {
           isEmail: true,
         }
       },
+      email_verified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       password_hash: {
         type: DataTypes.CHAR(60),
         allowNull: false
-      },
-      username: {
-        type: DataTypes.STRING(14),
-        unique: true,
-        allowNull: false,
-        validate: {
-          len: [1, 14],
-        }
       },
       member: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true
       },
-      email_verified: {
-        type: DataTypes.BOOLEAN,
+      last_login: {
+        type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: false
-      },
-      admin: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
+        defaultValue: DataTypes.NOW
       },
       created_at: {
         type: DataTypes.DATE,
@@ -65,24 +59,53 @@ module.exports = {
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
+      }
+    }),
+    await queryInterface.createTable('admin', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
       },
-      last_login: {
+      account_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'account',
+          key: 'id'
+        },
+        onDelete: 'CASCADE'
+      },
+      is_admin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+      },
+      created_at: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
       }
+    }),
+    await queryInterface.addIndex('admin', ['account_id'], {
+      unique: true,
     }),
     await queryInterface.createTable('country', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        autoIncrement: true,
       },
       language_id: {
         type: DataTypes.CHAR(2),
         unique: true,
         allowNull: false
       },
-      country_en: {
+      country_english: {
         type: DataTypes.STRING,
         allowNull: false
       },
@@ -90,7 +113,7 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false
       },
-      language_en: {
+      language_english: {
         type: DataTypes.STRING,
         allowNull: false
       },
@@ -473,6 +496,8 @@ module.exports = {
     await queryInterface.sequelize.query(account);
     await queryInterface.sequelize.query(account_kanji_card);
     await queryInterface.sequelize.query(account_kanji_review);
+    await queryInterface.sequelize.query(admin);
+    await queryInterface.sequelize.query(alter_tables);
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('translation_radical');
@@ -481,6 +506,7 @@ module.exports = {
     await queryInterface.dropTable('example_word_translation');
     await queryInterface.dropTable('account_kanji_review');
     await queryInterface.dropTable('account_kanji_card');
+    await queryInterface.dropTable('admin');
     await queryInterface.dropTable('account');
     await queryInterface.dropTable('country');
     await queryInterface.dropTable('kanji');
