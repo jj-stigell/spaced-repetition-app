@@ -1,5 +1,17 @@
-INSERT INTO deck(
-  type, deck_name, subscriber_only, country_code, active, created_at, updated_at
+INSERT INTO deck (
+  deck_name, type, subscriber_only, country_code, active, created_at, updated_at
 ) VALUES (
-  'recall', 'JLPT N5 Kanji', false, 'jp', true, NOW(), NOW()
+  'JLPT N5 Kanji', 'recall', false, 'jp', true, NOW(), NOW()
+);
+
+INSERT INTO deck (
+  deck_name, type, subscriber_only, country_code, active, created_at, updated_at
+) VALUES (
+  'JLPT N4 Kanji', 'recall', false, 'jp', true, NOW(), NOW()
+);
+
+INSERT INTO deck (
+  deck_name, type, subscriber_only, country_code, active, created_at, updated_at
+) VALUES (
+  'JLPT N3 Kanji', 'recall', false, 'jp', true, NOW(), NOW()
 );

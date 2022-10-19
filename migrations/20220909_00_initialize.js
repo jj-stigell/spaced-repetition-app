@@ -2,19 +2,20 @@ const { DataTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const constants = require('../src/util/constants');
-const country = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/country.sql'), 'utf8');
-const kanji = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji.sql'), 'utf8');
-const translation_kanji_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_kanji_en.sql'), 'utf8');
-const translation_kanji_fi = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_kanji_fi.sql'), 'utf8');
-const radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/radical.sql'), 'utf8');
-const translation_radical_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_radical_en.sql'), 'utf8');
-const translation_radical_fi = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_radical_fi.sql'), 'utf8');
-const kanji_radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_radical.sql'), 'utf8');
-const account = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account.sql'), 'utf8');
-const account_kanji_card = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_kanji_card.sql'), 'utf8');
-const account_kanji_review = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_kanji_review.sql'), 'utf8');
-const admin = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/admin.sql'), 'utf8');
 const alter_tables = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/alter_tables.sql'), 'utf8');
+const country = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/country.sql'), 'utf8');
+const account = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account.sql'), 'utf8');
+const admin = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/admin.sql'), 'utf8');
+const deck = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/deck.sql'), 'utf8');
+const deck_translation = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/deck_translation.sql'), 'utf8');
+const card = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/card.sql'), 'utf8');
+const card_list = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/card_list.sql'), 'utf8');
+const radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/radical.sql'), 'utf8');
+const radical_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/translation_radical_en.sql'), 'utf8');
+const kanji_radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_radical.sql'), 'utf8');
+const kanji = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji.sql'), 'utf8');
+const kanji_translation_fi = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_fi.sql'), 'utf8');
+const kanji_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_en.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -188,7 +189,7 @@ module.exports = {
       }
     }),
 
-    await queryInterface.addIndex('deck', ['language_id'], {
+    await queryInterface.addIndex('deck', ['id', 'language_id'], {
       unique: true,
     }),
     await queryInterface.createTable('deck_translation', {
@@ -276,7 +277,7 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('card', ['language_id'], {
+    await queryInterface.addIndex('card', ['language_id', 'id'], {
       unique: true,
     }),
     await queryInterface.createTable('card_list', {
@@ -315,7 +316,7 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('card_list', ['deck_id', 'card_id'], {
+    await queryInterface.addIndex('card_list', ['id', 'deck_id', 'card_id'], {
       unique: true,
     }),
     await queryInterface.createTable('account_deck_settings', {
@@ -428,6 +429,9 @@ module.exports = {
         defaultValue: DataTypes.NOW,
         allowNull: false
       },
+    }),
+    await queryInterface.addIndex('kanji', ['id', 'card_id'], {
+      unique: true,
     }),
     await queryInterface.createTable('radical', {
       id: {
@@ -628,6 +632,9 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
+    await queryInterface.addIndex('japanese_word', ['id', 'card_id'], {
+      unique: true,
+    }),
     await queryInterface.createTable('japanese_word_translation', {
       id: {
         type: DataTypes.INTEGER,
@@ -776,34 +783,36 @@ module.exports = {
     }),
     await queryInterface.sequelize.query(alter_tables);
     await queryInterface.sequelize.query(country);
-    await queryInterface.sequelize.query(kanji);
-    await queryInterface.sequelize.query(translation_kanji_en);
-    await queryInterface.sequelize.query(translation_kanji_fi);
-    await queryInterface.sequelize.query(radical);
-    await queryInterface.sequelize.query(translation_radical_en);
-    await queryInterface.sequelize.query(translation_radical_fi);
-    await queryInterface.sequelize.query(kanji_radical);
     await queryInterface.sequelize.query(account);
-    await queryInterface.sequelize.query(account_kanji_card);
-    await queryInterface.sequelize.query(account_kanji_review);
     await queryInterface.sequelize.query(admin);
+    await queryInterface.sequelize.query(deck);
+    await queryInterface.sequelize.query(deck_translation);
+    await queryInterface.sequelize.query(card);
+    await queryInterface.sequelize.query(card_list);
+    await queryInterface.sequelize.query(radical);
+    await queryInterface.sequelize.query(radical_translation_en);
+    await queryInterface.sequelize.query(kanji_radical);
+    await queryInterface.sequelize.query(kanji);
+    await queryInterface.sequelize.query(kanji_translation_fi);
+    await queryInterface.sequelize.query(kanji_translation_en);
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('radical_translation');
     await queryInterface.dropTable('kanji_radical');
     await queryInterface.dropTable('kanji_translation');
     await queryInterface.dropTable('japanese_word_translation');
+    await queryInterface.dropTable('japanese_word');
     await queryInterface.dropTable('account_review');
     await queryInterface.dropTable('account_card');
     await queryInterface.dropTable('admin');
     await queryInterface.dropTable('account');
-    await queryInterface.dropTable('country');
     await queryInterface.dropTable('kanji');
     await queryInterface.dropTable('radical');
+    await queryInterface.dropTable('account_deck_settings');
+    await queryInterface.dropTable('deck_translation');
+    await queryInterface.dropTable('card_list');
     await queryInterface.dropTable('deck');
     await queryInterface.dropTable('card');
-    await queryInterface.dropTable('card_list');
-    await queryInterface.dropTable('deck_translation');
-    await queryInterface.dropTable('account_deck_settings');
+    await queryInterface.dropTable('country');
   },
 };
