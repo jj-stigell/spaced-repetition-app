@@ -1,6 +1,6 @@
 const validator = require('validator');
 const { Op } = require('sequelize');
-const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji, Radical, TranslationRadical } = require('../../models');
+const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji, Radical, RadicalTranslation } = require('../../models');
 const { sequelize } = require('../../util/database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors');
@@ -192,7 +192,7 @@ const resolvers = {
             model: Radical,
             attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
             include: {
-              model: TranslationRadical,
+              model: RadicalTranslation,
               where: {
                 language_id: langId
               }
@@ -330,7 +330,7 @@ const resolvers = {
             model: Radical,
             attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
             include: {
-              model: TranslationRadical,
+              model: RadicalTranslation,
               where: {
                 language_id: langId
               }

@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../util/database');
+const constants = require('../../util/constants');
 
 class AccountKanjiReview extends Model {}
 
@@ -17,11 +18,11 @@ AccountKanjiReview.init({
       key: 'id'
     }
   },
-  kanjiId: {
+  cardId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'kanji',
+      model: 'card',
       key: 'id'
     }
   },
@@ -34,21 +35,17 @@ AccountKanjiReview.init({
     type: DataTypes.REAL,
   },
   reviewResult: {
-    type: DataTypes.ENUM('again', 'hard', 'easy'),
+    type: DataTypes.ENUM(constants.resultTypes),
     allowNull: false
   },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
-  },
+  }
 }, {
   sequelize,
+  updatedAt: false,
   modelName: 'account_kanji_review'
 });
 

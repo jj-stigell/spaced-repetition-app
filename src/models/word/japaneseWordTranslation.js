@@ -1,19 +1,19 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../util/database');
 
-class TranslationRadical extends Model {}
+class JapaneseWordTranslation extends Model {}
 
-TranslationRadical.init({
+JapaneseWordTranslation.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  radicalId: {
+  translationCardId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'radical',
+      model: 'card_translation',
       key: 'id'
     }
   },
@@ -27,14 +27,16 @@ TranslationRadical.init({
   },
   translation: {
     type: DataTypes.STRING,
-    allowNull: false
+  },
+  hint: {
+    type: DataTypes.STRING,
   },
   description: {
     type: DataTypes.STRING,
   },
 }, {
   sequelize,
-  modelName: 'translation_radical'
+  modelName: 'japanese_word_translation'
 });
 
-module.exports = TranslationRadical;
+module.exports = JapaneseWordTranslation;

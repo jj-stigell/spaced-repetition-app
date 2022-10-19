@@ -1,54 +1,44 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../util/database');
 
-class AccountKanjiCard extends Model {}
+class KanjiTranslation extends Model {}
 
-AccountKanjiCard.init({
+KanjiTranslation.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  accountId: {
+  translationCardId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'account',
+      model: 'card_translation',
       key: 'id'
     }
   },
-  kanjiId: {
-    type: DataTypes.INTEGER,
+  languageId: {
+    type: DataTypes.CHAR(2),
     allowNull: false,
     references: {
-      model: 'kanji',
-      key: 'id'
+      model: 'country',
+      key: 'language_id'
     }
   },
-  reviewCount: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    default: 1
-  },
-  easyFactor: {
-    type: DataTypes.REAL,
-    allowNull: false,
-    default: 2.5
-  },
-  dueDate: {
-    type: DataTypes.DATEONLY,
-    defaultValue: DataTypes.NOW
-  },
-  accountStory: {
+  keyword: {
     type: DataTypes.STRING,
   },
-  accountHint: {
+  story: {
     type: DataTypes.STRING,
   },
-  mature: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false
+  hint: {
+    type: DataTypes.STRING,
+  },
+  otherMeanings: {
+    type: DataTypes.STRING,
+  },
+  description: {
+    type: DataTypes.STRING,
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -62,7 +52,7 @@ AccountKanjiCard.init({
   },
 }, {
   sequelize,
-  modelName: 'account_kanji_card'
+  modelName: 'kanji_translation'
 });
 
-module.exports = AccountKanjiCard;
+module.exports = KanjiTranslation;

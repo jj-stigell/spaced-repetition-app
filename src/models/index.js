@@ -3,13 +3,13 @@ const Admin = require('./account/admin');
 const Kanji = require('./kanji/kanji');
 const Country = require('./country/country');
 const Radical = require('./radical/radical');
-const TranslationRadical = require('./radical/translationRadical');
+const RadicalTranslation = require('./radical/radicalTranslation');
 const KanjiRadical = require('./kanji/kanjiRadical');
-const TranslationKanji = require('./kanji/translationKanji');
-const Word = require('./word/word');
-const WordTranslation = require('./word/wordTranslation');
-const AccountKanjiCard = require('./kanji/accountKanjiCard');
-const AccountKanjiReview = require('./kanji/accountKanjiReview');
+const TranslationKanji = require('./kanji/kanjiTranslation');
+const Word = require('./word/japaneseWord');
+const WordTranslation = require('./word/japaneseWordTranslation');
+const AccountKanjiCard = require('./account/accountCard');
+const AccountKanjiReview = require('./account/accountReview');
 
 
 
@@ -37,10 +37,10 @@ Ship.belongsTo(Captain, { targetKey: 'name', foreignKey: 'captainName' });
 
 
 // Radical can have multiple translations that are identified with lang id and radical id
-Radical.hasMany(TranslationRadical, {
+Radical.hasMany(RadicalTranslation, {
   foreignKey: 'radical_id'
 });
-Country.hasMany(TranslationRadical, {
+Country.hasMany(RadicalTranslation, {
   foreignKey: 'country_code'
 });
 
@@ -85,7 +85,7 @@ module.exports = {
   Kanji,
   Country,
   Radical,
-  TranslationRadical,
+  RadicalTranslation,
   KanjiRadical,
   TranslationKanji,
   Word,
