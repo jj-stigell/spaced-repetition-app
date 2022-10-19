@@ -22,18 +22,7 @@ Admin.belongsTo(Account, {
 });
 
 
-/*
-Foo.hasOne(Bar, {
-  onDelete: 'RESTRICT',
-  onUpdate: 'RESTRICT'
-});
 
-Foo.hasOne(Bar, { sourceKey: 'name', foreignKey: 'fooName' });
-
-Ship.belongsTo(Captain, { targetKey: 'name', foreignKey: 'captainName' });
-
- "db.admins.belongsTo(db.users, { foreignKey: "id", targetKey: "id" });" – 
-*/
 
 
 // Radical can have multiple translations that are identified with lang id and radical id

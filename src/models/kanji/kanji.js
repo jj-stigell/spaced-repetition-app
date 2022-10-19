@@ -8,6 +8,14 @@ Kanji.init({
     type: DataTypes.INTEGER,
     primaryKey: true,
   },
+  cardId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'card',
+      key: 'id'
+    }
+  },
   kanji: {
     type: DataTypes.CHAR(1),
     unique: true,

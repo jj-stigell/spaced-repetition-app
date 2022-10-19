@@ -9,11 +9,11 @@ KanjiTranslation.init({
     primaryKey: true,
     autoIncrement: true
   },
-  translationCardId: {
+  kanjiId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'card_translation',
+      model: 'kanji',
       key: 'id'
     }
   },
@@ -22,7 +22,7 @@ KanjiTranslation.init({
     allowNull: false,
     references: {
       model: 'country',
-      key: 'language_id'
+      key: 'country_code'
     }
   },
   keyword: {

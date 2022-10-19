@@ -22,7 +22,7 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
       },
       email: {
         type: DataTypes.STRING(255),
@@ -46,6 +46,15 @@ module.exports = {
         allowNull: false,
         defaultValue: true
       },
+      language: {
+        type: DataTypes.CHAR(2),
+        allowNull: false,
+        defaultValue: 'en',
+        references: {
+          model: 'country',
+          key: 'country_code'
+        }
+      },
       last_login: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -59,13 +68,14 @@ module.exports = {
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW
       }
     }),
     await queryInterface.createTable('admin', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
       },
       account_id: {
         type: DataTypes.INTEGER,
@@ -89,6 +99,7 @@ module.exports = {
       updated_at: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW
       }
     }),
     await queryInterface.addIndex('admin', ['account_id'], {
@@ -123,25 +134,32 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
+        allowNull: false,
         defaultValue: DataTypes.NOW
       },
       updated_at: {
         type: DataTypes.DATE,
-      },
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      }
     }),
     await queryInterface.createTable('kanji', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
+      card_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'card',
+          key: 'id'
+        }
+      },
       kanji: {
         type: DataTypes.CHAR(1),
         unique: true,
         allowNull: false
-      },
-      learning_order: {
-        type: DataTypes.INTEGER,
-        unique: true
       },
       jlpt_level: {
         type: DataTypes.INTEGER,
@@ -163,10 +181,13 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       },
       updated_at: {
         type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       },
     }),
     await queryInterface.createTable('radical', {
@@ -188,16 +209,20 @@ module.exports = {
       },
       stroke_count: {
         type: DataTypes.INTEGER,
+        allowNull: false
       },
       created_at: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       },
       updated_at: {
         type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       },
     }),
-    await queryInterface.createTable('translation_radical', {
+    await queryInterface.createTable('radical_translation', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -228,13 +253,16 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.NOW,
+        allowNull: false,
       },
       updated_at: {
         type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false,
       },
     }),
-    await queryInterface.addIndex('translation_radical', ['radical_id', 'language_id'], {
+    await queryInterface.addIndex('radical_translation', ['radical_id', 'language_id'], {
       unique: true,
     }),
     await queryInterface.createTable('kanji_radical', {
@@ -261,16 +289,19 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
+        allowNull: false,
         defaultValue: DataTypes.NOW
       },
       updated_at: {
         type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
       },
     }),
     await queryInterface.addIndex('kanji_radical', ['radical_id', 'kanji_id'], {
       unique: true,
     }),
-    await queryInterface.createTable('translation_kanji', {
+    await queryInterface.createTable('kanji_translation', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -304,32 +335,43 @@ module.exports = {
       other_meanings: {
         type: DataTypes.STRING,
       },
-      created_at: {
+      createdAt: {
         type: DataTypes.DATE,
+        allowNull: false,
         defaultValue: DataTypes.NOW
       },
-      updated_at: {
+      updatedAt: {
         type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('translation_kanji', ['kanji_id', 'language_id'], {
+    await queryInterface.addIndex('kanji_translation', ['kanji_id', 'language_id'], {
       unique: true,
     }),
-    await queryInterface.createTable('example_word', {
+    await queryInterface.createTable('japanese_word', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
+      card_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'card',
+          key: 'id'
+        }
+      },
       word: {
         type: DataTypes.STRING,
         allowNull: false
       },
-      furigana: {
+      reading: {
         type: DataTypes.STRING,
         allowNull: false
       },
-      romaji: {
+      reading_romaji: {
         type: DataTypes.STRING,
         allowNull: false
       },
@@ -338,13 +380,16 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
+        allowNull: false,
         defaultValue: DataTypes.NOW
       },
       updated_at: {
         type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.createTable('example_word_translation', {
+    await queryInterface.createTable('japanese_word_translation', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -354,7 +399,7 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'example_word',
+          model: 'japanese_word',
           key: 'id'
         }
       },
@@ -377,16 +422,19 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
+        allowNull: false,
         defaultValue: DataTypes.NOW
       },
       updated_at: {
         type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('example_word_translation', ['word_id', 'language_id'], {
+    await queryInterface.addIndex('japanese_word_translation', ['word_id', 'language_id'], {
       unique: true,
     }),
-    await queryInterface.createTable('account_kanji_review', {
+    await queryInterface.createTable('account_review', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -400,11 +448,11 @@ module.exports = {
           key: 'id'
         }
       },
-      kanji_id: {
+      card_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'kanji',
+          model: 'card',
           key: 'id'
         }
       },
@@ -422,13 +470,11 @@ module.exports = {
       },
       created_at: {
         type: DataTypes.DATE,
+        allowNull: false,
         defaultValue: DataTypes.NOW
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-      },
+      }
     }),
-    await queryInterface.createTable('account_kanji_card', {
+    await queryInterface.createTable('account_card', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -442,13 +488,19 @@ module.exports = {
           key: 'id'
         }
       },
-      kanji_id: {
+      card_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'kanji',
+          model: 'card',
           key: 'id'
         }
+      },
+      account_story: {
+        type: DataTypes.STRING,
+      },
+      account_hint: {
+        type: DataTypes.STRING,
       },
       review_count: {
         type: DataTypes.INTEGER,
@@ -460,31 +512,30 @@ module.exports = {
         allowNull: false,
         default: 2.5
       },
-      due_date: {
-        type: DataTypes.DATEONLY,
-      },
-      account_story: {
-        type: DataTypes.STRING,
-      },
-      account_hint: {
-        type: DataTypes.STRING,
-      },
       mature: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
       },
+      due_at: {
+        type: DataTypes.DATEONLY,
+        defaultValue: DataTypes.NOW
+      },
       created_at: {
         type: DataTypes.DATE,
+        allowNull: false,
         defaultValue: DataTypes.NOW
       },
       updated_at: {
         type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('account_kanji_card', ['account_id', 'kanji_id'], {
+    await queryInterface.addIndex('account_card', ['account_id', 'card_id'], {
       unique: true,
     }),
+    await queryInterface.sequelize.query(alter_tables);
     await queryInterface.sequelize.query(country);
     await queryInterface.sequelize.query(kanji);
     await queryInterface.sequelize.query(translation_kanji_en);
@@ -497,7 +548,6 @@ module.exports = {
     await queryInterface.sequelize.query(account_kanji_card);
     await queryInterface.sequelize.query(account_kanji_review);
     await queryInterface.sequelize.query(admin);
-    await queryInterface.sequelize.query(alter_tables);
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('translation_radical');

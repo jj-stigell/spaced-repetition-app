@@ -22,6 +22,7 @@ Radical.init({
   },
   strokeCount: {
     type: DataTypes.INTEGER,
+    allowNull: false
   },
   createdAt: {
     type: DataTypes.DATE,

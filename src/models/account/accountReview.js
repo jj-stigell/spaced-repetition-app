@@ -46,7 +46,7 @@ AccountKanjiReview.init({
 }, {
   sequelize,
   updatedAt: false,
-  modelName: 'account_kanji_review'
+  modelName: 'account_review'
 });
 
 module.exports = AccountKanjiReview;

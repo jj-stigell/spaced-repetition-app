@@ -9,11 +9,11 @@ JapaneseWordTranslation.init({
     primaryKey: true,
     autoIncrement: true
   },
-  translationCardId: {
+  wordId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'card_translation',
+      model: 'japanese_word',
       key: 'id'
     }
   },
@@ -22,7 +22,7 @@ JapaneseWordTranslation.init({
     allowNull: false,
     references: {
       model: 'country',
-      key: 'language_id'
+      key: 'country_code'
     }
   },
   translation: {
@@ -33,6 +33,16 @@ JapaneseWordTranslation.init({
   },
   description: {
     type: DataTypes.STRING,
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
   },
 }, {
   sequelize,
