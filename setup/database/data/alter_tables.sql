@@ -1,0 +1,1 @@
+alter sequence account_id_seq restart with 230792;

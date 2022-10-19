@@ -1,6 +1,7 @@
 -- For purging the whole database (including migrations)
 BEGIN;
 DROP TYPE IF EXISTS result CASCADE;
+DROP TABLE IF EXISTS admin CASCADE;
 DROP TABLE IF EXISTS account CASCADE;
 DROP TABLE IF EXISTS country CASCADE;
 DROP TABLE IF EXISTS example_word CASCADE;

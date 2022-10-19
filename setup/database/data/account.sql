@@ -1,2 +1,3 @@
-INSERT INTO account (email, password_hash, username, created_at, updated_at, last_login) VALUES ('test1@test.com', '$2b$10$GE7OUAW2u2u0WDiJ8nBxIucrIYSV8ZSBU0PCoV.Heg9C5pLnFdqZu', 'test1', NOW(), NOW(), NOW());
-INSERT INTO account (email, password_hash, username, created_at, updated_at, last_login) VALUES ('test2@test.com', '$2b$10$GE7OUAW2u2u0WDiJ8nBxIucrIYSV8ZSBU0PCoV.Heg9C5pLnFdqZu', 'test2', NOW(), NOW(), NOW());
+INSERT INTO account (email, password_hash, created_at, updated_at, last_login) VALUES ('test1@test.com', '$2b$10$GE7OUAW2u2u0WDiJ8nBxIucrIYSV8ZSBU0PCoV.Heg9C5pLnFdqZu', NOW(), NOW(), NOW());
+INSERT INTO account (email, password_hash, created_at, updated_at, last_login) VALUES ('test2@test.com', '$2b$10$GE7OUAW2u2u0WDiJ8nBxIucrIYSV8ZSBU0PCoV.Heg9C5pLnFdqZu', NOW(), NOW(), NOW());
+INSERT INTO account (email, password_hash, created_at, updated_at, last_login) VALUES ('test3@test.com', '$2b$10$GE7OUAW2u2u0WDiJ8nBxIucrIYSV8ZSBU0PCoV.Heg9C5pLnFdqZu', NOW(), NOW(), NOW());

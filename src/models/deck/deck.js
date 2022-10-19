@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../util/database');
+const constants = require('../../util/constants');
 
 class Deck extends Model {}
 
@@ -25,6 +26,14 @@ Deck.init({
       model: 'country',
       key: 'language_id'
     }
+  },
+  type: {
+    type: DataTypes.ENUM(constants.deckTypes),
+    allowNull: false
+  },
+  review_result: {
+    type: DataTypes.ENUM(constants.availableResults),
+    allowNull: false
   },
   active: {
     type: DataTypes.BOOLEAN,
