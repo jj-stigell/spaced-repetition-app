@@ -17,7 +17,7 @@ DeckTranslation.init({
       key: 'id'
     }
   },
-  countryCode: {
+  languageId: {
     type: DataTypes.CHAR(2),
     allowNull: false,
     references: {

@@ -143,6 +143,245 @@ module.exports = {
         defaultValue: DataTypes.NOW
       }
     }),
+    await queryInterface.createTable('deck', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      deck_name: {
+        type: DataTypes.STRING(60),
+        allowNull: false,
+        unique: true,
+      },
+      type: {
+        type: DataTypes.ENUM(constants.deckTypes),
+        allowNull: false
+      },
+      subscriber_only: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      language_id: {
+        type: DataTypes.CHAR(2),
+        allowNull: false,
+        references: {
+          model: 'country',
+          key: 'country_code'
+        }
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      }
+    }),
+
+    await queryInterface.addIndex('deck', ['language_id'], {
+      unique: true,
+    }),
+    await queryInterface.createTable('deck_translation', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      deck_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'deck',
+          key: 'id'
+        }
+      },
+      language_id: {
+        type: DataTypes.CHAR(2),
+        allowNull: false,
+        references: {
+          model: 'country',
+          key: 'country_code'
+        }
+      },
+      title: {
+        type: DataTypes.STRING(60),
+        allowNull: false,
+        unique: true,
+      },
+      description: {
+        type: DataTypes.STRING(60),
+        allowNull: false,
+        unique: true,
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+    }),
+    await queryInterface.addIndex('deck_translation', ['deck_id', 'language_id'], {
+      unique: true,
+    }),
+    await queryInterface.createTable('card', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      type: {
+        type: DataTypes.ENUM(constants.cardTypes),
+        allowNull: false
+      },
+      language_id: {
+        type: DataTypes.CHAR(2),
+        allowNull: false,
+        references: {
+          model: 'country',
+          key: 'country_code'
+        }
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+    }),
+    await queryInterface.addIndex('card', ['language_id'], {
+      unique: true,
+    }),
+    await queryInterface.createTable('card_list', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      deck_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'deck',
+          key: 'id'
+        }
+      },
+      card_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'card',
+          key: 'id'
+        },
+      },
+      learning_order: {
+        type: DataTypes.INTEGER
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+    }),
+    await queryInterface.addIndex('card_list', ['deck_id', 'card_id'], {
+      unique: true,
+    }),
+    await queryInterface.createTable('account_deck_settings', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      account_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'account',
+          key: 'id'
+        }
+      },
+      deck_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'deck',
+          key: 'id'
+        }
+      },
+      favorite: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      max_review_interval: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        default: constants.defaultMaxInterval,
+        validate: {
+          max: constants.maxReviewInterval,
+          min: constants.minReviewInterval
+        }
+      },
+      max_review_per_day: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        default: constants.defaultMaxReviewPerDay,
+        validate: {
+          max: constants.maxLimitReviews,
+          min: constants.minLimitReviews
+        }
+      },
+      max_new_per_day: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        default: constants.defaultMaxNewPerDay
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+    }),
+    await queryInterface.addIndex('account_deck_settings', ['account_id', 'deck_id'], {
+      unique: true,
+    }),
     await queryInterface.createTable('kanji', {
       id: {
         type: DataTypes.INTEGER,
@@ -550,17 +789,21 @@ module.exports = {
     await queryInterface.sequelize.query(admin);
   },
   down: async ({ context: queryInterface }) => {
-    await queryInterface.dropTable('translation_radical');
+    await queryInterface.dropTable('radical_translation');
     await queryInterface.dropTable('kanji_radical');
-    await queryInterface.dropTable('translation_kanji');
-    await queryInterface.dropTable('example_word_translation');
-    await queryInterface.dropTable('account_kanji_review');
-    await queryInterface.dropTable('account_kanji_card');
+    await queryInterface.dropTable('kanji_translation');
+    await queryInterface.dropTable('japanese_word_translation');
+    await queryInterface.dropTable('account_review');
+    await queryInterface.dropTable('account_card');
     await queryInterface.dropTable('admin');
     await queryInterface.dropTable('account');
     await queryInterface.dropTable('country');
     await queryInterface.dropTable('kanji');
     await queryInterface.dropTable('radical');
-    await queryInterface.dropTable('example_word');
+    await queryInterface.dropTable('deck');
+    await queryInterface.dropTable('card');
+    await queryInterface.dropTable('card_list');
+    await queryInterface.dropTable('deck_translation');
+    await queryInterface.dropTable('account_deck_settings');
   },
 };

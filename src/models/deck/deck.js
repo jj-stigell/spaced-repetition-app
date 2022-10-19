@@ -24,7 +24,7 @@ Deck.init({
     allowNull: false,
     defaultValue: false
   },
-  countryCode: {
+  languageId: {
     type: DataTypes.CHAR(2),
     allowNull: false,
     references: {
