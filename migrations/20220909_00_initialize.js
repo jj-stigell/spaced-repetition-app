@@ -633,7 +633,9 @@ module.exports = {
         references: {
           model: 'card',
           key: 'id'
-        }
+        },
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
       },
       word: {
         type: DataTypes.STRING,

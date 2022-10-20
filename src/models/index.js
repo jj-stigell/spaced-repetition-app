@@ -208,6 +208,16 @@ Kanji.belongsTo(Card, {
   foreignKey: 'cardId'
 });
 
+// Word & card relation. Word belongs to one card but on card delete set null
+Card.hasOne(JapaneseWord, {
+  onDelete: 'SET NULL',
+  onUpdate: 'CASCADE'
+});
+JapaneseWord.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
+});
+
 
 
 
