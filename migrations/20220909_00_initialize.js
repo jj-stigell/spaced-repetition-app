@@ -122,6 +122,7 @@ module.exports = {
       account_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        unique: true,
         references: {
           model: 'account',
           key: 'id'
@@ -144,9 +145,6 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       }
-    }),
-    await queryInterface.addIndex('admin', ['account_id'], {
-      unique: true
     }),
     await queryInterface.createTable('deck', {
       id: {
@@ -289,7 +287,7 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('card', ['language_id', 'id'], {
+    await queryInterface.addIndex('card', ['id', 'language_id'], {
       unique: true
     }),
     await queryInterface.createTable('card_list', {
@@ -332,7 +330,7 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('card_list', ['id', 'deck_id', 'card_id'], {
+    await queryInterface.addIndex('card_list', ['deck_id', 'card_id'], {
       unique: true
     }),
     await queryInterface.createTable('account_deck_settings', {
@@ -410,6 +408,7 @@ module.exports = {
       },
       card_id: {
         type: DataTypes.INTEGER,
+        unique: true,
         references: {
           model: 'card',
           key: 'id'
@@ -450,9 +449,6 @@ module.exports = {
         defaultValue: DataTypes.NOW,
         allowNull: false
       },
-    }),
-    await queryInterface.addIndex('kanji', ['id', 'card_id'], {
-      unique: true
     }),
     await queryInterface.createTable('radical', {
       id: {
@@ -634,6 +630,7 @@ module.exports = {
       card_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        unique: true,
         references: {
           model: 'card',
           key: 'id'
@@ -666,9 +663,6 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       },
-    }),
-    await queryInterface.addIndex('japanese_word', ['id', 'card_id'], {
-      unique: true
     }),
     await queryInterface.createTable('japanese_word_translation', {
       id: {
