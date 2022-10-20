@@ -85,14 +85,14 @@ const typeDef = `
       jlptLevel: Int
       includeLowerLevelCards: Boolean
       limitReviews: Int
-      langId: String
+      languageId: String
     ): CardPayload!
 
     fetchNewKanjiCards(
       jlptLevel: Int
       includeLowerLevelCards: Boolean
       limitReviews: Int
-      langId: String
+      languageId: String
     ): CardPayload!
   }
 
@@ -112,7 +112,7 @@ const typeDef = `
 const resolvers = {
   Query: {
     // Fetch cards that are due or new cards based on the newCards boolean value, defaults to false.
-    fetchDueKanjiCards: async (_, { jlptLevel, includeLowerLevelCards, limitReviews, langId }, { currentUser }) => {
+    fetchDueKanjiCards: async (_, { jlptLevel, includeLowerLevelCards, limitReviews, languageId }, { currentUser }) => {
 
       // Check that user is logged in
       if (!currentUser) {
@@ -123,7 +123,7 @@ const resolvers = {
       }
 
       // Confirm that jlpt level and language id are not empty
-      if (!jlptLevel || !langId) {
+      if (!jlptLevel || !languageId) {
         return { 
           __typename: 'Error',
           errorCode: errors.inputValueMissingError
@@ -131,7 +131,7 @@ const resolvers = {
       }
 
       // Chack that language id is one of the available
-      if (!validator.isIn(langId.toLowerCase(), constants.availableLanguages)) {
+      if (!validator.isIn(languageId.toLowerCase(), constants.availableLanguages)) {
         return { 
           __typename: 'Error',
           errorCode: errors.invalidLanguageIdError
@@ -185,7 +185,7 @@ const resolvers = {
             model: TranslationKanji,
             attributes: ['keyword', 'story', 'hint', 'otherMeanings'],
             where: {
-              language_id: langId
+              language_id: languageId
             }
           },
           {
@@ -194,7 +194,7 @@ const resolvers = {
             include: {
               model: RadicalTranslation,
               where: {
-                language_id: langId
+                language_id: languageId
               }
             },
           },
@@ -226,7 +226,7 @@ const resolvers = {
       };
     },
     // Fetch cards that are due or new cards based on the newCards boolean value, defaults to false.
-    fetchNewKanjiCards: async (_, { jlptLevel, includeLowerLevelCards, limitReviews, langId }, { currentUser }) => {
+    fetchNewKanjiCards: async (_, { jlptLevel, includeLowerLevelCards, limitReviews, languageId }, { currentUser }) => {
 
       // Check that user is logged in
       if (!currentUser) {
@@ -237,7 +237,7 @@ const resolvers = {
       }
 
       // Confirm that jlpt level and language id are not empty
-      if (!jlptLevel || !langId) {
+      if (!jlptLevel || !languageId) {
         return { 
           __typename: 'Error',
           errorCode: errors.inputValueMissingError
@@ -245,7 +245,7 @@ const resolvers = {
       }
 
       // Chack that language id is one of the available
-      if (!validator.isIn(langId.toLowerCase(), constants.availableLanguages)) {
+      if (!validator.isIn(languageId.toLowerCase(), constants.availableLanguages)) {
         return { 
           __typename: 'Error',
           errorCode: errors.invalidLanguageIdError
@@ -323,7 +323,7 @@ const resolvers = {
             model: TranslationKanji,
             attributes: ['keyword', 'story', 'hint', 'otherMeanings'],
             where: {
-              language_id: langId
+              language_id: languageId
             }
           },
           {
@@ -332,7 +332,7 @@ const resolvers = {
             include: {
               model: RadicalTranslation,
               where: {
-                language_id: langId
+                language_id: languageId
               }
             },
           },
