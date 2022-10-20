@@ -138,6 +138,7 @@ JapaneseWordTranslation.belongsTo(Country, {
 });
 
 // Radical & kanji association through KanjiRadical join table
+// delete/update entry from join table When either one is deleted
 Kanji.belongsToMany(Radical, {
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE',
@@ -172,10 +173,23 @@ AccountReview.belongsTo(Card, {
   foreignKey: 'cardId'
 });
 
+// Deck & card association through CardList join table
+// delete/update entry from join table When either one is deleted
+Deck.belongsToMany(Card, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+  through: CardList
+});
+
+Card.belongsToMany(Deck, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+  through: CardList
+});
 
 
 
-
+// Account customized card / data card
 
 
 

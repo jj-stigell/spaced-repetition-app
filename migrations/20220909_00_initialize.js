@@ -302,7 +302,9 @@ module.exports = {
         references: {
           model: 'deck',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       card_id: {
         type: DataTypes.INTEGER,
@@ -311,6 +313,8 @@ module.exports = {
           model: 'card',
           key: 'id'
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       learning_order: {
         type: DataTypes.INTEGER
@@ -396,7 +400,7 @@ module.exports = {
     await queryInterface.createTable('kanji', {
       id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
+        primaryKey: true
       },
       card_id: {
         type: DataTypes.INTEGER,
@@ -412,22 +416,22 @@ module.exports = {
         allowNull: false
       },
       jlpt_level: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER
       },
       onyomi: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       onyomi_romaji: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       kunyomi: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       kunyomi_romaji: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       stroke_count: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER
       },
       created_at: {
         type: DataTypes.DATE,
@@ -446,7 +450,7 @@ module.exports = {
     await queryInterface.createTable('radical', {
       id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
+        primaryKey: true
       },
       radical: {
         type: DataTypes.CHAR(1),
@@ -506,17 +510,17 @@ module.exports = {
         allowNull: false
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
-        allowNull: false,
+        allowNull: false
       },
       updated_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
-        allowNull: false,
+        allowNull: false
       },
     }),
     await queryInterface.addIndex('radical_translation', ['radical_id', 'language_id'], {
@@ -536,7 +540,7 @@ module.exports = {
           key: 'id'
         },
         onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       kanji_id: {
         type: DataTypes.INTEGER,
@@ -546,7 +550,7 @@ module.exports = {
           key: 'id'
         },
         onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       created_at: {
         type: DataTypes.DATE,
@@ -589,16 +593,16 @@ module.exports = {
         onUpdate: 'CASCADE'
       },
       keyword: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       story: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       hint: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       other_meanings: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       created_at: {
         type: DataTypes.DATE,
@@ -641,7 +645,7 @@ module.exports = {
         allowNull: false
       },
       jlpt_level: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER
       },
       created_at: {
         type: DataTypes.DATE,
@@ -684,13 +688,13 @@ module.exports = {
         onUpdate: 'CASCADE'
       },
       translation: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       type: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       created_at: {
         type: DataTypes.DATE,
@@ -774,10 +778,10 @@ module.exports = {
         }
       },
       account_story: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       account_hint: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING
       },
       review_count: {
         type: DataTypes.INTEGER,
