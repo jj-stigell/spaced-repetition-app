@@ -24,7 +24,7 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
       },
       country_code: {
         type: DataTypes.CHAR(2),
@@ -69,7 +69,7 @@ module.exports = {
         unique: true,
         allowNull: false,
         validate: {
-          isEmail: true,
+          isEmail: true
         }
       },
       email_verified: {
@@ -127,7 +127,7 @@ module.exports = {
           key: 'id'
         },
         onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       is_admin: {
         type: DataTypes.BOOLEAN,
@@ -146,7 +146,7 @@ module.exports = {
       }
     }),
     await queryInterface.addIndex('admin', ['account_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('deck', {
       id: {
@@ -196,13 +196,13 @@ module.exports = {
     }),
 
     await queryInterface.addIndex('deck', ['id', 'language_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('deck_translation', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
       },
       deck_id: {
         type: DataTypes.INTEGER,
@@ -232,7 +232,7 @@ module.exports = {
       description: {
         type: DataTypes.STRING(60),
         allowNull: false,
-        unique: true,
+        unique: true
       },
       active: {
         type: DataTypes.BOOLEAN,
@@ -251,13 +251,13 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('deck_translation', ['deck_id', 'language_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('card', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
       },
       type: {
         type: DataTypes.ENUM(constants.cardTypes),
@@ -290,7 +290,7 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('card', ['language_id', 'id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('card_list', {
       id: {
@@ -333,13 +333,13 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('card_list', ['id', 'deck_id', 'card_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('account_deck_settings', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
       },
       account_id: {
         type: DataTypes.INTEGER,
@@ -397,7 +397,7 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('account_deck_settings', ['account_id', 'deck_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('kanji', {
       id: {
@@ -447,7 +447,7 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('kanji', ['id', 'card_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('radical', {
       id: {
@@ -526,7 +526,7 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('radical_translation', ['radical_id', 'language_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('kanji_radical', {
       id: {
@@ -566,7 +566,7 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('kanji_radical', ['radical_id', 'kanji_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('kanji_translation', {
       id: {
@@ -661,7 +661,7 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('japanese_word', ['id', 'card_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('japanese_word_translation', {
       id: {
@@ -710,7 +710,7 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('japanese_word_translation', ['word_id', 'language_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('account_review', {
       id: {
@@ -742,7 +742,7 @@ module.exports = {
         defaultValue: false
       },
       timing: {
-        type: DataTypes.REAL,
+        type: DataTypes.REAL
       },
       result: {
         type: DataTypes.ENUM(constants.resultTypes),
@@ -755,7 +755,7 @@ module.exports = {
       }
     }),
     await queryInterface.addIndex('account_review', ['account_id', 'card_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('account_card', {
       id: {
@@ -816,7 +816,7 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('account_card', ['account_id', 'card_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.sequelize.query(alter_tables);
     await queryInterface.sequelize.query(country);
