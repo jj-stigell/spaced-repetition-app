@@ -71,16 +71,6 @@ DeckTranslation.belongsTo(Country, {
   foreignKey: 'languageId'
 });
 
-Country.hasMany(KanjiTranslation, {
-  onDelete: 'RESTRICT',
-  onUpdate: 'CASCADE'
-});
-
-KanjiTranslation.belongsTo(Country, {
-  targetKey: 'countryCode',
-  foreignKey: 'languageId'
-});
-
 Country.hasMany(JapaneseWordTranslation, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
@@ -113,6 +103,27 @@ RadicalTranslation.belongsTo(Country, {
   foreignKey: 'languageId'
 });
 
+// Kanji can have multiple translations that are identified with language_id and kanji_id
+// Cascade delete only when kanji is deleted
+Kanji.hasMany(KanjiTranslation, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+KanjiTranslation.belongsTo(Kanji, {
+  targetKey: 'id',
+  foreignKey: 'kanjiId'
+});
+
+Country.hasMany(KanjiTranslation, {
+  onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE'
+});
+
+KanjiTranslation.belongsTo(Country, {
+  targetKey: 'countryCode',
+  foreignKey: 'languageId'
+});
 
 
 
