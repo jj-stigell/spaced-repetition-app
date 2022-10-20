@@ -223,32 +223,9 @@ JapaneseWord.belongsTo(Card, {
 
 
 
-// Account customized card / data card
-
-
-
-
-
-/*
-
-// Account can have multiple revies of the same kanji (history of reviews)
-Kanji.hasMany(AccountKanjiReview, {
-  foreignKey: 'kanji_id'
-});
-Account.hasMany(AccountKanjiReview, {
-  foreignKey: 'account_id'
-});
-
-// Account can have multiple personal kanji cards, but only one per unique kanji
-Kanji.hasMany(AccountKanjiCard, {
-  foreignKey: 'kanji_id'
-});
-Account.hasMany(AccountKanjiCard, {
-  foreignKey: 'account_id'
-});*/
-
 module.exports = {
   Account,
+  Admin,
   Kanji,
   Country,
   Radical,
@@ -265,47 +242,3 @@ module.exports = {
   Deck,
   DeckTranslation
 };
-
-
-/*
-// Radical can have multiple translations that are identified with lang id and radical id
-Radical.hasMany(RadicalTranslation, {
-  foreignKey: 'radical_id'
-});
-
-RadicalTranslation.belongsTo(Radical, {
-  targetKey: 'id',
-  foreignKey: 'radical_id',
-});
-
-
-Country.hasMany(RadicalTranslation, {
-  foreignKey: 'country_code'
-});
-
-
-
-
-
-
-
-// Radicals that kanji has, the kanji that has multiple radicals attached to it
-Kanji.belongsToMany(Radical, { through: KanjiRadical });
-Radical.belongsToMany(Kanji, { through: KanjiRadical });
-
-// Account can have multiple revies of the same kanji (history of reviews)
-Kanji.hasMany(AccountKanjiReview, {
-  foreignKey: 'kanji_id'
-});
-Account.hasMany(AccountKanjiReview, {
-  foreignKey: 'account_id'
-});
-
-// Account can have multiple personal kanji cards, but only one per unique kanji
-Kanji.hasMany(AccountKanjiCard, {
-  foreignKey: 'kanji_id'
-});
-Account.hasMany(AccountKanjiCard, {
-  foreignKey: 'account_id'
-});
-*/

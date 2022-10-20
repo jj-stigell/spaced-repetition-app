@@ -619,7 +619,7 @@ module.exports = {
       },
     }),
     await queryInterface.addIndex('kanji_translation', ['kanji_id', 'language_id'], {
-      unique: true,
+      unique: true
     }),
     await queryInterface.createTable('japanese_word', {
       id: {
