@@ -71,12 +71,24 @@ DeckTranslation.belongsTo(Country, {
   foreignKey: 'languageId'
 });
 
-Country.hasMany(JapaneseWordTranslation, {
+// Kanji can have multiple translations that are identified with language_id and kanji_id
+// Cascade delete only when kanji is deleted
+Kanji.hasMany(KanjiTranslation, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+KanjiTranslation.belongsTo(Kanji, {
+  targetKey: 'id',
+  foreignKey: 'kanjiId'
+});
+
+Country.hasMany(KanjiTranslation, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
 });
 
-JapaneseWordTranslation.belongsTo(Country, {
+KanjiTranslation.belongsTo(Country, {
   targetKey: 'countryCode',
   foreignKey: 'languageId'
 });
@@ -103,29 +115,27 @@ RadicalTranslation.belongsTo(Country, {
   foreignKey: 'languageId'
 });
 
-// Kanji can have multiple translations that are identified with language_id and kanji_id
-// Cascade delete only when kanji is deleted
-Kanji.hasMany(KanjiTranslation, {
+// Japanese words can have multiple translations that are identified with language_id and kanji_id
+// Cascade delete only when word is deleted
+JapaneseWord.hasMany(JapaneseWordTranslation, {
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
 });
 
-KanjiTranslation.belongsTo(Kanji, {
+JapaneseWordTranslation.belongsTo(JapaneseWord, {
   targetKey: 'id',
-  foreignKey: 'kanjiId'
+  foreignKey: 'wordId'
 });
 
-Country.hasMany(KanjiTranslation, {
+Country.hasMany(JapaneseWordTranslation, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
 });
 
-KanjiTranslation.belongsTo(Country, {
+JapaneseWordTranslation.belongsTo(Country, {
   targetKey: 'countryCode',
   foreignKey: 'languageId'
 });
-
-
 
 
 

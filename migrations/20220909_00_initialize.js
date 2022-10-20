@@ -665,7 +665,9 @@ module.exports = {
         references: {
           model: 'japanese_word',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       language_id: {
         type: DataTypes.CHAR(2),
