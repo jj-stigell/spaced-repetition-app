@@ -127,7 +127,7 @@ module.exports = {
           key: 'id'
         },
         onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
+        onUpdate: 'CASCADE',
       },
       is_admin: {
         type: DataTypes.BOOLEAN,
@@ -219,8 +219,8 @@ module.exports = {
           model: 'country',
           key: 'country_code'
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT'
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE'
       },
       title: {
         type: DataTypes.STRING(60),
@@ -268,8 +268,8 @@ module.exports = {
           model: 'country',
           key: 'country_code'
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT'
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE'
       },
       active: {
         type: DataTypes.BOOLEAN,
@@ -488,7 +488,8 @@ module.exports = {
           model: 'radical',
           key: 'id'
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       language_id: {
         type: DataTypes.CHAR(2),
@@ -497,8 +498,8 @@ module.exports = {
           model: 'country',
           key: 'country_code'
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT'
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE'
       },
       translation: {
         type: DataTypes.STRING,
@@ -578,8 +579,8 @@ module.exports = {
           model: 'country',
           key: 'country_code'
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT'
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE'
       },
       keyword: {
         type: DataTypes.STRING,
@@ -671,8 +672,8 @@ module.exports = {
           model: 'country',
           key: 'country_code'
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT'
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE'
       },
       translation: {
         type: DataTypes.STRING,

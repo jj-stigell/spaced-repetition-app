@@ -26,13 +26,14 @@ Account.hasOne(Admin, {
 });
 Admin.belongsTo(Account, {
   targetKey: 'id',
-  foreignKey: 'accountId',
+  foreignKey: 'accountId'
 });
 
-// Country has many accounts, deck, deck translations with the country code being FK, cascade on updates, no deletion of language allowed
+// Country has many accounts, deck, deck translations, etc. with
+// the country code being FK, cascade on updates, no deletion of language allowed
 Country.hasMany(Account, {
-  onUpdate: 'CASCADE',
   onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE'
 });
 
 Account.belongsTo(Country, {
@@ -41,8 +42,8 @@ Account.belongsTo(Country, {
 });
 
 Country.hasMany(Deck, {
-  onUpdate: 'CASCADE',
   onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE'
 });
 
 Deck.belongsTo(Country, {
@@ -51,8 +52,8 @@ Deck.belongsTo(Country, {
 });
 
 Country.hasMany(Card, {
-  onUpdate: 'CASCADE',
   onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE'
 });
 
 Card.belongsTo(Country, {
@@ -61,8 +62,8 @@ Card.belongsTo(Country, {
 });
 
 Country.hasMany(DeckTranslation, {
-  onUpdate: 'CASCADE',
   onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE'
 });
 
 DeckTranslation.belongsTo(Country, {
@@ -71,8 +72,8 @@ DeckTranslation.belongsTo(Country, {
 });
 
 Country.hasMany(KanjiTranslation, {
-  onUpdate: 'CASCADE',
   onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE'
 });
 
 KanjiTranslation.belongsTo(Country, {
@@ -80,19 +81,9 @@ KanjiTranslation.belongsTo(Country, {
   foreignKey: 'languageId'
 });
 
-Country.hasMany(RadicalTranslation, {
-  onUpdate: 'CASCADE',
-  onDelete: 'RESTRICT',
-});
-
-RadicalTranslation.belongsTo(Country, {
-  targetKey: 'countryCode',
-  foreignKey: 'languageId'
-});
-
 Country.hasMany(JapaneseWordTranslation, {
-  onUpdate: 'CASCADE',
   onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE'
 });
 
 JapaneseWordTranslation.belongsTo(Country, {
@@ -100,20 +91,32 @@ JapaneseWordTranslation.belongsTo(Country, {
   foreignKey: 'languageId'
 });
 
-
-
-
-
-
-// Radicals can have multiple translations that are identified with lang id and radical id
+// Radicals can have multiple translations that are identified with language_id and radical_id
+// Cascade delete only when radical is deleted
 Radical.hasMany(RadicalTranslation, {
-  onDelete: 'CASCADE'
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
 });
 
 RadicalTranslation.belongsTo(Radical, {
   targetKey: 'id',
-  foreignKey: 'radical_id',
+  foreignKey: 'radicalId'
 });
+
+Country.hasMany(RadicalTranslation, {
+  onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE'
+});
+
+RadicalTranslation.belongsTo(Country, {
+  targetKey: 'countryCode',
+  foreignKey: 'languageId'
+});
+
+
+
+
+
 
 
 
