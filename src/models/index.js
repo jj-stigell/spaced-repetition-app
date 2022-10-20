@@ -198,6 +198,15 @@ DeckTranslation.belongsTo(Deck, {
   foreignKey: 'deckId'
 });
 
+// Kanji & card relation. Kanji belongs to one card but on card delete set null
+Card.hasOne(Kanji, {
+  onDelete: 'SET NULL',
+  onUpdate: 'CASCADE'
+});
+Kanji.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
+});
 
 
 

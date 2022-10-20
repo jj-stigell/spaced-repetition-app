@@ -406,11 +406,12 @@ module.exports = {
       },
       card_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: 'card',
           key: 'id'
-        }
+        },
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
       },
       kanji: {
         type: DataTypes.CHAR(1),

@@ -10,7 +10,6 @@ Kanji.init({
   },
   cardId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
     references: {
       model: 'card',
       key: 'id'
