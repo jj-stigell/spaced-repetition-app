@@ -86,14 +86,16 @@ module.exports = {
         allowNull: false,
         defaultValue: true
       },
-      language: {
+      language_id: {
         type: DataTypes.CHAR(2),
         allowNull: false,
         defaultValue: 'en',
         references: {
           model: 'country',
           key: 'country_code'
-        }
+        },
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE'
       },
       last_login: {
         type: DataTypes.DATE,
@@ -124,7 +126,8 @@ module.exports = {
           model: 'account',
           key: 'id'
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       is_admin: {
         type: DataTypes.BOOLEAN,
@@ -149,12 +152,12 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true
       },
       deck_name: {
         type: DataTypes.STRING(60),
         allowNull: false,
-        unique: true,
+        unique: true
       },
       type: {
         type: DataTypes.ENUM(constants.deckTypes),
@@ -171,7 +174,9 @@ module.exports = {
         references: {
           model: 'country',
           key: 'country_code'
-        }
+        },
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE'
       },
       active: {
         type: DataTypes.BOOLEAN,
@@ -213,7 +218,9 @@ module.exports = {
         references: {
           model: 'country',
           key: 'country_code'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
       },
       title: {
         type: DataTypes.STRING(60),
@@ -260,7 +267,9 @@ module.exports = {
         references: {
           model: 'country',
           key: 'country_code'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
       },
       active: {
         type: DataTypes.BOOLEAN,
@@ -487,7 +496,9 @@ module.exports = {
         references: {
           model: 'country',
           key: 'country_code'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
       },
       translation: {
         type: DataTypes.STRING,
@@ -566,7 +577,9 @@ module.exports = {
         references: {
           model: 'country',
           key: 'country_code'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
       },
       keyword: {
         type: DataTypes.STRING,
@@ -657,7 +670,9 @@ module.exports = {
         references: {
           model: 'country',
           key: 'country_code'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
       },
       translation: {
         type: DataTypes.STRING,
@@ -712,7 +727,7 @@ module.exports = {
       timing: {
         type: DataTypes.REAL,
       },
-      review_result: {
+      result: {
         type: DataTypes.ENUM(constants.resultTypes),
         allowNull: false
       },

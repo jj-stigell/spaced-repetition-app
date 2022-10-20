@@ -18,12 +18,92 @@ const JapaneseWordTranslation = require('./word/japaneseWordTranslation');
 
 // Account can have one admin entry, on delete cascade to admin table
 Account.hasOne(Admin, {
-  onDelete: 'CASCADE'
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+  foreignKey: {
+    allowNull: false
+  }
 });
 Admin.belongsTo(Account, {
   targetKey: 'id',
-  foreignKey: 'account_id',
+  foreignKey: 'accountId',
 });
+
+// Country has many accounts, deck, deck translations with the country code being FK, cascade on updates, no deletion of language allowed
+Country.hasMany(Account, {
+  onUpdate: 'CASCADE',
+  onDelete: 'RESTRICT',
+});
+
+Account.belongsTo(Country, {
+  targetKey: 'countryCode',
+  foreignKey: 'languageId'
+});
+
+Country.hasMany(Deck, {
+  onUpdate: 'CASCADE',
+  onDelete: 'RESTRICT',
+});
+
+Deck.belongsTo(Country, {
+  targetKey: 'countryCode',
+  foreignKey: 'languageId'
+});
+
+Country.hasMany(Card, {
+  onUpdate: 'CASCADE',
+  onDelete: 'RESTRICT',
+});
+
+Card.belongsTo(Country, {
+  targetKey: 'countryCode',
+  foreignKey: 'languageId'
+});
+
+Country.hasMany(DeckTranslation, {
+  onUpdate: 'CASCADE',
+  onDelete: 'RESTRICT',
+});
+
+DeckTranslation.belongsTo(Country, {
+  targetKey: 'countryCode',
+  foreignKey: 'languageId'
+});
+
+Country.hasMany(KanjiTranslation, {
+  onUpdate: 'CASCADE',
+  onDelete: 'RESTRICT',
+});
+
+KanjiTranslation.belongsTo(Country, {
+  targetKey: 'countryCode',
+  foreignKey: 'languageId'
+});
+
+Country.hasMany(RadicalTranslation, {
+  onUpdate: 'CASCADE',
+  onDelete: 'RESTRICT',
+});
+
+RadicalTranslation.belongsTo(Country, {
+  targetKey: 'countryCode',
+  foreignKey: 'languageId'
+});
+
+Country.hasMany(JapaneseWordTranslation, {
+  onUpdate: 'CASCADE',
+  onDelete: 'RESTRICT',
+});
+
+JapaneseWordTranslation.belongsTo(Country, {
+  targetKey: 'countryCode',
+  foreignKey: 'languageId'
+});
+
+
+
+
+
 
 // Radicals can have multiple translations that are identified with lang id and radical id
 Radical.hasMany(RadicalTranslation, {
@@ -35,13 +115,6 @@ RadicalTranslation.belongsTo(Radical, {
   foreignKey: 'radical_id',
 });
 
-Country.hasMany(RadicalTranslation, {
-  onDelete: 'SET NULL'
-});
-RadicalTranslation.belongsTo(Radical, {
-  targetKey: 'id',
-  foreignKey: 'radical_id',
-});
 
 
 
