@@ -187,6 +187,21 @@ Card.belongsToMany(Deck, {
   through: CardList
 });
 
+// Deck translations, one to many, cascade both on delete and update
+Deck.hasMany(DeckTranslation, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+DeckTranslation.belongsTo(Deck, {
+  targetKey: 'id',
+  foreignKey: 'deckId'
+});
+
+
+
+
+
 
 
 // Account customized card / data card

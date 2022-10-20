@@ -210,7 +210,9 @@ module.exports = {
         references: {
           model: 'deck',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       language_id: {
         type: DataTypes.CHAR(2),
