@@ -10,6 +10,18 @@
 -- Ref: deck.country_code > countries.code
 
 
+// SRS - APP
+// If schema name is omitted, it will default to "public" schema.
+// You can define the tables with full schema names
+// If schema name is omitted, it will default to "public" schema.
+
+// Creating references
+// You can also define relaionship separately
+// > many-to-one; < one-to-many; - one-to-one; <> many-to-many
+//Ref: account.country_code > countries.code  
+//Ref: deck.country_code > countries.code
+
+
 Table account {
   id int [pk, increment]
   email varchar [unique]
@@ -26,7 +38,7 @@ Table account {
 Table admin {
   id int [pk, increment]
   account_id int [ref: - account.id]
-  admin boolean [default: true]
+  is_admin boolean [default: true]
   created_at timestamp [default: `now()`]
   updated_at timestamp [default: `now()`]
 }
@@ -41,8 +53,8 @@ Table account_confirmation {
 }
 
 Table country {
-  id int [pk]
-  country_code varchar [unique]
+  id int [pk, increment]
+  country_code varchar(2) [unique]
   country_native varchar
   country_english varchar
   language_native varchar
@@ -59,9 +71,20 @@ Enum card_type {
   katakana
 }
 
+Enum deck_type {
+  recall
+  recognise
+}
+
+Enum review_result {
+  ok
+  again
+}
+
 Table deck {
   id int [pk, increment]
-  name varchar [unique]
+  type deck_type
+  deck_name varchar [unique]
   subscriber_only boolean [default: false]
   country_code varchar [ref: > country.country_code]
   active boolean [default: false]
@@ -129,13 +152,12 @@ Table kanji {
   id int [pk, increment]
   card_id int [ref: - card.id]
   character char(1)
+  jlpt_level int
   onyomi varchar
   onyomi_romaji varchar
   kunyomi varchar
   kunyomi_romaji varchar
   stroke_count int
-  created_at timestamp [default: `now()`]
-  updated_at timestamp [default: `now()`]
 }
 
 Table word {
@@ -157,7 +179,7 @@ Table radical {
 }
 
 Table kanji_radical {
-  id int [pk]
+  id int [pk, increment]
   radical_id int [ref: > radical.id]
   kanji_id int [ref: > kanji.id]
   created_at timestamp [default: `now()`]
@@ -174,6 +196,7 @@ Table radical_translation {
   updated_at timestamp [default: `now()`]
 }
 
+/*
 Table translation_card {
   id int [pk, increment]
   card_id int [ref: > card.id]
@@ -181,20 +204,24 @@ Table translation_card {
   created_at timestamp [default: `now()`]
   updated_at timestamp [default: `now()`]
 }
+*/
 
 Table translation_kanji {
   id int [pk, increment]
-  translation_card int [ref: - translation_card.id]
+  kanji_id int [ref: > kanji.id]
   language_id int [ref: > country.country_code]
-  translation varchar
+  story varchar
+  hint varchar
+  other_meanings varchar
   description varchar
 }
 
-Table translation_word {
+Table translation_japanese_word {
   id int [pk, increment]
-  translation_card int [ref: - translation_card.id]
+  word_id int [ref: > word.id]
   language_id int [ref: > country.country_code]
   translation varchar
+  hint varchar
   description varchar
 }
 
@@ -210,11 +237,26 @@ Table account_card {
   due_at timestamp
   created_at timestamp [default: `now()`]
   updated_at timestamp [default: `now()`]
-  
   Indexes {
     (card_id, account_id)
   }
 }
+
+Table account_review {
+  id int [pk, increment]
+  card_id int [ref: > card.id]
+  account_id int [ref: > account.id]
+  extraReview boolean [default: false]
+  timing float
+  reviewResult review_result
+  created_at timestamp [default: `now()`]
+  Indexes {
+    (card_id, account_id)
+  }
+}
+
+
+
 
 
 /*
