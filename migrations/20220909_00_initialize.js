@@ -772,7 +772,9 @@ module.exports = {
         references: {
           model: 'account',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       card_id: {
         type: DataTypes.INTEGER,
@@ -780,7 +782,9 @@ module.exports = {
         references: {
           model: 'card',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       account_story: {
         type: DataTypes.STRING

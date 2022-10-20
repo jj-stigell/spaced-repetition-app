@@ -218,7 +218,26 @@ JapaneseWord.belongsTo(Card, {
   foreignKey: 'cardId'
 });
 
+// Account customized card (personal hints, stories, metadata), account/card specific
+Account.hasMany(AccountCard, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
 
+AccountCard.belongsTo(Account, {
+  targetKey: 'id',
+  foreignKey: 'accountId'
+});
+
+Card.hasMany(AccountCard, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+AccountCard.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
+});
 
 
 
