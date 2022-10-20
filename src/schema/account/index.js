@@ -46,7 +46,7 @@ const typeDef = `
       email: String!
       password: String!
       passwordConfirmation: String!
-      languageId: String!
+      languageId: String
     ): RegisterResult!
 
     login(
