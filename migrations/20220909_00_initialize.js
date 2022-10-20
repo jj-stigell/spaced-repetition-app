@@ -714,19 +714,21 @@ module.exports = {
       },
       account_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: 'account',
           key: 'id'
-        }
+        },
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
       },
       card_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: 'card',
           key: 'id'
-        }
+        },
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
       },
       extra_review: {
         type: DataTypes.BOOLEAN,
@@ -745,6 +747,9 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       }
+    }),
+    await queryInterface.addIndex('account_review', ['account_id', 'card_id'], {
+      unique: true,
     }),
     await queryInterface.createTable('account_card', {
       id: {

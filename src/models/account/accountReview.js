@@ -12,7 +12,6 @@ AccountKanjiReview.init({
   },
   accountId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
     references: {
       model: 'account',
       key: 'id'
@@ -20,7 +19,6 @@ AccountKanjiReview.init({
   },
   cardId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
     references: {
       model: 'card',
       key: 'id'

@@ -150,6 +150,30 @@ Radical.belongsToMany(Kanji, {
   through: KanjiRadical
 });
 
+// Account reviews, review belongs to some card and account, id PK, account_id and card_id FK
+// On delete set null so stats can be collected
+Account.hasMany(AccountReview, {
+  onDelete: 'SET NULL',
+  onUpdate: 'CASCADE'
+});
+
+AccountReview.belongsTo(Account, {
+  targetKey: 'id',
+  foreignKey: 'accountId'
+});
+
+Card.hasMany(AccountReview, {
+  onDelete: 'SET NULL',
+  onUpdate: 'CASCADE'
+});
+
+AccountReview.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
+});
+
+
+
 
 
 
@@ -158,25 +182,6 @@ Radical.belongsToMany(Kanji, {
 
 
 /*
-
-Kanji.belongsToMany(Radical, { through: KanjiRadical });
-Radical.belongsToMany(Kanji, { through: KanjiRadical });
-
-// Kanji and language can have multiple translations, but translation may have only one kanji+lang id combination
-Kanji.hasMany(KanjiTranslation, {
-  foreignKey: 'kanji_id'
-});
-Country.hasMany(KanjiTranslation, {
-  foreignKey: 'country_code'
-});
-
-// Example word has multiple translations based on the lang id
-JapaneseWord.hasMany(JapaneseWordTranslation, {
-  foreignKey: 'word_id'
-});
-Country.hasMany(JapaneseWordTranslation, {
-  foreignKey: 'country_code'
-});
 
 // Account can have multiple revies of the same kanji (history of reviews)
 Kanji.hasMany(AccountKanjiReview, {
