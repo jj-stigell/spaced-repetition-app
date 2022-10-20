@@ -17,6 +17,7 @@
 | 12.10. | 2 | Write fetch cards resolver and query |
 | 15.10. | 2 | Write fetch new cards resolver and query |
 | 16.10. | 4 | Write reschedule new and due cards resolver and query  |
+| 19.10. | 2 | Rewrite part of the db structure, previous structure did not allow easy expansion for card types |
+| 20.20. | 2 | Fix the new relations in the sequelize model |
 |  |  |  |
-|  |  |  |
-| total | 45 |  | 
+| total | 49 |  | 
