@@ -347,7 +347,9 @@ module.exports = {
         references: {
           model: 'account',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       deck_id: {
         type: DataTypes.INTEGER,
@@ -355,7 +357,9 @@ module.exports = {
         references: {
           model: 'deck',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       favorite: {
         type: DataTypes.BOOLEAN,

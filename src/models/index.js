@@ -239,8 +239,26 @@ AccountCard.belongsTo(Card, {
   foreignKey: 'cardId'
 });
 
+// Account specific deck settings
+Account.hasMany(AccountDeckSettings, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
 
+AccountDeckSettings.belongsTo(Account, {
+  targetKey: 'id',
+  foreignKey: 'accountId'
+});
 
+Deck.hasMany(AccountDeckSettings, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+AccountDeckSettings.belongsTo(Deck, {
+  targetKey: 'id',
+  foreignKey: 'deckId'
+});
 
 module.exports = {
   Account,
