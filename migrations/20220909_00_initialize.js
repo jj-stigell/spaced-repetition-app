@@ -534,7 +534,9 @@ module.exports = {
         references: {
           model: 'radical',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       kanji_id: {
         type: DataTypes.INTEGER,
@@ -542,7 +544,9 @@ module.exports = {
         references: {
           model: 'kanji',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       created_at: {
         type: DataTypes.DATE,

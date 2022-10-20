@@ -137,6 +137,19 @@ JapaneseWordTranslation.belongsTo(Country, {
   foreignKey: 'languageId'
 });
 
+// Radical & kanji association through KanjiRadical join table
+Kanji.belongsToMany(Radical, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+  through: KanjiRadical
+});
+
+Radical.belongsToMany(Kanji, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+  through: KanjiRadical
+});
+
 
 
 
@@ -145,7 +158,7 @@ JapaneseWordTranslation.belongsTo(Country, {
 
 
 /*
-// Radicals that kanji has, the kanji that has multiple radicals attached to it
+
 Kanji.belongsToMany(Radical, { through: KanjiRadical });
 Radical.belongsToMany(Kanji, { through: KanjiRadical });
 
@@ -227,22 +240,6 @@ Country.hasMany(RadicalTranslation, {
 Kanji.belongsToMany(Radical, { through: KanjiRadical });
 Radical.belongsToMany(Kanji, { through: KanjiRadical });
 
-// Kanji and language can have multiple translations, but translation may have only one kanji+lang id combination
-Kanji.hasMany(TranslationKanji, {
-  foreignKey: 'kanji_id'
-});
-Country.hasMany(TranslationKanji, {
-  foreignKey: 'country_code'
-});
-
-// Example word has multiple translations based on the lang id
-Word.hasMany(WordTranslation, {
-  foreignKey: 'word_id'
-});
-Country.hasMany(WordTranslation, {
-  foreignKey: 'country_code'
-});
-
 // Account can have multiple revies of the same kanji (history of reviews)
 Kanji.hasMany(AccountKanjiReview, {
   foreignKey: 'kanji_id'
@@ -258,18 +255,4 @@ Kanji.hasMany(AccountKanjiCard, {
 Account.hasMany(AccountKanjiCard, {
   foreignKey: 'account_id'
 });
-
-module.exports = {
-  Account,
-  Kanji,
-  Country,
-  Radical,
-  RadicalTranslation,
-  KanjiRadical,
-  TranslationKanji,
-  Word,
-  WordTranslation,
-  AccountKanjiCard,
-  AccountKanjiReview
-};
 */
