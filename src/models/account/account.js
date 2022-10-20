@@ -31,7 +31,7 @@ Account.init({
     allowNull: false,
     defaultValue: true
   },
-  language: {
+  languageId: {
     type: DataTypes.CHAR(2),
     allowNull: false,
     defaultValue: 'en',
