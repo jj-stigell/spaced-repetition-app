@@ -21,8 +21,8 @@ JapaneseWordTranslation.init({
     type: DataTypes.CHAR(2),
     allowNull: false,
     references: {
-      model: 'country',
-      key: 'country_code'
+      model: 'language',
+      key: 'id'
     }
   },
   translation: {

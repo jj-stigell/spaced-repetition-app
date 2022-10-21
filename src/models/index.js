@@ -5,7 +5,7 @@ const AccountReview = require('./account/accountReview');
 const Admin = require('./account/admin');
 const Card = require('./card/card');
 const CardList = require('./card/cardList');
-const Country = require('./country/country');
+const Language = require('./language/language');
 const Deck = require('./deck/deck');
 const DeckTranslation = require('./deck/deckTranslation');
 const Kanji = require('./kanji/kanji');
@@ -29,45 +29,45 @@ Admin.belongsTo(Account, {
   foreignKey: 'accountId'
 });
 
-// Country has many accounts, deck, deck translations, etc. with
-// the country code being FK, cascade on updates, no deletion of language allowed
-Country.hasMany(Account, {
+// Language has many accounts, deck, deck translations, etc. with
+// the language code being FK, cascade on updates, no deletion of language allowed
+Language.hasMany(Account, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
 });
 
-Account.belongsTo(Country, {
-  targetKey: 'countryCode',
+Account.belongsTo(Language, {
+  targetKey: 'id',
   foreignKey: 'languageId'
 });
 
-Country.hasMany(Deck, {
+Language.hasMany(Deck, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
 });
 
-Deck.belongsTo(Country, {
-  targetKey: 'countryCode',
+Deck.belongsTo(Language, {
+  targetKey: 'id',
   foreignKey: 'languageId'
 });
 
-Country.hasMany(Card, {
+Language.hasMany(Card, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
 });
 
-Card.belongsTo(Country, {
-  targetKey: 'countryCode',
+Card.belongsTo(Language, {
+  targetKey: 'id',
   foreignKey: 'languageId'
 });
 
-Country.hasMany(DeckTranslation, {
+Language.hasMany(DeckTranslation, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
 });
 
-DeckTranslation.belongsTo(Country, {
-  targetKey: 'countryCode',
+DeckTranslation.belongsTo(Language, {
+  targetKey: 'id',
   foreignKey: 'languageId'
 });
 
@@ -83,13 +83,13 @@ KanjiTranslation.belongsTo(Kanji, {
   foreignKey: 'kanjiId'
 });
 
-Country.hasMany(KanjiTranslation, {
+Language.hasMany(KanjiTranslation, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
 });
 
-KanjiTranslation.belongsTo(Country, {
-  targetKey: 'countryCode',
+KanjiTranslation.belongsTo(Language, {
+  targetKey: 'id',
   foreignKey: 'languageId'
 });
 
@@ -105,13 +105,13 @@ RadicalTranslation.belongsTo(Radical, {
   foreignKey: 'radicalId'
 });
 
-Country.hasMany(RadicalTranslation, {
+Language.hasMany(RadicalTranslation, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
 });
 
-RadicalTranslation.belongsTo(Country, {
-  targetKey: 'countryCode',
+RadicalTranslation.belongsTo(Language, {
+  targetKey: 'id',
   foreignKey: 'languageId'
 });
 
@@ -127,13 +127,13 @@ JapaneseWordTranslation.belongsTo(JapaneseWord, {
   foreignKey: 'wordId'
 });
 
-Country.hasMany(JapaneseWordTranslation, {
+Language.hasMany(JapaneseWordTranslation, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
 });
 
-JapaneseWordTranslation.belongsTo(Country, {
-  targetKey: 'countryCode',
+JapaneseWordTranslation.belongsTo(Language, {
+  targetKey: 'id',
   foreignKey: 'languageId'
 });
 
@@ -264,7 +264,7 @@ module.exports = {
   Account,
   Admin,
   Kanji,
-  Country,
+  Language,
   Radical,
   RadicalTranslation,
   KanjiRadical,

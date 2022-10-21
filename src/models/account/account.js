@@ -36,8 +36,8 @@ Account.init({
     allowNull: false,
     defaultValue: 'en',
     references: {
-      model: 'country',
-      key: 'country_code'
+      model: 'language',
+      key: 'id'
     }
   },
   lastLogin: {

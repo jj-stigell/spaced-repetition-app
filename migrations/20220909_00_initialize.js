@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const constants = require('../src/util/constants');
 const alter_tables = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/alter_tables.sql'), 'utf8');
-const country = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/country.sql'), 'utf8');
+const language = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/language.sql'), 'utf8');
 const account = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account.sql'), 'utf8');
 const admin = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/admin.sql'), 'utf8');
 const deck = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/deck.sql'), 'utf8');
@@ -20,23 +20,10 @@ const japanese_word = fs.readFileSync(path.resolve(__dirname, '../setup/database
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
-    await queryInterface.createTable('country', {
+    await queryInterface.createTable('language', {
       id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      country_code: {
         type: DataTypes.CHAR(2),
-        unique: true,
-        allowNull: false
-      },
-      country_english: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      country_native: {
-        type: DataTypes.STRING,
+        primaryKey: true,
         allowNull: false
       },
       language_english: {
@@ -91,8 +78,8 @@ module.exports = {
         allowNull: false,
         defaultValue: 'en',
         references: {
-          model: 'country',
-          key: 'country_code'
+          model: 'language',
+          key: 'id'
         },
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE'
@@ -170,8 +157,8 @@ module.exports = {
         type: DataTypes.CHAR(2),
         allowNull: false,
         references: {
-          model: 'country',
-          key: 'country_code'
+          model: 'language',
+          key: 'id'
         },
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE'
@@ -216,8 +203,8 @@ module.exports = {
         type: DataTypes.CHAR(2),
         allowNull: false,
         references: {
-          model: 'country',
-          key: 'country_code'
+          model: 'language',
+          key: 'id'
         },
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE'
@@ -265,8 +252,8 @@ module.exports = {
         type: DataTypes.CHAR(2),
         allowNull: false,
         references: {
-          model: 'country',
-          key: 'country_code'
+          model: 'language',
+          key: 'id'
         },
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE'
@@ -502,8 +489,8 @@ module.exports = {
         type: DataTypes.CHAR(2),
         allowNull: false,
         references: {
-          model: 'country',
-          key: 'country_code'
+          model: 'language',
+          key: 'id'
         },
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE'
@@ -589,8 +576,8 @@ module.exports = {
         type: DataTypes.CHAR(2),
         allowNull: false,
         references: {
-          model: 'country',
-          key: 'country_code'
+          model: 'language',
+          key: 'id'
         },
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE'
@@ -684,8 +671,8 @@ module.exports = {
         type: DataTypes.CHAR(2),
         allowNull: false,
         references: {
-          model: 'country',
-          key: 'country_code'
+          model: 'language',
+          key: 'id'
         },
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE'
@@ -824,7 +811,7 @@ module.exports = {
       unique: true
     }),
     await queryInterface.sequelize.query(alter_tables);
-    await queryInterface.sequelize.query(country);
+    await queryInterface.sequelize.query(language);
     await queryInterface.sequelize.query(account);
     await queryInterface.sequelize.query(admin);
     await queryInterface.sequelize.query(deck);
@@ -856,6 +843,9 @@ module.exports = {
     await queryInterface.dropTable('card_list');
     await queryInterface.dropTable('deck');
     await queryInterface.dropTable('card');
-    await queryInterface.dropTable('country');
+    await queryInterface.dropTable('language');
+    await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_card_type;');
+    await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_deck_type;');
+    await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_account_review_result;');
   },
 };

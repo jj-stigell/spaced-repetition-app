@@ -1,25 +1,12 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../util/database');
 
-class Country extends Model {}
+class Language extends Model {}
 
-Country.init({
+Language.init({
   id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  countryCode: {
     type: DataTypes.CHAR(2),
-    unique: true,
-    allowNull: false
-  },
-  countryEnglish: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  countryNative: {
-    type: DataTypes.STRING,
+    primaryKey: true,
     allowNull: false
   },
   languageEnglish: {
@@ -30,19 +17,19 @@ Country.init({
     type: DataTypes.STRING,
     allowNull: false
   },
-  created_at: {
+  createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
   },
-  updated_at: {
+  updatedAt: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
   }
 }, {
   sequelize,
-  modelName: 'country'
+  modelName: 'language'
 });
 
-module.exports = Country;
+module.exports = Language;
