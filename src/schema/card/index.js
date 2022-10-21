@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 const validator = require('validator');
 const { Op } = require('sequelize');
-const { Kanji, AccountKanjiReview, AccountKanjiCard, TranslationKanji, Radical, RadicalTranslation } = require('../../models');
+const { Deck, AccountDeckSettings, Kanji, Radical, RadicalTranslation, Card, CardList, DeckTranslation } = require('../../models');
 const { sequelize } = require('../../util/database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors');
@@ -81,10 +82,8 @@ const typeDef = `
   union RescheduleResult = Success | Error
 
   type Query {
-    fetchDueKanjiCards(
-      jlptLevel: Int
-      includeLowerLevelCards: Boolean
-      limitReviews: Int
+    fetchCards(
+      deckId: Int!
       languageId: String
     ): CardPayload!
 
@@ -112,7 +111,7 @@ const typeDef = `
 const resolvers = {
   Query: {
     // Fetch cards that are due or new cards based on the newCards boolean value, defaults to false.
-    fetchDueKanjiCards: async (_, { jlptLevel, includeLowerLevelCards, limitReviews, languageId }, { currentUser }) => {
+    fetchCards: async (_, { deckId, languageId }, { currentUser }) => {
 
       // Check that user is logged in
       if (!currentUser) {
@@ -122,29 +121,208 @@ const resolvers = {
         };
       }
 
-      // Confirm that jlpt level and language id are not empty
-      if (!jlptLevel || !languageId) {
+      // Confirm that deck id is not empty
+      if (!deckId) {
         return { 
           __typename: 'Error',
           errorCode: errors.inputValueMissingError
         };
       }
 
-      // Chack that language id is one of the available
-      if (!validator.isIn(languageId.toLowerCase(), constants.availableLanguages)) {
-        return { 
-          __typename: 'Error',
-          errorCode: errors.invalidLanguageIdError
-        };
-      }
-
-      // Check that type of integer correct
-      if (!Number.isInteger(jlptLevel) || (limitReviews && !Number.isInteger(limitReviews))) {
+      // Check that type of deck id (integer) correct
+      if (!Number.isInteger(deckId) || deckId < 1) {
         return { 
           __typename: 'Error',
           errorCode: errors.inputValueTypeError
         };
       }
+
+      let selectedLanguage;
+      // If language id is empty, set to default 'en'
+      if (!languageId) {
+        selectedLanguage = constants.defaultLanguage;
+      } else {
+        // Check that language id is one of the available if provided
+        if (!validator.isIn(languageId.toLowerCase(), constants.availableLanguages)) {
+          return { 
+            __typename: 'Error',
+            errorCode: errors.invalidLanguageIdError
+          };
+        }
+      }
+      
+      let deck;
+      // Check if deck with an id exists
+      try {
+        deck = await Deck.findOne({ where: { id: deckId } });
+      } catch(error) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.connectionError
+        };
+      }
+
+      // No deck found with an id
+      if (!deck) {
+        return { 
+          __typename: 'Error',
+          errorCode: errors.nonExistingDeck
+        };
+      }
+
+      let accountDeckSettings;
+      // Check if deck has an account specific settings
+      try {
+        accountDeckSettings = await AccountDeckSettings.findOne({ where: { accountId: currentUser.id, deckId: deckId }});
+      } catch(error) {
+        return {
+          __typename: 'Error',
+          errorCode: errors.connectionError
+        };
+      }
+
+      //create new accoung deck settings if no existing one
+      if (!accountDeckSettings) {
+        try {
+          accountDeckSettings = await AccountDeckSettings.create({
+            accountId: currentUser.id,
+            deckId: deckId
+          });
+          accountDeckSettings.save();
+        } catch(error) {
+          console.log('error:', error);
+          return {
+            __typename: 'Error',
+            errorCode: errors.connectionError
+          };
+        }
+      }
+
+      console.log('account settings are now:, NEW CARDS', accountDeckSettings.newCardsPerDay);
+
+
+      const DECK = await Deck.findAll({
+        where: {
+          'id': deckId
+        },
+        raw: true,
+        nest: true,
+        include: [
+          {
+            model: Card,
+            attributes: ['id', 'type'],
+            required: true,
+            where: {
+              active: true
+            }
+          },
+          /*
+          {
+            model: TranslationKanji,
+            attributes: ['keyword', 'story', 'hint', 'otherMeanings'],
+            where: {
+              language_id: languageId
+            }
+          },
+          {
+            model: Radical,
+            attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+            include: {
+              model: RadicalTranslation,
+              where: {
+                language_id: languageId
+              }
+            },
+          },
+        ],
+        order: [
+          [AccountKanjiCard, 'dueDate', 'ASC']
+        
+        ]
+        */
+        ]
+        
+      });
+
+
+      console.log('cards found are:', JSON.stringify(DECK, null, 2));
+
+      console.log(DECK);
+
+      /*
+
+        deckId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'deck',
+      key: 'id'
+    }
+  },
+  cardId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'card',
+      key: 'id'
+    },
+  },
+
+         /*
+          // Create new account kanji card if kanji exists
+          accountKanjiCard = await AccountKanjiCard.create({
+            accountId: currentUser.id,
+            kanjiId: kanjiId,
+            dueDate: newDueDate,
+            easyFactor: 2.5,
+            reviewCount: 1,
+          });
+          accountKanjiCard.save();
+
+          // Add new row to review history
+          // eslint-disable-next-line no-unused-vars
+          const newReviewHistory = await AccountKanjiReview.create({
+            accountId: currentUser.id,
+            kanjiId: kanjiId,
+            reviewResult: reviewResult,
+            extraReview: extraReview ? true : false,
+            timing: timing
+          });
+
+
+  maxLimitReviews: 999,
+  minLimitReviews: 1,
+  maxReviewInterval: 999,
+  minReviewInterval: 1,
+  defaultMaxNewPerDay: 15
+
+8/10
+5/8
+7/12
+9/15
+tot. 29/45  0.64 (0,32)
+0.03 feedback
+0.42 project
+
+
+AccountDeckSettings.init({
+  accountId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'account',
+      key: 'id'
+    }
+  },
+  deckId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'deck',
+      key: 'id'
+    }
+  },
+  
 
       // Check that jlpt level between 1 - 5
       if (!constants.jltpLevels.includes(jlptLevel)) {
@@ -203,20 +381,20 @@ const resolvers = {
           [AccountKanjiCard, 'dueDate', 'ASC']
         ]
       });
+      */
+
+
+
+
+      const cards = [1,2,3,4,5];
+
+
 
       // If no cards found, return error
       if (cards.length === 0) {
         return { 
           __typename: 'Error',
           errorCode: errors.noDueCardsError
-        };
-      }
-
-      // Slice if review count limited
-      if (limitReviews) {
-        return {
-          __typename: 'CardSet',
-          Cards: cards.slice(0, limitReviews),
         };
       }
 
@@ -319,6 +497,7 @@ const resolvers = {
           }
         },
         include: [
+          /*
           {
             model: TranslationKanji,
             attributes: ['keyword', 'story', 'hint', 'otherMeanings'],
@@ -326,6 +505,7 @@ const resolvers = {
               language_id: languageId
             }
           },
+          */
           {
             model: Radical,
             attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
@@ -408,7 +588,7 @@ const resolvers = {
 
       try {
         // Check if card exists for the user for that kanji
-        accountKanjiCard = await AccountKanjiCard.findOne({ where: { accountId: currentUser.id, kanjiId: kanjiId } });
+        //accountKanjiCard = await AccountKanjiCard.findOne({ where: { accountId: currentUser.id, kanjiId: kanjiId } });
       } catch(error) {
         return { 
           __typename: 'Error',
@@ -437,6 +617,7 @@ const resolvers = {
             };
           }
           
+          /*
           // Create new account kanji card if kanji exists
           accountKanjiCard = await AccountKanjiCard.create({
             accountId: currentUser.id,
@@ -457,6 +638,7 @@ const resolvers = {
             timing: timing
           });
 
+          */
           return { 
             __typename: 'Success',
             status: true
@@ -484,6 +666,7 @@ const resolvers = {
         });
         accountKanjiCard.save();
 
+        /*
         // Add new row to review history
         await AccountKanjiReview.create({
           accountId: currentUser.id,
@@ -492,6 +675,8 @@ const resolvers = {
           extraReview: extraReview ? true : false,
           timing: timing
         });
+        */
+
         return { 
           __typename: 'Success',
           status: true,

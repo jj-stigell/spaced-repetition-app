@@ -1,4 +1,3 @@
-//const { UserInputError, AuthenticationError, ForbiddenError } = require('apollo-server');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
