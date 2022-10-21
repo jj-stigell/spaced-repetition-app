@@ -52,7 +52,11 @@ AccountDeckSettings.init({
   maxNewPerDay: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    default: constants.defaultMaxNewPerDay
+    default: constants.defaultMaxNewPerDay,
+    validate: {
+      max: constants.maxNewReviews,
+      min: constants.minNewReviews
+    }
   },
   createdAt: {
     type: DataTypes.DATE,
