@@ -1,10 +1,11 @@
 const mutations = {
-  registerMutation: `mutation createAccount($username: String!, $email: String!, $password: String!, $passwordConfirmation: String!) {
-    createAccount(username: $username, email: $email, password: $password, passwordConfirmation: $passwordConfirmation) {
+  registerMutation: `mutation createAccount($email: String!, $password: String!, $passwordConfirmation: String!) {
+    createAccount(email: $email, password: $password, passwordConfirmation: $passwordConfirmation) {
       ... on Error {
         errorCode
       }
       ... on Account {
+        id
         email
       }
     }
@@ -20,8 +21,7 @@ const mutations = {
         }
         user {
           id,
-          email,
-          username
+          email
         }
       }
     }

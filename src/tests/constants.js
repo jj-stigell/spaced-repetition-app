@@ -1,8 +1,8 @@
 const account = {
-  username: 'Testing123',
   email: 'testing@test.com',
   password: 'ThisIsValid123',
-  passwordConfirmation: 'ThisIsValid123'
+  passwordConfirmation: 'ThisIsValid123',
+  languageId: 'en'
 };
 
 const passwordData = {
@@ -14,6 +14,7 @@ const passwordData = {
 const stringData = {
   availableEmail: 'emailnottaken@test.com',
   nonExistingEmail: 'nonExistingEmail@test.com',
+  notAvailableLanguage: 'xu',
   incorrectPassword: 'ThisIsNotCorrect123',
   noNumbersPass: 'noNumbersInThisOne',
   notLongEnoughPass: '1234Len',
