@@ -354,7 +354,7 @@ module.exports = {
       review_interval: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        default: constants.defaultMaxInterval,
+        defaultValue: constants.defaultMaxInterval,
         validate: {
           max: constants.maxReviewInterval,
           min: constants.minReviewInterval
@@ -363,7 +363,7 @@ module.exports = {
       reviews_per_day: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        default: constants.defaultMaxReviewPerDay,
+        defaultValue: constants.defaultMaxReviewPerDay,
         validate: {
           max: constants.maxLimitReviews,
           min: constants.minLimitReviews
@@ -372,7 +372,7 @@ module.exports = {
       new_cards_per_day: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        default: constants.defaultMaxNewPerDay,
+        defaultValue: constants.defaultMaxNewPerDay,
         validate: {
           max: constants.maxNewReviews,
           min: constants.minNewReviews
