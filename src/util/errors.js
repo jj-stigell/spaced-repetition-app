@@ -20,7 +20,8 @@ const errors = {
   noDueCardsError: 'noDueCardsError',
   noNewCardsError: 'noNewCardsError',
   negativeNumberTypeError: 'negativeNumberTypeError',
-  nonExistingId: 'nonExistingId'
+  nonExistingId: 'nonExistingId',
+  nonExistingDeck: 'nonExistingDeck'
 };
 
 module.exports = errors;
