@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const validator = require('validator');
 const { Op } = require('sequelize');
-const { Deck, AccountDeckSettings, Kanji, Radical, RadicalTranslation, Card, CardList, DeckTranslation } = require('../../models');
+const { Deck, AccountDeckSettings, Kanji, Radical, RadicalTranslation, Card, CardList, DeckTranslation, JapaneseWord, KanjiTranslation, KanjiRadical } = require('../../models');
 const { sequelize } = require('../../util/database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors');
@@ -30,34 +30,32 @@ const typeDef = `
     dueDate: String
   }
 
-  type TranslationKanjiData {
+  type KanjiTranslation {
     keyword: String
     story: String
     hint: String
     otherMeanings: String
+    description: String
   }
 
-  type TranslationRadical {
-    id: Int
-    languageId: String
+  type RadicalTranslation {
     translation: String
     description: String
     createdAt: String
     updatedAt: String
   }
 
-  type RadicalData {
-    id: Int
+  type Radical {
     radical: String
     reading: String
     readingRomaji: String
     strokeCount: Int
     createdAt: String
     updatedAt: String
-    translation_radicals: [TranslationRadical]
+    radical_translations: [RadicalTranslation]
   }
 
-  type Card {
+  type Kanji {
     id: Int
     kanji: String
     learningOrder: Int
@@ -69,13 +67,13 @@ const typeDef = `
     strokeCount: Int
     createdAt: String
     updatedAt: String
-    translation_kanjis: [TranslationKanjiData]
+    kanji_translations: [KanjiTranslation]
     account_kanji_cards: [CustomizedCardData]
-    radicals: [RadicalData]
+    radicals: [Radical]
   }
 
   type CardSet {
-    Cards: [Card]
+    Cards: [Kanji]
   }
 
   union CardPayload = CardSet | Error
@@ -198,14 +196,13 @@ const resolvers = {
         }
       }
 
-      console.log('account settings are now:, NEW CARDS', accountDeckSettings.newCardsPerDay);
-
-
-      const DECK = await Deck.findAll({
+      const cards = await Deck.findAll({
         where: {
           'id': deckId
         },
-        raw: true,
+        limit: accountDeckSettings.newCardsPerDay,
+        subQuery: false,
+        //raw: true,
         nest: true,
         include: [
           {
@@ -214,95 +211,119 @@ const resolvers = {
             required: true,
             where: {
               active: true
-            }
-          },
-          /*
-          {
-            model: TranslationKanji,
-            attributes: ['keyword', 'story', 'hint', 'otherMeanings'],
-            where: {
-              language_id: languageId
-            }
-          },
-          {
-            model: Radical,
-            attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
-            include: {
-              model: RadicalTranslation,
-              where: {
-                language_id: languageId
-              }
             },
-          },
+            include:
+            {
+              model: Kanji,
+              include: [
+                {
+                  model: KanjiTranslation,
+                  where: {
+                    language_id: languageId
+                  },
+                },
+                {
+                  model: Radical,
+                  attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+                  include: {
+                    model: RadicalTranslation,
+                    where: {
+                      language_id: languageId
+                    }
+                  },
+                }
+              ]
+            }
+          }
         ],
-        order: [
-          [AccountKanjiCard, 'dueDate', 'ASC']
-        
-        ]
-        */
-        ]
+        //order: [
+        //[Card, 'cardList.learningOrder', 'ASC']
+        //],
         
       });
 
 
-      console.log('cards found are:', JSON.stringify(DECK, null, 2));
+      console.log('cards found are:', JSON.stringify(cards, null, 2));
 
-      console.log(DECK);
+      console.log(cards);
 
       /*
 
-        deckId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'deck',
-      key: 'id'
+      // NOTE, use CardList for fetching cards, not just a join table because includes 
+      learning order, fix the relation in model index,js first
+
+        {
+    "id": 1,
+    "deckName": "JLPT N5 Kanji",
+    "type": "recall",
+    "subscriberOnly": false,
+    "languageId": "jp",
+    "active": true,
+    "createdAt": "2022-10-21T13:34:01.664Z",
+    "updatedAt": "2022-10-21T13:34:01.664Z",
+    "cards": {
+      "id": 7,
+      "type": "kanji",
+      "card_list": {
+        "id": 7,
+        "deckId": 1,
+        "cardId": 7,
+        "learningOrder": 7,
+        "createdAt": "2022-10-21T13:34:01.782Z",
+        "updatedAt": "2022-10-21T13:34:01.782Z"
+      },
+      "kanji": {
+        "id": 7,
+        "cardId": 7,
+        "kanji": "三",
+        "jlptLevel": 5,
+        "onyomi": "サン、 ゾウ",
+        "onyomiRomaji": "san, zou",
+        "kunyomi": "み、 み.つ、 みっ.つ",
+        "kunyomiRomaji": "mi, mi.tsu, mit.tsu",
+        "strokeCount": 3,
+        "createdAt": "2022-10-21T13:34:02.063Z",
+        "updatedAt": "2022-10-21T13:34:02.063Z",
+        "kanji_translations": {
+          "id": 110,
+          "kanjiId": 7,
+          "languageId": "en",
+          "keyword": "Three",
+          "story": "Three lines represent number three.",
+          "hint": "1 + 1 + 1 = ?",
+          "otherMeanings": "-",
+          "description": null,
+          "createdAt": "2022-10-21T13:34:02.222Z",
+          "updatedAt": "2022-10-21T13:34:02.222Z"
+        },
+        "radicals": {
+          "id": null,
+          "radical": null,
+          "reading": null,
+          "readingRomaji": null,
+          "strokeCount": null,
+          "createdAt": null,
+          "updatedAt": null,
+          "kanji_radical": {
+            "id": null,
+            "radicalId": null,
+            "kanjiId": null,
+            "createdAt": null,
+            "updatedAt": null
+          },
+          "radical_translations": {
+            "id": null,
+            "radicalId": null,
+            "languageId": null,
+            "translation": null,
+            "description": null,
+            "createdAt": null,
+            "updatedAt": null
+          }
+        }
+      }
     }
-  },
-  cardId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'card',
-      key: 'id'
-    },
-  },
 
-         /*
-          // Create new account kanji card if kanji exists
-          accountKanjiCard = await AccountKanjiCard.create({
-            accountId: currentUser.id,
-            kanjiId: kanjiId,
-            dueDate: newDueDate,
-            easyFactor: 2.5,
-            reviewCount: 1,
-          });
-          accountKanjiCard.save();
-
-          // Add new row to review history
-          // eslint-disable-next-line no-unused-vars
-          const newReviewHistory = await AccountKanjiReview.create({
-            accountId: currentUser.id,
-            kanjiId: kanjiId,
-            reviewResult: reviewResult,
-            extraReview: extraReview ? true : false,
-            timing: timing
-          });
-
-
-  maxLimitReviews: 999,
-  minLimitReviews: 1,
-  maxReviewInterval: 999,
-  minReviewInterval: 1,
-  defaultMaxNewPerDay: 15
-
-8/10
-5/8
-7/12
-9/15
-tot. 29/45  0.64 (0,32)
-0.03 feedback
-0.42 project
 
 
 AccountDeckSettings.init({
@@ -386,7 +407,7 @@ AccountDeckSettings.init({
 
 
 
-      const cards = [1,2,3,4,5];
+      //const cards = [1,2,3,4,5];
 
 
 

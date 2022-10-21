@@ -26,19 +26,19 @@ KanjiTranslation.init({
     }
   },
   keyword: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING
   },
   story: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING
   },
   hint: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING
   },
   otherMeanings: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING
   },
   description: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING
   },
   createdAt: {
     type: DataTypes.DATE,

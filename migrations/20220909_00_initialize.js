@@ -598,6 +598,9 @@ module.exports = {
       other_meanings: {
         type: DataTypes.STRING
       },
+      description: {
+        type: DataTypes.STRING
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,

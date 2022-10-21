@@ -293,7 +293,7 @@ describe('Account tests', () => {
   describe('Changing password', () => {
     let authToken;
 
-    it('Login and change password succesfully', async () => {
+    it('Change password and login with new password succesfully', async () => {
       //login and receive token
       let response = await request(testUrl)
         .post('/')

@@ -1,1 +1,9 @@
 INSERT INTO kanji_radical (radical_id, kanji_id, created_at, updated_at) VALUES (33, 1, NOW(), NOW());
+INSERT INTO kanji_radical (radical_id, kanji_id, created_at, updated_at) VALUES (12, 4, NOW(), NOW());
+INSERT INTO kanji_radical (radical_id, kanji_id, created_at, updated_at) VALUES (7, 9, NOW(), NOW());
+INSERT INTO kanji_radical (radical_id, kanji_id, created_at, updated_at) VALUES (13, 6, NOW(), NOW());
+INSERT INTO kanji_radical (radical_id, kanji_id, created_at, updated_at) VALUES (23, 18, NOW(), NOW());
+INSERT INTO kanji_radical (radical_id, kanji_id, created_at, updated_at) VALUES (45, 24, NOW(), NOW());
+INSERT INTO kanji_radical (radical_id, kanji_id, created_at, updated_at) VALUES (87, 24, NOW(), NOW());
+INSERT INTO kanji_radical (radical_id, kanji_id, created_at, updated_at) VALUES (24, 18, NOW(), NOW());
+INSERT INTO kanji_radical (radical_id, kanji_id, created_at, updated_at) VALUES (30, 9, NOW(), NOW());
