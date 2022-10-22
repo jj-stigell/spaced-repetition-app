@@ -7,7 +7,7 @@
     "start": "NODE_ENV=production node src/index.js",
     "dev": "NODE_ENV=development nodemon src/index.js",
     "test": "npm run test:migration:down && npm run jestTest",
-    "jestTest": "NODE_ENV=test jest --verbose --runInBand --detectOpenHandles",
+    "jestTest": "NODE_ENV=test jest --verbose --runInBand --detectOpenHandles --coverage",
     "lint": "eslint .",
     "prod:migration:down": "NODE_ENV=production node src/util/rollback.js",
     "dev:migration:down": "NODE_ENV=development node src/util/rollback.js",

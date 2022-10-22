@@ -25,6 +25,7 @@ Frontend time keeping is in the frontend GitHub repository
 - [JSON web token](https://www.npmjs.com/package/jsonwebtoken) or [JWT](https://jwt.io/) for user authorization. [MIT License](https://github.com/auth0/node-jsonwebtoken/blob/HEAD/LICENSE)
 - [bcrypt](https://www.npmjs.com/package/bcrypt) for hashing user passwords. [MIT License](https://github.com/kelektiv/node.bcrypt.js/blob/master/LICENSE)
 - [validator.js](https://www.npmjs.com/package/validator), validating user input on the server side. [MIT License](https://github.com/validatorjs/validator.js/blob/master/LICENSE)
+- [Yup](https://www.npmjs.com/package/yup), Yup is a JavaScript schema builder for value parsing and validation.
 
 
 ## TODOs
@@ -35,14 +36,17 @@ Frontend time keeping is in the frontend GitHub repository
     - [X] Set styling rules on lint etc.
 - [ ] Deployment pipeline
     - [X] Run tests with #test
-    - [ ] Version numbering
+    - [ ] Version numbering (command?)
     - [X] Deploy to production with #deploy
 - [ ] GraphQL server
     - [ ] Limit query depth
-    - [ ] Set request limit
+    - [ ] Set request limit per connection/ip-address
+    - [ ] Cache
+    - [ ] Catch internal server errors, no (possible) db errors no client
+- [ ] Service functionality
     - [ ] User related
         - [ ] User registration
-            - [X] Validate input (Validator lib, RegExp)
+            - [X] Validate input (Validator lib, RegExp, Yup)
             - [ ] Captcha to prevent bots ([reCAPTCHA](https://www.google.com/recaptcha/about/))
             - [X] Check that username, email etc not taken
             - [X] Create user
@@ -51,41 +55,67 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] Validate input
             - [X] Error on missing, incorrect input, mismatch with password
             - [X] Succesfully create and return token
+                - [ ] token content, expiry time?
             - [ ] Keep track of sessions
         - [ ] User logout
             - [ ] Delete session
         - [ ] User change password/personal data
             - [X] Old password matches hash in DB
             - [X] Validate new, confirmation must match, cannot be same as old one
-            - [ ] Email, settings change
+            - [ ] send email notification
         - [ ] Recover account (e.g. password forgotten)
-    - [X] Card related
+    - [ ] Card related
         - [ ] Validation of user input, including error messages
-             - [ ] Fetch due cards
-             - [ ] Fetch new cards
-             - [ ] Reschedule card
-        - [X] Get cards based on user ID and other inputs
-            - [X] New cards
-            - [X] Due cards
-        - [X] Reschedule card based on user input (interval, extrareview, etc.)
-            - [X] Reschedule new card by creating new user card
-            - [X] Reschedule due card
-            - [X] Add row to review history 
+            - [ ] Install and configure Yup
+            - [ ] Match validation rules with front-end
+            - [ ] Card validation
+        - [ ] Card mutations
+            - [ ] Reschedule card
+            - [ ] Add custom card hint
+            - [ ] Add custom card story
+            - [ ] set deck ad favorite
+        - [ ] Card and deck queries
+            - [ ] due cards
+            - [ ] new cards
+            - [ ] fetch the amount of due cards for the next n days, group by date
+            - [ ] fetch available decks, language information, deck specific due cards amount
+            - [ ] amount of reviewed kanji (mature or not?)
+            - [ ] learnt kanji (x of y)
+            - [ ] daily average review count
+        - [ ] Reschedule card based on user input (interval, extrareview, etc.)
+            - [ ] Reschedule new card by creating new user card
+            - [ ] Reschedule due card
+            - [ ] Add row to review history 
 - [ ] PostgreSQL / Sequelize
     - [X] Translate db to Sequelize
     - [X] Create models and associations
-    - [X] Load initial sql file containing precompiled data to database when running first migration
+    - [X] Load initial sql file containing decks, cards and translations
+
     - [ ] Add constraints to initial database migration
+        - [ ] unique (email, deck names)
+        - [ ] range: integers, varchar
+    - [ ] DB performance testing
+        - [ ] Generate [mock data](https://www.mockaroo.com/)
 - [ ] Testing
     - [ ] Unit testing for functions
+        - [ ] Helper functions
     - [ ] Integration tests
-        - [X] Account creation
-        - [X] Login
-        - [X] Password changing
+        - [X] ACCOUNT
+            - [X] Account creation
+            - [X] Login
+            - [X] Password changing
         - [ ] Logout
-        - [ ] Fetch due cards
-        - [ ] Fetch new cards
-        - [ ] Reschedule a card
+        - [ ] MUTATIONS
+            - [ ] Reschedule card
+            - [ ] Add custom card hint
+            - [ ] Add custom card story
+            - [ ] set deck ad favorite
+        - [ ] QUERIES
+            - [ ] Fetch due cards
+            - [ ] Fetch new cards
+            - [ ] Fetch decks
+            - [ ] Fetch due per date, one or multiple
+        
     
 
 ## Deployment
