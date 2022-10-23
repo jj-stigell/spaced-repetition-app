@@ -50,19 +50,23 @@ Frontend time keeping is in the frontend GitHub repository
             - [ ] Captcha to prevent bots ([reCAPTCHA](https://www.google.com/recaptcha/about/))
             - [X] Check that username, email etc not taken
             - [X] Create user
-            - [ ] Email verification ([node mailer](https://nodemailer.com/about/) & [Amazon SES](https://aws.amazon.com/ses/))
+            - [ ] Email verification ([node mailer](https://nodemailer.com/about/) & [Amazon SES](https://aws.amazon.com/ses/)?)
+            - [ ] register using google account
         - [ ] User login, JWT on succesful login, otherwise error
             - [X] Validate input
             - [X] Error on missing, incorrect input, mismatch with password
             - [X] Succesfully create and return token
-                - [ ] token content, expiry time?
+                - [ ] token content (user id, exp), expiry time?
             - [ ] Keep track of sessions
+            - [ ] login using google account
         - [ ] User logout
             - [ ] Delete session
         - [ ] User change password/personal data
             - [X] Old password matches hash in DB
             - [X] Validate new, confirmation must match, cannot be same as old one
             - [ ] send email notification
+            - [ ] show open sessions (location, device, expiry date)
+            - [ ] delete session
         - [ ] Recover account (e.g. password forgotten)
     - [ ] Card related
         - [ ] Validation of user input, including error messages
@@ -73,7 +77,9 @@ Frontend time keeping is in the frontend GitHub repository
             - [ ] Reschedule card
             - [ ] Add custom card hint
             - [ ] Add custom card story
-            - [ ] set deck ad favorite
+            - [ ] set deck as favorite (limit?)
+            - [ ] Sick day (push all cards +1 day)
+            - [ ] Optimize (recalculate deck cards for optimal interval)
         - [ ] Card and deck queries
             - [ ] due cards
             - [ ] new cards
@@ -85,12 +91,19 @@ Frontend time keeping is in the frontend GitHub repository
         - [ ] Reschedule card based on user input (interval, extrareview, etc.)
             - [ ] Reschedule new card by creating new user card
             - [ ] Reschedule due card
-            - [ ] Add row to review history 
+            - [ ] Add row to review history
+- [ ] misc.
+    - [ ] Bug report tool
 - [ ] PostgreSQL / Sequelize
     - [X] Translate db to Sequelize
     - [X] Create models and associations
-    - [X] Load initial sql file containing decks, cards and translations
-
+    - [ ] Load initial sql file containing decks, cards and translations
+        - [ ] Kanji
+        - [ ] Radicals
+        - [ ] Words
+        - [ ] Translations
+        - [ ] Decks
+        - [ ] Cards
     - [ ] Add constraints to initial database migration
         - [ ] unique (email, deck names)
         - [ ] range: integers, varchar
@@ -109,7 +122,9 @@ Frontend time keeping is in the frontend GitHub repository
             - [ ] Reschedule card
             - [ ] Add custom card hint
             - [ ] Add custom card story
-            - [ ] set deck ad favorite
+            - [ ] set deck as favorite
+            - [ ] Sick day
+            - [ ] Optimize schedule
         - [ ] QUERIES
             - [ ] Fetch due cards
             - [ ] Fetch new cards
@@ -123,7 +138,7 @@ Deployment to done from branch `production` only if tests pass succesfully and d
 
 **Commands:**
 * `#test` runs tests (and deploy if coupled with lower command)
-* `#deploy` deployes the main branch to production if all tests are run and pass
+* `#deploy` copies the main branch to production branch if all tests are run and pass, from there render takes over
 * with no `#test` and `#deploy` committed changes are just pushed to the main branch
 
 
