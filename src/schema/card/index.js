@@ -36,6 +36,8 @@ const typeDef = `
     hint: String
     otherMeanings: String
     description: String
+    createdAt: String
+    updatedAt: String
   }
 
   type RadicalTranslation {
@@ -71,9 +73,32 @@ const typeDef = `
     account_kanji_cards: [CustomizedCardData]
     radicals: [Radical]
   }
+  type Card {
+    id: Int
+    type: String
+    createdAt: String
+    updatedAt: String
+    kanji: Kanji2
+  }
+
+  type Kanji2 {
+    id: Int
+    kanji: String
+    jlptLevel: Int
+    onyomi: String
+    onyomiRomaji: String
+    kunyomi: String
+    kunyomiRomaji: String
+    strokeCount: Int
+    createdAt: String
+    updatedAt: String
+    kanji_translations: [KanjiTranslation]
+    account_kanji_cards: [CustomizedCardData]
+    radicals: [Radical]
+  }
 
   type CardSet {
-    Cards: [Kanji]
+    Cards: [Card]
   }
 
   union CardPayload = CardSet | Error
@@ -198,7 +223,7 @@ const resolvers = {
 
 
 
-      
+
 
       const rawQuery = `SELECT card_id FROM card_list WHERE deck_id = :deckId AND NOT EXISTS (
         SELECT NULL 
@@ -218,82 +243,43 @@ const resolvers = {
         raw: true
       });
 
-      /*
-const cardIds = await sequelize.query(rawQuery, {
-        replacements: {
-          jlptLevel: jlptLevel,
-          accountId: currentUser.id,
-          limitReviews: limitReviews,
-        },
-        model: Kanji,
-        type: sequelize.QueryTypes.SELECT,
-        raw: true
-      });
-
-
-
-const rawQuery = `SELECT id FROM kanji WHERE jlpt_level ${selectLevel} :jlptLevel AND NOT EXISTS (
-        SELECT NULL 
-        FROM account_kanji_card 
-        WHERE account_kanji_card.account_id = :accountId AND kanji.id = account_kanji_card.kanji_id
-      ) 
-      ORDER BY learning_order ASC LIMIT :limitReviews`;
-      */
-
-
-      
-
-
       const idArray = cardIds.map(listItem => listItem.card_id);
 
       console.log('new card ids:', idArray);
 
-      const cards = await CardList.findAll({
+      const cards = await Card.findAll({
         where: {
-          'deckId': deckId
+          'id': { [Op.in]: idArray },
+          'active': true
         },
         subQuery: false,
         //raw: true,
         nest: true,
-        include: [
-          {
-            model: Card,
-            attributes: ['id', 'type'],
-            required: true,
-            where: {
-              active: true
-            },
-            include:
+        include: {
+          model: Kanji,
+          include: [
             {
-              model: Kanji,
-              include: [
-                {
-                  model: KanjiTranslation,
-                  where: {
-                    language_id: languageId
-                  },
-                },
-                {
-                  model: Radical,
-                  attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
-                  include: {
-                    model: RadicalTranslation,
-                    where: {
-                      language_id: languageId
-                    }
-                  },
+              model: KanjiTranslation,
+              where: {
+                language_id: languageId
+              },
+            },
+            {
+              model: Radical,
+              attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+              include: {
+                model: RadicalTranslation,
+                where: {
+                  language_id: languageId
                 }
-              ]
+              },
             }
-          }
-        ],
-        order: [['learningOrder', 'ASC']],
-
-
+          ]
+        }
       });
 
 
-      //console.log('cards found are:', JSON.stringify(cards, null, 2));
+      console.log('cards found are:', JSON.stringify(cards, null, 2));
 
       //console.log(cards);
 
