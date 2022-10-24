@@ -100,7 +100,8 @@ Frontend time keeping is in the frontend GitHub repository
     - [ ] Load initial sql file containing decks, cards and translations
         - [ ] Kanji
         - [ ] Radicals
-        - [ ] Words
+        - [ ] Hiragana
+        - [ ] Katakana
         - [ ] Translations
         - [ ] Decks
         - [ ] Cards
