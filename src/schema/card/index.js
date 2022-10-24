@@ -1,10 +1,21 @@
 /* eslint-disable no-unused-vars */
 const validator = require('validator');
 const { Op } = require('sequelize');
-const { Deck, AccountDeckSettings, Kanji, Radical, RadicalTranslation, Card, CardList, DeckTranslation, JapaneseWord, KanjiTranslation, KanjiRadical } = require('../../models');
+const {
+  Deck,
+  AccountDeckSettings,
+  Kanji,
+  Radical,
+  RadicalTranslation,
+  Card,
+  CardList,
+  KanjiTranslation,
+  AccountCard
+} = require('../../models');
 const { sequelize } = require('../../util/database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors');
+const { selectNewCardIds, selectDueCardIds } = require('./rawQueries');
 
 const typeDef = `
   type Account {
@@ -15,7 +26,7 @@ const typeDef = `
   }
 
   type Error {
-    errorCode: String!
+    errorCodes: [String!]
   }
 
   type Success {
@@ -60,7 +71,6 @@ const typeDef = `
   type Kanji {
     id: Int
     kanji: String
-    learningOrder: Int
     jlptLevel: Int
     onyomi: String
     onyomiRomaji: String
@@ -73,28 +83,13 @@ const typeDef = `
     account_kanji_cards: [CustomizedCardData]
     radicals: [Radical]
   }
+
   type Card {
     id: Int
     type: String
     createdAt: String
     updatedAt: String
-    kanji: Kanji2
-  }
-
-  type Kanji2 {
-    id: Int
-    kanji: String
-    jlptLevel: Int
-    onyomi: String
-    onyomiRomaji: String
-    kunyomi: String
-    kunyomiRomaji: String
-    strokeCount: Int
-    createdAt: String
-    updatedAt: String
-    kanji_translations: [KanjiTranslation]
-    account_kanji_cards: [CustomizedCardData]
-    radicals: [Radical]
+    kanji: Kanji
   }
 
   type CardSet {
@@ -108,6 +103,7 @@ const typeDef = `
     fetchCards(
       deckId: Int!
       languageId: String
+      newCards: Boolean
     ): CardPayload!
 
     fetchNewKanjiCards(
@@ -134,13 +130,13 @@ const typeDef = `
 const resolvers = {
   Query: {
     // Fetch cards that are due or new cards based on the newCards boolean value, defaults to false.
-    fetchCards: async (_, { deckId, languageId }, { currentUser }) => {
+    fetchCards: async (_, { deckId, languageId, newCards }, { currentUser }) => {
 
       // Check that user is logged in
       if (!currentUser) {
         return { 
           __typename: 'Error',
-          errorCode: errors.notAuthError
+          errorCodess: [errors.notAuthError]
         };
       }
 
@@ -148,7 +144,7 @@ const resolvers = {
       if (!deckId) {
         return { 
           __typename: 'Error',
-          errorCode: errors.inputValueMissingError
+          errorCodess: [errors.inputValueMissingError]
         };
       }
 
@@ -156,7 +152,7 @@ const resolvers = {
       if (!Number.isInteger(deckId) || deckId < 1) {
         return { 
           __typename: 'Error',
-          errorCode: errors.inputValueTypeError
+          errorCodes: [errors.inputValueTypeError]
         };
       }
 
@@ -169,7 +165,7 @@ const resolvers = {
         if (!validator.isIn(languageId.toLowerCase(), constants.availableLanguages)) {
           return { 
             __typename: 'Error',
-            errorCode: errors.invalidLanguageIdError
+            errorCodes: [errors.invalidLanguageIdError]
           };
         }
       }
@@ -181,7 +177,7 @@ const resolvers = {
       } catch(error) {
         return { 
           __typename: 'Error',
-          errorCode: errors.connectionError
+          errorCodes: [errors.connectionError]
         };
       }
 
@@ -189,7 +185,7 @@ const resolvers = {
       if (!deck) {
         return { 
           __typename: 'Error',
-          errorCode: errors.nonExistingDeck
+          errorCodes: [errors.nonExistingDeck]
         };
       }
 
@@ -200,7 +196,7 @@ const resolvers = {
       } catch(error) {
         return {
           __typename: 'Error',
-          errorCode: errors.connectionError
+          errorCodes: [errors.connectionError]
         };
       }
 
@@ -216,286 +212,157 @@ const resolvers = {
           console.log('error:', error);
           return {
             __typename: 'Error',
-            errorCode: errors.connectionError
+            errorCodes: [errors.connectionError]
           };
         }
       }
 
 
+      console.log(accountDeckSettings.reviewsPerDay);
+      
 
 
-
-      const rawQuery = `SELECT card_id FROM card_list WHERE deck_id = :deckId AND NOT EXISTS (
-        SELECT NULL 
-        FROM account_card 
-        WHERE account_card.account_id = :accountId AND card_list.card_id = account_card.card_id
-      ) ORDER BY learning_order ASC LIMIT :limitReviews`;
+      let cards = [];
 
 
-      const cardIds = await sequelize.query(rawQuery, {
-        replacements: {
-          deckId: deckId,
-          accountId: currentUser.id,
-          limitReviews: accountDeckSettings.newCardsPerDay,
-        },
-        model: CardList,
-        type: sequelize.QueryTypes.SELECT,
-        raw: true
-      });
-
-      const idArray = cardIds.map(listItem => listItem.card_id);
-
-      console.log('new card ids:', idArray);
-
-      const cards = await Card.findAll({
-        where: {
-          'id': { [Op.in]: idArray },
-          'active': true
-        },
-        subQuery: false,
-        //raw: true,
-        nest: true,
-        include: {
-          model: Kanji,
-          include: [
-            {
-              model: KanjiTranslation,
-              where: {
-                language_id: languageId
-              },
-            },
-            {
-              model: Radical,
-              attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
-              include: {
-                model: RadicalTranslation,
+      if (newCards) {
+        // Fetch new cards
+        const cardIds = await sequelize.query(selectNewCardIds, {
+          replacements: {
+            deckId: deckId,
+            accountId: currentUser.id,
+            limitReviews: accountDeckSettings.newCardsPerDay,
+          },
+          model: CardList,
+          type: sequelize.QueryTypes.SELECT,
+          raw: true
+        });
+  
+        const idInLearningOrder = cardIds.map(listItem => listItem.card_id);
+        cards = await Card.findAll({
+          where: {
+            'id': { [Op.in]: idInLearningOrder },
+            'active': true
+          },
+          subQuery: false,
+          nest: true,
+          include: {
+            model: Kanji,
+            include: [
+              {
+                model: KanjiTranslation,
                 where: {
                   language_id: languageId
-                }
+                },
               },
-            }
-          ]
-        }
-      });
-
-
-      console.log('cards found are:', JSON.stringify(cards, null, 2));
-
-      //console.log(cards);
-
-      /*
-
-      // NOTE, use CardList for fetching cards, not just a join table because includes 
-      learning order, fix the relation in model index,js first
-
-      const cards = await Deck.findAll({
-        where: {
-          'id': deckId
-        },
-        limit: accountDeckSettings.newCardsPerDay,
-        subQuery: false,
-        //raw: true,
-        nest: true,
-        include: [
-          {
-            model: Card,
-            attributes: ['id', 'type'],
-            required: true,
-            where: {
-              active: true
-            },
-            include:
-            {
-              model: Kanji,
-              include: [
-                {
-                  model: KanjiTranslation,
+              {
+                model: Radical,
+                attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+                include: {
+                  model: RadicalTranslation,
                   where: {
                     language_id: languageId
-                  },
+                  }
                 },
-                {
-                  model: Radical,
-                  attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
-                  include: {
-                    model: RadicalTranslation,
-                    where: {
-                      language_id: languageId
-                    }
-                  },
-                }
-              ]
-            }
-          }
-        ],
-        order: [
-          [[CardList, 'learningOrder', 'ASC']]
-        ],
-        
-      });
-
-
-
-
-
-
-
-        {
-    "id": 1,
-    "deckName": "JLPT N5 Kanji",
-    "type": "recall",
-    "subscriberOnly": false,
-    "languageId": "jp",
-    "active": true,
-    "createdAt": "2022-10-21T13:34:01.664Z",
-    "updatedAt": "2022-10-21T13:34:01.664Z",
-    "cards": {
-      "id": 7,
-      "type": "kanji",
-      "card_list": {
-        "id": 7,
-        "deckId": 1,
-        "cardId": 7,
-        "learningOrder": 7,
-        "createdAt": "2022-10-21T13:34:01.782Z",
-        "updatedAt": "2022-10-21T13:34:01.782Z"
-      },
-      "kanji": {
-        "id": 7,
-        "cardId": 7,
-        "kanji": "三",
-        "jlptLevel": 5,
-        "onyomi": "サン、 ゾウ",
-        "onyomiRomaji": "san, zou",
-        "kunyomi": "み、 み.つ、 みっ.つ",
-        "kunyomiRomaji": "mi, mi.tsu, mit.tsu",
-        "strokeCount": 3,
-        "createdAt": "2022-10-21T13:34:02.063Z",
-        "updatedAt": "2022-10-21T13:34:02.063Z",
-        "kanji_translations": {
-          "id": 110,
-          "kanjiId": 7,
-          "languageId": "en",
-          "keyword": "Three",
-          "story": "Three lines represent number three.",
-          "hint": "1 + 1 + 1 = ?",
-          "otherMeanings": "-",
-          "description": null,
-          "createdAt": "2022-10-21T13:34:02.222Z",
-          "updatedAt": "2022-10-21T13:34:02.222Z"
-        },
-        "radicals": {
-          "id": null,
-          "radical": null,
-          "reading": null,
-          "readingRomaji": null,
-          "strokeCount": null,
-          "createdAt": null,
-          "updatedAt": null,
-          "kanji_radical": {
-            "id": null,
-            "radicalId": null,
-            "kanjiId": null,
-            "createdAt": null,
-            "updatedAt": null
-          },
-          "radical_translations": {
-            "id": null,
-            "radicalId": null,
-            "languageId": null,
-            "translation": null,
-            "description": null,
-            "createdAt": null,
-            "updatedAt": null
-          }
-        }
-      }
-    }
-
-
-
-AccountDeckSettings.init({
-  accountId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'account',
-      key: 'id'
-    }
-  },
-  deckId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'deck',
-      key: 'id'
-    }
-  },
-  
-
-      // Check that jlpt level between 1 - 5
-      if (!constants.jltpLevels.includes(jlptLevel)) {
-        return { 
-          __typename: 'Error',
-          errorCode: errors.invalidJlptLevelError
-        };
-      }
-
-      // Check that limitReviews in correct range
-      if (limitReviews > constants.maxLimitReviews || limitReviews < constants.minLimitReviews) {
-        return { 
-          __typename: 'Error',
-          errorCode: errors.limitReviewsRangeError
-        };
-      }
-
-      let selectLevel = { [Op.eq]: jlptLevel };
-      // Set where filter to JLPT level >= jlptLevel, lower level cards included
-      if (includeLowerLevelCards) {
-        selectLevel = { [Op.gte]: jlptLevel };
-      }
-
-      // Find due cards, order by due date
-      const cards = await Kanji.findAll({
-        where: {
-          'jlptLevel': selectLevel
-        },
-        include: [
-          {
-            model: AccountKanjiCard,
-            attributes: ['reviewCount', 'easyFactor', 'accountStory', 'accountHint', 'dueDate'],
-            where: {
-              account_id: currentUser.id
-            }
-          },
-          {
-            model: TranslationKanji,
-            attributes: ['keyword', 'story', 'hint', 'otherMeanings'],
-            where: {
-              language_id: languageId
-            }
-          },
-          {
-            model: Radical,
-            attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
-            include: {
-              model: RadicalTranslation,
-              where: {
-                language_id: languageId
               }
-            },
+            ]
+          }
+        });
+  
+        cards.sort(function (a, b) {
+          return idInLearningOrder.indexOf(a.id) - idInLearningOrder.indexOf(b.id);
+        });
+      } else {
+
+
+
+
+        // Fetch due cards
+        const cardIds = await sequelize.query(selectDueCardIds, {
+          replacements: {
+            deckId: deckId,
+            accountId: currentUser.id,
+            limitReviews: accountDeckSettings.reviewsPerDay,
           },
-        ],
-        order: [
-          [AccountKanjiCard, 'dueDate', 'ASC']
-        ]
-      });
-      */
+          model: CardList,
+          type: sequelize.QueryTypes.SELECT,
+          raw: true
+        });
+  
+        const fetchCardIds = cardIds.map(listItem => listItem.card_id);
+        console.log(fetchCardIds);
+        cards = await Card.findAll({
+          where: {
+            'id': { [Op.in]: fetchCardIds },
+            'active': true
+          },
+          subQuery: false,
+          nest: true,
+          include: {
+            model: Kanji,
+            include: [
+              {
+                model: KanjiTranslation,
+                where: {
+                  language_id: languageId
+                },
+              },
+              {
+                model: Radical,
+                attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+                include: {
+                  model: RadicalTranslation,
+                  where: {
+                    language_id: languageId
+                  }
+                },
+              }
+            ]
+          }
+        });
+  
+        cards.sort(function (a, b) {
+          return fetchCardIds.indexOf(a.id) - fetchCardIds.indexOf(b.id);
+        });
 
 
 
 
-      //const cards = [1,2,3,4,5];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      }
+
 
 
 
@@ -503,13 +370,13 @@ AccountDeckSettings.init({
       if (cards.length === 0) {
         return { 
           __typename: 'Error',
-          errorCode: errors.noDueCardsError
+          errorCodes: [errors.noDueCardsError]
         };
       }
 
       return {
         __typename: 'CardSet',
-        Cards: cards,
+        Cards: cards
       };
     },
     // Fetch cards that are due or new cards based on the newCards boolean value, defaults to false.
@@ -519,7 +386,7 @@ AccountDeckSettings.init({
       if (!currentUser) {
         return { 
           __typename: 'Error',
-          errorCode: errors.notAuthError
+          errorCodes: errors.notAuthError
         };
       }
 
@@ -527,7 +394,7 @@ AccountDeckSettings.init({
       if (!jlptLevel || !languageId) {
         return { 
           __typename: 'Error',
-          errorCode: errors.inputValueMissingError
+          errorCodes: errors.inputValueMissingError
         };
       }
 
@@ -535,7 +402,7 @@ AccountDeckSettings.init({
       if (!validator.isIn(languageId.toLowerCase(), constants.availableLanguages)) {
         return { 
           __typename: 'Error',
-          errorCode: errors.invalidLanguageIdError
+          errorCodes: errors.invalidLanguageIdError
         };
       }
 
@@ -543,7 +410,7 @@ AccountDeckSettings.init({
       if (!Number.isInteger(jlptLevel) || (limitReviews && !Number.isInteger(limitReviews))) {
         return { 
           __typename: 'Error',
-          errorCode: errors.inputValueTypeError
+          errorCodes: errors.inputValueTypeError
         };
       }
 
@@ -551,7 +418,7 @@ AccountDeckSettings.init({
       if (!constants.jltpLevels.includes(jlptLevel)) {
         return { 
           __typename: 'Error',
-          errorCode: errors.invalidJlptLevelError
+          errorCodes: errors.invalidJlptLevelError
         };
       }
 
@@ -559,7 +426,7 @@ AccountDeckSettings.init({
       if (limitReviews > constants.maxLimitReviews || limitReviews < constants.availableLanguages.minLimitReviews) {
         return { 
           __typename: 'Error',
-          errorCode: errors.limitReviewsRangeError
+          errorCodes: errors.limitReviewsRangeError
         };
       }
 
@@ -594,7 +461,7 @@ AccountDeckSettings.init({
       if (idArray.length === 0) {
         return { 
           __typename: 'Error',
-          errorCode: errors.noNewCardsError
+          errorCodes: errors.noNewCardsError
         };
       }
 
@@ -645,7 +512,7 @@ AccountDeckSettings.init({
       if (!currentUser) {
         return { 
           __typename: 'Error',
-          errorCode: errors.notAuthError
+          errorCodes: errors.notAuthError
         };
       }
 
@@ -653,7 +520,7 @@ AccountDeckSettings.init({
       if (!kanjiId || !reviewResult || !newInterval || !newEasyFactor) {
         return { 
           __typename: 'Error',
-          errorCode: errors.inputValueMissingError
+          errorCodes: errors.inputValueMissingError
         };
       }
 
@@ -661,7 +528,7 @@ AccountDeckSettings.init({
       if (!validator.isIn(reviewResult.toLowerCase(), constants.availableResults)) {
         return { 
           __typename: 'Error',
-          errorCode: errors.invalidResultIdError
+          errorCodes: errors.invalidResultIdError
         };
       }
 
@@ -669,7 +536,7 @@ AccountDeckSettings.init({
       if (!Number.isInteger(kanjiId) || !Number.isInteger(newInterval)) {
         return { 
           __typename: 'Error',
-          errorCode: errors.inputValueTypeError
+          errorCodes: errors.inputValueTypeError
         };
       }
 
@@ -678,7 +545,7 @@ AccountDeckSettings.init({
       if (!newEasyFactor || !timing) {
         return { 
           __typename: 'Error',
-          errorCode: errors.inputValueTypeError
+          errorCodes: errors.inputValueTypeError
         };
       }
 
@@ -686,7 +553,7 @@ AccountDeckSettings.init({
       if (kanjiId < 1 || newInterval < 1 || newEasyFactor <= 0.0) {
         return { 
           __typename: 'Error',
-          errorCode: errors.negativeNumberTypeError
+          errorCodes: errors.negativeNumberTypeError
         };
       }
 
@@ -701,7 +568,7 @@ AccountDeckSettings.init({
       } catch(error) {
         return { 
           __typename: 'Error',
-          errorCode: errors.connectionError
+          errorCodes: errors.connectionError
         };
       }
 
@@ -722,7 +589,7 @@ AccountDeckSettings.init({
           if (!kanji[0]) {
             return { 
               __typename: 'Error',
-              errorCode: errors.nonExistingId
+              errorCodes: errors.nonExistingId
             };
           }
           
@@ -757,7 +624,7 @@ AccountDeckSettings.init({
           console.log(error.errors);
           return { 
             __typename: 'Error',
-            errorCode: errors.connectionError
+            errorCodes: errors.connectionError
           };
         }
       }
@@ -794,7 +661,7 @@ AccountDeckSettings.init({
         console.log(error.errors);
         return { 
           __typename: 'Error',
-          errorCode: errors.connectionError
+          errorCodes: errors.connectionError
         };
       }
     },
