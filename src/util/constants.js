@@ -10,10 +10,8 @@ const constants = {
   minLimitReviews: 0,
   maxReviewInterval: 999,
   minReviewInterval: 1,
-
   maxNewReviews: 100,
   minNewReviews: 0,
-
   defaultMaxInterval: 999,
   defaultMaxReviewPerDay: 999,
   defaultMaxNewPerDay: 15
