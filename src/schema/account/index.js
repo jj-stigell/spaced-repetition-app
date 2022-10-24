@@ -211,7 +211,7 @@ const resolvers = {
 
       return { 
         __typename: 'AccountToken',
-        token: { value: jwt.sign(payload, JWT_SECRET, { expiresIn: 60*60 })},
+        token: { value: jwt.sign(payload, JWT_SECRET, { expiresIn: 60*60*300 })},
         user: accountInfo
       };
     },

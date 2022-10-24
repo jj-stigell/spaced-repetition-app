@@ -196,6 +196,61 @@ const resolvers = {
         }
       }
 
+      const cards = await CardList.findAll({
+        where: {
+          'deckId': deckId
+        },
+        limit: accountDeckSettings.newCardsPerDay,
+        subQuery: false,
+        //raw: true,
+        nest: true,
+        include: [
+          {
+            model: Card,
+            attributes: ['id', 'type'],
+            required: true,
+            where: {
+              active: true
+            },
+            include:
+            {
+              model: Kanji,
+              include: [
+                {
+                  model: KanjiTranslation,
+                  where: {
+                    language_id: languageId
+                  },
+                },
+                {
+                  model: Radical,
+                  attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+                  include: {
+                    model: RadicalTranslation,
+                    where: {
+                      language_id: languageId
+                    }
+                  },
+                }
+              ]
+            }
+          }
+        ],
+        order: [['learningOrder', 'ASC']],
+
+
+      });
+
+
+      console.log('cards found are:', JSON.stringify(cards, null, 2));
+
+      console.log(cards[0]);
+
+      /*
+
+      // NOTE, use CardList for fetching cards, not just a join table because includes 
+      learning order, fix the relation in model index,js first
+
       const cards = await Deck.findAll({
         where: {
           'id': deckId
@@ -236,21 +291,17 @@ const resolvers = {
             }
           }
         ],
-        //order: [
-        //[Card, 'cardList.learningOrder', 'ASC']
-        //],
+        order: [
+          [[CardList, 'learningOrder', 'ASC']]
+        ],
         
       });
 
 
-      console.log('cards found are:', JSON.stringify(cards, null, 2));
 
-      console.log(cards);
 
-      /*
 
-      // NOTE, use CardList for fetching cards, not just a join table because includes 
-      learning order, fix the relation in model index,js first
+
 
         {
     "id": 1,

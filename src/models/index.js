@@ -175,6 +175,7 @@ AccountReview.belongsTo(Card, {
 
 // Deck & card association through CardList join table
 // delete/update entry from join table When either one is deleted
+/*
 Deck.belongsToMany(Card, {
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE',
@@ -185,6 +186,27 @@ Card.belongsToMany(Deck, {
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE',
   through: CardList
+});
+*/
+
+Deck.hasMany(CardList, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+CardList.belongsTo(Deck, {
+  targetKey: 'id',
+  foreignKey: 'deckId'
+});
+
+Card.hasMany(CardList, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+CardList.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
 });
 
 // Deck translations, one to many, cascade both on delete and update
