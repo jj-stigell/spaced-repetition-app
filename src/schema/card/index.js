@@ -196,11 +196,62 @@ const resolvers = {
         }
       }
 
+
+
+      
+
+      const rawQuery = `SELECT card_id FROM card_list WHERE deck_id = :deckId AND NOT EXISTS (
+        SELECT NULL 
+        FROM account_card 
+        WHERE account_card.account_id = :accountId AND card_list.card_id = account_card.card_id
+      ) ORDER BY learning_order ASC LIMIT :limitReviews`;
+
+
+      const cardIds = await sequelize.query(rawQuery, {
+        replacements: {
+          deckId: deckId,
+          accountId: currentUser.id,
+          limitReviews: accountDeckSettings.newCardsPerDay,
+        },
+        model: CardList,
+        type: sequelize.QueryTypes.SELECT,
+        raw: true
+      });
+
+      /*
+const cardIds = await sequelize.query(rawQuery, {
+        replacements: {
+          jlptLevel: jlptLevel,
+          accountId: currentUser.id,
+          limitReviews: limitReviews,
+        },
+        model: Kanji,
+        type: sequelize.QueryTypes.SELECT,
+        raw: true
+      });
+
+
+
+const rawQuery = `SELECT id FROM kanji WHERE jlpt_level ${selectLevel} :jlptLevel AND NOT EXISTS (
+        SELECT NULL 
+        FROM account_kanji_card 
+        WHERE account_kanji_card.account_id = :accountId AND kanji.id = account_kanji_card.kanji_id
+      ) 
+      ORDER BY learning_order ASC LIMIT :limitReviews`;
+      */
+
+
+      
+
+
+      const idArray = cardIds.map(listItem => listItem.card_id);
+
+      console.log('new card ids:', idArray);
+
       const cards = await CardList.findAll({
         where: {
           'deckId': deckId
         },
-        limit: accountDeckSettings.newCardsPerDay,
         subQuery: false,
         //raw: true,
         nest: true,
@@ -242,9 +293,9 @@ const resolvers = {
       });
 
 
-      console.log('cards found are:', JSON.stringify(cards, null, 2));
+      //console.log('cards found are:', JSON.stringify(cards, null, 2));
 
-      console.log(cards[0]);
+      //console.log(cards);
 
       /*
 
