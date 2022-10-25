@@ -11,16 +11,14 @@
 ## Queries
 
 
-: async (_, { deckId, languageId }, { currentUser }) => {
 ### fetchCards
 
-Creates a new account.
+Fetch either cards that are due for review or new cards.
 
 **arguments:**
   * `deckId` deck id, integer <span style="color:red">REQUIRED</span>
   * `languageId` preferred language defaults to english if not provided, string <span style="color:green">OPTIONAL</span>
-
-
+  * `newCards` fetch due cards or new cards, boolean, defaults to false <span style="color:green">OPTIONAL</span>
 
 **fields:**
   * type name `Account` returned after creating account succesfully
@@ -28,7 +26,6 @@ Creates a new account.
     * `email` account email address, string
   * type name `Error` returned if error occurs during query
     * `errorCode` error code reflecting the encountered error, string
-
 
 
 Possible error throwing situations:
@@ -41,57 +38,64 @@ Possible error throwing situations:
 ```
 query {
   fetchCards(
-    deckId: $id
-    languageId: $languageId
-    ) {
-        ... on Error {
-          errorCode
+    deckId: 1
+    languageId: "en"
+    newCards: false
+  )
+  {
+    ... on Error {
+      errorCodes
+    }
+    ... on Cardset {
+      Cards {
+        id
+        type
+        createdAt
+        updatedAt
+        account_cards {
+          reviewCount
+          easyFactor
+          accountStory
+          accountHint
+          dueDate
         }
-        ... on CardSet {
-          Cards {
-            id
-            kanji
-            jlptLevel
-            onyomi
-            onyomiRomaji
-            kunyomi
-            kunyomiRomaji
+        kanji {
+          id
+          kanji
+          jlptLevel
+          onyomi
+          onyomiRomaji
+          kunyomi
+          kunyomiRomaji
+          strokeCount
+          createdAt
+          updatedAt
+          kanji_translations {
+            hint
+            keyword
+            story
+            otherMeanings
+          }
+          radicals {
+            radical
+            reading
+            readingRomaji
             strokeCount
             createdAt
             updatedAt
-            accountCustomizedCard {
-              reviewCount
-              easyFactor
-              accountStory
-              accountHint
-              dueDate
-            }
-            kanjiTranslation {
-              hint
-              keyword
-              story
-              otherMeanings
-            }
-            radicals {
-              radical
-              reading
-              readingRomaji
-              strokeCount
+            radical_translations {
+              translation
+              description
               createdAt
               updatedAt
-              radicalTranslation {
-                translation
-                description
-                createdAt
-                updatedAt
-              }
             }
           }
         }
       }
+    }
+  }
 }
 ```
-
 
 
 ## Mutations
