@@ -17,6 +17,7 @@ const kanji_radical = fs.readFileSync(path.resolve(__dirname, '../setup/database
 const kanji_translation_fi = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_fi.sql'), 'utf8');
 const kanji_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_en.sql'), 'utf8');
 const japanese_word = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/japanese_word.sql'), 'utf8');
+const japanese_word_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/japanese_word_translation_en.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -636,9 +637,12 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false
       },
+      furigana: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
       reading: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.STRING
       },
       reading_romaji: {
         type: DataTypes.STRING,
@@ -687,8 +691,8 @@ module.exports = {
       translation: {
         type: DataTypes.STRING
       },
-      type: {
-        type: DataTypes.STRING
+      hint: {
+        type: DataTypes.STRING,
       },
       description: {
         type: DataTypes.STRING
@@ -832,6 +836,7 @@ module.exports = {
     await queryInterface.sequelize.query(kanji_translation_fi);
     await queryInterface.sequelize.query(kanji_translation_en);
     await queryInterface.sequelize.query(japanese_word);
+    await queryInterface.sequelize.query(japanese_word_translation_en);
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('radical_translation');
