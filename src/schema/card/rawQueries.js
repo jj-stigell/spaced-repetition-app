@@ -9,7 +9,10 @@ account_card ON account_card.card_id = card_list.card_id
 WHERE card_list.deck_id = :deckId AND account_card.account_id = :accountId 
 ORDER BY due_at ASC LIMIT :limitReviews`;
 
+const findCard = 'SELECT 1 FROM card WHERE id = :cardId';
+
 module.exports = {
   selectNewCardIds,
-  selectDueCardIds
+  selectDueCardIds,
+  findCard
 };
