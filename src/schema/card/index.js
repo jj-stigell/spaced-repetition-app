@@ -10,12 +10,13 @@ const {
   Card,
   CardList,
   KanjiTranslation,
-  AccountCard
+  AccountCard,
+  AccountReview
 } = require('../../models');
 const { sequelize } = require('../../util/database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors');
-const { selectNewCardIds, selectDueCardIds } = require('./rawQueries');
+const { selectNewCardIds, selectDueCardIds, findCard } = require('./rawQueries');
 
 const typeDef = `
   type Account {
@@ -80,7 +81,6 @@ const typeDef = `
     createdAt: String
     updatedAt: String
     kanji_translations: [KanjiTranslation]
-    account_kanji_cards: [CustomizedCardData]
     radicals: [Radical]
   }
 
@@ -89,14 +89,15 @@ const typeDef = `
     type: String
     createdAt: String
     updatedAt: String
+    account_cards: [CustomizedCardData]
     kanji: Kanji
   }
 
-  type CardSet {
+  type Cardset {
     Cards: [Card]
   }
 
-  union CardPayload = CardSet | Error
+  union CardPayload = Cardset | Error
   union RescheduleResult = Success | Error
 
   type Query {
@@ -105,25 +106,17 @@ const typeDef = `
       languageId: String
       newCards: Boolean
     ): CardPayload!
-
-    fetchNewKanjiCards(
-      jlptLevel: Int
-      includeLowerLevelCards: Boolean
-      limitReviews: Int
-      languageId: String
-    ): CardPayload!
   }
 
   type Mutation {
     rescheduleCard(
-      kanjiId: Int!
+      cardId: Int!
       reviewResult: String!
       newInterval: Int!
       newEasyFactor: Float!
       extraReview: Boolean
       timing: Float
     ): RescheduleResult!
-
   }
 `;
 
@@ -217,17 +210,11 @@ const resolvers = {
         }
       }
 
-
-      console.log(accountDeckSettings.reviewsPerDay);
-      
-
-
-      let cards = [];
-
+      let cards = [], cardIds = [];
 
       if (newCards) {
         // Fetch new cards
-        const cardIds = await sequelize.query(selectNewCardIds, {
+        cardIds = await sequelize.query(selectNewCardIds, {
           replacements: {
             deckId: deckId,
             accountId: currentUser.id,
@@ -237,8 +224,31 @@ const resolvers = {
           type: sequelize.QueryTypes.SELECT,
           raw: true
         });
+      } else {
+        // Fetch due cards
+        cardIds = await sequelize.query(selectDueCardIds, {
+          replacements: {
+            deckId: deckId,
+            accountId: currentUser.id,
+            limitReviews: accountDeckSettings.reviewsPerDay,
+          },
+          model: CardList,
+          type: sequelize.QueryTypes.SELECT,
+          raw: true
+        });
+      }
   
-        const idInLearningOrder = cardIds.map(listItem => listItem.card_id);
+      // If no cards found, return error
+      if (cardIds.length === 0) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.noDueCardsError]
+        };
+      }
+
+      const idInLearningOrder = cardIds.map(listItem => listItem.card_id);
+
+      if (newCards) {
         cards = await Card.findAll({
           where: {
             'id': { [Op.in]: idInLearningOrder },
@@ -266,393 +276,198 @@ const resolvers = {
                 },
               }
             ]
-          }
-        });
-  
-        cards.sort(function (a, b) {
-          return idInLearningOrder.indexOf(a.id) - idInLearningOrder.indexOf(b.id);
+          },
         });
       } else {
-
-
-
-
-        // Fetch due cards
-        const cardIds = await sequelize.query(selectDueCardIds, {
-          replacements: {
-            deckId: deckId,
-            accountId: currentUser.id,
-            limitReviews: accountDeckSettings.reviewsPerDay,
-          },
-          model: CardList,
-          type: sequelize.QueryTypes.SELECT,
-          raw: true
-        });
-  
-        const fetchCardIds = cardIds.map(listItem => listItem.card_id);
-        console.log(fetchCardIds);
         cards = await Card.findAll({
           where: {
-            'id': { [Op.in]: fetchCardIds },
+            'id': { [Op.in]: idInLearningOrder },
             'active': true
           },
           subQuery: false,
           nest: true,
-          include: {
-            model: Kanji,
-            include: [
-              {
-                model: KanjiTranslation,
-                where: {
-                  language_id: languageId
-                },
-              },
-              {
-                model: Radical,
-                attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
-                include: {
-                  model: RadicalTranslation,
+          include: [
+            {
+              model: Kanji,
+              include: [
+                {
+                  model: KanjiTranslation,
                   where: {
                     language_id: languageId
-                  }
+                  },
                 },
-              }
-            ]
-          }
-        });
-  
-        cards.sort(function (a, b) {
-          return fetchCardIds.indexOf(a.id) - fetchCardIds.indexOf(b.id);
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      }
-
-
-
-
-      // If no cards found, return error
-      if (cards.length === 0) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.noDueCardsError]
-        };
-      }
-
-      return {
-        __typename: 'CardSet',
-        Cards: cards
-      };
-    },
-    // Fetch cards that are due or new cards based on the newCards boolean value, defaults to false.
-    fetchNewKanjiCards: async (_, { jlptLevel, includeLowerLevelCards, limitReviews, languageId }, { currentUser }) => {
-
-      // Check that user is logged in
-      if (!currentUser) {
-        return { 
-          __typename: 'Error',
-          errorCodes: errors.notAuthError
-        };
-      }
-
-      // Confirm that jlpt level and language id are not empty
-      if (!jlptLevel || !languageId) {
-        return { 
-          __typename: 'Error',
-          errorCodes: errors.inputValueMissingError
-        };
-      }
-
-      // Chack that language id is one of the available
-      if (!validator.isIn(languageId.toLowerCase(), constants.availableLanguages)) {
-        return { 
-          __typename: 'Error',
-          errorCodes: errors.invalidLanguageIdError
-        };
-      }
-
-      // Check that type of integer correct
-      if (!Number.isInteger(jlptLevel) || (limitReviews && !Number.isInteger(limitReviews))) {
-        return { 
-          __typename: 'Error',
-          errorCodes: errors.inputValueTypeError
-        };
-      }
-
-      // Check that jlpt level between 1 - 5
-      if (!constants.jltpLevels.includes(jlptLevel)) {
-        return { 
-          __typename: 'Error',
-          errorCodes: errors.invalidJlptLevelError
-        };
-      }
-
-      // Check that limitReviews in correct range (1 - 9999)
-      if (limitReviews > constants.maxLimitReviews || limitReviews < constants.availableLanguages.minLimitReviews) {
-        return { 
-          __typename: 'Error',
-          errorCodes: errors.limitReviewsRangeError
-        };
-      }
-
-      let selectLevel = '=';
-      // Set where filter to JLPT level >= jlptLevel, lower level cards included
-      if (includeLowerLevelCards) {
-        selectLevel = '>=';
-      }
-
-      // Fetch id of new cards (cards not existing in user cards)
-      const rawQuery = `SELECT id FROM kanji WHERE jlpt_level ${selectLevel} :jlptLevel AND NOT EXISTS (
-        SELECT NULL 
-        FROM account_kanji_card 
-        WHERE account_kanji_card.account_id = :accountId AND kanji.id = account_kanji_card.kanji_id
-      ) 
-      ORDER BY learning_order ASC LIMIT :limitReviews`;
-
-      const cardIds = await sequelize.query(rawQuery, {
-        replacements: {
-          jlptLevel: jlptLevel,
-          accountId: currentUser.id,
-          limitReviews: limitReviews,
-        },
-        model: Kanji,
-        type: sequelize.QueryTypes.SELECT,
-        raw: true
-      });
-
-      const idArray = cardIds.map(card => card.id);
-
-      // If no cards found, return error
-      if (idArray.length === 0) {
-        return { 
-          __typename: 'Error',
-          errorCodes: errors.noNewCardsError
-        };
-      }
-
-      // Fetch cards based on previously found ids, order according the learning order
-      const cards = await Kanji.findAll({
-        where: {
-          'id': {
-            [Op.in]: idArray
-          }
-        },
-        include: [
-          /*
-          {
-            model: TranslationKanji,
-            attributes: ['keyword', 'story', 'hint', 'otherMeanings'],
-            where: {
-              language_id: languageId
-            }
-          },
-          */
-          {
-            model: Radical,
-            attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
-            include: {
-              model: RadicalTranslation,
-              where: {
-                language_id: languageId
-              }
+                {
+                  model: Radical,
+                  attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+                  include: {
+                    model: RadicalTranslation,
+                    where: {
+                      language_id: languageId
+                    }
+                  },
+                }
+              ]
             },
-          },
-        ],
-        order: [
-          ['learningOrder', 'ASC']
-        ]
+            {
+              model: AccountCard,
+              where: {
+                accountId: currentUser.id
+              }
+            }
+          ]
+        });
+      }
+
+      cards.sort(function (a, b) {
+        return idInLearningOrder.indexOf(a.id) - idInLearningOrder.indexOf(b.id);
       });
 
       return {
-        __typename: 'CardSet',
-        Cards: cards,
+        __typename: 'Cardset',
+        Cards: cards
       };
     },
   },
   Mutation: {
     // eslint-disable-next-line no-unused-vars
-    rescheduleCard: async (_, { kanjiId, reviewResult, newInterval, newEasyFactor, extraReview, timing }, { currentUser }) => {
+    rescheduleCard: async (_, { cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing }, { currentUser }) => {
 
       // Check that user is logged in
       if (!currentUser) {
         return { 
           __typename: 'Error',
-          errorCodes: errors.notAuthError
+          errorCodes: [errors.notAuthError]
         };
       }
 
       // Confirm that jlpt level and language id are not empty
-      if (!kanjiId || !reviewResult || !newInterval || !newEasyFactor) {
+      if (!cardId || !reviewResult || !newInterval || !newEasyFactor) {
         return { 
           __typename: 'Error',
-          errorCodes: errors.inputValueMissingError
+          errorCodes: [errors.inputValueMissingError]
         };
       }
 
       // Chack that result is one of the available
-      if (!validator.isIn(reviewResult.toLowerCase(), constants.availableResults)) {
+      if (!validator.isIn(reviewResult.toLowerCase(), constants.resultTypes)) {
         return { 
           __typename: 'Error',
-          errorCodes: errors.invalidResultIdError
+          errorCodes: [errors.invalidResultIdError]
         };
       }
 
       // Check that type of integer correct
-      if (!Number.isInteger(kanjiId) || !Number.isInteger(newInterval)) {
+      if (!Number.isInteger(cardId) || !Number.isInteger(newInterval)) {
         return { 
           __typename: 'Error',
-          errorCodes: errors.inputValueTypeError
+          errorCodes: [errors.inputValueTypeError]
         };
       }
 
+      /*
       // TODO
-      // Check that type of float correct
+      // Check that type of float correct if exists, 
       if (!newEasyFactor || !timing) {
         return { 
           __typename: 'Error',
-          errorCodes: errors.inputValueTypeError
+          errorCodes: [errors.inputValueTypeError]
         };
       }
+      */
 
       // Check that integers and floats positive numbers
-      if (kanjiId < 1 || newInterval < 1 || newEasyFactor <= 0.0) {
+      if (cardId < 1 || newInterval < 1 || newEasyFactor <= 0.1) {
         return { 
           __typename: 'Error',
-          errorCodes: errors.negativeNumberTypeError
+          errorCodes: [errors.negativeNumberTypeError]
         };
       }
 
-      let accountKanjiCard;
+      let accountCard;
       // Create new (due) date object
       let newDueDate = new Date();
       newDueDate.setDate(newDueDate.getDate() + newInterval);
 
       try {
-        // Check if card exists for the user for that kanji
-        //accountKanjiCard = await AccountKanjiCard.findOne({ where: { accountId: currentUser.id, kanjiId: kanjiId } });
+        // Check if card exists for the user for that card id
+        accountCard = await AccountCard.findOne({ where: { accountId: currentUser.id, cardId: cardId } });
       } catch(error) {
+        console.log(error.errors);
         return { 
           __typename: 'Error',
-          errorCodes: errors.connectionError
+          errorCodes: [errors.connectionError]
         };
       }
 
       // Create new custom card for the user, if none found the current user id and kanji id
-      if (!accountKanjiCard) {
-        // Check that kanji actually exists in the database
-        const rawQuery = 'SELECT 1 FROM kanji WHERE id = :kanjiId';
+      if (!accountCard) {
+        // Check that card actually exists in the database
         try {
-          const kanji = await sequelize.query(rawQuery, {
+          const card = await sequelize.query(findCard, {
             replacements: {
-              kanjiId: kanjiId,
+              cardId: cardId,
             },
             model: Kanji,
             type: sequelize.QueryTypes.SELECT,
             raw: true
           });
 
-          if (!kanji[0]) {
+          if (!card[0]) {
             return { 
               __typename: 'Error',
-              errorCodes: errors.nonExistingId
+              errorCodes: [errors.nonExistingId]
             };
           }
           
-          /*
-          // Create new account kanji card if kanji exists
-          accountKanjiCard = await AccountKanjiCard.create({
+          // Create new account card if card exists
+          accountCard = await AccountCard.create({
             accountId: currentUser.id,
-            kanjiId: kanjiId,
-            dueDate: newDueDate,
-            easyFactor: 2.5,
-            reviewCount: 1,
+            cardId: cardId,
+            dueAt: newDueDate,
+            easyFactor: constants.defaultEasyFactor,
+            reviewCount: constants.defaultReviewCount,
           });
-          accountKanjiCard.save();
-
-          // Add new row to review history
-          // eslint-disable-next-line no-unused-vars
-          const newReviewHistory = await AccountKanjiReview.create({
-            accountId: currentUser.id,
-            kanjiId: kanjiId,
-            reviewResult: reviewResult,
-            extraReview: extraReview ? true : false,
-            timing: timing
-          });
-
-          */
-          return { 
-            __typename: 'Success',
-            status: true
-          };
+          accountCard.save();
 
         } catch(error) {
           console.log(error.errors);
           return { 
             __typename: 'Error',
-            errorCodes: errors.connectionError
+            errorCodes: [errors.connectionError]
+          };
+        }
+      } else {
+        // Update existing user kanji card and add new row to history
+        try {
+        // Add one review to the total count
+          accountCard.increment('reviewCount');
+        
+          // Update and save changes, card is set to mature if the interval is higher than set maturing interval
+          accountCard.set({
+            easyFactor: newEasyFactor,
+            dueDate: newDueDate,
+            mature: newInterval > constants.matureInterval ? true : false
+          });
+          accountCard.save();
+
+        } catch(error) {
+          console.log(error.errors);
+          return { 
+            __typename: 'Error',
+            errorCodes: [errors.connectionError]
           };
         }
       }
 
-      // Update existing user kanji card and add new row to history
       try {
-        // Add one review to the total count
-        accountKanjiCard.increment('reviewCount');
-        
-        // Update and save changes, card is set to mature if the interval is higher than set maturing interval
-        accountKanjiCard.set({
-          easyFactor: newEasyFactor,
-          dueDate: newDueDate,
-          mature: newInterval > constants.matureInterval ? true : false
-        });
-        accountKanjiCard.save();
-
-        /*
         // Add new row to review history
-        await AccountKanjiReview.create({
+        const newReviewHistory = await AccountReview.create({
           accountId: currentUser.id,
-          kanjiId: kanjiId,
-          reviewResult: reviewResult,
+          cardId: cardId,
+          result: reviewResult,
           extraReview: extraReview ? true : false,
           timing: timing
         });
-        */
-
         return { 
           __typename: 'Success',
           status: true,
@@ -661,7 +476,7 @@ const resolvers = {
         console.log(error.errors);
         return { 
           __typename: 'Error',
-          errorCodes: errors.connectionError
+          errorCodes: [errors.connectionError]
         };
       }
     },
