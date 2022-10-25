@@ -14,7 +14,9 @@ const constants = {
   minNewReviews: 0,
   defaultMaxInterval: 999,
   defaultMaxReviewPerDay: 999,
-  defaultMaxNewPerDay: 15
+  defaultMaxNewPerDay: 15,
+  defaultEasyFactor: 2.5,
+  defaultReviewCount: 1
 };
 
 module.exports = constants;
