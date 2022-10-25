@@ -12,6 +12,7 @@ JapaneseWord.init({
   cardId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    unique: true,
     references: {
       model: 'card',
       key: 'id'
@@ -19,15 +20,18 @@ JapaneseWord.init({
   },
   word: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
+  },
+  furigana: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
   reading: {
-    type: DataTypes.STRING,
-    allowNull: false
+    type: DataTypes.STRING
   },
   readingRomaji: {
     type: DataTypes.STRING,
-    allowNull: false
   },
   jlptLevel: {
     type: DataTypes.INTEGER,
