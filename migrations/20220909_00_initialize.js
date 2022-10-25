@@ -749,7 +749,7 @@ module.exports = {
         defaultValue: DataTypes.NOW
       }
     }),
-    await queryInterface.addIndex('account_review', ['account_id', 'card_id'], {
+    await queryInterface.addIndex('account_review', ['id', 'account_id', 'card_id'], {
       unique: true
     }),
     await queryInterface.createTable('account_card', {
