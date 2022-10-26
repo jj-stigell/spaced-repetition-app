@@ -13,8 +13,8 @@ const KanjiRadical = require('./kanji/kanjiRadical');
 const KanjiTranslation = require('./kanji/kanjiTranslation');
 const Radical = require('./radical/radical');
 const RadicalTranslation = require('./radical/radicalTranslation');
-const JapaneseWord = require('./word/japaneseWord');
-const JapaneseWordTranslation = require('./word/japaneseWordTranslation');
+const Word = require('./word/word');
+const WordTranslation = require('./word/wordTranslation');
 
 // Account can have one admin entry, on delete cascade to admin table
 Account.hasOne(Admin, {
@@ -117,22 +117,22 @@ RadicalTranslation.belongsTo(Language, {
 
 // Japanese words can have multiple translations that are identified with language_id and kanji_id
 // Cascade delete only when word is deleted
-JapaneseWord.hasMany(JapaneseWordTranslation, {
+Word.hasMany(WordTranslation, {
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
 });
 
-JapaneseWordTranslation.belongsTo(JapaneseWord, {
+WordTranslation.belongsTo(Word, {
   targetKey: 'id',
   foreignKey: 'wordId'
 });
 
-Language.hasMany(JapaneseWordTranslation, {
+Language.hasMany(WordTranslation, {
   onDelete: 'RESTRICT',
   onUpdate: 'CASCADE'
 });
 
-JapaneseWordTranslation.belongsTo(Language, {
+WordTranslation.belongsTo(Language, {
   targetKey: 'id',
   foreignKey: 'languageId'
 });
@@ -231,11 +231,11 @@ Kanji.belongsTo(Card, {
 });
 
 // Word & card relation. Word belongs to one card but on card delete set null
-Card.hasOne(JapaneseWord, {
+Card.hasOne(Word, {
   onDelete: 'SET NULL',
   onUpdate: 'CASCADE'
 });
-JapaneseWord.belongsTo(Card, {
+Word.belongsTo(Card, {
   targetKey: 'id',
   foreignKey: 'cardId'
 });
@@ -291,8 +291,8 @@ module.exports = {
   RadicalTranslation,
   KanjiRadical,
   KanjiTranslation,
-  JapaneseWord,
-  JapaneseWordTranslation,
+  Word,
+  WordTranslation,
   AccountCard,
   AccountReview,
   AccountDeckSettings,

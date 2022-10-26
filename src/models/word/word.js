@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../util/database');
 
-class JapaneseWord extends Model {}
+class Word extends Model {}
 
-JapaneseWord.init({
+Word.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -48,7 +48,7 @@ JapaneseWord.init({
   },
 }, {
   sequelize,
-  modelName: 'japanese_word'
+  modelName: 'word'
 });
 
-module.exports = JapaneseWord;
+module.exports = Word;

@@ -11,7 +11,9 @@ const {
   CardList,
   KanjiTranslation,
   AccountCard,
-  AccountReview
+  AccountReview,
+  Word,
+  WordTranslation
 } = require('../../models');
 const { sequelize } = require('../../util/database');
 const constants = require('../../util/constants');
@@ -19,6 +21,8 @@ const errors = require('../../util/errors');
 const { selectNewCardIds, selectDueCardIds, findCard } = require('./rawQueries');
 
 const typeDef = `
+  scalar Date
+
   type Account {
     id: ID!
     email: String
@@ -48,15 +52,23 @@ const typeDef = `
     hint: String
     otherMeanings: String
     description: String
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
+  }
+
+  type WordTranslation {
+    translation: String
+    hint: String
+    description: String
+    createdAt: Date
+    updatedAt: Date
   }
 
   type RadicalTranslation {
     translation: String
     description: String
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
   }
 
   type Radical {
@@ -64,8 +76,8 @@ const typeDef = `
     reading: String
     readingRomaji: String
     strokeCount: Int
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
     radical_translations: [RadicalTranslation]
   }
 
@@ -78,19 +90,32 @@ const typeDef = `
     kunyomi: String
     kunyomiRomaji: String
     strokeCount: Int
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
     kanji_translations: [KanjiTranslation]
     radicals: [Radical]
+  }
+
+  type Word {
+    id: Int
+    word: String
+    jlptLevel: Int
+    furigana: Boolean
+    reading: String
+    readingRomaji: String
+    createdAt: Date
+    updatedAt: Date
+    word_translations: [WordTranslation]
   }
 
   type Card {
     id: Int
     type: String
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
     account_cards: [CustomizedCardData]
     kanji: Kanji
+    word: Word
   }
 
   type Cardset {
@@ -256,27 +281,38 @@ const resolvers = {
           },
           subQuery: false,
           nest: true,
-          include: {
-            model: Kanji,
-            include: [
-              {
-                model: KanjiTranslation,
+          include: [
+            {
+              model: Kanji,
+              include: [
+                {
+                  model: KanjiTranslation,
+                  where: {
+                    language_id: languageId
+                  },
+                },
+                {
+                  model: Radical,
+                  attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+                  include: {
+                    model: RadicalTranslation,
+                    where: {
+                      language_id: languageId
+                    }
+                  },
+                }
+              ]
+            },
+            {
+              model: Word,
+              include: {
+                model: WordTranslation,
                 where: {
                   language_id: languageId
                 },
-              },
-              {
-                model: Radical,
-                attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
-                include: {
-                  model: RadicalTranslation,
-                  where: {
-                    language_id: languageId
-                  }
-                },
               }
-            ]
-          },
+            }
+          ]
         });
       } else {
         cards = await Card.findAll({
@@ -312,6 +348,15 @@ const resolvers = {
               model: AccountCard,
               where: {
                 accountId: currentUser.id
+              }
+            },
+            {
+              model: Word,
+              include: {
+                model: WordTranslation,
+                where: {
+                  language_id: languageId
+                },
               }
             }
           ]

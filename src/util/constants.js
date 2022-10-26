@@ -4,7 +4,7 @@ const constants = {
   availableLanguages: ['en', 'fi'],
   resultTypes: ['again', 'good'],
   deckTypes: ['recall', 'recognise'],
-  cardTypes: ['kanji', 'hiragana', 'katakana', 'japanese_word', 'japanese_sentence'],
+  cardTypes: ['kanji', 'hiragana', 'katakana', 'word', 'sentence'],
   jltpLevels: [1, 2, 3, 4, 5],
   maxLimitReviews: 999,
   minLimitReviews: 0,

@@ -16,8 +16,8 @@ const kanji = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/ka
 const kanji_radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_radical.sql'), 'utf8');
 const kanji_translation_fi = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_fi.sql'), 'utf8');
 const kanji_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_en.sql'), 'utf8');
-const japanese_word = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/japanese_word.sql'), 'utf8');
-const japanese_word_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/japanese_word_translation_en.sql'), 'utf8');
+const word = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/word.sql'), 'utf8');
+const word_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/word_translation_en.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -616,7 +616,7 @@ module.exports = {
     await queryInterface.addIndex('kanji_translation', ['kanji_id', 'language_id'], {
       unique: true
     }),
-    await queryInterface.createTable('japanese_word', {
+    await queryInterface.createTable('word', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -662,7 +662,7 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.createTable('japanese_word_translation', {
+    await queryInterface.createTable('word_translation', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -672,7 +672,7 @@ module.exports = {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'japanese_word',
+          model: 'word',
           key: 'id'
         },
         onDelete: 'CASCADE',
@@ -708,7 +708,7 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('japanese_word_translation', ['word_id', 'language_id'], {
+    await queryInterface.addIndex('word_translation', ['word_id', 'language_id'], {
       unique: true
     }),
     await queryInterface.createTable('account_review', {
@@ -835,15 +835,15 @@ module.exports = {
     await queryInterface.sequelize.query(kanji_radical);
     await queryInterface.sequelize.query(kanji_translation_fi);
     await queryInterface.sequelize.query(kanji_translation_en);
-    await queryInterface.sequelize.query(japanese_word);
-    await queryInterface.sequelize.query(japanese_word_translation_en);
+    await queryInterface.sequelize.query(word);
+    await queryInterface.sequelize.query(word_translation_en);
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('radical_translation');
     await queryInterface.dropTable('kanji_radical');
     await queryInterface.dropTable('kanji_translation');
-    await queryInterface.dropTable('japanese_word_translation');
-    await queryInterface.dropTable('japanese_word');
+    await queryInterface.dropTable('word_translation');
+    await queryInterface.dropTable('word');
     await queryInterface.dropTable('account_review');
     await queryInterface.dropTable('account_card');
     await queryInterface.dropTable('account_deck_settings');
