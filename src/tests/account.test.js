@@ -167,7 +167,7 @@ describe('Account tests', () => {
         .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCodes).toContain(errors.passwordValidationError);
+      expect(response.body.data.createAccount.errorCodes).toContain(errors.passwordNumberError);
     });
 
     it('Error when password does not contain uppercase', async () => {
@@ -181,7 +181,7 @@ describe('Account tests', () => {
         .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCodes).toContain(errors.passwordValidationError);
+      expect(response.body.data.createAccount.errorCodes).toContain(errors.passwordUppercaseError);
     });
 
     it('Error when password does not contain lowercase', async () => {
@@ -195,7 +195,7 @@ describe('Account tests', () => {
         .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.body.data.createAccount.email).toBeUndefined();
-      expect(response.body.data.createAccount.errorCodes).toContain(errors.passwordValidationError);
+      expect(response.body.data.createAccount.errorCodes).toContain(errors.passwordLowercaseError);
     });
 
     it('Error when language id invalid', async () => {

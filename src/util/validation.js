@@ -55,6 +55,9 @@ const createAccountSchema = yup.object().shape({
     .string(errors.inputValueTypeError)
     .max(constants.passwordMaxLength, errors.passwordMaxLengthError)
     .min(constants.passwordMinLength, errors.passwordMinLengthError)
+    .matches(/^(?=.*[a-z])/, errors.passwordLowercaseError)
+    .matches(/^(?=.*[A-Z])/, errors.passwordUppercaseError)
+    .matches(/^(?=.*[0-9])/, errors.passwordNumberError)
     .required(errors.requiredPasswordError),
   passwordConfirmation: yup
     .string(errors.inputValueTypeError)
@@ -70,3 +73,5 @@ module.exports = {
   rescheduleCardSchema,
   createAccountSchema
 };
+
+

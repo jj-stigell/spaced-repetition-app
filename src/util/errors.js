@@ -27,7 +27,10 @@ const errors = {
   nonExistingDeckError: 'nonExistingDeck',
   passwordMaxLengthError: 'passwordMaxLengthError',
   passwordMinLengthError: 'passwordMinLengthError',
-  requiredPasswordConfirmError: 'requiredPasswordConfirmError'
+  requiredPasswordConfirmError: 'requiredPasswordConfirmError',
+  passwordNumberError: 'passwordNumberError',
+  passwordUppercaseError: 'passwordUppercaseError',
+  passwordLowercaseError: 'passwordLowercaseError'
 };
 
 module.exports = errors;

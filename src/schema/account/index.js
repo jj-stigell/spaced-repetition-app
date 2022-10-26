@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const { JWT_SECRET } = require('../../util/config');
 const { Account } = require('../../models');
 const { Op } = require('sequelize');
-const constants = require('../../util/constants');
 const errors = require('../../util/errors');
 const { createAccountSchema } = require('../../util/validation');
 const formatYupError = require('../../util/errorFormatter');
@@ -85,14 +84,7 @@ const resolvers = {
   Mutation: {
     createAccount: async (_, { email, password, passwordConfirmation, languageId }) => {
 
-      /**
-       * Validate new account input:
-       * - check email is valid and not in use
-       * - check password matches with confirmation, correct length and includes required symbols
-       */
-
-
-      // validate input
+      // Validate input
       try {
         await createAccountSchema.validate({ email, password, passwordConfirmation, languageId }, { abortEarly: false });
       } catch (error) {
@@ -102,72 +94,31 @@ const resolvers = {
         };
       }
 
-
-      /*
-      
-
-      // Confirm that no value is empty
-      if (!email || !password || !passwordConfirmation) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.inputValueMissingError]
-        };
-      }
-
-      // Check that confirmation matches to password
-      if (password !== passwordConfirmation) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.passwordMismatchError]
-        };
-      }
-
-      // Chack that language id is one of the available
-      if (languageId && !validator.isIn(languageId.toLowerCase(), constants.availableLanguages)) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.invalidLanguageIdError]
-        };
-      }
-      */
-
-      // Password must contain min 8 chars, at least one lower, upper and number character
-      if (!validator.isStrongPassword(password, {
-        minLength: 8,
-        minLowercase: 1,
-        minUppercase: 1,
-        minNumbers: 1,
-        minSymbols: 0,
-        returnScore: false
-      }) || password.length > 50) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.passwordValidationError]
-        };
-      }
-
-      /*
-      // Check for valid email
-      if (!validator.isEmail(email)) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.notEmailError]
-        };
-      }
-      */
-
-      // Check that email not reserved, emails stored in lowercase
-      const emailInUse = await Account.findOne({ where: { email: email.toLowerCase() } });
-      if (emailInUse) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.emailInUseError]
-        };
-      }
-
-      // Create a new account if all validations pass
       try {
-        // Hash password
+        // Check that email not reserved, emails stored in lowercase
+        const emailInUse = await Account.findOne({
+          attributes: ['id'],
+          where: {
+            email: email.toLowerCase()
+          }
+        });
+
+        if (emailInUse) {
+          return { 
+            __typename: 'Error',
+            errorCodes: [errors.emailInUseError]
+          };
+        }
+      } catch(error) {
+        console.log(error.errors);
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
+      }
+
+      try {
+        // Create a new account if all validations pass
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(password, saltRounds);
 
