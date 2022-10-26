@@ -20,6 +20,6 @@
 | 19.10. | 2 | Rewrite part of the db structure, previous structure did not allow easy expansion for card types |
 | 20.20. | 2 | Fix the new relations in the sequelize model |
 | 25.10. | 2 | Rewrite fetch card queries |
+| 26.10. | 2 | Add yup validation for decks and accounts, update account tests, refactor account mutations |
 |  |  |  |
-|  |  |  |
-| total | 51 |  | 
+| total | 53 |  | 
