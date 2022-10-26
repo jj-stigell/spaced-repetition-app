@@ -25,11 +25,11 @@ INSERT INTO deck_translation (
 INSERT INTO deck_translation (
   deck_id, language_id, title, description, active, created_at, updated_at
 ) VALUES (
-  3, 'en', 'JLPT N3 Kanji - english title', 'Learn all N3 kanji!', true, NOW(), NOW()
+  3, 'en', 'TEST COMBINATION DECK', 'see if multiple type fetch works', true, NOW(), NOW()
 );
 
 INSERT INTO deck_translation (
   deck_id, language_id, title, description, active, created_at, updated_at
 ) VALUES (
-  3, 'fi', 'JLPT N3 Kanji - suomekielinen otsikko', 'Opi kaikki N3 kanjit!', true, NOW(), NOW()
+  3, 'fi', 'TESTI YHDISTELMA DEKKI', 'Onnistuuko useamman tyypin yhdistaminen', true, NOW(), NOW()
 );
