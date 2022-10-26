@@ -6,6 +6,8 @@ const { Account } = require('../../models');
 const { Op } = require('sequelize');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors');
+const { createAccountSchema } = require('../../util/validation');
+const formatYupError = require('../../util/errorFormatter');
 
 const typeDef = `
   type Account {
@@ -27,7 +29,7 @@ const typeDef = `
   }
 
   type Error {
-    errorCode: String!
+    errorCodess: [String!]
   }
 
   union LoginPayload = AccountToken | Error
@@ -89,11 +91,26 @@ const resolvers = {
        * - check password matches with confirmation, correct length and includes required symbols
        */
 
+
+      // validate input
+      try {
+        await createAccountSchema.validate({ email, password, passwordConfirmation, languageId }, { abortEarly: false });
+      } catch (error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: formatYupError(error)
+        };
+      }
+
+
+      /*
+      
+
       // Confirm that no value is empty
       if (!email || !password || !passwordConfirmation) {
         return { 
           __typename: 'Error',
-          errorCode: errors.inputValueMissingError
+          errorCodes: [errors.inputValueMissingError]
         };
       }
 
@@ -101,7 +118,7 @@ const resolvers = {
       if (password !== passwordConfirmation) {
         return { 
           __typename: 'Error',
-          errorCode: errors.passwordMismatchError
+          errorCodes: [errors.passwordMismatchError]
         };
       }
 
@@ -109,9 +126,10 @@ const resolvers = {
       if (languageId && !validator.isIn(languageId.toLowerCase(), constants.availableLanguages)) {
         return { 
           __typename: 'Error',
-          errorCode: errors.invalidLanguageIdError
+          errorCodes: [errors.invalidLanguageIdError]
         };
       }
+      */
 
       // Password must contain min 8 chars, at least one lower, upper and number character
       if (!validator.isStrongPassword(password, {
@@ -124,24 +142,26 @@ const resolvers = {
       }) || password.length > 50) {
         return { 
           __typename: 'Error',
-          errorCode: errors.passwordValidationError
+          errorCodes: [errors.passwordValidationError]
         };
       }
 
+      /*
       // Check for valid email
       if (!validator.isEmail(email)) {
         return { 
           __typename: 'Error',
-          errorCode: errors.notEmailError
+          errorCodes: [errors.notEmailError]
         };
       }
+      */
 
       // Check that email not reserved, emails stored in lowercase
       const emailInUse = await Account.findOne({ where: { email: email.toLowerCase() } });
       if (emailInUse) {
         return { 
           __typename: 'Error',
-          errorCode: errors.emailInUseError
+          errorCodes: [errors.emailInUseError]
         };
       }
 
@@ -164,7 +184,7 @@ const resolvers = {
         console.log(error.errors);
         return { 
           __typename: 'Error',
-          errorCode: errors.connectionError
+          errorCodes: [errors.internalServerError]
         };
       }
     },
@@ -174,7 +194,7 @@ const resolvers = {
       if (!email || !password) {
         return { 
           __typename: 'Error',
-          errorCode: errors.inputValueMissingError
+          errorCodes: [errors.inputValueMissingError]
         };
       }
 
@@ -182,7 +202,7 @@ const resolvers = {
       if (!validator.isEmail(email)) {
         return { 
           __typename: 'Error',
-          errorCode: errors.notEmailError
+          errorCodes: [errors.notEmailError]
         };
       }
 
@@ -196,7 +216,7 @@ const resolvers = {
       if (!account || !passwordCorrect) {
         return { 
           __typename: 'Error',
-          errorCode: errors.userOrPassIncorrectError
+          errorCodes: [errors.userOrPassIncorrectError]
         };
       }
     
@@ -220,7 +240,7 @@ const resolvers = {
       if (!currentUser) {
         return { 
           __typename: 'Error',
-          errorCode: errors.notAuthError
+          errorCodes: [errors.notAuthError]
         };
       }
 
@@ -228,7 +248,7 @@ const resolvers = {
       if (!currentPassword || !newPassword || !newPasswordConfirmation) {
         return { 
           __typename: 'Error',
-          errorCode: errors.changePasswordValueMissingError
+          errorCodes: [errors.changePasswordValueMissingError]
         };
       }
 
@@ -236,7 +256,7 @@ const resolvers = {
       if (newPassword !== newPasswordConfirmation) {
         return { 
           __typename: 'Error',
-          errorCode: errors.passwordMismatchError
+          errorCodes: [errors.passwordMismatchError]
         };
       }
 
@@ -244,7 +264,7 @@ const resolvers = {
       if (newPassword === currentPassword) {
         return { 
           __typename: 'Error',
-          errorCode: errors.currAndNewPassEqualError
+          errorCodes: [errors.currAndNewPassEqualError]
         };
       }
 
@@ -259,7 +279,7 @@ const resolvers = {
       }) || newPassword.length > 50) {
         return { 
           __typename: 'Error',
-          errorCode: errors.passwordValidationError
+          errorCodes: [errors.passwordValidationError]
         };
       }
 
@@ -273,7 +293,7 @@ const resolvers = {
       if (!passwordCorrect) {
         return { 
           __typename: 'Error',
-          errorCode: errors.currentPasswordIncorrect
+          errorCodes: [errors.currentPasswordIncorrect]
         };
       }
 
@@ -294,7 +314,7 @@ const resolvers = {
         console.log(error.errors);
         return { 
           __typename: 'Error',
-          errorCode: errors.connectionError
+          errorCodes: [errors.internalServerError]
         };
       }
     },

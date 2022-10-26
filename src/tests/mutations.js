@@ -1,8 +1,8 @@
 const mutations = {
-  registerMutation: `mutation createAccount($email: String!, $password: String!, $passwordConfirmation: String!) {
-    createAccount(email: $email, password: $password, passwordConfirmation: $passwordConfirmation) {
+  registerMutation: `mutation createAccount($email: String!, $password: String!, $passwordConfirmation: String!, $languageId: String) {
+    createAccount(email: $email, password: $password, passwordConfirmation: $passwordConfirmation, languageId: $languageId) {
       ... on Error {
-        errorCode
+        errorCodes
       }
       ... on Account {
         id
@@ -13,7 +13,7 @@ const mutations = {
   loginMutation: `mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       ... on Error {
-        errorCode
+        errorCodes
       }
       ... on AccountToken {
         token {
@@ -29,7 +29,7 @@ const mutations = {
   changePasswordMutation: `mutation changePassword($currentPassword: String!, $newPassword: String!, $newPasswordConfirmation: String!) {
     changePassword(currentPassword: $currentPassword, newPassword: $newPassword, newPasswordConfirmation: $newPasswordConfirmation) {
       ... on Error {
-        errorCode
+        errorCodes
       }
       ... on Success {
         status
