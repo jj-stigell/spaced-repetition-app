@@ -195,7 +195,7 @@ const resolvers = {
       } catch(error) {
         return { 
           __typename: 'Error',
-          errorCodes: [errors.connectionError]
+          errorCodes: [errors.internalServerError]
         };
       }
 
@@ -214,7 +214,7 @@ const resolvers = {
       } catch(error) {
         return {
           __typename: 'Error',
-          errorCodes: [errors.connectionError]
+          errorCodes: [errors.internalServerError]
         };
       }
 
@@ -230,7 +230,7 @@ const resolvers = {
           console.log('error:', error);
           return {
             __typename: 'Error',
-            errorCodes: [errors.connectionError]
+            errorCodes: [errors.internalServerError]
           };
         }
       }
@@ -440,7 +440,7 @@ const resolvers = {
         console.log(error.errors);
         return { 
           __typename: 'Error',
-          errorCodes: [errors.connectionError]
+          errorCodes: [errors.internalServerError]
         };
       }
 
@@ -478,7 +478,7 @@ const resolvers = {
           console.log(error.errors);
           return { 
             __typename: 'Error',
-            errorCodes: [errors.connectionError]
+            errorCodes: [errors.internalServerError]
           };
         }
       } else {
@@ -499,7 +499,7 @@ const resolvers = {
           console.log(error.errors);
           return { 
             __typename: 'Error',
-            errorCodes: [errors.connectionError]
+            errorCodes: [errors.internalServerError]
           };
         }
       }
@@ -521,7 +521,7 @@ const resolvers = {
         console.log(error.errors);
         return { 
           __typename: 'Error',
-          errorCodes: [errors.connectionError]
+          errorCodes: [errors.internalServerError]
         };
       }
     },

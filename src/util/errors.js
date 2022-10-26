@@ -7,7 +7,7 @@ const errors = {
   usernameValidationError: 'usernameValidationError',
   emailInUseError: 'emailInUseError',
   usernameInUseError: 'usernameInUseError',
-  connectionError: 'connectionError',
+  internalServerError: 'internalServerError',
   userOrPassIncorrectError: 'userOrPassIncorrectError',
   notAuthError: 'notAuthError',
   changePasswordValueMissingError: 'changePasswordValueMissingError',
@@ -20,8 +20,8 @@ const errors = {
   noDueCardsError: 'noDueCardsError',
   noNewCardsError: 'noNewCardsError',
   negativeNumberTypeError: 'negativeNumberTypeError',
-  nonExistingId: 'nonExistingId',
-  nonExistingDeck: 'nonExistingDeck'
+  nonExistingIdError: 'nonExistingId',
+  nonExistingDeckError: 'nonExistingDeck'
 };
 
 module.exports = errors;

@@ -37,7 +37,8 @@
     "pg": "^8.8.0",
     "sequelize": "^6.21.5",
     "umzug": "^3.2.1",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "eslint": "^8.23.0",
