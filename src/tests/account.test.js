@@ -334,7 +334,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCodes).toContain(errors.changePasswordValueMissingError);
+      expect(response.body.data.changePassword.errorCodes).toContain(errors.requiredPasswordError);
     });
 
     it('Error when missing value, new password', async () => {
@@ -345,7 +345,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
       
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCodes).toContain(errors.changePasswordValueMissingError);
+      expect(response.body.data.changePassword.errorCodes).toContain(errors.requiredPasswordError);
     });
 
     it('Error when missing value, new password confirmation', async () => {
@@ -356,7 +356,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCodes).toContain(errors.changePasswordValueMissingError);
+      expect(response.body.data.changePassword.errorCodes).toContain(errors.requiredPasswordConfirmError);
     });
 
     it('Error when password and password confirmation do not match', async () => {

@@ -1,13 +1,12 @@
-const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { JWT_SECRET } = require('../../util/config');
 const { Account } = require('../../models');
 const { Op } = require('sequelize');
 const errors = require('../../util/errors');
-const { createAccountSchema, loginSchema } = require('../../util/validation');
-const formatYupError = require('../../util/errorFormatter');
 const constants = require('../../util/constants');
+const { createAccountSchema, loginSchema, changePasswordSchema} = require('../../util/validation');
+const formatYupError = require('../../util/errorFormatter');
 
 const typeDef = `
   type Account {
@@ -65,21 +64,33 @@ const typeDef = `
 
 const resolvers = {
   Query: {
-    // eslint-disable-next-line no-unused-vars
     emailAvailable: async (_, { email }) => {
-      // Check that username is not in use, case insensitive
-      const emailInUse = await Account.findOne({
-        where: {
-          email: {
-            [Op.iLike]: email
+      
+      // Check that email is not in use, case insensitive
+      let result = false;
+      try {
+        const emailInUse = await Account.findOne({
+          attributes: ['id'],
+          where: {
+            email: {
+              [Op.iLike]: email
+            }
           }
+        });
+        if (!emailInUse) {
+          result = true;
         }
-      });
-      if (emailInUse) {
-        return false;
+        return { 
+          __typename: 'Success',
+          status: result
+        };
+      } catch(error) {
+        console.log(error.errors);
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
       }
-
-      return true;
     },
   },
   Mutation: {
@@ -120,8 +131,7 @@ const resolvers = {
 
       try {
         // Create a new account if all validations pass
-        const saltRounds = 10;
-        const passwordHash = await bcrypt.hash(password, saltRounds);
+        const passwordHash = await bcrypt.hash(password, constants.saltRounds);
 
         const account = await Account.create({
           email: email.toLowerCase(),
@@ -190,6 +200,17 @@ const resolvers = {
         };
       }
 
+      // Validate input
+      try {
+        await changePasswordSchema.validate({ currentPassword, newPassword, newPasswordConfirmation }, { abortEarly: false });
+      } catch (error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: formatYupError(error)
+        };
+      }
+
+      /*
       // Confirm that currentPassword, newPassword, newPasswordConfirmation not empty
       if (!currentPassword || !newPassword || !newPasswordConfirmation) {
         return { 
@@ -228,26 +249,42 @@ const resolvers = {
           errorCodes: [errors.passwordValidationError]
         };
       }
+      */
 
-      const account = await Account.findByPk(currentUser.id);
 
-      // If user is found, compare the crypted password to the hash fetched from database
-      const passwordCorrect = account === null
-        ? false
-        : await bcrypt.compare(currentPassword, account.passwordHash);
+      let account;
 
-      if (!passwordCorrect) {
+      try {
+        // Find user and check that password matches
+        account = await Account.findByPk(currentUser.id);
+
+        // If user is found, compare the crypted password to the hash fetched from database
+        const passwordCorrect = account === null
+          ? false
+          : await bcrypt.compare(currentPassword, account.passwordHash);
+  
+        if (!passwordCorrect) {
+          return { 
+            __typename: 'Error',
+            errorCodes: [errors.currentPasswordIncorrect]
+          };
+        }
+      } catch(error) {
+        console.log(error.errors);
         return { 
           __typename: 'Error',
-          errorCodes: [errors.currentPasswordIncorrect]
+          errorCodes: [errors.internalServerError]
         };
       }
 
-      // Update password if all validations pass
+
+
+
+
+    
       try {
-        // Hash password
-        const saltRounds = 10;
-        const passwordHash = await bcrypt.hash(newPassword, saltRounds);
+        // Update password if all validations pass
+        const passwordHash = await bcrypt.hash(newPassword, constants.saltRounds);
 
         // Update new password hash to account and save
         account.passwordHash = passwordHash;

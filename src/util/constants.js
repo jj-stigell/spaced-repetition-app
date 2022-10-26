@@ -20,7 +20,8 @@ const constants = {
   maxAmountOfDecks: 50,
   passwordMaxLength: 50,
   passwordMinLength: 8,
-  jwtExpiryTime: 60*60*300
+  jwtExpiryTime: 60*60*300,
+  saltRounds: 10
 };
 
 module.exports = constants;

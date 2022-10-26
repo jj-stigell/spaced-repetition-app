@@ -81,9 +81,30 @@ const loginSchema = yup.object().shape({
     .required(errors.requiredPasswordError),
 });
 
+const changePasswordSchema = yup.object().shape({
+  currentPassword: yup
+    .string(errors.inputValueTypeError)
+    .max(constants.passwordMaxLength, errors.passwordMaxLengthError)
+    .min(constants.passwordMinLength, errors.passwordMinLengthError)
+    .required(errors.requiredPasswordError),
+  newPassword: yup
+    .string(errors.inputValueTypeError)
+    .max(constants.passwordMaxLength, errors.passwordMaxLengthError)
+    .min(constants.passwordMinLength, errors.passwordMinLengthError)
+    .matches(/^(?=.*[a-z])/, errors.passwordLowercaseError)
+    .matches(/^(?=.*[A-Z])/, errors.passwordUppercaseError)
+    .matches(/^(?=.*[0-9])/, errors.passwordNumberError)
+    .required(errors.requiredPasswordError),
+  newPasswordConfirmation: yup
+    .string(errors.inputValueTypeError)
+    .oneOf([yup.ref('newPassword'), null], errors.passwordMismatchError)
+    .required(errors.requiredPasswordConfirmError),
+});
+
 module.exports = {
   fetchCardsSchema,
   rescheduleCardSchema,
   createAccountSchema,
-  loginSchema
+  loginSchema,
+  changePasswordSchema
 };
