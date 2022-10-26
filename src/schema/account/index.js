@@ -5,8 +5,9 @@ const { JWT_SECRET } = require('../../util/config');
 const { Account } = require('../../models');
 const { Op } = require('sequelize');
 const errors = require('../../util/errors');
-const { createAccountSchema } = require('../../util/validation');
+const { createAccountSchema, loginSchema } = require('../../util/validation');
 const formatYupError = require('../../util/errorFormatter');
+const constants = require('../../util/constants');
 
 const typeDef = `
   type Account {
@@ -140,51 +141,45 @@ const resolvers = {
       }
     },
     login: async (_, { email, password }) => {
-
-      // Confirm that email and password not empty
-      if (!email || !password) {
+      // Validate input
+      try {
+        await loginSchema.validate({ email, password }, { abortEarly: false });
+      } catch (error) {
         return { 
           __typename: 'Error',
-          errorCodes: [errors.inputValueMissingError]
+          errorCodes: formatYupError(error)
         };
       }
 
-      // Confirm for valid email
-      if (!validator.isEmail(email)) {
+      try {
+        // Try to find the user from db
+        const account = await Account.findOne({ where: { email: email.toLowerCase() } });
+
+        // If user is found, compare the crypted password to the hash fetched from database
+        const passwordCorrect = account === null
+          ? false
+          : await bcrypt.compare(password, account.passwordHash);
+  
+        if (!account || !passwordCorrect) {
+          return { 
+            __typename: 'Error',
+            errorCodes: [errors.userOrPassIncorrectError]
+          };
+        }
+  
+        return { 
+          __typename: 'AccountToken',
+          token: { value: jwt.sign( { id: account.id }, JWT_SECRET, { expiresIn: constants.jwtExpiryTime } )},
+          user: { id: account.id, email: account.email }
+        };
+
+      } catch(error) {
+        console.log(error.errors);
         return { 
           __typename: 'Error',
-          errorCodes: [errors.notEmailError]
+          errorCodes: [errors.internalServerError]
         };
       }
-
-      const account = await Account.findOne({ where: { email: email.toLowerCase() } });
-
-      // If user is found, compare the crypted password to the hash fetched from database
-      const passwordCorrect = account === null
-        ? false
-        : await bcrypt.compare(password, account.passwordHash);
-
-      if (!account || !passwordCorrect) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.userOrPassIncorrectError]
-        };
-      }
-    
-      const payload = {
-        id: account.id,
-      };
-
-      const accountInfo = {
-        id: account.id,
-        email: account.email,
-      };
-
-      return { 
-        __typename: 'AccountToken',
-        token: { value: jwt.sign(payload, JWT_SECRET, { expiresIn: 60*60*300 })},
-        user: accountInfo
-      };
     },
     changePassword: async (_, { currentPassword, newPassword, newPasswordConfirmation }, { currentUser }) => {
 

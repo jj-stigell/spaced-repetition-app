@@ -19,6 +19,8 @@ const { sequelize } = require('../../util/database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors');
 const { selectNewCardIds, selectDueCardIds, findCard } = require('./rawQueries');
+const { fetchCardsSchema } = require('../../util/validation');
+const formatYupError = require('../../util/errorFormatter');
 
 const typeDef = `
   scalar Date
@@ -154,15 +156,30 @@ const resolvers = {
       if (!currentUser) {
         return { 
           __typename: 'Error',
-          errorCodess: [errors.notAuthError]
+          errorCodes: [errors.notAuthError]
         };
       }
+
+      // validate input
+      try {
+        await fetchCardsSchema.validate({ deckId, languageId, newCards }, { abortEarly: false });
+      } catch (error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: formatYupError(error)
+        };
+      }
+
+
+
+
+
 
       // Confirm that deck id is not empty
       if (!deckId) {
         return { 
           __typename: 'Error',
-          errorCodess: [errors.inputValueMissingError]
+          errorCodes: [errors.inputValueMissingError]
         };
       }
 
@@ -173,6 +190,9 @@ const resolvers = {
           errorCodes: [errors.inputValueTypeError]
         };
       }
+
+
+
 
       let selectedLanguage;
       // If language id is empty, set to default 'en'
@@ -288,7 +308,7 @@ const resolvers = {
                 {
                   model: KanjiTranslation,
                   where: {
-                    language_id: languageId
+                    language_id: selectedLanguage
                   },
                 },
                 {
@@ -297,7 +317,7 @@ const resolvers = {
                   include: {
                     model: RadicalTranslation,
                     where: {
-                      language_id: languageId
+                      language_id: selectedLanguage
                     }
                   },
                 }
@@ -308,7 +328,7 @@ const resolvers = {
               include: {
                 model: WordTranslation,
                 where: {
-                  language_id: languageId
+                  language_id: selectedLanguage
                 },
               }
             }
@@ -329,7 +349,7 @@ const resolvers = {
                 {
                   model: KanjiTranslation,
                   where: {
-                    language_id: languageId
+                    language_id: selectedLanguage
                   },
                 },
                 {
@@ -338,7 +358,7 @@ const resolvers = {
                   include: {
                     model: RadicalTranslation,
                     where: {
-                      language_id: languageId
+                      language_id: selectedLanguage
                     }
                   },
                 }
@@ -355,7 +375,7 @@ const resolvers = {
               include: {
                 model: WordTranslation,
                 where: {
-                  language_id: languageId
+                  language_id: selectedLanguage
                 },
               }
             }

@@ -19,7 +19,8 @@ const constants = {
   defaultReviewCount: 1,
   maxAmountOfDecks: 50,
   passwordMaxLength: 50,
-  passwordMinLength: 8
+  passwordMinLength: 8,
+  jwtExpiryTime: 60*60*300
 };
 
 module.exports = constants;

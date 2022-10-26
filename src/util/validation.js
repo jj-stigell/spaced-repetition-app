@@ -68,10 +68,22 @@ const createAccountSchema = yup.object().shape({
     .oneOf(constants.availableLanguages, errors.invalidLanguageIdError),
 });
 
+const loginSchema = yup.object().shape({
+  email: yup
+    .string(errors.inputValueTypeError)
+    .email(errors.notEmailError)
+    .max(255, errors.emailMaxLengthError)
+    .required(errors.requiredEmailError),
+  password: yup
+    .string(errors.inputValueTypeError)
+    .max(constants.passwordMaxLength, errors.passwordMaxLengthError)
+    .min(constants.passwordMinLength, errors.passwordMinLengthError)
+    .required(errors.requiredPasswordError),
+});
+
 module.exports = {
   fetchCardsSchema,
   rescheduleCardSchema,
-  createAccountSchema
+  createAccountSchema,
+  loginSchema
 };
-
-
