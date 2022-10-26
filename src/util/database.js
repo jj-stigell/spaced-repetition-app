@@ -10,7 +10,7 @@ const sequelize = new Sequelize(DATABASE_URL, {
     },
   },
   define: {
-    timestamps: true,
+    timestamps: true,             // Use createdAt and UpdatedAt timestamps
     freezeTableName: true,        // Freeze names, no plural names
     underscored: true,            // Underscore everywhere, no need to declare on model level
   },
