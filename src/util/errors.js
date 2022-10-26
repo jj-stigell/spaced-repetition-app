@@ -3,7 +3,10 @@ const errors = {
   inputValueTypeError: 'inputValueTypeError',
   passwordMismatchError: 'passwordMismatchError',
   passwordValidationError: 'passwordValidationError',
+  requiredPasswordError: 'requiredPasswordError',
   notEmailError: 'notEmailError',
+  emailMaxLengthError: 'emailMaxLengthError',
+  requiredEmailError: 'requiredEmailError',
   usernameValidationError: 'usernameValidationError',
   emailInUseError: 'emailInUseError',
   usernameInUseError: 'usernameInUseError',
@@ -21,7 +24,10 @@ const errors = {
   noNewCardsError: 'noNewCardsError',
   negativeNumberTypeError: 'negativeNumberTypeError',
   nonExistingIdError: 'nonExistingId',
-  nonExistingDeckError: 'nonExistingDeck'
+  nonExistingDeckError: 'nonExistingDeck',
+  passwordMaxLengthError: 'passwordMaxLengthError',
+  passwordMinLengthError: 'passwordMinLengthError',
+  requiredPasswordConfirmError: 'requiredPasswordConfirmError'
 };
 
 module.exports = errors;

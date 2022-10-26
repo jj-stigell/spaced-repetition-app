@@ -16,7 +16,10 @@ const constants = {
   defaultMaxReviewPerDay: 999,
   defaultMaxNewPerDay: 15,
   defaultEasyFactor: 2.5,
-  defaultReviewCount: 1
+  defaultReviewCount: 1,
+  maxAmountOfDecks: 50,
+  passwordMaxLength: 50,
+  passwordMinLength: 8
 };
 
 module.exports = constants;
