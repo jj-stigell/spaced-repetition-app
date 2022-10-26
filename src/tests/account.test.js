@@ -1,5 +1,6 @@
 const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
 const { ApolloServer } = require('apollo-server');
+const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET, ENVIRONMENT, PORT } = require('../util/config');
@@ -10,6 +11,7 @@ const mutations = require('./mutations');
 const errors = require('../util/errors');
 const schema = require('../schema');
 
+/*
 const server = new ApolloServer({
   schema,
   introspection: ENVIRONMENT.DEVELOPMENT,
@@ -21,6 +23,28 @@ const server = new ApolloServer({
       );
       const currentUser = await Account.findByPk(decodedToken.id);
       return { currentUser };
+    }
+  }
+});
+*/
+
+
+const server = new ApolloServer({
+  cache: new InMemoryLRUCache(),
+  schema,
+  introspection: ENVIRONMENT.DEVELOPMENT,
+  context: async ({ req }) => {
+    const auth = req ? req.headers.authorization : null;
+    if (auth && auth.toLowerCase().startsWith('bearer ')) {
+      try {
+        const decodedToken = jwt.verify(
+          auth.substring(7), JWT_SECRET
+        );
+        const currentUser = await Account.findByPk(decodedToken.id);
+        return { currentUser };
+      } catch(error) {
+        console.log(error);
+      } 
     }
   }
 });
@@ -233,7 +257,7 @@ describe('Account tests', () => {
 
       expect(response.body.data.login.token).toBeUndefined();
       expect(response.body.data.login.user).toBeUndefined();
-      expect(response.body.data.login.errorCodes).toContain(errors.inputValueMissingError);
+      expect(response.body.data.login.errorCodes).toContain(errors.requiredEmailError);
     });
 
     it('Error when missing value, password', async () => {
@@ -244,7 +268,7 @@ describe('Account tests', () => {
 
       expect(response.body.data.login.token).toBeUndefined();
       expect(response.body.data.login.user).toBeUndefined();
-      expect(response.body.data.login.errorCodes).toContain(errors.inputValueMissingError);
+      expect(response.body.data.login.errorCodes).toContain(errors.requiredPasswordError);
     });
 
     it('Error when email not valid', async () => {
@@ -407,7 +431,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordValidationError);
+      expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordMinLengthError);
     });
 
     it('Error when new password is too long', async () => {
@@ -422,7 +446,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordValidationError);
+      expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordMaxLengthError);
     });
 
     it('Error when new password does not contain numbers', async () => {
@@ -437,7 +461,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordValidationError);
+      expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordNumberError);
     });
 
     it('Error when new password does not contain uppercase', async () => {
@@ -452,7 +476,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordValidationError);
+      expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordUppercaseError);
     });
 
     it('Error when new password does not contain lowercase', async () => {
@@ -467,7 +491,7 @@ describe('Account tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: data });
 
       expect(response.body.data.changePassword.status).toBeUndefined();
-      expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordValidationError);
+      expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordLowercaseError);
     });
   });
 });

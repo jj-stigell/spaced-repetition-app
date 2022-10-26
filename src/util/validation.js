@@ -89,6 +89,7 @@ const changePasswordSchema = yup.object().shape({
     .required(errors.requiredPasswordError),
   newPassword: yup
     .string(errors.inputValueTypeError)
+    .notOneOf([yup.ref('currentPassword'), null], errors.currAndNewPassEqualError)
     .max(constants.passwordMaxLength, errors.passwordMaxLengthError)
     .min(constants.passwordMinLength, errors.passwordMinLengthError)
     .matches(/^(?=.*[a-z])/, errors.passwordLowercaseError)

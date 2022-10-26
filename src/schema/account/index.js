@@ -210,48 +210,6 @@ const resolvers = {
         };
       }
 
-      /*
-      // Confirm that currentPassword, newPassword, newPasswordConfirmation not empty
-      if (!currentPassword || !newPassword || !newPasswordConfirmation) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.changePasswordValueMissingError]
-        };
-      }
-
-      // Check that confirmation matches to password
-      if (newPassword !== newPasswordConfirmation) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.passwordMismatchError]
-        };
-      }
-
-      // Check that new password is not same ass old one
-      if (newPassword === currentPassword) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.currAndNewPassEqualError]
-        };
-      }
-
-      // Password must contain min 8 chars, at least one lower, upper and number character
-      if (!validator.isStrongPassword(newPassword, {
-        minLength: 8,
-        minLowercase: 1,
-        minUppercase: 1,
-        minNumbers: 1,
-        minSymbols: 0,
-        returnScore: false
-      }) || newPassword.length > 50) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.passwordValidationError]
-        };
-      }
-      */
-
-
       let account;
 
       try {
@@ -277,11 +235,6 @@ const resolvers = {
         };
       }
 
-
-
-
-
-    
       try {
         // Update password if all validations pass
         const passwordHash = await bcrypt.hash(newPassword, constants.saltRounds);
