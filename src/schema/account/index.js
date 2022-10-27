@@ -5,7 +5,7 @@ const { Account } = require('../../models');
 const { Op } = require('sequelize');
 const errors = require('../../util/errors');
 const constants = require('../../util/constants');
-const { createAccountSchema, loginSchema, changePasswordSchema} = require('../../util/validation');
+const { emailAvailableSchema, createAccountSchema, loginSchema, changePasswordSchema } = require('../../util/validation');
 const formatYupError = require('../../util/errorFormatter');
 
 const typeDef = `
@@ -28,17 +28,18 @@ const typeDef = `
   }
 
   type Error {
-    errorCodess: [String!]
+    errorCodes: [String!]
   }
 
   union LoginPayload = AccountToken | Error
   union RegisterResult = Account | Error
   union ChangePasswordResult = Success | Error
+  union emailAvailable = Success | Error
 
   type Query {
     emailAvailable(
       email: String!
-    ): Boolean!
+    ): emailAvailable!
   }
 
   type Mutation {
@@ -65,6 +66,16 @@ const typeDef = `
 const resolvers = {
   Query: {
     emailAvailable: async (_, { email }) => {
+
+      // Validate input
+      try {
+        await emailAvailableSchema.validate({ email }, { abortEarly: false });
+      } catch (error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: formatYupError(error)
+        };
+      }
       
       // Check that email is not in use, case insensitive
       let result = false;

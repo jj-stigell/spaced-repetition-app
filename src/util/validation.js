@@ -45,6 +45,14 @@ const rescheduleCardSchema = yup.object().shape({
     .max(255)
 });
 
+const emailAvailableSchema = yup.object().shape({
+  email: yup
+    .string(errors.inputValueTypeError)
+    .email(errors.notEmailError)
+    .max(255, errors.emailMaxLengthError)
+    .required(errors.requiredEmailError)
+});
+
 const createAccountSchema = yup.object().shape({
   email: yup
     .string(errors.inputValueTypeError)
@@ -105,6 +113,7 @@ const changePasswordSchema = yup.object().shape({
 module.exports = {
   fetchCardsSchema,
   rescheduleCardSchema,
+  emailAvailableSchema,
   createAccountSchema,
   loginSchema,
   changePasswordSchema
