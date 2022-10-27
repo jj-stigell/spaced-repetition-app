@@ -1,53 +1,11 @@
 const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
-const { ApolloServer } = require('apollo-server');
-const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
 const request = require('supertest');
-const jwt = require('jsonwebtoken');
-const { JWT_SECRET, ENVIRONMENT, PORT } = require('../util/config');
+const { PORT } = require('../util/config');
 const { connectToDatabase } = require('../util/database');
 const { account, passwordData, stringData } = require('./constants'); 
-const { Account } = require('../models');
 const mutations = require('./mutations');
 const errors = require('../util/errors');
-const schema = require('../schema');
-
-/*
-const server = new ApolloServer({
-  schema,
-  introspection: ENVIRONMENT.DEVELOPMENT,
-  context: async ({ req }) => {
-    const auth = req ? req.headers.authorization : null;
-    if (auth && auth.toLowerCase().startsWith('bearer ')) {
-      const decodedToken = jwt.verify(
-        auth.substring(7), JWT_SECRET
-      );
-      const currentUser = await Account.findByPk(decodedToken.id);
-      return { currentUser };
-    }
-  }
-});
-*/
-
-
-const server = new ApolloServer({
-  cache: new InMemoryLRUCache(),
-  schema,
-  introspection: ENVIRONMENT.DEVELOPMENT,
-  context: async ({ req }) => {
-    const auth = req ? req.headers.authorization : null;
-    if (auth && auth.toLowerCase().startsWith('bearer ')) {
-      try {
-        const decodedToken = jwt.verify(
-          auth.substring(7), JWT_SECRET
-        );
-        const currentUser = await Account.findByPk(decodedToken.id);
-        return { currentUser };
-      } catch(error) {
-        console.log(error);
-      } 
-    }
-  }
-});
+const server = require('../util/server');
 
 describe('Account tests', () => {
   let testServer, testUrl;
@@ -63,7 +21,6 @@ describe('Account tests', () => {
   afterAll(async () => {
     await testServer?.close();
   });
-  
 
   describe('Registering an account', () => {
 
