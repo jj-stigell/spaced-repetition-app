@@ -21,5 +21,6 @@
 | 20.20. | 2 | Fix the new relations in the sequelize model |
 | 25.10. | 2 | Rewrite fetch card queries |
 | 26.10. | 2 | Add yup validation for decks and accounts, update account tests, refactor account mutations |
+| 27.10. | 1 | Refactor validation to avoid redundancy. Refactor server to its own module so production and testing can import same server |
 |  |  |  |
-| total | 53 |  | 
+| total | 54 |  | 
