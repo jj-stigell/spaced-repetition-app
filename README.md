@@ -56,7 +56,7 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] Validate input
             - [X] Error on missing, incorrect input, mismatch with password
             - [X] Succesfully create and return token
-                - [ ] token content (user id, exp), expiry time?
+                - [X] token content (user id, exp), expiry time set in constants
             - [ ] Keep track of sessions
             - [ ] login using google account
         - [ ] User logout
@@ -69,24 +69,26 @@ Frontend time keeping is in the frontend GitHub repository
             - [ ] delete session
         - [ ] Recover account (e.g. password forgotten)
     - [ ] Card related
+        - [ ] transactions
         - [ ] Validation of user input, including error messages
-            - [ ] Install and configure Yup
+            - [X] Install and configure Yup
             - [ ] Match validation rules with front-end
             - [ ] Card validation
         - [ ] Card mutations
-            - [ ] Reschedule card
+            - [X] Reschedule card
             - [ ] Add custom card hint
             - [ ] Add custom card story
             - [ ] set deck as favorite (limit?)
             - [ ] Sick day (push all cards +1 day)
             - [ ] Optimize (recalculate deck cards for optimal interval)
         - [ ] Card and deck queries
-            - [ ] due cards
-            - [ ] new cards
+            - [X] due cards
+            - [X] new cards
             - [ ] fetch the amount of due cards for the next n days, group by date
             - [ ] fetch available decks, language information, deck specific due cards amount
             - [ ] amount of reviewed kanji (mature or not?)
             - [ ] learnt kanji (x of y)
+            - [ ] learnt word (x of y)
             - [ ] daily average review count
         - [ ] Reschedule card based on user input (interval, extrareview, etc.)
             - [ ] Reschedule new card by creating new user card
