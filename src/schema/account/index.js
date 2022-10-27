@@ -5,7 +5,12 @@ const { Account } = require('../../models');
 const { Op } = require('sequelize');
 const errors = require('../../util/errors');
 const constants = require('../../util/constants');
-const { emailAvailableSchema, createAccountSchema, loginSchema, changePasswordSchema } = require('../../util/validation');
+const {
+  emailAvailableSchema,
+  createAccountSchema,
+  loginSchema,
+  changePasswordSchema
+} = require('../../util/validation/validation');
 const formatYupError = require('../../util/errorFormatter');
 
 const typeDef = `
@@ -213,7 +218,9 @@ const resolvers = {
 
       // Validate input
       try {
-        await changePasswordSchema.validate({ currentPassword, newPassword, newPasswordConfirmation }, { abortEarly: false });
+        await changePasswordSchema.validate({
+          currentPassword, password: newPassword, passwordConfirmation: newPasswordConfirmation
+        }, { abortEarly: false });
       } catch (error) {
         return { 
           __typename: 'Error',

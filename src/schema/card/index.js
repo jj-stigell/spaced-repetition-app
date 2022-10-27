@@ -19,7 +19,7 @@ const { sequelize } = require('../../util/database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors');
 const { selectNewCardIds, selectDueCardIds, findCard } = require('./rawQueries');
-const { fetchCardsSchema } = require('../../util/validation');
+const { fetchCardsSchema } = require('../../util/validation/validation');
 const formatYupError = require('../../util/errorFormatter');
 
 const typeDef = `
@@ -170,11 +170,6 @@ const resolvers = {
         };
       }
 
-
-
-
-
-
       // Confirm that deck id is not empty
       if (!deckId) {
         return { 
@@ -190,9 +185,6 @@ const resolvers = {
           errorCodes: [errors.inputValueTypeError]
         };
       }
-
-
-
 
       let selectedLanguage;
       // If language id is empty, set to default 'en'
