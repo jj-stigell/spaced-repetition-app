@@ -3,6 +3,7 @@ const validator = require('validator');
 const { Op } = require('sequelize');
 const {
   Deck,
+  DeckTranslation,
   AccountDeckSettings,
   Kanji,
   Radical,
@@ -120,11 +121,38 @@ const typeDef = `
     word: Word
   }
 
+  type DeckTranslation {
+    id: Int
+    languageId: String
+    title: String
+    description: String
+    active: Boolean
+    createdAt: Date
+    updatedAt: Date
+  }
+
+  type Deck {
+    id: Int
+    deckName: String
+    type: String
+    subscriberOnly: Boolean
+    languageId: String
+    active: Boolean
+    createdAt: Date
+    updatedAt: Date
+    deck_translations: [DeckTranslation]
+  }
+
   type Cardset {
     Cards: [Card]
   }
 
+  type DeckList {
+    Decks: [Deck]
+  }
+
   union CardPayload = Cardset | Error
+  union DeckPayload = DeckList | Error
   union RescheduleResult = Success | Error
 
   type Query {
@@ -133,6 +161,10 @@ const typeDef = `
       languageId: String
       newCards: Boolean
     ): CardPayload!
+
+    fetchDecks(
+      filter: String
+    ): DeckPayload!
   }
 
   type Mutation {
@@ -383,6 +415,38 @@ const resolvers = {
         __typename: 'Cardset',
         Cards: cards
       };
+    },
+    // Fetch cards that are due or new cards based on the newCards boolean value, defaults to false.
+    fetchDecks: async (_, { filter }, { currentUser }) => {
+
+      // Check that user is logged in
+      if (!currentUser) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.notAuthError]
+        };
+      }
+
+      const decks = await Deck.findAll({
+        where: {
+          'active': true
+        },
+        subQuery: false,
+        //raw: true,
+        nest: true,
+        include: {
+          model: DeckTranslation,
+          where: {
+            'active': true
+          }
+        }
+      });
+
+      return {
+        __typename: 'DeckList',
+        Decks: decks
+      };
+
     },
   },
   Mutation: {
