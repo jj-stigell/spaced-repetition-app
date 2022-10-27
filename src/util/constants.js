@@ -21,7 +21,10 @@ const constants = {
   passwordMaxLength: 50,
   passwordMinLength: 8,
   jwtExpiryTime: 60*60*300,
-  saltRounds: 10
+  saltRounds: 10,
+  lowercaseRegex: /^(?=.*[a-z])/,
+  uppercaseRegex: /^(?=.*[A-Z])/,
+  numberRegex: /^(?=.*[0-9])/,
 };
 
 module.exports = constants;
