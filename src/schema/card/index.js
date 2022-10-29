@@ -16,10 +16,10 @@ const {
   Word,
   WordTranslation
 } = require('../../models');
-const { sequelize } = require('../../util/database');
+const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors');
-const { selectNewCardIds, selectDueCardIds, findCard } = require('../../util/rawQueries');
+const { selectNewCardIds, selectDueCardIds, findCard } = require('../../database/rawQueries');
 const { fetchCardsSchema, fecthDeckSettings } = require('../../util/validation/validation');
 const formatYupError = require('../../util/errorFormatter');
 

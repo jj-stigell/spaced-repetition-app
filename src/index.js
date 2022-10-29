@@ -1,4 +1,4 @@
-const { connectToDatabase } = require('./util/database');
+const { connectToDatabase } = require('./database');
 const { PORT } = require('./util/config');
 const server = require('./util/server');
 

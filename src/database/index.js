@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { Umzug, SequelizeStorage } = require('umzug');
-const { DATABASE_URL, ENVIRONMENT, NODE_ENV } = require('./config');
+const { DATABASE_URL, ENVIRONMENT, NODE_ENV } = require('../util/config');
 
 const sequelize = new Sequelize(DATABASE_URL, {
   dialectOptions: {

@@ -1,7 +1,7 @@
 const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
 const request = require('supertest');
 const { PORT } = require('../util/config');
-const { connectToDatabase } = require('../util/database');
+const { connectToDatabase } = require('../database');
 const { account, passwordData, stringData } = require('./utils/constants'); 
 const mutations = require('./utils/mutations');
 const queries = require('./utils/queries');

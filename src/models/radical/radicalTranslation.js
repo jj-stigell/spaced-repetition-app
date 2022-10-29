@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const { sequelize } = require('../../util/database');
+const { sequelize } = require('../../database');
 
 class RadicalTranslation extends Model {}
 
