@@ -21,17 +21,9 @@ default: {
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const ENVIRONMENT = {
-  DEVELOPMENT: NODE_ENV === 'development',
-  TEST: NODE_ENV === 'test',
-  STAGING: NODE_ENV === 'staging',
-  PRODUCTION: NODE_ENV === 'production',
-};
-
 module.exports = {
   DATABASE_URL,
   PORT,
   NODE_ENV,
-  JWT_SECRET,
-  ENVIRONMENT
+  JWT_SECRET
 };

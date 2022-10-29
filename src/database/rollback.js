@@ -1,7 +1,7 @@
 const { rollbackMigration } = require('.');
-const { ENVIRONMENT, NODE_ENV } = require('../util/config');
+const { NODE_ENV } = require('../util/config');
 
-if (ENVIRONMENT.PRODUCTION) {
+if (NODE_ENV === 'production') {
   console.log('Be careful when rolling back, this is production version');
   return;
 } else {
