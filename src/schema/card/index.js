@@ -20,7 +20,7 @@ const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
 const { selectNewCardIds, selectDueCardIds, findCard } = require('../../database/rawQueries');
-const { fetchCardsSchema, fecthDeckSettings } = require('../../util/validation/validation');
+const { fetchCardsSchema, validateDeckId } = require('../../util/validation/validation');
 const formatYupError = require('../../util/errors/errorFormatter');
 
 const typeDef = `
@@ -167,6 +167,7 @@ const typeDef = `
   union DeckPayload = DeckList | Error
   union RescheduleResult = Success | Error
   union SettingsPayload = DeckSettings | Error
+  union Result = Success | Error
 
   type Query {
     fetchCards(
@@ -193,6 +194,10 @@ const typeDef = `
       extraReview: Boolean
       timing: Float
     ): RescheduleResult!
+
+    toggleDeckFavorite(
+      deckId: Int!
+    ): Result!
   }
 `;
 
@@ -466,9 +471,6 @@ const resolvers = {
     },
     fecthDeckSettings: async (_, { deckId }, { currentUser }) => {
 
-      //TODO: if account deck specific settings cannot be found, create a new one, fetch cards query has this functionality
-      // refactor to separate file, helper functions
-
       // Check that user is logged in
       if (!currentUser) {
         return { 
@@ -479,7 +481,7 @@ const resolvers = {
 
       // validate input
       try {
-        await fecthDeckSettings.validate({ deckId }, { abortEarly: false });
+        await validateDeckId.validate({ deckId }, { abortEarly: false });
       } catch (error) {
         return { 
           __typename: 'Error',
@@ -533,8 +535,6 @@ const resolvers = {
           };
         }
       }
-
-      console.log(deckSettings);
 
       return {
         __typename: 'DeckSettings',
@@ -696,6 +696,89 @@ const resolvers = {
         };
       } catch(error) {
         console.log(error.errors);
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
+      }
+    },
+    toggleDeckFavorite: async (_, { deckId }, { currentUser }) => {
+
+      // Check that user is logged in
+      if (!currentUser) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.notAuthError]
+        };
+      }
+
+      // validate input
+      try {
+        await validateDeckId.validate({ deckId }, { abortEarly: false });
+      } catch (error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: formatYupError(error)
+        };
+      }
+
+      let foundDeck;
+      // Check if deck with an id exists
+      try {
+        foundDeck = await Deck.findOne({ where: { id: deckId } });
+      } catch(error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
+      }
+      
+      // No deck found with an id
+      if (!foundDeck) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.nonExistingDeckError]
+        };
+      }
+
+      let deckSettings;
+      // Find the deck settings, account specific
+      try {
+        deckSettings = await AccountDeckSettings.findOne({ where: {'account_id': currentUser.id, 'deck_id': deckId }, nest: true, });
+      } catch(error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
+      }
+
+      // create new accoung deck settings if no existing one
+      if (!deckSettings) {
+        try {
+          deckSettings = await AccountDeckSettings.create({
+            accountId: currentUser.id,
+            deckId: deckId,
+            favorite: true
+          });
+          deckSettings.save();
+        } catch(error) {
+          console.log('error:', error);
+          return {
+            __typename: 'Error',
+            errorCodes: [errors.internalServerError]
+          };
+        }
+      }
+
+      // Update existing deck settings
+      try {
+        deckSettings.favorite = deckSettings.favorite ? false : true;
+        await deckSettings.save();
+        return { 
+          __typename: 'Success',
+          status: deckSettings.favorite
+        };
+      } catch(error) {
         return { 
           __typename: 'Error',
           errorCodes: [errors.internalServerError]

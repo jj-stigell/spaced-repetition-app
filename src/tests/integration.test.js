@@ -495,4 +495,34 @@ describe('Integration tests', () => {
       expect(response.body.data.emailAvailable.errorCodes).toContain(errors.notEmailError);
     });
   });
+
+  describe('Fetching cards', () => {
+    //let authToken;
+
+    it('Fetch deck id 1, new cards', async () => {
+      expect(2).toBe(2);
+      /*
+      //login and receive token
+      let response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.loginMutation, variables: account });
+      
+      expect(response.body.data.login.errorCodes).toBeUndefined();
+      expect(response.body.data.login.token).toBeDefined();
+      expect(response.body.data.login.user).toBeDefined();
+      expect(response.body.data.login.user.email).toBe(account.email);
+
+      authToken = response.body.data.login.token.value;
+      
+      //set token as auth header and change password
+      response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: passwordData });
+      */
+
+    });
+
+  });
+
 });

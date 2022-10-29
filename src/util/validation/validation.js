@@ -37,7 +37,7 @@ const rescheduleCardSchema = yup.object().shape({
     .max(255)
 });
 
-const fecthDeckSettings = yup.object().shape({
+const validateDeckId = yup.object().shape({
   deckId: validationRules.deckId
 });
 
@@ -66,7 +66,7 @@ const changePasswordSchema = yup.object().shape({
 module.exports = {
   fetchCardsSchema,
   rescheduleCardSchema,
-  fecthDeckSettings,
+  validateDeckId,
   emailAvailableSchema,
   createAccountSchema,
   loginSchema,
