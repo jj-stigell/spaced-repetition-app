@@ -81,9 +81,11 @@ Frontend time keeping is in the frontend GitHub repository
             - [ ] set deck as favorite (limit?)
             - [ ] Sick day (push all cards +1 day)
             - [ ] Optimize (recalculate deck cards for optimal interval)
+            - [ ] Edit account deck settings
         - [ ] Card and deck queries
             - [X] due cards
             - [X] new cards
+            - [X] Fetch account deck settings
             - [ ] fetch the amount of due cards for the next n days, group by date
             - [ ] fetch available decks, language information, deck specific due cards amount
             - [ ] amount of reviewed kanji (mature or not?)
