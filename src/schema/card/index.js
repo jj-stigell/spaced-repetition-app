@@ -20,7 +20,7 @@ const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
 const { selectNewCardIds, selectDueCardIds, findCard } = require('../../database/rawQueries');
-const { fetchCardsSchema, validateDeckId } = require('../../util/validation/validation');
+const { fetchCardsSchema, validateDeckId, validateDeckSettings } = require('../../util/validation/validation');
 const formatYupError = require('../../util/errors/errorFormatter');
 
 const typeDef = `
@@ -195,9 +195,13 @@ const typeDef = `
       timing: Float
     ): RescheduleResult!
 
-    toggleDeckFavorite(
+    changeDeckSettings(
       deckId: Int!
-    ): Result!
+      favorite: Boolean
+      reviewInterval: Int
+      reviewsPerDay: Int
+      newCardsPerDay: Int
+    ): SettingsPayload!
   }
 `;
 
@@ -702,7 +706,7 @@ const resolvers = {
         };
       }
     },
-    toggleDeckFavorite: async (_, { deckId }, { currentUser }) => {
+    changeDeckSettings: async (_, { deckId, favorite, reviewInterval, reviewsPerDay, newCardsPerDay }, { currentUser }) => {
 
       // Check that user is logged in
       if (!currentUser) {
@@ -714,7 +718,7 @@ const resolvers = {
 
       // validate input
       try {
-        await validateDeckId.validate({ deckId }, { abortEarly: false });
+        await validateDeckSettings.validate({ deckId, favorite, reviewInterval, reviewsPerDay, newCardsPerDay }, { abortEarly: false });
       } catch (error) {
         return { 
           __typename: 'Error',
@@ -752,13 +756,17 @@ const resolvers = {
         };
       }
 
-      // create new accoung deck settings if no existing one
+      // create new account deck settings row if no existing one
       if (!deckSettings) {
         try {
+          //favorite, reviewInterval, reviewsPerDay, newCardsPerDay
           deckSettings = await AccountDeckSettings.create({
             accountId: currentUser.id,
             deckId: deckId,
-            favorite: true
+            favorite: favorite ? true : false,
+            reviewInterval: reviewInterval ? reviewInterval : constants.defaultInterval,
+            reviewsPerDay: reviewsPerDay ? reviewsPerDay : constants.defaultReviewPerDay,
+            newCardsPerDay: newCardsPerDay ? newCardsPerDay : constants.defaultNewPerDay
           });
           deckSettings.save();
         } catch(error) {
@@ -772,11 +780,23 @@ const resolvers = {
 
       // Update existing deck settings
       try {
-        deckSettings.favorite = deckSettings.favorite ? false : true;
+        deckSettings.favorite = favorite ? true : false;
+        deckSettings.reviewInterval = reviewInterval ? reviewInterval : deckSettings.reviewInterval,
+        deckSettings.reviewsPerDay = reviewsPerDay ? reviewsPerDay : deckSettings.reviewsPerDay,
+        deckSettings.newCardsPerDay = newCardsPerDay ? newCardsPerDay : deckSettings.newCardsPerDay,
         await deckSettings.save();
-        return { 
-          __typename: 'Success',
-          status: deckSettings.favorite
+
+        return {
+          __typename: 'DeckSettings',
+          id: deckSettings.id,
+          accountId: deckSettings.accountId,
+          deckId: deckSettings.deckId,
+          favorite: deckSettings.favorite,
+          reviewInterval: deckSettings.reviewInterval,
+          reviewsPerDay: deckSettings.reviewsPerDay,
+          newCardsPerDay: deckSettings.newCardsPerDay,
+          createdAt: deckSettings.createdAt,
+          updatedAt: deckSettings.updatedAt
         };
       } catch(error) {
         return { 

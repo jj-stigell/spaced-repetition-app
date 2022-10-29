@@ -34,7 +34,7 @@ AccountDeckSettings.init({
   reviewInterval: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: constants.defaultMaxInterval,
+    defaultValue: constants.defaultInterval,
     validate: {
       max: constants.maxReviewInterval,
       min: constants.minReviewInterval
@@ -43,7 +43,7 @@ AccountDeckSettings.init({
   reviewsPerDay: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: constants.defaultMaxReviewPerDay,
+    defaultValue: constants.defaultReviewPerDay,
     validate: {
       max: constants.maxLimitReviews,
       min: constants.minLimitReviews
@@ -52,7 +52,7 @@ AccountDeckSettings.init({
   newCardsPerDay: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: constants.defaultMaxNewPerDay,
+    defaultValue: constants.defaultNewPerDay,
     validate: {
       max: constants.maxNewReviews,
       min: constants.minNewReviews

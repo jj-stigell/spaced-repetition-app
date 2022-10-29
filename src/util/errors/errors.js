@@ -30,7 +30,13 @@ const errors = {
   requiredPasswordConfirmError: 'requiredPasswordConfirmError',
   passwordNumberError: 'passwordNumberError',
   passwordUppercaseError: 'passwordUppercaseError',
-  passwordLowercaseError: 'passwordLowercaseError'
+  passwordLowercaseError: 'passwordLowercaseError',
+  maxLimitReviewsError: 'maxLimitReviewsError',
+  minLimitReviewsError: 'minLimitReviewsError',
+  maxReviewIntervalError: 'maxReviewIntervalError',
+  minReviewIntervalError: 'minReviewIntervalError',
+  maxNewReviewsError: 'maxNewReviewsError',
+  minNewReviewsError: 'minNewReviewsError',
 };
 
 module.exports = errors;

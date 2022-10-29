@@ -41,6 +41,14 @@ const validateDeckId = yup.object().shape({
   deckId: validationRules.deckId
 });
 
+const validateDeckSettings = yup.object().shape({
+  deckId: validationRules.deckId,
+  favorite: validationRules.isBoolean,
+  reviewInterval: validationRules.reviewInterval,
+  reviewsPerDay: validationRules.reviewsPerDay,
+  newCardsPerDay: validationRules.newCardsPerDay
+});
+
 const emailAvailableSchema = yup.object().shape({
   email: validationRules.email
 });
@@ -67,6 +75,7 @@ module.exports = {
   fetchCardsSchema,
   rescheduleCardSchema,
   validateDeckId,
+  validateDeckSettings,
   emailAvailableSchema,
   createAccountSchema,
   loginSchema,

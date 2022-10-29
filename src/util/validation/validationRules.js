@@ -7,7 +7,6 @@ const deckId = yup
   .required(errors.inputValueMissingError)
   .min(1, errors.negativeNumberTypeError)
   .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
-  .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
   .integer(errors.inputValueTypeError);
 
 const email = yup
@@ -53,6 +52,24 @@ const passwordConfirmation = yup
 const isBoolean = yup
   .boolean(errors.inputValueTypeError);
 
+const reviewInterval = yup
+  .number(errors.inputValueTypeError)
+  .min(constants.minReviewInterval, errors.minReviewIntervalError)
+  .max(constants.maxReviewInterval, errors.maxReviewIntervalError)
+  .integer(errors.inputValueTypeError);
+
+const reviewsPerDay = yup
+  .number(errors.inputValueTypeError)
+  .min(constants.minLimitReviews, errors.minLimitReviewsError)
+  .max(constants.maxLimitReviews, errors.maxLimitReviewsError)
+  .integer(errors.inputValueTypeError);
+
+const newCardsPerDay = yup
+  .number(errors.inputValueTypeError)
+  .min(constants.minNewReviews, errors.minNewReviewsError)
+  .max(constants.maxNewReviews, errors.maxNewReviewsError)
+  .integer(errors.inputValueTypeError);
+
 module.exports = {
   deckId,
   email,
@@ -61,5 +78,8 @@ module.exports = {
   currentPassword,
   newPassword,
   passwordConfirmation,
-  isBoolean
+  isBoolean,
+  reviewInterval,
+  reviewsPerDay,
+  newCardsPerDay
 };
