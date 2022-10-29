@@ -23,6 +23,16 @@ describe('Integration tests', () => {
     await testServer?.close();
   });
 
+  it('Server should respond 200 ok to health check', async () => {
+    const response = await request(`${testUrl}.well-known/apollo/server-health`)
+      .post('/')
+      .send({ query: mutations.registerMutation, variables: account });
+
+    expect(response.body.status).toBeDefined();
+    expect(response.status).toBe(200);
+    expect(response.body.status).toBe('pass');
+  });
+
   describe('Registering an account', () => {
 
     it('New account created succesfully', async () => {
@@ -460,7 +470,6 @@ describe('Integration tests', () => {
         .post('/')
         .send({ query: queries.emailAvailableQuery, variables: { email: stringData.availableEmail } });
 
-      console.log(response.body.data);  
       expect(response.body.data.emailAvailable.status).toBeDefined();
       expect(response.body.data.emailAvailable.status).toBeTruthy();
       expect(response.body.data.emailAvailable.errorCodes).toBeUndefined();
@@ -471,7 +480,6 @@ describe('Integration tests', () => {
         .post('/')
         .send({ query: queries.emailAvailableQuery, variables: { email: account.email } });
 
-      console.log(response.body.data);
       expect(response.body.data.emailAvailable.status).toBeDefined();
       expect(response.body.data.emailAvailable.status).toBeFalsy();
       expect(response.body.data.emailAvailable.errorCodes).toBeUndefined();
