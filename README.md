@@ -78,10 +78,9 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] Reschedule card
             - [ ] Add custom card hint
             - [ ] Add custom card story
-            - [ ] set deck as favorite (limit?)
             - [ ] Sick day (push all cards +1 day)
             - [ ] Optimize (recalculate deck cards for optimal interval)
-            - [ ] Edit account deck settings
+            - [X] Edit account deck settings
         - [ ] Card and deck queries
             - [X] due cards
             - [X] new cards
@@ -92,10 +91,10 @@ Frontend time keeping is in the frontend GitHub repository
             - [ ] learnt kanji (x of y)
             - [ ] learnt word (x of y)
             - [ ] daily average review count
-        - [ ] Reschedule card based on user input (interval, extrareview, etc.)
-            - [ ] Reschedule new card by creating new user card
-            - [ ] Reschedule due card
-            - [ ] Add row to review history
+        - [X] Reschedule card based on user input (interval, extrareview, etc.)
+            - [X] Reschedule new card by creating new user card
+            - [X] Reschedule due card
+            - [X] Add row to review history
 - [ ] misc.
     - [ ] Bug report tool
 - [ ] PostgreSQL / Sequelize
