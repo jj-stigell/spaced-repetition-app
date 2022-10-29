@@ -7,6 +7,7 @@ const deckId = yup
   .required(errors.inputValueMissingError)
   .min(1, errors.negativeNumberTypeError)
   .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
+  .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
   .integer(errors.inputValueTypeError);
 
 const email = yup

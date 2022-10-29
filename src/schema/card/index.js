@@ -463,7 +463,6 @@ const resolvers = {
         __typename: 'DeckList',
         Decks: decks
       };
-
     },
     fecthDeckSettings: async (_, { deckId }, { currentUser }) => {
 
@@ -507,27 +506,48 @@ const resolvers = {
         };
       }
 
+      let deckSettings;
       // Find the deck settings, account specific
       try {
-        const deckSettings = await AccountDeckSettings.findAll({ where: {'account_id': currentUser.id, 'deck_id': deckId }, nest: true, });
-        return {
-          __typename: 'DeckSettings',
-          id: deckSettings.id,
-          accountId: deckSettings.accountId,
-          deckId: deckSettings.deckId,
-          favorite: deckSettings.favorite,
-          reviewInterval: deckSettings.reviewInterval,
-          reviewsPerDay: deckSettings.reviewsPerDay,
-          newCardsPerDay: deckSettings.newCardsPerDay,
-          createdAt: deckSettings.createdAt,
-          updatedAt: deckSettings.updatedAt
-        };
+        deckSettings = await AccountDeckSettings.findOne({ where: {'account_id': currentUser.id, 'deck_id': deckId }, nest: true, });
       } catch(error) {
         return { 
           __typename: 'Error',
           errorCodes: [errors.internalServerError]
         };
       }
+
+      //create new accoung deck settings if no existing one
+      if (!deckSettings) {
+        try {
+          deckSettings = await AccountDeckSettings.create({
+            accountId: currentUser.id,
+            deckId: deckId
+          });
+          deckSettings.save();
+        } catch(error) {
+          console.log('error:', error);
+          return {
+            __typename: 'Error',
+            errorCodes: [errors.internalServerError]
+          };
+        }
+      }
+
+      console.log(deckSettings);
+
+      return {
+        __typename: 'DeckSettings',
+        id: deckSettings.id,
+        accountId: deckSettings.accountId,
+        deckId: deckSettings.deckId,
+        favorite: deckSettings.favorite,
+        reviewInterval: deckSettings.reviewInterval,
+        reviewsPerDay: deckSettings.reviewsPerDay,
+        newCardsPerDay: deckSettings.newCardsPerDay,
+        createdAt: deckSettings.createdAt,
+        updatedAt: deckSettings.updatedAt
+      };
     },
   },
   Mutation: {
