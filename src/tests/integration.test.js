@@ -4,10 +4,11 @@ const { PORT } = require('../util/config');
 const { connectToDatabase } = require('../util/database');
 const { account, passwordData, stringData } = require('./constants'); 
 const mutations = require('./mutations');
+const queries = require('./queries');
 const errors = require('../util/errors');
 const server = require('../util/server');
 
-describe('Account tests', () => {
+describe('Integration tests', () => {
   let testServer, testUrl;
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
@@ -449,6 +450,41 @@ describe('Account tests', () => {
 
       expect(response.body.data.changePassword.status).toBeUndefined();
       expect(response.body.data.changePassword.errorCodes).toContain(errors.passwordLowercaseError);
+    });
+  });
+
+  describe('Email availability', () => {
+
+    it('Should receive boolean true when email available', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.emailAvailableQuery, variables: { email: stringData.availableEmail } });
+
+      console.log(response.body.data);  
+      expect(response.body.data.emailAvailable.status).toBeDefined();
+      expect(response.body.data.emailAvailable.status).toBeTruthy();
+      expect(response.body.data.emailAvailable.errorCodes).toBeUndefined();
+    });
+    
+    it('Should receive boolean false when email not available', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.emailAvailableQuery, variables: { email: account.email } });
+
+      console.log(response.body.data);
+      expect(response.body.data.emailAvailable.status).toBeDefined();
+      expect(response.body.data.emailAvailable.status).toBeFalsy();
+      expect(response.body.data.emailAvailable.errorCodes).toBeUndefined();
+    });
+    
+    it('Error when email not valid', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.emailAvailableQuery, variables: { email: stringData.nonValidEmail } });
+
+      expect(response.body.data.emailAvailable.status).toBeUndefined();
+      expect(response.body.data.emailAvailable.errorCodes).toBeDefined();
+      expect(response.body.data.emailAvailable.errorCodes).toContain(errors.notEmailError);
     });
   });
 });
