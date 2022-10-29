@@ -1,5 +1,5 @@
 const yup = require('yup');
-const errors = require('../errors');
+const errors = require('../errors/errors');
 const validationRules = require('./validationRules');
 
 const fetchCardsSchema = yup.object().shape({

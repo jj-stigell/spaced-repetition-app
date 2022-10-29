@@ -5,7 +5,7 @@ const { connectToDatabase } = require('../database');
 const { account, passwordData, stringData } = require('./utils/constants'); 
 const mutations = require('./utils/mutations');
 const queries = require('./utils/queries');
-const errors = require('../util/errors');
+const errors = require('../util/errors/errors');
 const server = require('../util/server');
 
 describe('Integration tests', () => {

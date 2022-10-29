@@ -18,10 +18,10 @@ const {
 } = require('../../models');
 const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
-const errors = require('../../util/errors');
+const errors = require('../../util/errors/errors');
 const { selectNewCardIds, selectDueCardIds, findCard } = require('../../database/rawQueries');
 const { fetchCardsSchema, fecthDeckSettings } = require('../../util/validation/validation');
-const formatYupError = require('../../util/errorFormatter');
+const formatYupError = require('../../util/errors/errorFormatter');
 
 const typeDef = `
   scalar Date

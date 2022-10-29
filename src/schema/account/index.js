@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const { JWT_SECRET } = require('../../util/config');
 const { Account } = require('../../models');
 const { Op } = require('sequelize');
-const errors = require('../../util/errors');
+const errors = require('../../util/errors/errors');
 const constants = require('../../util/constants');
 const {
   emailAvailableSchema,
@@ -11,7 +11,7 @@ const {
   loginSchema,
   changePasswordSchema
 } = require('../../util/validation/validation');
-const formatYupError = require('../../util/errorFormatter');
+const formatYupError = require('../../util/errors/errorFormatter');
 
 const typeDef = `
   type Account {
