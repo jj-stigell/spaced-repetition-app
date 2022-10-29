@@ -19,8 +19,8 @@ const {
 const { sequelize } = require('../../util/database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors');
-const { selectNewCardIds, selectDueCardIds, findCard } = require('./rawQueries');
-const { fetchCardsSchema } = require('../../util/validation/validation');
+const { selectNewCardIds, selectDueCardIds, findCard } = require('../../util/rawQueries');
+const { fetchCardsSchema, fecthDeckSettings } = require('../../util/validation/validation');
 const formatYupError = require('../../util/errorFormatter');
 
 const typeDef = `
@@ -143,6 +143,18 @@ const typeDef = `
     deck_translations: [DeckTranslation]
   }
 
+  type DeckSettings {
+    id: Int
+    accountId: Int
+    deckId: Int
+    favorite: Boolean
+    reviewInterval: Int
+    reviewsPerDay: Int
+    newCardsPerDay: Int
+    createdAt: Date
+    updatedAt: Date
+  }
+
   type Cardset {
     Cards: [Card]
   }
@@ -154,6 +166,7 @@ const typeDef = `
   union CardPayload = Cardset | Error
   union DeckPayload = DeckList | Error
   union RescheduleResult = Success | Error
+  union SettingsPayload = DeckSettings | Error
 
   type Query {
     fetchCards(
@@ -165,6 +178,10 @@ const typeDef = `
     fetchDecks(
       filter: String
     ): DeckPayload!
+
+    fecthDeckSettings(
+      deckId: Int!
+    ): SettingsPayload!
   }
 
   type Mutation {
@@ -247,7 +264,7 @@ const resolvers = {
       if (!deck) {
         return { 
           __typename: 'Error',
-          errorCodes: [errors.nonExistingDeck]
+          errorCodes: [errors.nonExistingDeckError]
         };
       }
 
@@ -447,6 +464,70 @@ const resolvers = {
         Decks: decks
       };
 
+    },
+    fecthDeckSettings: async (_, { deckId }, { currentUser }) => {
+
+      //TODO: if account deck specific settings cannot be found, create a new one, fetch cards query has this functionality
+      // refactor to separate file, helper functions
+
+      // Check that user is logged in
+      if (!currentUser) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.notAuthError]
+        };
+      }
+
+      // validate input
+      try {
+        await fecthDeckSettings.validate({ deckId }, { abortEarly: false });
+      } catch (error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: formatYupError(error)
+        };
+      }
+
+      let foundDeck;
+      // Check if deck with an id exists
+      try {
+        foundDeck = await Deck.findOne({ where: { id: deckId } });
+      } catch(error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
+      }
+      
+      // No deck found with an id
+      if (!foundDeck) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.nonExistingDeckError]
+        };
+      }
+
+      // Find the deck settings, account specific
+      try {
+        const deckSettings = await AccountDeckSettings.findAll({ where: {'account_id': currentUser.id, 'deck_id': deckId }, nest: true, });
+        return {
+          __typename: 'DeckSettings',
+          id: deckSettings.id,
+          accountId: deckSettings.accountId,
+          deckId: deckSettings.deckId,
+          favorite: deckSettings.favorite,
+          reviewInterval: deckSettings.reviewInterval,
+          reviewsPerDay: deckSettings.reviewsPerDay,
+          newCardsPerDay: deckSettings.newCardsPerDay,
+          createdAt: deckSettings.createdAt,
+          updatedAt: deckSettings.updatedAt
+        };
+      } catch(error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
+      }
     },
   },
   Mutation: {
