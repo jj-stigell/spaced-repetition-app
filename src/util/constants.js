@@ -5,7 +5,7 @@ const constants = {
   resultTypes: ['again', 'good'],
   deckTypes: ['recall', 'recognise'],
   cardTypes: ['kanji', 'hiragana', 'katakana', 'word', 'sentence'],
-  jltpLevels: [1, 2, 3, 4, 5],
+  jltpLevels: [1, 2, 3, 4, 5],                                          // Available JLPT levels, officially
   maxLimitReviews: 999,
   minLimitReviews: 0,
   maxReviewInterval: 999,
@@ -15,6 +15,7 @@ const constants = {
   defaultInterval: 999,
   defaultReviewPerDay: 999,
   defaultNewPerDay: 15,
+  maxPushReviewsDays: 7,                                                // How many days can user at maximum push reviews ahead
   defaultEasyFactor: 2.5,
   defaultReviewCount: 1,
   maxAmountOfDecks: 50,

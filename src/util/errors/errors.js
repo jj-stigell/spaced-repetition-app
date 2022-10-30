@@ -37,6 +37,7 @@ const errors = {
   minReviewIntervalError: 'minReviewIntervalError',
   maxNewReviewsError: 'maxNewReviewsError',
   minNewReviewsError: 'minNewReviewsError',
+  pushReviewsLimitError: 'pushReviewsLimitError'
 };
 
 module.exports = errors;
