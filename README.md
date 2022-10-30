@@ -76,9 +76,9 @@ Frontend time keeping is in the frontend GitHub repository
             - [ ] Card validation
         - [ ] Card mutations
             - [X] Reschedule card
-            - [ ] Add custom card hint
-            - [ ] Add custom card story
-            - [ ] Sick day (push all cards +1 day)
+            - [X] Add custom card hint
+            - [X] Add custom card story
+            - [X] Sick day (push all cards +1 day)
             - [ ] Optimize (recalculate deck cards for optimal interval)
             - [X] Edit account deck settings
         - [ ] Card and deck queries
@@ -121,7 +121,7 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] Account creation
             - [X] Login
             - [X] Password changing
-        - [ ] Logout
+            - [ ] Logout
         - [ ] MUTATIONS
             - [ ] Reschedule card
             - [ ] Add custom card hint
