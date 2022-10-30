@@ -20,7 +20,7 @@ const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
 const { selectNewCardIds, selectDueCardIds, findCard, pushAllCardsNDays, pushCardsInDeckIdNDays } = require('../../database/rawQueries');
-const { fetchCardsSchema, validateDeckId, validateDeckSettings, validatePushCards } = require('../../util/validation/validation');
+const { fetchCardsSchema, validateDeckId, validateDeckSettings, validatePushCards, validateEditAccountCard } = require('../../util/validation/validation');
 const formatYupError = require('../../util/errors/errorFormatter');
 
 const typeDef = `
@@ -41,7 +41,8 @@ const typeDef = `
     status: Boolean!
   }
 
-  type CustomizedCardData {
+  type AccountCard {
+    id: Int
     reviewCount: Int
     easyFactor: Float
     accountStory: String
@@ -116,7 +117,7 @@ const typeDef = `
     type: String
     createdAt: Date
     updatedAt: Date
-    account_cards: [CustomizedCardData]
+    account_cards: [AccountCard]
     kanji: Kanji
     word: Word
   }
@@ -168,6 +169,7 @@ const typeDef = `
   union RescheduleResult = Success | Error
   union SettingsPayload = DeckSettings | Error
   union Result = Success | Error
+  union EditResult = AccountCard | Error
 
   type Query {
     fetchCards(
@@ -207,6 +209,12 @@ const typeDef = `
       deckId: Int
       days: Int
     ): Result!
+
+    editAccountCard(
+      cardId: Int!
+      story: String
+      hint: String
+    ): EditResult!
   }
 `;
 
@@ -638,7 +646,7 @@ const resolvers = {
             replacements: {
               cardId: cardId,
             },
-            model: Kanji,
+            model: Card,
             type: sequelize.QueryTypes.SELECT,
             raw: true
           });
@@ -880,6 +888,97 @@ const resolvers = {
           errorCodes: [errors.internalServerError]
         };
       }
+    },
+    editAccountCard: async (_, { cardId, story, hint }, { currentUser }) => {
+
+      // Check that user is logged in
+      if (!currentUser) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.notAuthError]
+        };
+      }
+
+      // validate input
+      try {
+        await validateEditAccountCard.validate({ cardId, story, hint }, { abortEarly: false });
+      } catch (error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: formatYupError(error)
+        };
+      }
+
+      let accountCard;
+      // Check that account card exist and user is the owner od the card
+      try {
+        accountCard = await AccountCard.findOne({ where: { accountId: currentUser.id, cardId: cardId } });
+      } catch(error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
+      }
+      
+      // Create new custom card for the user, if none found the current user id and kanji id
+      if (!accountCard) {
+        // Check that card actually exists in the database
+        try {
+          const card = await sequelize.query(findCard, {
+            replacements: {
+              cardId: cardId,
+            },
+            model: Card,
+            type: sequelize.QueryTypes.SELECT,
+            raw: true
+          });
+
+          if (!card[0]) {
+            return { 
+              __typename: 'Error',
+              errorCodes: [errors.nonExistingId]
+            };
+          }
+          
+          // Create new account card if card exists
+          accountCard = await AccountCard.create({
+            accountId: currentUser.id,
+            cardId: cardId,
+            dueAt: sequelize.DataTypes.NOW,
+            easyFactor: constants.defaultEasyFactor,
+            reviewCount: 0,
+            accountStory: story ? story : null,
+            accountHint: hint ? hint : null
+          });
+          accountCard.save();
+        } catch(error) {
+          console.log(error.errors);
+          return { 
+            __typename: 'Error',
+            errorCodes: [errors.internalServerError]
+          };
+        }
+      } else {
+        // Update existing user card
+        try {
+          // Update and save changes, card is set to mature if the interval is higher than set maturing interval
+          accountCard.set({
+            accountStory: story ? story : accountCard.accountStory,
+            accountHint: hint ? hint : accountCard.accountHint,
+          });
+          accountCard.save();
+        } catch(error) {
+          console.log(error.errors);
+          return { 
+            __typename: 'Error',
+            errorCodes: [errors.internalServerError]
+          };
+        }
+      }
+      return { 
+        __typename: 'AccountCard',
+        accountCard
+      };
     },
   }
 };
