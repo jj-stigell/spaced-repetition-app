@@ -11,7 +11,7 @@ ORDER BY due_at ASC LIMIT :limitReviews`;
 
 const findCard = 'SELECT 1 FROM card WHERE id = :cardId';
 
-const pushAllCardsNDays = 'UPDATE account_card SET due_at = due_at + 1 WHERE account_id = :accountId';
+const pushAllCardsNDays = 'UPDATE account_card SET due_at = due_at + :days WHERE account_id = :accountId';
 
 module.exports = {
   selectNewCardIds,
