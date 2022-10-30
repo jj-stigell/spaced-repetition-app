@@ -22,5 +22,6 @@
 | 25.10. | 2 | Rewrite fetch card queries |
 | 26.10. | 2 | Add yup validation for decks and accounts, update account tests, refactor account mutations |
 | 27.10. | 1 | Refactor validation to avoid redundancy. Refactor server to its own module so production and testing can import same server |
+| 29.10. | 2 | Update and change deck settings |
 |  |  |  |
-| total | 54 |  | 
+| total | 56 |  | 
