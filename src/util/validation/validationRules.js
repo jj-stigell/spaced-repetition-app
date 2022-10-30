@@ -2,7 +2,14 @@ const yup = require('yup');
 const errors = require('../errors/errors');
 const constants = require('../constants');
 
-const deckId = deckIdNotRequired.required(errors.inputValueMissingError);
+const deckIdNotRequired = yup
+  .number(errors.inputValueTypeError)
+  .min(1, errors.negativeNumberTypeError)
+  .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
+  .integer(errors.inputValueTypeError);
+
+const deckId = deckIdNotRequired
+  .required(errors.inputValueMissingError);
 
 /*
 const deckId = yup
@@ -12,12 +19,6 @@ const deckId = yup
   .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
   .integer(errors.inputValueTypeError);
 */
-
-const deckIdNotRequired = yup
-  .number(errors.inputValueTypeError)
-  .min(1, errors.negativeNumberTypeError)
-  .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
-  .integer(errors.inputValueTypeError);
 
 const cardId = yup
   .number(errors.inputValueTypeError)
