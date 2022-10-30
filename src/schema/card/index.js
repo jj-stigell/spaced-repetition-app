@@ -19,8 +19,8 @@ const {
 const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
-const { selectNewCardIds, selectDueCardIds, findCard } = require('../../database/rawQueries');
-const { fetchCardsSchema, validateDeckId, validateDeckSettings } = require('../../util/validation/validation');
+const { selectNewCardIds, selectDueCardIds, findCard, pushAllCardsNDays, pushCardsInDeckIdNDays } = require('../../database/rawQueries');
+const { fetchCardsSchema, validateDeckId, validateDeckSettings, validatePushCards } = require('../../util/validation/validation');
 const formatYupError = require('../../util/errors/errorFormatter');
 
 const typeDef = `
@@ -202,6 +202,11 @@ const typeDef = `
       reviewsPerDay: Int
       newCardsPerDay: Int
     ): SettingsPayload!
+
+    pushCards(
+      deckId: Int
+      days: Int
+    ): Result!
   }
 `;
 
@@ -800,6 +805,77 @@ const resolvers = {
         };
       } catch(error) {
         return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
+      }
+    },
+    pushCards: async (_, { deckId, days }, { currentUser }) => {
+
+      // Check that user is logged in
+      if (!currentUser) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.notAuthError]
+        };
+      }
+
+      // validate input
+      try {
+        await validatePushCards.validate({ deckId, days }, { abortEarly: false });
+      } catch (error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: formatYupError(error)
+        };
+      }
+
+      // Push all users cards forward n days
+      if (!deckId) {
+        try {
+          const result = await sequelize.query(pushAllCardsNDays, {
+            replacements: {
+              days: days,
+              accountId: currentUser.id
+            },
+            model: AccountCard,
+            type: sequelize.QueryTypes.UPDATE,
+            raw: true
+          });
+          console.log(result);
+          return { 
+            __typename: 'Success',
+            status: true
+          };
+        } catch(error) {
+          console.log('error:', error);
+          return {
+            __typename: 'Error',
+            errorCodes: [errors.internalServerError]
+          };
+        }
+      }
+
+      // Else push cards in deck x for n days
+      try {
+        const result = await sequelize.query(pushCardsInDeckIdNDays, {
+          replacements: {
+            days: days,
+            deckId: deckId,
+            accountId: currentUser.id
+          },
+          model: AccountCard,
+          type: sequelize.QueryTypes.UPDATE,
+          raw: true
+        });
+        console.log(result);
+        return { 
+          __typename: 'Success',
+          status: true
+        };
+      } catch(error) {
+        console.log('error:', error);
+        return {
           __typename: 'Error',
           errorCodes: [errors.internalServerError]
         };
