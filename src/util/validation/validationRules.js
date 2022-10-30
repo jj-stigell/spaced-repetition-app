@@ -2,9 +2,19 @@ const yup = require('yup');
 const errors = require('../errors/errors');
 const constants = require('../constants');
 
+const deckId = deckIdNotRequired.required(errors.inputValueMissingError);
+
+/*
 const deckId = yup
   .number(errors.inputValueTypeError)
   .required(errors.inputValueMissingError)
+  .min(1, errors.negativeNumberTypeError)
+  .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
+  .integer(errors.inputValueTypeError);
+  */
+
+const deckIdNotRequired = yup
+  .number(errors.inputValueTypeError)
   .min(1, errors.negativeNumberTypeError)
   .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
   .integer(errors.inputValueTypeError);
@@ -70,8 +80,16 @@ const newCardsPerDay = yup
   .max(constants.maxNewReviews, errors.maxNewReviewsError)
   .integer(errors.inputValueTypeError);
 
+const days = yup
+  .number(errors.inputValueTypeError)
+  .required(errors.inputValueMissingError)
+  .min(1, errors.negativeNumberTypeError)
+  .max(constants.maxPushReviewsDays, errors.pushReviewsLimitError)
+  .integer(errors.inputValueTypeError);
+
 module.exports = {
   deckId,
+  deckIdNotRequired,
   email,
   languageId,
   password,
@@ -81,5 +99,6 @@ module.exports = {
   isBoolean,
   reviewInterval,
   reviewsPerDay,
-  newCardsPerDay
+  newCardsPerDay,
+  days
 };
