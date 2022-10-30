@@ -37,7 +37,11 @@ const errors = {
   minReviewIntervalError: 'minReviewIntervalError',
   maxNewReviewsError: 'maxNewReviewsError',
   minNewReviewsError: 'minNewReviewsError',
-  pushReviewsLimitError: 'pushReviewsLimitError'
+  pushReviewsLimitError: 'pushReviewsLimitError',
+  storyTooLongError: 'storyTooLongError',
+  storyTooShortError: 'storyTooShortError',
+  hintTooLongError: 'hintTooLongError',
+  hintTooShortError: 'hintTooShortError'
 };
 
 module.exports = errors;
