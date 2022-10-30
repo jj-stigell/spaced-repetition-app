@@ -11,12 +11,17 @@ const deckId = yup
   .min(1, errors.negativeNumberTypeError)
   .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
   .integer(errors.inputValueTypeError);
-  */
+*/
 
 const deckIdNotRequired = yup
   .number(errors.inputValueTypeError)
   .min(1, errors.negativeNumberTypeError)
   .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
+  .integer(errors.inputValueTypeError);
+
+const cardId = yup
+  .number(errors.inputValueTypeError)
+  .min(1, errors.negativeNumberTypeError)
   .integer(errors.inputValueTypeError);
 
 const email = yup
@@ -87,9 +92,20 @@ const days = yup
   .max(constants.maxPushReviewsDays, errors.pushReviewsLimitError)
   .integer(errors.inputValueTypeError);
 
+const story = yup
+  .string(errors.inputValueTypeError)
+  .min(constants.storyMinLength, errors.storyTooShortError)
+  .max(constants.storyMaxLength, errors.storyTooLongError);
+
+const hint = yup
+  .string(errors.inputValueTypeError)
+  .min(constants.hintMinLength, errors.hintTooShortError)
+  .max(constants.hintMaxLength, errors.hintTooLongError);
+
 module.exports = {
   deckId,
   deckIdNotRequired,
+  cardId,
   email,
   languageId,
   password,
@@ -100,5 +116,7 @@ module.exports = {
   reviewInterval,
   reviewsPerDay,
   newCardsPerDay,
-  days
+  days,
+  story,
+  hint
 };

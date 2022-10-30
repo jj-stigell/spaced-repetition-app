@@ -58,6 +58,12 @@ const emailAvailableSchema = yup.object().shape({
   email: validationRules.email
 });
 
+const validateEditAccountCard = yup.object().shape({
+  cardId: validationRules.cardId,
+  story: validationRules.story,
+  hint: validationRules.hint
+});
+
 const createAccountSchema = yup.object().shape({
   email: validationRules.email,
   password: validationRules.password,
@@ -83,6 +89,7 @@ module.exports = {
   validateDeckSettings,
   validatePushCards,
   emailAvailableSchema,
+  validateEditAccountCard,
   createAccountSchema,
   loginSchema,
   changePasswordSchema
