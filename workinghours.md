@@ -23,5 +23,6 @@
 | 26.10. | 2 | Add yup validation for decks and accounts, update account tests, refactor account mutations |
 | 27.10. | 1 | Refactor validation to avoid redundancy. Refactor server to its own module so production and testing can import same server |
 | 29.10. | 2 | Update and change deck settings |
+| 30.10. | 2 | Push cards n days (all cards or deck specific), edit and add user hints and stories |
 |  |  |  |
-| total | 56 |  | 
+| total | 58 |  | 
