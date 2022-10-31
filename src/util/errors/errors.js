@@ -41,7 +41,9 @@ const errors = {
   storyTooLongError: 'storyTooLongError',
   storyTooShortError: 'storyTooShortError',
   hintTooLongError: 'hintTooLongError',
-  hintTooShortError: 'hintTooShortError'
+  hintTooShortError: 'hintTooShortError',
+  invalidCardType: 'invalidCardType',
+  noCardsFound: 'noCardsFound'
 };
 
 module.exports = errors;
