@@ -24,5 +24,6 @@
 | 27.10. | 1 | Refactor validation to avoid redundancy. Refactor server to its own module so production and testing can import same server |
 | 29.10. | 2 | Update and change deck settings |
 | 30.10. | 2 | Push cards n days (all cards or deck specific), edit and add user hints and stories |
+| 31.10. | 2 | Fetch due cards and review history grouped by date |
 |  |  |  |
-| total | 58 |  | 
+| total | 60 |  | 

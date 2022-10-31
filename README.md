@@ -42,7 +42,7 @@ Frontend time keeping is in the frontend GitHub repository
     - [ ] Limit query depth
     - [ ] Set request limit per connection/ip-address
     - [ ] Cache
-    - [ ] Catch internal server errors, no (possible) db errors no client
+    - [ ] Catch internal server errors, no (possible) db errors to client
 - [ ] Service functionality
     - [ ] User related
         - [ ] User registration
@@ -69,12 +69,12 @@ Frontend time keeping is in the frontend GitHub repository
             - [ ] delete session
         - [ ] Recover account (e.g. password forgotten)
     - [ ] Card related
-        - [ ] transactions
+        - [ ] transactions (where needed)
         - [ ] Validation of user input, including error messages
             - [X] Install and configure Yup
             - [ ] Match validation rules with front-end
             - [ ] Card validation
-        - [ ] Card mutations
+        - [ ] Card and deck mutations
             - [X] Reschedule card
             - [X] Add custom card hint
             - [X] Add custom card story
@@ -85,12 +85,12 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] due cards
             - [X] new cards
             - [X] Fetch account deck settings
-            - [ ] fetch the amount of due cards for the next n days, group by date
-            - [ ] fetch available decks, language information, deck specific due cards amount
+            - [X] fetch the amount of due cards for the next n days, group by date
+            - [X] fetch the amount of review in the past, group by date
+            - [X] fetch available decks, language information, deck specific due cards amount
             - [ ] amount of reviewed kanji (mature or not?)
             - [ ] learnt kanji (x of y)
             - [ ] learnt word (x of y)
-            - [ ] daily average review count
         - [X] Reschedule card based on user input (interval, extrareview, etc.)
             - [X] Reschedule new card by creating new user card
             - [X] Reschedule due card
@@ -101,13 +101,11 @@ Frontend time keeping is in the frontend GitHub repository
     - [X] Translate db to Sequelize
     - [X] Create models and associations
     - [ ] Load initial sql file containing decks, cards and translations
-        - [ ] Kanji
-        - [ ] Radicals
-        - [ ] Hiragana
-        - [ ] Katakana
-        - [ ] Translations
-        - [ ] Decks
-        - [ ] Cards
+        - [X] Kanji
+        - [X] Radicals
+        - [X] Translations
+        - [X] Decks
+        - [X] Cards
     - [ ] Add constraints to initial database migration
         - [ ] unique (email, deck names)
         - [ ] range: integers, varchar

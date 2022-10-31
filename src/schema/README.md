@@ -1,5 +1,7 @@
 # GraphQL API queries and mutations
 
+All card related queries and murtations require user to be authenticated and jwt to be valid.
+
 * [Queries](#queries)
   * [fetchCards](#fetchcards)
 * [Mutations](#mutations)
