@@ -25,7 +25,7 @@ const pushCardsInDeckIdNDays = `UPDATE account_card SET due_at = account_card.du
   AS found WHERE found.card_id = account_card.card_id`;
 
 // Fetch count per day of the accounts past reviews for "limitReviews" amount of days. Arrange from latest review to oldest
-const fetchDailyReviewCountNDays = `SELECT created_at::date, COUNT(*) FROM account_review where account_id = :accountId 
+const fetchDailyReviewHistoryNDays = `SELECT created_at::date AS date, COUNT(*) AS reviews FROM account_review where account_id = :accountId 
   GROUP BY created_at::date ORDER BY created_at::date DESC LIMIT :limitReviews`;
 
 module.exports = {
@@ -34,5 +34,5 @@ module.exports = {
   findCard,
   pushAllCardsNDays,
   pushCardsInDeckIdNDays,
-  fetchDailyReviewCountNDays
+  fetchDailyReviewHistoryNDays
 };
