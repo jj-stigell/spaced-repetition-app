@@ -19,8 +19,8 @@ const {
 const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
-const { selectNewCardIds, selectDueCardIds, findCard, pushAllCardsNDays, pushCardsInDeckIdNDays } = require('../../database/rawQueries');
-const { fetchCardsSchema, validateDeckId, validateDeckSettings, validatePushCards, validateEditAccountCard } = require('../../util/validation/validation');
+const { selectNewCardIds, selectDueCardIds, findCard, pushAllCardsNDays, pushCardsInDeckIdNDays, fetchDailyReviewHistoryNDays } = require('../../database/rawQueries');
+const { fetchCardsSchema, validateDeckId, validateDeckSettings, validatePushCards, validateEditAccountCard, validateInteger } = require('../../util/validation/validation');
 const formatYupError = require('../../util/errors/errorFormatter');
 
 const typeDef = `
@@ -156,6 +156,15 @@ const typeDef = `
     updatedAt: Date
   }
 
+  type Day {
+    date: Date
+    reviews: Int
+  }
+
+  type Reviews {
+    reviews: [Day]
+  }
+
   type Cardset {
     Cards: [Card]
   }
@@ -170,6 +179,7 @@ const typeDef = `
   union SettingsPayload = DeckSettings | Error
   union Result = Success | Error
   union EditResult = AccountCard | Error
+  union ReviewCountPayload = Reviews | Error
 
   type Query {
     fetchCards(
@@ -185,6 +195,10 @@ const typeDef = `
     fecthDeckSettings(
       deckId: Int!
     ): SettingsPayload!
+
+    fetchReviewHistory(
+      limitReviews: Int!
+    ): ReviewCountPayload!
   }
 
   type Mutation {
@@ -565,6 +579,55 @@ const resolvers = {
         createdAt: deckSettings.createdAt,
         updatedAt: deckSettings.updatedAt
       };
+    },
+    fetchReviewHistory: async (_, { limitReviews }, { currentUser }) => {
+
+      // Check that user is logged in
+      if (!currentUser) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.notAuthError]
+        };
+      }
+
+      // validate input
+      try {
+        await validateInteger.validate({ limitReviews }, { abortEarly: false });
+      } catch (error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: formatYupError(error)
+        };
+      }
+
+      try {
+        const reviewHistory = await sequelize.query(fetchDailyReviewHistoryNDays, {
+          replacements: {
+            limitReviews: limitReviews,
+            accountId: currentUser.id
+          },
+          model: AccountReview,
+          type: sequelize.QueryTypes.SELECT,
+          raw: true
+        });
+
+        if (reviewHistory.length === 0) {
+          return { 
+            __typename: 'Error',
+            errorCodes: [errors.nonExistingId]  // switch to proper
+          };
+        }
+        return { 
+          __typename: 'Reviews',
+          reviews: reviewHistory
+        };
+      } catch(error) {
+        console.log(error);
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
+      }
     },
   },
   Mutation: {
