@@ -19,7 +19,8 @@ const {
 const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
-const { selectNewCardIds, selectDueCardIds, findCard, pushAllCardsNDays, pushCardsInDeckIdNDays, fetchDailyReviewHistoryNDays } = require('../../database/rawQueries');
+const rawQueries = require('../../database/rawQueries');
+//const { selectNewCardIds, selectDueCardIds, findCard, pushAllCardsNDays, pushCardsInDeckIdNDays, fetchDailyReviewHistoryNDays, fetchDueReviewsNDays } = require('../../database/rawQueries');
 const { fetchCardsSchema, validateDeckId, validateDeckSettings, validatePushCards, validateEditAccountCard, validateInteger } = require('../../util/validation/validation');
 const formatYupError = require('../../util/errors/errorFormatter');
 
@@ -199,6 +200,10 @@ const typeDef = `
     fetchReviewHistory(
       limitReviews: Int!
     ): ReviewCountPayload!
+
+    fetchDueCount(
+      limitReviews: Int!
+    ): ReviewCountPayload!
   }
 
   type Mutation {
@@ -336,7 +341,7 @@ const resolvers = {
 
       if (newCards) {
         // Fetch new cards
-        cardIds = await sequelize.query(selectNewCardIds, {
+        cardIds = await sequelize.query(rawQueries.selectNewCardIds, {
           replacements: {
             deckId: deckId,
             accountId: currentUser.id,
@@ -348,7 +353,7 @@ const resolvers = {
         });
       } else {
         // Fetch due cards
-        cardIds = await sequelize.query(selectDueCardIds, {
+        cardIds = await sequelize.query(rawQueries.selectDueCardIds, {
           replacements: {
             deckId: deckId,
             accountId: currentUser.id,
@@ -601,7 +606,7 @@ const resolvers = {
       }
 
       try {
-        const reviewHistory = await sequelize.query(fetchDailyReviewHistoryNDays, {
+        const reviewHistory = await sequelize.query(rawQueries.fetchDailyReviewHistoryNDays, {
           replacements: {
             limitReviews: limitReviews,
             accountId: currentUser.id
@@ -620,6 +625,55 @@ const resolvers = {
         return { 
           __typename: 'Reviews',
           reviews: reviewHistory
+        };
+      } catch(error) {
+        console.log(error);
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.internalServerError]
+        };
+      }
+    },
+    fetchDueCount: async (_, { limitReviews }, { currentUser }) => {
+
+      // Check that user is logged in
+      if (!currentUser) {
+        return { 
+          __typename: 'Error',
+          errorCodes: [errors.notAuthError]
+        };
+      }
+
+      // validate input
+      try {
+        await validateInteger.validate({ limitReviews }, { abortEarly: false });
+      } catch (error) {
+        return { 
+          __typename: 'Error',
+          errorCodes: formatYupError(error)
+        };
+      }
+
+      try {
+        const dueReviews = await sequelize.query(rawQueries.fetchDueReviewsNDays, {
+          replacements: {
+            limitReviews: limitReviews,
+            accountId: currentUser.id
+          },
+          model: AccountCard,
+          type: sequelize.QueryTypes.SELECT,
+          raw: true
+        });
+
+        if (dueReviews.length === 0) {
+          return { 
+            __typename: 'Error',
+            errorCodes: [errors.nonExistingId]  // switch to proper
+          };
+        }
+        return { 
+          __typename: 'Reviews',
+          reviews: dueReviews
         };
       } catch(error) {
         console.log(error);
@@ -705,7 +759,7 @@ const resolvers = {
       if (!accountCard) {
         // Check that card actually exists in the database
         try {
-          const card = await sequelize.query(findCard, {
+          const card = await sequelize.query(rawQueries.findCard, {
             replacements: {
               cardId: cardId,
             },
@@ -904,7 +958,7 @@ const resolvers = {
       // Push all users cards forward n days
       if (!deckId) {
         try {
-          const result = await sequelize.query(pushAllCardsNDays, {
+          const result = await sequelize.query(rawQueries.pushAllCardsNDays, {
             replacements: {
               days: days,
               accountId: currentUser.id
@@ -929,7 +983,7 @@ const resolvers = {
 
       // Else push cards in deck x for n days
       try {
-        const result = await sequelize.query(pushCardsInDeckIdNDays, {
+        const result = await sequelize.query(rawQueries.pushCardsInDeckIdNDays, {
           replacements: {
             days: days,
             deckId: deckId,
@@ -987,7 +1041,7 @@ const resolvers = {
       if (!accountCard) {
         // Check that card actually exists in the database
         try {
-          const card = await sequelize.query(findCard, {
+          const card = await sequelize.query(rawQueries.findCard, {
             replacements: {
               cardId: cardId,
             },
