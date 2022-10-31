@@ -72,6 +72,11 @@ const type = yup
   .string(errors.inputValueTypeError)
   .oneOf(constants.cardTypes, errors.invalidCardType);
 
+const id = yup
+  .number(errors.inputValueTypeError)
+  .min(1, errors.negativeNumberTypeError)
+  .integer(errors.inputValueTypeError);
+
 const reviewInterval = yup
   .number(errors.inputValueTypeError)
   .min(constants.minReviewInterval, errors.minReviewIntervalError)
@@ -119,6 +124,7 @@ module.exports = {
   passwordConfirmation,
   isBoolean,
   type,
+  id,
   reviewInterval,
   reviewsPerDay,
   newCardsPerDay,

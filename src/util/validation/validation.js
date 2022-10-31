@@ -41,8 +41,12 @@ const validateDeckId = yup.object().shape({
   deckId: validationRules.deckId
 });
 
+const validateId = yup.object().shape({
+  id: validationRules.id
+});
+
 const validateType = yup.object().shape({
-  type: validationRules.type
+  cardType: validationRules.type
 });
 
 const validateDeckSettings = yup.object().shape({
@@ -90,6 +94,7 @@ module.exports = {
   fetchCardsSchema,
   rescheduleCardSchema,
   validateDeckId,
+  validateId,
   validateType,
   validateDeckSettings,
   validatePushCards,
