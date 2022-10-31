@@ -77,6 +77,11 @@ const id = yup
   .min(1, errors.negativeNumberTypeError)
   .integer(errors.inputValueTypeError);
 
+const integer = yup
+  .number(errors.inputValueTypeError)
+  .min(1, errors.negativeNumberTypeError)
+  .integer(errors.inputValueTypeError);
+
 const reviewInterval = yup
   .number(errors.inputValueTypeError)
   .min(constants.minReviewInterval, errors.minReviewIntervalError)
@@ -125,6 +130,7 @@ module.exports = {
   isBoolean,
   type,
   id,
+  integer,
   reviewInterval,
   reviewsPerDay,
   newCardsPerDay,

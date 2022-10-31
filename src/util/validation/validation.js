@@ -45,8 +45,17 @@ const validateId = yup.object().shape({
   id: validationRules.id
 });
 
+const validateInteger = yup.object().shape({
+  id: validationRules.integer
+});
+
 const validateType = yup.object().shape({
   cardType: validationRules.type
+});
+
+const validateFetchKanji = yup.object().shape({
+  kanjiId: validationRules.id,
+  includeAccountCard: validationRules.isBoolean
 });
 
 const validateDeckSettings = yup.object().shape({
@@ -95,7 +104,9 @@ module.exports = {
   rescheduleCardSchema,
   validateDeckId,
   validateId,
+  validateInteger,
   validateType,
+  validateFetchKanji,
   validateDeckSettings,
   validatePushCards,
   emailAvailableSchema,
