@@ -1,7 +1,7 @@
 /* Create an executable scheme from all the typedefs and merged resolvers */
 const { merge } = require('lodash');
 const { makeExecutableSchema } = require('@graphql-tools/schema');
-const { typeDef: Account, resolvers: accountResolvers } = require('./account/');
+const { typeDefs: Account, resolvers: accountResolvers } = require('./account/');
 const { typeDef: Card, resolvers: cardResolvers } = require('./card/');
 const { typeDef: Kanji, resolvers: kanjiResolvers } = require('./kanji/');
 
