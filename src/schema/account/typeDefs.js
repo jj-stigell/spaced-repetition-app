@@ -17,19 +17,10 @@ type Success {
   status: Boolean!
 }
 
-type Error {
-  errorCodes: [String!]
-}
-
-union LoginPayload = AccountToken | Error
-union RegisterResult = Account | Error
-union ChangePasswordResult = Success | Error
-union emailAvailable = Success | Error
-
 type Query {
   emailAvailable(
     email: String!
-  ): emailAvailable!
+  ): Success!
 }
 
 type Mutation {
@@ -38,18 +29,18 @@ type Mutation {
     password: String!
     passwordConfirmation: String!
     languageId: String
-  ): RegisterResult!
+  ): Account!
 
   login(
     email: String!
     password: String!
-  ): LoginPayload!
+  ): AccountToken!
 
   changePassword(
     currentPassword: String!
     newPassword: String!
     newPasswordConfirmation: String!
-  ): ChangePasswordResult!
+  ): Success!
 }`;
 
 module.exports = typeDefs;
