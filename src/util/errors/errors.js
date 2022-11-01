@@ -43,7 +43,8 @@ const errors = {
   hintTooLongError: 'hintTooLongError',
   hintTooShortError: 'hintTooShortError',
   invalidCardType: 'invalidCardType',
-  noCardsFound: 'noCardsFound'
+  noCardsFound: 'noCardsFound',
+  badUserInput: 'BAD_USER_INPUT'
 };
 
 module.exports = errors;
