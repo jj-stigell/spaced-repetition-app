@@ -8,6 +8,7 @@ All card related queries and murtations require user to be authenticated and jwt
   * [createAccount](#createaccount)
   * [login](#login)
   * [changePassword](#changepassword)
+* [Errors information](#errors-information)
 
 
 ## Queries
@@ -30,7 +31,7 @@ Fetch either cards that are due for review or new cards.
     * `errorCode` error code reflecting the encountered error, string
 
 
-Possible error throwing situations:
+**Possible error throwing situations:**
   * non-existing deck id provided
   * invalid deck id provided (string type, etc. validation error)
   * no deck id provided
@@ -150,6 +151,50 @@ mutation {
 
 ### login
 
+
+
+
 ### changePassword
+
+Change users password, must be loggedin and provide valid JWT
+
+**arguments:**
+  * `currentPassword` users current password, string <span style="color:red">REQUIRED</span>
+  * `newPassword` new password, string <span style="color:red">REQUIRED</span>
+  * `newPasswordConfirmation` new password confirmation, string <span style="color:red">REQUIRED</span>
+
+**fields:**
+  * type name `Success` returned after changing password without errors
+    * `status` status of the operation, boolean, true if succesfull
+  * type name `Error` returned if error occurs during query
+    * `errorCodes` error codes reflecting the encountered errors, string array
+
+**Possible error throwing situations:**
+  * no valid JWT provided (GraphQL error thrown)
+  * new password and confirmation do not match
+  * new password does not match the requirements
+  * current password does not match with DB hash
+  * connection to database fail (GraphQL error thrown)
+  * comparing the passwords fail
+
+```
+mutation ChangePassword($currentPassword: String!, $newPassword: String!, $newPasswordConfirmation: String!) {
+  changePassword(currentPassword: $currentPassword, newPassword: $newPassword, newPasswordConfirmation: $newPasswordConfirmation) {
+    ... on Success {
+      status
+    }
+    ... on Error {
+      errorCodes
+    }
+  }
+}
+```
+
+
+## Errors information
+
+[graphql errors](https://www.apollographql.com/docs/apollo-server/data/errors/#masking-and-logging-errors)
+
+
 
 
