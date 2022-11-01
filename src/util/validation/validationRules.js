@@ -11,15 +11,6 @@ const deckIdNotRequired = yup
 const deckId = deckIdNotRequired
   .required(errors.inputValueMissingError);
 
-/*
-const deckId = yup
-  .number(errors.inputValueTypeError)
-  .required(errors.inputValueMissingError)
-  .min(1, errors.negativeNumberTypeError)
-  .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
-  .integer(errors.inputValueTypeError);
-*/
-
 const cardId = yup
   .number(errors.inputValueTypeError)
   .min(1, errors.negativeNumberTypeError)
@@ -68,7 +59,7 @@ const passwordConfirmation = yup
 const isBoolean = yup
   .boolean(errors.inputValueTypeError);
 
-const type = yup
+const cardType = yup
   .string(errors.inputValueTypeError)
   .oneOf(constants.cardTypes, errors.invalidCardType);
 
@@ -128,7 +119,7 @@ module.exports = {
   newPassword,
   passwordConfirmation,
   isBoolean,
-  type,
+  cardType,
   id,
   integer,
   reviewInterval,
