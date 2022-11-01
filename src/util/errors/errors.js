@@ -44,7 +44,13 @@ const errors = {
   hintTooShortError: 'hintTooShortError',
   invalidCardType: 'invalidCardType',
   noCardsFound: 'noCardsFound',
-  badUserInput: 'BAD_USER_INPUT'
+  graphQlErrors: {
+    badUserInput: 'BAD_USER_INPUT',
+    unauthenticated: 'UNAUTHENTICATED',
+    internalServerError: 'INTERNAL_SERVER_ERROR',
+    validationError: 'VALIDATION_ERROR',
+    defaultError: 'DEFAULT_ERROR',
+  }
 };
 
 module.exports = errors;
