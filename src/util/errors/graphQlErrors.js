@@ -2,41 +2,37 @@ const { GraphQLError } = require('graphql');
 const errors = require('./errors');
 
 const notAuthError = () => {
-  throw new GraphQLError('UNAUTHENTICATED', {
+  throw new GraphQLError(errors.graphQlErrors.unauthenticated, {
     extensions: {
-      errorCodes: [errors.notAuthError],
-      http: { status: 401 }, // 401 Unauthorized
-      code: 'UNAUTHENTICATED'
+      code: errors.graphQlErrors.unauthenticated,
+      http: { status: 401 } // 401 Unauthorized
     },
   });
 };
 
 const internalServerError = () => {
-  throw new GraphQLError('INTERNAL_SERVER_ERROR', {
+  throw new GraphQLError(errors.graphQlErrors.internalServerError, {
     extensions: {
-      errorCodes: [errors.internalServerError],
-      http: { status: 500 }, // 500 Internal Server Error
-      code: 'INTERNAL_SERVER_ERROR'
+      code: errors.graphQlErrors.internalServerError,
+      http: { status: 500 } // 500 Internal Server Error
     },
   });
 };
 
 const validationError = (validationErrors) => {
-  throw new GraphQLError('VALIDATION_ERROR', {
+  throw new GraphQLError(errors.graphQlErrors.validationError, {
     extensions: {
-      errorCodes: validationErrors,
-      http: { status: 400 }, // 400 Bad Request
-      code: 'VALIDATION_ERROR'
+      code: validationErrors,
+      http: { status: 400 } // 400 Bad Request
     },
   });
 };
 
 const defaultError = (error) => {
-  throw new GraphQLError('DEFAULT_ERROR', {
+  throw new GraphQLError(errors.graphQlErrors.defaultError, {
     extensions: {
-      errorCodes: error,
-      http: { status: 400 }, // 400 Bad Request
-      code: 'DEFAULT_ERROR'
+      code: error,
+      http: { status: 400 } // 400 Bad Request
     },
   });
 };
