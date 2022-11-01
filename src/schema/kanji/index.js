@@ -19,7 +19,7 @@ const {
 const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
-const { validateFetchKanji } = require('../../util/validation/validation');
+const { validateFetchKanji } = require('../../util/validation/schema');
 const formatYupError = require('../../util/errors/errorFormatter');
 
 const typeDef = `
@@ -115,6 +115,12 @@ const resolvers = {
           errorCodes: formatYupError(error)
         };
       }
+
+
+      if (kanjiId) {
+        //fecth only one kanji by id, include accountcard if includeAccountCard TRUE
+      }
+
 
       let kanjiList;
       try {

@@ -21,7 +21,7 @@ const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
 const rawQueries = require('../../database/rawQueries');
 //const { selectNewCardIds, selectDueCardIds, findCard, pushAllCardsNDays, pushCardsInDeckIdNDays, fetchDailyReviewHistoryNDays, fetchDueReviewsNDays } = require('../../database/rawQueries');
-const { fetchCardsSchema, validateDeckId, validateDeckSettings, validatePushCards, validateEditAccountCard, validateInteger } = require('../../util/validation/validation');
+const { fetchCardsSchema, validateDeckId, validateDeckSettings, validatePushCards, validateEditAccountCard, validateInteger } = require('../../util/validation/schema');
 const formatYupError = require('../../util/errors/errorFormatter');
 
 const typeDef = `
@@ -308,6 +308,8 @@ const resolvers = {
           errorCodes: [errors.nonExistingDeckError]
         };
       }
+
+      // What if deck is not active?
 
       let accountDeckSettings;
       // Check if deck has an account specific settings
