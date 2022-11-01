@@ -30,6 +30,7 @@ const constants = {
   lowercaseRegex: /^(?=.*[a-z])/,
   uppercaseRegex: /^(?=.*[A-Z])/,
   numberRegex: /^(?=.*[0-9])/,
+  yupAbortEarly: false                      // Abort validation early, or validate everything
 };
 
 module.exports = constants;
