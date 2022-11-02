@@ -1,7 +1,51 @@
 const { internalServerError } = require('../../util/errors/graphQlErrors');
 const models = require('../../models');
 const { sequelize } = require('../../database');
+const constants = require('../../util/constants');
 const rawQueries = require('./rawQueries');
+
+const findCardById = async (cardId) => {
+  try {
+    return await models.AccountCard.findByPk(cardId);
+  } catch (error) {
+    console.log(error);
+    return internalServerError();
+  }
+};
+
+const createAccountCard = async (cardId, accountId, story, hint) => {
+  try {
+    return await models.AccountCard.create({
+      accountId: accountId,
+      cardId: cardId,
+      dueAt: sequelize.DataTypes.NOW,
+      easyFactor: constants.defaultEasyFactor,
+      reviewCount: 0,
+      accountStory: story ? story : null,
+      accountHint: hint ? hint : null
+    });
+  } catch (error) {
+    console.log(error);
+    return internalServerError();
+  }
+};
+
+const updateAccountCard = async (cardId, accountId, story, hint) => {
+  try {
+    return await models.AccountCard.create({
+      accountId: accountId,
+      cardId: cardId,
+      dueAt: sequelize.DataTypes.NOW,
+      easyFactor: constants.defaultEasyFactor,
+      reviewCount: 0,
+      accountStory: story ? story : null,
+      accountHint: hint ? hint : null
+    });
+  } catch (error) {
+    console.log(error);
+    return internalServerError();
+  }
+};
 
 const findReviewHistory = async (limitReviews, accountId) => {
   try {
@@ -72,9 +116,27 @@ const pushCardsInDeck = async (deckId, days, accountId) => {
   }
 };
 
+const findAccountCard = async (cardId, accountId) => {
+  try {
+    return await models.AccountCard.findOne({
+      where: {
+        accountId: accountId,
+        cardId: cardId
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return internalServerError();
+  }
+};
+
 module.exports = {
+  findCardById,
+  createAccountCard,
+  updateAccountCard,
   findReviewHistory,
   findDueReviewsCount,
   pushAllCards,
-  pushCardsInDeck
+  pushCardsInDeck,
+  findAccountCard
 };
