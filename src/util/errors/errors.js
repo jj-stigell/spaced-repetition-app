@@ -44,6 +44,7 @@ const errors = {
   hintTooShortError: 'hintTooShortError',
   invalidCardType: 'invalidCardType',
   noCardsFound: 'noCardsFound',
+  noRecordsFoundError: 'noRecordsFoundError',
   graphQlErrors: {
     badUserInput: 'BAD_USER_INPUT',
     unauthenticated: 'UNAUTHENTICATED',
