@@ -1,4 +1,8 @@
-/* Format Yup validation errors to string array, each error from errors list */
+/**
+ * Format Yup validation errors.
+ * @param {array} errors, yup errors
+ * @returns string array, each error from errors list
+ */
 const formatYupError = (errors) => {
   const errorArray = [];
   errors.inner.forEach(error => {
