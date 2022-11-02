@@ -53,11 +53,20 @@ const validatePushCards = async (deckId, days) => {
   }
 };
 
+const validateDeckId = async (deckId) => {
+  try {
+    await schema.deckId.validate({ deckId }, { abortEarly: false });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
 module.exports = {
   validateEmail,
   validateNewAccount,
   validateLogin,
   validateChangePassword,
   validateInteger,
-  validatePushCards
+  validatePushCards,
+  validateDeckId
 };
