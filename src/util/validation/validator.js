@@ -39,7 +39,7 @@ const validateChangePassword = async (currentPassword, newPassword, newPasswordC
 
 const validateInteger = async (integer) => {
   try {
-    await schema.integer.validate({ integer }, { abortEarly: false });
+    await schema.integer.validate({ integer }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
@@ -47,7 +47,7 @@ const validateInteger = async (integer) => {
 
 const validatePushCards = async (deckId, days) => {
   try {
-    await schema.pushCards.validate({ deckId, days }, { abortEarly: false });
+    await schema.pushCards.validate({ deckId, days }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
@@ -55,7 +55,15 @@ const validatePushCards = async (deckId, days) => {
 
 const validateDeckId = async (deckId) => {
   try {
-    await schema.deckId.validate({ deckId }, { abortEarly: false });
+    await schema.deckId.validate({ deckId }, { abortEarly: constants.yupAbortEarly  });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
+const validateEditAccountCard = async (cardId, story, hint ) => {
+  try {
+    await schema.editAccountCard.validate({ cardId, story, hint }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
@@ -68,5 +76,6 @@ module.exports = {
   validateChangePassword,
   validateInteger,
   validatePushCards,
-  validateDeckId
+  validateDeckId,
+  validateEditAccountCard
 };
