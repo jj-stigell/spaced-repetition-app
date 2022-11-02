@@ -1,40 +1,7 @@
 const { internalServerError } = require('../../util/errors/graphQlErrors');
-//const constants = require('../../util/constants');
 const models = require('../../models');
 const { sequelize } = require('../../database');
 const rawQueries = require('./rawQueries');
-
-const findAllDecks = async (includeInactive) => {
-  try {
-    if (!includeInactive) {
-      return await models.Deck.findAll({
-        where: { 'active': true },
-        subQuery: false,
-        nest: true,
-        include: {
-          model: models.DeckTranslation,
-          where: {
-            'active': true
-          }
-        }
-      });
-    } else {
-      return await models.Deck.findAll({
-        subQuery: false,
-        nest: true,
-        include: {
-          model: models.DeckTranslation,
-          where: {
-            'active': true
-          }
-        }
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    return internalServerError();
-  }
-};
 
 const findReviewHistory = async (limitReviews, accountId) => {
   try {
@@ -70,8 +37,44 @@ const findDueReviewsCount = async (limitReviews, accountId) => {
   }
 };
 
+const pushAllCards = async (days, accountId) => {
+  try {
+    await sequelize.query(rawQueries.pushAllCardsNDays, {
+      replacements: {
+        days: days,
+        accountId: accountId
+      },
+      model: models.AccountCard,
+      type: sequelize.QueryTypes.UPDATE,
+      raw: true
+    });
+  } catch (error) {
+    console.log(error);
+    return internalServerError();
+  }
+};
+
+const pushCardsInDeck = async (deckId, days, accountId) => {
+  try {
+    await sequelize.query(rawQueries.pushCardsInDeckIdNDays, {
+      replacements: {
+        days: days,
+        deckId: deckId,
+        accountId: accountId
+      },
+      model: models.AccountCard,
+      type: sequelize.QueryTypes.UPDATE,
+      raw: true
+    });
+  } catch (error) {
+    console.log(error);
+    return internalServerError();
+  }
+};
+
 module.exports = {
-  findAllDecks,
   findReviewHistory,
-  findDueReviewsCount
+  findDueReviewsCount,
+  pushAllCards,
+  pushCardsInDeck
 };
