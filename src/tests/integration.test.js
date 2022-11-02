@@ -9,7 +9,7 @@ const errors = require('../util/errors/errors');
 const server = require('../util/server');
 
 describe('Integration tests', () => {
-  let testServer, testUrl;
+  let testServer, testUrl, authToken;
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
@@ -246,7 +246,7 @@ describe('Integration tests', () => {
       expect(response.body.data.login.user.email).toBe(account.email);
     });
 
-    it('Error when missing value, email', async () => {
+    it('Error when empty value, email', async () => {
       const newAccount = { ...account, email: '' };
       const response = await request(testUrl)
         .post('/')
@@ -256,7 +256,7 @@ describe('Integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredEmailError);
     });
 
-    it('Error when missing value, password', async () => {
+    it('Error when empty value, password', async () => {
       const newAccount = { ...account, password: '' };
       const response = await request(testUrl)
         .post('/')
@@ -264,6 +264,26 @@ describe('Integration tests', () => {
 
       expect(response.body.data?.login).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredPasswordError);
+    });
+
+    it('Error when value with wrong type, email', async () => {
+      const newAccount = { ...account, email: 1 };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.loginMutation, variables: newAccount });
+
+      expect(response.body.data?.login).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when value with wrong type, password', async () => {
+      const newAccount = { ...account, password: 1 };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.loginMutation, variables: newAccount });
+
+      expect(response.body.data?.login).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when email not valid', async () => {
@@ -298,7 +318,6 @@ describe('Integration tests', () => {
   });
 
   describe('Changing password', () => {
-    let authToken;
 
     it('Change password and login with new password succesfully', async () => {
       //login and receive token
@@ -342,7 +361,7 @@ describe('Integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
     
-    it('Error when missing value, current password', async () => {
+    it('Error when empty value, current password', async () => {
       const data = { ...passwordData, currentPassword: '' };
       const response = await request(testUrl)
         .post('/')
@@ -353,7 +372,7 @@ describe('Integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredPasswordError);
     });
 
-    it('Error when missing value, new password', async () => {
+    it('Error when empty value, new password', async () => {
       const data = { ...passwordData, newPassword: '' };
       const response = await request(testUrl)
         .post('/')
@@ -364,7 +383,7 @@ describe('Integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredPasswordError);
     });
 
-    it('Error when missing value, new password confirmation', async () => {
+    it('Error when empty value, new password confirmation', async () => {
       const data = { ...passwordData, newPasswordConfirmation: '' };
       const response = await request(testUrl)
         .post('/')
@@ -373,6 +392,39 @@ describe('Integration tests', () => {
 
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredPasswordConfirmError);
+    });
+
+    it('Error when value with wrong type, current password', async () => {
+      const data = { ...passwordData, currentPassword: 1 };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+
+      expect(response.body.data?.changePassword.status).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when value with wrong type, new password', async () => {
+      const data = { ...passwordData, newPassword: 1 };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+      
+      expect(response.body.data?.changePassword.status).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when value with wrong type, new password confirmation', async () => {
+      const data = { ...passwordData, newPasswordConfirmation: 1 };
+      const response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: mutations.changePasswordMutation, variables: data });
+
+      expect(response.body.data?.changePassword.status).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when password and password confirmation do not match', async () => {
@@ -517,18 +569,32 @@ describe('Integration tests', () => {
       expect(response.body.data?.emailAvailable.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.notEmailError);
     });
+
+    it('Error when email is empty value', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.emailAvailableQuery, variables: { email: '' } });
+
+      expect(response.body.data?.emailAvailable.status).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.requiredEmailError);
+    });
+
+    it('Error when email value is wrong type', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.emailAvailableQuery, variables: { email: 1 } });
+
+      expect(response.body.data?.emailAvailable.status).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
   });
 
-  describe('Fetching cards', () => {
-    //let authToken;
+  describe('Fetching decks and cards', () => {
 
-    it('Fetch deck id 1, new cards', async () => {
-      expect(2).toBe(2);
-      /*
-      //login and receive token
+    it('Fetch all available decks, 3 at the moment', async () => {
       let response = await request(testUrl)
         .post('/')
-        .send({ query: mutations.loginMutation, variables: account });
+        .send({ query: mutations.loginMutation, variables: { ...account, password: passwordData.newPassword } });
       
       expect(response.body.data.login.code).toBeUndefined();
       expect(response.body.data.login.token).toBeDefined();
@@ -536,16 +602,14 @@ describe('Integration tests', () => {
       expect(response.body.data.login.user.email).toBe(account.email);
 
       authToken = response.body.data.login.token.value;
-      
-      //set token as auth header and change password
       response = await request(testUrl)
         .post('/')
         .set('Authorization', `bearer ${authToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: passwordData });
-      */
+        .send({ query: queries.fetchDecksQuery});
 
+      expect(response.body.data.fetchDecks.Decks).toBeDefined();
+      expect(response.body.data.fetchDecks.Decks.length).toBe(3);
     });
-
   });
 
 });
