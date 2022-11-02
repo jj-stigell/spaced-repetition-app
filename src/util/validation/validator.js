@@ -37,9 +37,27 @@ const validateChangePassword = async (currentPassword, newPassword, newPasswordC
   }
 };
 
+const validateInteger = async (integer) => {
+  try {
+    await schema.integer.validate({ integer }, { abortEarly: false });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
+const validatePushCards = async (deckId, days) => {
+  try {
+    await schema.pushCards.validate({ deckId, days }, { abortEarly: false });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
 module.exports = {
   validateEmail,
   validateNewAccount,
   validateLogin,
-  validateChangePassword
+  validateChangePassword,
+  validateInteger,
+  validatePushCards
 };
