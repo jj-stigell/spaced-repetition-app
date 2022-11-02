@@ -22,7 +22,7 @@ const errors = require('../../util/errors/errors');
 const { validateFetchKanji } = require('../../util/validation/schema');
 const formatYupError = require('../../util/errors/errorFormatter');
 
-const typeDef = `
+const typeDefs = `
   scalar Date
 
   type Error {
@@ -161,6 +161,6 @@ const resolvers = {
 };
 
 module.exports = {
-  typeDef,
+  typeDefs,
   resolvers
 };
