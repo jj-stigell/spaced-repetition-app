@@ -26,5 +26,6 @@
 | 30.10. | 2 | Push cards n days (all cards or deck specific), edit and add user hints and stories |
 | 31.10. | 2 | Fetch due cards and review history grouped by date |
 | 1.11. | 3 | Update error handling, refactor account schema to separate resolver and typedefs, create account service |
+| 2.11. | 3 | Refactor card resolvers and typedefs, add validators, clean code, add first deck tests |
 |  |  |  |
-| total | 63 |  | 
+| total | 66 |  | 

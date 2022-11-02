@@ -130,7 +130,7 @@ Frontend time keeping is in the frontend GitHub repository
         - [ ] QUERIES
             - [ ] Fetch due cards
             - [ ] Fetch new cards
-            - [ ] Fetch decks
+            - [X] Fetch decks
             - [ ] Fetch due per date, one or multiple
         
     
