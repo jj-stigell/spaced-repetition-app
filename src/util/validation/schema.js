@@ -1,44 +1,23 @@
 const yup = require('yup');
-const errors = require('../errors/errors');
 const validationRules = require('./validationRules');
 
 const fetchCards = yup.object().shape({
-  deckId: validationRules.deckId,
+  deckId: validationRules.deckIdRequired,
   languageId: validationRules.languageId,
   newCards: validationRules.isBoolean
 });
 
 const rescheduleCard = yup.object().shape({
-  cardId: yup
-    .number(errors.inputValueTypeError)
-    .required(errors.inputValueMissingError)
-    .min(1, errors.negativeNumberTypeError)
-    .max(100, errors.nonExistingDeckError)
-    .integer(errors.inputValueTypeError),
-  reviewResult: yup
-    .string()
-    .min(3, '')
-    .max(255),
-  newInterval: yup
-    .string()
-    .min(3, '')
-    .max(255),
-  newEasyFactor: yup
-    .string()
-    .min(3, '')
-    .max(255),
-  extraReview: yup
-    .string()
-    .min(3, '')
-    .max(255),
-  timing: yup
-    .string()
-    .min(3, '')
-    .max(255)
+  cardId: validationRules.cardIdRequired,
+  reviewResult: validationRules.resultType,
+  newInterval: validationRules.reviewIntervalRequired,
+  newEasyFactor: validationRules.easyFactor,
+  extraReview: validationRules.isBoolean,
+  timing: validationRules.timing
 });
 
 const deckId = yup.object().shape({
-  deckId: validationRules.deckId
+  deckId: validationRules.deckIdRequired
 });
 
 const id = yup.object().shape({
@@ -59,7 +38,7 @@ const fetchKanji = yup.object().shape({
 });
 
 const deckSettings = yup.object().shape({
-  deckId: validationRules.deckId,
+  deckId: validationRules.deckIdRequired,
   favorite: validationRules.isBoolean,
   reviewInterval: validationRules.reviewInterval,
   reviewsPerDay: validationRules.reviewsPerDay,
@@ -67,7 +46,7 @@ const deckSettings = yup.object().shape({
 });
 
 const pushCards = yup.object().shape({
-  deckId: validationRules.deckIdNotRequired,
+  deckId: validationRules.deckId,
   days: validationRules.days
 });
 
