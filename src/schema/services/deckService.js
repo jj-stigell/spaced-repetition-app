@@ -1,5 +1,6 @@
 const { internalServerError } = require('../../util/errors/graphQlErrors');
 const models = require('../../models');
+const constants = require('../../util/constants');
 
 const findDeckById = async (deckId) => {
   try {
@@ -57,11 +58,20 @@ const findAccountDeckSettings = async (deckId, accountId) => {
   }
 };
 
-const createAccountDeckSettings = async (deckId, accountId) => {
+const createAccountDeckSettings = async (
+  deckId, accountId, favorite,
+  reviewInterval = constants.defaultInterval,
+  reviewsPerDay = constants.defaultReviewPerDay,
+  newCardsPerDay = constants.defaultNewPerDay
+) => {
   try {
     return await models.AccountDeckSettings.create({
       accountId: accountId,
-      deckId: deckId
+      deckId: deckId,
+      favorite: favorite ? true : false,
+      reviewInterval: reviewInterval,
+      reviewsPerDay: reviewsPerDay,
+      newCardsPerDay: newCardsPerDay
     });
   } catch (error) {
     console.log(error);
