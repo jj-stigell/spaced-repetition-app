@@ -27,6 +27,19 @@ const queries = {
       }
     }
   }`,
+  fetchDeckSettings: `query FecthDeckSettings($deckId: Int!) {
+    fecthDeckSettings(deckId: $deckId) {
+      id
+      accountId
+      deckId
+      favorite
+      reviewInterval
+      reviewsPerDay
+      newCardsPerDay
+      createdAt
+      updatedAt
+    }
+  }`,
 };
 
 module.exports = queries;
