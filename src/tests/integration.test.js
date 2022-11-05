@@ -7,6 +7,7 @@ const mutations = require('./utils/mutations');
 const queries = require('./utils/queries');
 const errors = require('../util/errors/errors');
 const server = require('../util/server');
+const constants = require('../util/constants');
 
 describe('Integration tests', () => {
   let testServer, testUrl, authToken;
@@ -591,12 +592,21 @@ describe('Integration tests', () => {
 
   describe('Fetching decks and cards', () => {
 
+    it('Fetch decks leads to auth error when not logged in', async () => {
+      let response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.fetchDecksQuery});
+
+      expect(response.body.data?.fetchDecks).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
+    });
+
     it('Fetch all available decks, 3 at the moment', async () => {
       let response = await request(testUrl)
         .post('/')
         .send({ query: mutations.loginMutation, variables: { ...account, password: passwordData.newPassword } });
       
-      expect(response.body.data.login.code).toBeUndefined();
+      expect(response.body.errors).toBeUndefined();
       expect(response.body.data.login.token).toBeDefined();
       expect(response.body.data.login.user).toBeDefined();
       expect(response.body.data.login.user.email).toBe(account.email);
@@ -607,8 +617,33 @@ describe('Integration tests', () => {
         .set('Authorization', `bearer ${authToken}`)
         .send({ query: queries.fetchDecksQuery});
 
+      expect(response.body.errors).toBeUndefined();
       expect(response.body.data.fetchDecks.Decks).toBeDefined();
       expect(response.body.data.fetchDecks.Decks.length).toBe(3);
+    });
+
+    it('Fetch deck settings leads to auth error when not logged in', async () => {
+      let response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.fetchDeckSettings, variables: { deckId: 1 } });
+
+      expect(response.body.data?.fecthDeckSettings).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
+    });
+
+    it('Fetch deck setting for deck id 1, settings should be default, defined in constants', async () => {
+      let response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${authToken}`)
+        .send({ query: queries.fetchDeckSettings, variables: { deckId: 1 } });
+
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.fecthDeckSettings).toBeDefined();
+      expect(response.body.data.fecthDeckSettings.deckId).toBe(1);
+      expect(response.body.data.fecthDeckSettings.favorite).toBe(false);
+      expect(response.body.data.fecthDeckSettings.reviewInterval).toBe(constants.defaultInterval);
+      expect(response.body.data.fecthDeckSettings.reviewsPerDay).toBe(constants.defaultReviewPerDay);
+      expect(response.body.data.fecthDeckSettings.newCardsPerDay).toBe(constants.defaultNewPerDay);
     });
   });
 
