@@ -37,6 +37,34 @@ const validateChangePassword = async (currentPassword, newPassword, newPasswordC
   }
 };
 
+const validateFetchCards = async (deckId, languageId, newCards) => {
+  try {
+    await schema.fetchCards.validate({ deckId, languageId, newCards }, { abortEarly: constants.yupAbortEarly  });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
+const validateRescheduleCard = async (cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing) => {
+  try {
+    await schema.rescheduleCard.validate({
+      cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing
+    }, { abortEarly: constants.yupAbortEarly  });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
+const validateDeckSettings = async (deckId, favorite, reviewInterval, reviewsPerDay, newCardsPerDay) => {
+  try {
+    await schema.deckSettings.validate({
+      deckId, favorite, reviewInterval, reviewsPerDay, newCardsPerDay
+    }, { abortEarly: constants.yupAbortEarly  });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
 const validateInteger = async (integer) => {
   try {
     await schema.integer.validate({ integer }, { abortEarly: constants.yupAbortEarly  });
@@ -74,6 +102,9 @@ module.exports = {
   validateNewAccount,
   validateLogin,
   validateChangePassword,
+  validateFetchCards,
+  validateRescheduleCard,
+  validateDeckSettings,
   validateInteger,
   validatePushCards,
   validateDeckId,

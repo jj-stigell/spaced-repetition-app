@@ -2,19 +2,36 @@ const yup = require('yup');
 const errors = require('../errors/errors');
 const constants = require('../constants');
 
-const deckIdNotRequired = yup
+const deckId = yup
   .number(errors.inputValueTypeError)
   .min(1, errors.negativeNumberTypeError)
   .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
   .integer(errors.inputValueTypeError);
 
-const deckId = deckIdNotRequired
+const deckIdRequired = deckId
   .required(errors.inputValueMissingError);
 
 const cardId = yup
   .number(errors.inputValueTypeError)
   .min(1, errors.negativeNumberTypeError)
   .integer(errors.inputValueTypeError);
+
+const cardIdRequired = cardId
+  .required(errors.inputValueMissingError);
+
+const resultType = yup
+  .string(errors.inputValueTypeError)
+  .oneOf(constants.resultTypes, errors.invalidResultTypeError)
+  .required(errors.requiredResultTypeError);
+
+const easyFactor = yup
+  .number(errors.inputValueTypeError)
+  .min(0.01, errors.negativeNumberTypeError)
+  .required(errors.requiredResultTypeError);
+
+const timing = yup
+  .number(errors.inputValueTypeError)
+  .min(0.01, errors.negativeNumberTypeError);
 
 const email = yup
   .string(errors.inputValueTypeError)
@@ -79,6 +96,9 @@ const reviewInterval = yup
   .max(constants.maxReviewInterval, errors.maxReviewIntervalError)
   .integer(errors.inputValueTypeError);
 
+const reviewIntervalRequired = reviewInterval
+  .required(errors.inputValueMissingError);
+
 const reviewsPerDay = yup
   .number(errors.inputValueTypeError)
   .min(constants.minLimitReviews, errors.minLimitReviewsError)
@@ -110,8 +130,12 @@ const hint = yup
 
 module.exports = {
   deckId,
-  deckIdNotRequired,
+  deckIdRequired,
   cardId,
+  cardIdRequired,
+  resultType,
+  easyFactor,
+  timing,
   email,
   languageId,
   password,
@@ -123,6 +147,7 @@ module.exports = {
   id,
   integer,
   reviewInterval,
+  reviewIntervalRequired,
   reviewsPerDay,
   newCardsPerDay,
   days,
