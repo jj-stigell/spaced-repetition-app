@@ -8,10 +8,6 @@ type Account {
   password: String
 }
 
-type Error {
-  errorCodes: [String!]
-}
-
 type Success {
   status: Boolean!
 }
@@ -148,19 +144,12 @@ type DeckList {
   Decks: [Deck]
 }
 
-union CardPayload = Cardset | Error
-union DeckPayload = DeckList | Error
-union RescheduleResult = Success | Error
-union SettingsPayload = DeckSettings | Error
-union Result = Success | Error
-union EditResult = AccountCard | Error
-
 type Query {
   fetchCards(
     deckId: Int!
     languageId: String
     newCards: Boolean
-  ): CardPayload!
+  ): Cardset!
 
   fetchDecks: DeckList!
 
@@ -185,7 +174,7 @@ type Mutation {
     newEasyFactor: Float!
     extraReview: Boolean
     timing: Float
-  ): RescheduleResult!
+  ): Success!
 
   changeDeckSettings(
     deckId: Int!
@@ -193,18 +182,18 @@ type Mutation {
     reviewInterval: Int
     reviewsPerDay: Int
     newCardsPerDay: Int
-  ): SettingsPayload!
+  ): DeckSettings!
 
   pushCards(
     deckId: Int
     days: Int
-  ): Result!
+  ): Success!
 
   editAccountCard(
     cardId: Int!
     story: String
     hint: String
-  ): EditResult!
+  ): AccountCard!
 }`;
 
 module.exports = typeDefs;
