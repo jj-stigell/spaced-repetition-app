@@ -105,6 +105,14 @@ const validateFetchKanji = async (kanjiId, includeAccountCard) => {
   }
 };
 
+const validateFetchCardsByType = async (type, languageId) => {
+  try {
+    await schema.fetchCardsByType.validate({ type, languageId }, { abortEarly: constants.yupAbortEarly  });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
 module.exports = {
   validateEmail,
   validateNewAccount,
@@ -117,5 +125,6 @@ module.exports = {
   validatePushCards,
   validateDeckId,
   validateEditAccountCard,
-  validateFetchKanji
+  validateFetchKanji,
+  validateFetchCardsByType
 };

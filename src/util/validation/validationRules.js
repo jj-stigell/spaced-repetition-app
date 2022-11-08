@@ -78,7 +78,8 @@ const isBoolean = yup
 
 const cardType = yup
   .string(errors.inputValueTypeError)
-  .oneOf(constants.cardTypes, errors.invalidCardType);
+  .oneOf(constants.cardTypes, errors.invalidCardType)
+  .required(errors.inputValueMissingError);
 
 /*
 const id = yup

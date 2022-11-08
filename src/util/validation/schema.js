@@ -78,6 +78,11 @@ const changePassword = yup.object().shape({
   passwordConfirmation: validationRules.passwordConfirmation
 });
 
+const fetchCardsByType = yup.object().shape({
+  type: validationRules.cardType,
+  languageId: validationRules.languageId
+});
+
 module.exports = {
   fetchCards,
   rescheduleCard,
@@ -92,5 +97,6 @@ module.exports = {
   editAccountCard,
   createAccount,
   login,
-  changePassword
+  changePassword,
+  fetchCardsByType
 };
