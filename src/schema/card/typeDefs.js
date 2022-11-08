@@ -19,6 +19,7 @@ type AccountCard {
   accountStory: String
   accountHint: String
   dueAt: Date
+  mature: Boolean
 }
 
 type KanjiTranslation {
@@ -149,6 +150,11 @@ type Query {
     deckId: Int!
     languageId: String
     newCards: Boolean
+  ): Cardset!
+
+  fetchCardsByType(
+    type: String!
+    languageId: String
   ): Cardset!
 
   fetchDecks: DeckList!

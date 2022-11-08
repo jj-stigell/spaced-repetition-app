@@ -54,6 +54,29 @@ const resolvers = {
         Cards: cards
       };
     },
+    fetchCardsByType: async (_, { type, languageId }, { currentUser }) => {
+      if (!currentUser) graphQlErrors.notAuthError();
+      await validator.validateFetchCardsByType(type, languageId);
+
+      let selectedLanguage;
+      // If language id is empty, set to default 'en'
+      if (!languageId) {
+        selectedLanguage = constants.defaultLanguage;
+      } {
+        selectedLanguage = languageId;
+      }
+
+      const cards = await cardService.fetchCardsByType(type, currentUser.id, selectedLanguage);
+      // No cards found with the type
+      if (cards.length === 0) return graphQlErrors.defaultError(errors.noCardsFound);
+
+      console.log(cards.length);
+
+      return {
+        __typename: 'Cardset',
+        Cards: cards
+      };
+    },
     fetchDecks: async (root, args, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       const decks = await deckService.findAllDecks(false);
