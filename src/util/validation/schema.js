@@ -21,7 +21,7 @@ const deckId = yup.object().shape({
 });
 
 const id = yup.object().shape({
-  id: validationRules.id
+  id: validationRules.integer
 });
 
 const integer = yup.object().shape({
@@ -33,7 +33,7 @@ const cardType = yup.object().shape({
 });
 
 const fetchKanji = yup.object().shape({
-  kanjiId: validationRules.id,
+  kanjiId: validationRules.integer,
   includeAccountCard: validationRules.isBoolean
 });
 

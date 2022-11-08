@@ -89,9 +89,17 @@ const validateDeckId = async (deckId) => {
   }
 };
 
-const validateEditAccountCard = async (cardId, story, hint ) => {
+const validateEditAccountCard = async (cardId, story, hint) => {
   try {
     await schema.editAccountCard.validate({ cardId, story, hint }, { abortEarly: constants.yupAbortEarly  });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
+const validateFetchKanji = async (kanjiId, includeAccountCard) => {
+  try {
+    await schema.fetchKanji.validate({ kanjiId, includeAccountCard }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
@@ -108,5 +116,6 @@ module.exports = {
   validateInteger,
   validatePushCards,
   validateDeckId,
-  validateEditAccountCard
+  validateEditAccountCard,
+  validateFetchKanji
 };
