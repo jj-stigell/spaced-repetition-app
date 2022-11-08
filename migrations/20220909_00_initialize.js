@@ -2,6 +2,7 @@ const { DataTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const constants = require('../src/util/constants');
+const { NODE_ENV } = require('../src/util/config');
 const alter_tables = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/alter_tables.sql'), 'utf8');
 const language = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/language.sql'), 'utf8');
 const account = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account.sql'), 'utf8');
@@ -18,6 +19,10 @@ const kanji_translation_fi = fs.readFileSync(path.resolve(__dirname, '../setup/d
 const kanji_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_en.sql'), 'utf8');
 const word = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/word.sql'), 'utf8');
 const word_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/word_translation_en.sql'), 'utf8');
+const account_deck_settings = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_deck_settings.sql'), 'utf8');
+const account_card = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_card.sql'), 'utf8');
+const account_review = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_review.sql'), 'utf8');
+const dummy_accounts = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/dummy_accounts.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -837,6 +842,13 @@ module.exports = {
     await queryInterface.sequelize.query(kanji_translation_en);
     await queryInterface.sequelize.query(word);
     await queryInterface.sequelize.query(word_translation_en);
+    if (NODE_ENV !== 'production' && NODE_ENV !== 'test') {
+      console.log('Not in production/test, loading dummy data');
+      await queryInterface.sequelize.query(dummy_accounts);
+      await queryInterface.sequelize.query(account_deck_settings);
+      await queryInterface.sequelize.query(account_card);
+      await queryInterface.sequelize.query(account_review);
+    }
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('radical_translation');
