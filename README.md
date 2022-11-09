@@ -47,24 +47,24 @@ Frontend time keeping is in the frontend GitHub repository
     - [ ] User related
         - [ ] User registration
             - [X] Validate input (Validator lib, RegExp, Yup)
-            - [ ] Captcha to prevent bots ([reCAPTCHA](https://www.google.com/recaptcha/about/))
+            - [ ] Captcha to prevent bots ([reCAPTCHA](https://www.google.com/recaptcha/about/)) <span style="color:red">OPTIONAL</span>
             - [X] Check that username, email etc not taken
             - [X] Create user
-            - [ ] Email verification ([node mailer](https://nodemailer.com/about/) & [Amazon SES](https://aws.amazon.com/ses/)?)
-            - [ ] register using google account
+            - [ ] Email verification ([node mailer](https://nodemailer.com/about/) & [Amazon SES](https://aws.amazon.com/ses/)?) <span style="color:red">OPTIONAL</span>
+            - [ ] register using google account <span style="color:red">OPTIONAL</span>
         - [ ] User login, JWT on succesful login, otherwise error
             - [X] Validate input
             - [X] Error on missing, incorrect input, mismatch with password
             - [X] Succesfully create and return token
                 - [X] token content (user id, exp), expiry time set in constants
-            - [ ] Keep track of sessions
-            - [ ] login using google account
-        - [ ] User logout
-            - [ ] Delete session
+            - [ ] Keep track of sessions <span style="color:red">OPTIONAL</span>
+            - [ ] login using google account <span style="color:red">OPTIONAL</span>
+        - [ ] User logout <span style="color:red">OPTIONAL</span>
+            - [ ] Delete session <span style="color:red">OPTIONAL</span>
         - [ ] User change password/personal data
             - [X] Old password matches hash in DB
             - [X] Validate new, confirmation must match, cannot be same as old one
-            - [ ] send email notification
+            - [ ] send email notification <span style="color:red">OPTIONAL</span>
             - [ ] show open sessions (location, device, expiry date)
             - [ ] delete session
         - [ ] Recover account (e.g. password forgotten)
@@ -73,13 +73,12 @@ Frontend time keeping is in the frontend GitHub repository
         - [ ] Validation of user input, including error messages
             - [X] Install and configure Yup
             - [ ] Match validation rules with front-end
-            - [ ] Card validation
         - [ ] Card and deck mutations
             - [X] Reschedule card
             - [X] Add custom card hint
             - [X] Add custom card story
             - [X] Sick day (push all cards +1 day)
-            - [ ] Optimize (recalculate deck cards for optimal interval)
+            - [ ] Optimize (recalculate deck cards for optimal interval) <span style="color:red">OPTIONAL</span>
             - [X] Edit account deck settings
         - [ ] Card and deck queries
             - [X] due cards
@@ -88,7 +87,7 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] fetch the amount of due cards for the next n days, group by date
             - [X] fetch the amount of review in the past, group by date
             - [X] fetch available decks, language information, deck specific due cards amount
-            - [ ] amount of reviewed kanji (mature or not?)
+            - [ ] amount of reviewed kanji (mature or not?) (now possible to fetch all cards by type, account cards included)
             - [ ] learnt kanji (x of y)
             - [ ] learnt word (x of y)
         - [X] Reschedule card based on user input (interval, extrareview, etc.)

@@ -27,5 +27,7 @@
 | 31.10. | 2 | Fetch due cards and review history grouped by date |
 | 1.11. | 3 | Update error handling, refactor account schema to separate resolver and typedefs, create account service |
 | 2.11. | 3 | Refactor card resolvers and typedefs, add validators, clean code, add first deck tests |
+| 5.11. | 1 | tests and refactoring |
+| 8.11. | 1 | validators and dummy data |
 |  |  |  |
-| total | 66 |  | 
+| total | 68 |  | 
