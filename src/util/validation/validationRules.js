@@ -81,13 +81,6 @@ const cardType = yup
   .oneOf(constants.cardTypes, errors.invalidCardType)
   .required(errors.inputValueMissingError);
 
-/*
-const id = yup
-  .number(errors.inputValueTypeError)
-  .min(1, errors.negativeNumberTypeError)
-  .integer(errors.inputValueTypeError);
-*/
-
 const integer = yup
   .number(errors.inputValueTypeError)
   .min(1, errors.negativeNumberTypeError)
@@ -123,13 +116,13 @@ const days = yup
 
 const story = yup
   .string(errors.inputValueTypeError)
-  .min(constants.storyMinLength, errors.storyTooShortError)
-  .max(constants.storyMaxLength, errors.storyTooLongError);
+  .min(constants.card.storyMinLength, errors.storyTooShortError)
+  .max(constants.card.storyMaxLength, errors.storyTooLongError);
 
 const hint = yup
   .string(errors.inputValueTypeError)
-  .min(constants.hintMinLength, errors.hintTooShortError)
-  .max(constants.hintMaxLength, errors.hintTooLongError);
+  .min(constants.card.hintMinLength, errors.hintTooShortError)
+  .max(constants.card.hintMaxLength, errors.hintTooLongError);
 
 module.exports = {
   deckId,
