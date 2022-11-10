@@ -6,8 +6,7 @@ const findDeckById = async (deckId) => {
   try {
     return await models.Deck.findByPk(deckId);
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -38,8 +37,7 @@ const findAllDecks = async (includeInactive) => {
       });
     }
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -53,8 +51,7 @@ const findAccountDeckSettings = async (deckId, accountId) => {
       nest: true
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -74,8 +71,7 @@ const createAccountDeckSettings = async (
       newCardsPerDay: newCardsPerDay
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 

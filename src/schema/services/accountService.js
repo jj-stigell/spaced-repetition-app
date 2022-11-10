@@ -12,8 +12,7 @@ const findAccountById = async (accountId) => {
   try {
     return await Account.findByPk(accountId);
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -26,8 +25,7 @@ const findAccountByEmail = async (email) => {
   try {
     return await Account.findOne({ where: { email: email.toLowerCase() } });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -44,8 +42,7 @@ const createNewAccount = async (email, passwordHash) => {
       passwordHash: passwordHash,
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -59,8 +56,7 @@ const hashCompare = async (password, hash) => {
   try {
     return await bcrypt.compare(password, hash);
   } catch(error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -73,8 +69,7 @@ const hashPassword = async (password) => {
   try {
     return await bcrypt.hash(password, constants.saltRounds);
   } catch(error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 

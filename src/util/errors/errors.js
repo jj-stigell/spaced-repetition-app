@@ -11,7 +11,7 @@ const errors = {
   usernameValidationError: 'usernameValidationError',
   emailInUseError: 'emailInUseError',
   usernameInUseError: 'usernameInUseError',
-  internalServerError: 'internalServerError',
+  //internalServerError: 'internalServerError',
   userOrPassIncorrectError: 'userOrPassIncorrectError',
   notAuthError: 'notAuthError',
   changePasswordValueMissingError: 'changePasswordValueMissingError',
@@ -53,6 +53,12 @@ const errors = {
     internalServerError: 'INTERNAL_SERVER_ERROR',
     validationError: 'VALIDATION_ERROR',
     defaultError: 'DEFAULT_ERROR',
+  },
+  cardErrors: {
+
+  },
+  validationError: {
+
   }
 };
 

@@ -4,6 +4,7 @@ const { JWT_SECRET, NODE_ENV } = require('./config');
 const schema = require('../schema');
 const jwt = require('jsonwebtoken');
 const { Account } = require('../models');
+const errorLogger = require('./errors/errorLogger');
 
 const server = new ApolloServer({
   cache: new InMemoryLRUCache(),
@@ -19,7 +20,7 @@ const server = new ApolloServer({
         const currentUser = await Account.findByPk(decodedToken.id);
         return { currentUser };
       } catch(error) {
-        console.log(error);
+        errorLogger(error);
       } 
     }
   }

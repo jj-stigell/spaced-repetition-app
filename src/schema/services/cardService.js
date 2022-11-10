@@ -7,10 +7,9 @@ const rawQueries = require('./rawQueries');
 
 const findCardById = async (cardId) => {
   try {
-    return await models.AccountCard.findByPk(cardId);
+    return await models.Card.findByPk(cardId);
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -20,14 +19,13 @@ const createAccountCard = async (cardId, accountId, story, hint) => {
       accountId: accountId,
       cardId: cardId,
       dueAt: sequelize.DataTypes.NOW,
-      easyFactor: constants.defaultEasyFactor,
+      easyFactor: constants.card.defaultEasyFactor,
       reviewCount: 0,
       accountStory: story ? story : null,
       accountHint: hint ? hint : null
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -37,14 +35,13 @@ const updateAccountCard = async (cardId, accountId, story, hint) => {
       accountId: accountId,
       cardId: cardId,
       dueAt: sequelize.DataTypes.NOW,
-      easyFactor: constants.defaultEasyFactor,
+      easyFactor: constants.card.defaultEasyFactor,
       reviewCount: 0,
       accountStory: story ? story : null,
       accountHint: hint ? hint : null
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -67,8 +64,7 @@ const createAccountReview = async (cardId, accountId, reviewResult, extraReview,
       timing: timing
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -136,8 +132,7 @@ const fetchNewCards = async (deckId, accountId, limitReviews, selectedLanguage) 
 
     return cards;
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -212,8 +207,60 @@ const fetchDueCards = async (deckId, accountId, limitReviews, selectedLanguage) 
 
     return cards;
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
+  }
+};
+
+const fetchCardsByType = async (type, accountId, selectedLanguage) => {
+  try {
+    return await models.Card.findAll({
+      where: {
+        'type': type,
+        'active': true
+      },
+      subQuery: false,
+      nest: true,
+      include: [
+        {
+          model: models.Kanji,
+          include: [
+            {
+              model: models.KanjiTranslation,
+              where: {
+                language_id: selectedLanguage
+              },
+            },
+            {
+              model: models.Radical,
+              attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+              include: {
+                model: models.RadicalTranslation,
+                where: {
+                  language_id: selectedLanguage
+                }
+              },
+            }
+          ]
+        },
+        {
+          model: models.AccountCard,
+          where: {
+            accountId: accountId
+          }
+        },
+        {
+          model: models.Word,
+          include: {
+            model: models.WordTranslation,
+            where: {
+              language_id: selectedLanguage
+            },
+          }
+        }
+      ]
+    });
+  } catch (error) {
+    return internalServerError(error);
   }
 };
 
@@ -229,8 +276,7 @@ const findReviewHistory = async (limitReviews, accountId) => {
       raw: true
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -246,8 +292,7 @@ const findDueReviewsCount = async (limitReviews, accountId) => {
       raw: true
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -263,8 +308,7 @@ const pushAllCards = async (days, accountId) => {
       raw: true
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -281,8 +325,7 @@ const pushCardsInDeck = async (deckId, days, accountId) => {
       raw: true
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -295,8 +338,7 @@ const findAccountCard = async (cardId, accountId) => {
       }
     });
   } catch (error) {
-    console.log(error);
-    return internalServerError();
+    return internalServerError(error);
   }
 };
 
@@ -307,6 +349,7 @@ module.exports = {
   createAccountReview,
   fetchNewCards,
   fetchDueCards,
+  fetchCardsByType,
   findReviewHistory,
   findDueReviewsCount,
   pushAllCards,
