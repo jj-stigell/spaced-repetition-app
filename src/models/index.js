@@ -15,6 +15,7 @@ const Radical = require('./radical/radical');
 const RadicalTranslation = require('./radical/radicalTranslation');
 const Word = require('./word/word');
 const WordTranslation = require('./word/wordTranslation');
+const BugReport = require('./bugReport/bugReport'); 
 
 // Account can have one admin entry, on delete cascade to admin table
 Account.hasOne(Admin, {
@@ -282,6 +283,28 @@ AccountDeckSettings.belongsTo(Deck, {
   foreignKey: 'deckId'
 });
 
+// Bug reports belongs to some card and account, id PK, account_id and card_id FK
+// On delete set null so bug history stays intact
+Account.hasMany(BugReport, {
+  onDelete: 'SET NULL',
+  onUpdate: 'CASCADE'
+});
+
+BugReport.belongsTo(Account, {
+  targetKey: 'id',
+  foreignKey: 'accountId'
+});
+
+Card.hasMany(BugReport, {
+  onDelete: 'SET NULL',
+  onUpdate: 'CASCADE'
+});
+
+BugReport.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
+});
+
 module.exports = {
   Account,
   Admin,
@@ -299,5 +322,6 @@ module.exports = {
   Card,
   CardList,
   Deck,
-  DeckTranslation
+  DeckTranslation,
+  BugReport
 };
