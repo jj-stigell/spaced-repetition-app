@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../database');
+const { constants } = require('../../util/constants');
 
 class AccountCard extends Model {}
 
@@ -27,9 +28,21 @@ AccountCard.init({
   },
   accountStory: {
     type: DataTypes.STRING,
+    validate: {
+      len: [
+        constants.card.storyMinLength,
+        constants.card.storyMaxLength
+      ]
+    }
   },
   accountHint: {
     type: DataTypes.STRING,
+    validate: {
+      len: [
+        constants.card.hintMinLength,
+        constants.card.hintMaxLength
+      ]
+    }
   },
   reviewCount: {
     type: DataTypes.INTEGER,
@@ -39,7 +52,7 @@ AccountCard.init({
   easyFactor: {
     type: DataTypes.REAL,
     allowNull: false,
-    default: 2.5
+    default: constants.card.defaultEasyFactor
   },
   mature: {
     type: DataTypes.BOOLEAN,
