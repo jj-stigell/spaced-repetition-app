@@ -32,6 +32,18 @@ const fetchDailyReviewHistoryNDays = `SELECT created_at::date AS date, COUNT(*) 
 const fetchDueReviewsNDays = `SELECT due_at::date AS date, COUNT(*) AS reviews FROM account_card WHERE account_id = :accountId GROUP BY due_at::date
 ORDER BY due_at::date ASC LIMIT :limitReviews`;
 
+// Fetch by accounts learning progress, grouped by  "matured", "learning", and "new"
+const groupByTypeAndLearningStatus = `
+SELECT 'matured' AS status, COUNT(acc.mature) FROM card INNER JOIN account_card AS acc
+ON acc.card_id = card.id WHERE card.type = :cardType AND acc.account_id = :accountId AND acc.mature = true GROUP BY acc.mature
+UNION
+SELECT 'learning' AS status, COUNT(acc.mature) FROM card INNER JOIN account_card AS acc
+ON acc.card_id = card.id WHERE card.type = :cardType AND acc.account_id = :accountId AND acc.mature = false GROUP BY acc.mature
+UNION
+SELECT 'new' AS status, COUNT(card.id) FROM card WHERE card.type = :cardType AND NOT EXISTS (
+SELECT null FROM account_card WHERE account_card.account_id = :accountId AND account_card.card_id = card.id
+) GROUP BY status`;
+
 module.exports = {
   selectNewCardIds,
   selectDueCardIds,
@@ -39,5 +51,6 @@ module.exports = {
   pushAllCardsNDays,
   pushCardsInDeckIdNDays,
   fetchDailyReviewHistoryNDays,
-  fetchDueReviewsNDays
+  fetchDueReviewsNDays,
+  groupByTypeAndLearningStatus
 };
