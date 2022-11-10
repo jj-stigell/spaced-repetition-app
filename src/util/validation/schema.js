@@ -79,7 +79,7 @@ const changePassword = yup.object().shape({
 });
 
 const fetchCardsByType = yup.object().shape({
-  type: validationRules.cardType,
+  cardType: validationRules.cardType,
   languageId: validationRules.languageId
 });
 

@@ -105,9 +105,17 @@ const validateFetchKanji = async (kanjiId, includeAccountCard) => {
   }
 };
 
-const validateFetchCardsByType = async (type, languageId) => {
+const validateFetchCardsByType = async (cardType, languageId) => {
   try {
-    await schema.fetchCardsByType.validate({ type, languageId }, { abortEarly: constants.yupAbortEarly  });
+    await schema.fetchCardsByType.validate({ cardType, languageId }, { abortEarly: constants.yupAbortEarly  });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
+const validateCardType = async (cardType) => {
+  try {
+    await schema.cardType.validate({ cardType }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
@@ -126,5 +134,6 @@ module.exports = {
   validateDeckId,
   validateEditAccountCard,
   validateFetchKanji,
-  validateFetchCardsByType
+  validateFetchCardsByType,
+  validateCardType
 };

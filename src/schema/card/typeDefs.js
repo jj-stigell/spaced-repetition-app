@@ -128,6 +128,11 @@ type DeckSettings {
   updatedAt: Date
 }
 
+type Statistics {
+  status: String
+  count: Int
+}
+
 type Day {
   date: Date
   reviews: Int
@@ -156,6 +161,10 @@ type Query {
     type: String!
     languageId: String
   ): Cardset!
+
+  fetchLearningStatistics(
+    cardType: String!
+  ): [Statistics!]!
 
   fetchDecks: DeckList!
 

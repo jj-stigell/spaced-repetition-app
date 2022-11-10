@@ -54,9 +54,9 @@ const resolvers = {
         Cards: cards
       };
     },
-    fetchCardsByType: async (_, { type, languageId }, { currentUser }) => {
+    fetchCardsByType: async (_, { cardType, languageId }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
-      await validator.validateFetchCardsByType(type, languageId);
+      await validator.validateFetchCardsByType(cardType, languageId);
 
       let selectedLanguage;
       // If language id is empty, set to default 'en'
@@ -66,7 +66,7 @@ const resolvers = {
         selectedLanguage = languageId;
       }
 
-      const cards = await cardService.fetchCardsByType(type, currentUser.id, selectedLanguage);
+      const cards = await cardService.fetchCardsByType(cardType, currentUser.id, selectedLanguage);
       // No cards found with the type
       if (cards.length === 0) return graphQlErrors.defaultError(errors.noCardsFound);
 
@@ -133,6 +133,12 @@ const resolvers = {
         reviews: dueReviews
       };
     },
+    fetchLearningStatistics: async (_, { cardType }, { currentUser }) => {
+      if (!currentUser) graphQlErrors.notAuthError();
+      await validator.validateCardType(cardType);
+      const statistics = await cardService.findLearningProgressByType(cardType, currentUser.id);
+      return statistics;
+    },
   },
   Mutation: {
     rescheduleCard: async (_, { cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing }, { currentUser }) => {
@@ -164,8 +170,7 @@ const resolvers = {
           });
           accountCard.save();
         } catch(error) {
-          console.log(error);
-          return graphQlErrors.internalServerError();
+          return graphQlErrors.internalServerError(error);
         }
       }
       // Add new row to review history
@@ -203,8 +208,7 @@ const resolvers = {
         deckSettings.newCardsPerDay = newCardsPerDay ? newCardsPerDay : deckSettings.newCardsPerDay,
         await deckSettings.save();
       } catch(error) {
-        console.log(error);
-        return graphQlErrors.internalServerError();
+        return graphQlErrors.internalServerError(error);
       }
 
       return {
@@ -255,8 +259,7 @@ const resolvers = {
           });
           accountCard.save();
         } catch(error) {
-          console.log(error);
-          return graphQlErrors.internalServerError();
+          return graphQlErrors.internalServerError(error);
         }
       }
       return { 
