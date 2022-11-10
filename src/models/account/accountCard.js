@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../database');
-const { constants } = require('../../util/constants');
+const constants = require('../../util/constants');
 
 class AccountCard extends Model {}
 
