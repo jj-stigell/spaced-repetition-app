@@ -788,10 +788,22 @@ module.exports = {
         onUpdate: 'CASCADE'
       },
       account_story: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        validate: {
+          len: [
+            constants.card.storyMinLength,
+            constants.card.storyMaxLength
+          ]
+        }
       },
       account_hint: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        validate: {
+          len: [
+            constants.card.hintMinLength,
+            constants.card.hintMaxLength
+          ]
+        }
       },
       review_count: {
         type: DataTypes.INTEGER,
@@ -801,7 +813,7 @@ module.exports = {
       easy_factor: {
         type: DataTypes.REAL,
         allowNull: false,
-        default: 2.5
+        default: constants.card.defaultEasyFactor
       },
       mature: {
         type: DataTypes.BOOLEAN,
@@ -825,6 +837,70 @@ module.exports = {
     }),
     await queryInterface.addIndex('account_card', ['account_id', 'card_id'], {
       unique: true
+    }),
+    await queryInterface.createTable('bug_report', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      account_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'account',
+          key: 'id'
+        },
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
+      },
+      card_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'card',
+          key: 'id'
+        },
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
+      },
+      type: {
+        type: DataTypes.ENUM(constants.bugs.bugTypes),
+        allowNull: false
+      },
+      bug_message: {
+        type: DataTypes.STRING,
+        validate: {
+          len: [
+            constants.bugs.bugMessageMinLength,
+            constants.bugs.bugMessageMaxLength
+          ]
+        }
+      },
+      solved_message: {
+        type: DataTypes.STRING,
+        validate: {
+          len: [
+            constants.bugs.solvedMessageMinLength,
+            constants.bugs.solcedMessageMaxLength
+          ]
+        }
+      },
+      solved: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
     }),
     await queryInterface.sequelize.query(alter_tables);
     await queryInterface.sequelize.query(language);
@@ -851,6 +927,7 @@ module.exports = {
     }
   },
   down: async ({ context: queryInterface }) => {
+    await queryInterface.dropTable('bug_report');
     await queryInterface.dropTable('radical_translation');
     await queryInterface.dropTable('kanji_radical');
     await queryInterface.dropTable('kanji_translation');
