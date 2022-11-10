@@ -1,7 +1,9 @@
 const { GraphQLError } = require('graphql');
 const errors = require('./errors');
+const errorLogger = require('./errorLogger');
 
 const notAuthError = () => {
+  errorLogger('not authenticated');
   throw new GraphQLError(errors.graphQlErrors.unauthenticated, {
     extensions: {
       code: errors.graphQlErrors.unauthenticated,
@@ -10,7 +12,8 @@ const notAuthError = () => {
   });
 };
 
-const internalServerError = () => {
+const internalServerError = (error) => {
+  errorLogger(error);
   throw new GraphQLError(errors.graphQlErrors.internalServerError, {
     extensions: {
       code: errors.graphQlErrors.internalServerError,
@@ -20,6 +23,7 @@ const internalServerError = () => {
 };
 
 const validationError = (validationErrors) => {
+  errorLogger(validationErrors);
   throw new GraphQLError(errors.graphQlErrors.validationError, {
     extensions: {
       code: validationErrors,
@@ -29,6 +33,7 @@ const validationError = (validationErrors) => {
 };
 
 const defaultError = (error) => {
+  errorLogger(error);
   throw new GraphQLError(errors.graphQlErrors.defaultError, {
     extensions: {
       code: error,
