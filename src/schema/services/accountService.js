@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const { internalServerError } = require('../../util/errors/graphQlErrors');
 const constants = require('../../util/constants');
-const { Account } = require('../../models');
+const { Account, Session } = require('../../models');
 
 /**
  * Fecth account from database by id number
@@ -73,10 +73,27 @@ const hashPassword = async (password) => {
   }
 };
 
+/**
+ * Create a new session for the user, set expiry same as JWT expiry, placeholder for now
+ * @param {integer} accountId, accounts id number
+ * @returns New session object
+ */
+const createNewSession = async (accountId) => {
+  try {
+    return await Session.create({
+      accountId: accountId,
+      expireAt: '2022-11-29',
+    });
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
 module.exports = {
   findAccountById,
   findAccountByEmail,
   createNewAccount,
   hashCompare,
-  hashPassword
+  hashPassword,
+  createNewSession
 };

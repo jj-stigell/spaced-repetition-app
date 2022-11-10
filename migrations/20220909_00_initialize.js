@@ -902,6 +902,32 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
+    await queryInterface.createTable('session', {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      account_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'account',
+          key: 'id'
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      expire_at: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
+    }),
     await queryInterface.sequelize.query(alter_tables);
     await queryInterface.sequelize.query(language);
     await queryInterface.sequelize.query(account);
@@ -927,6 +953,7 @@ module.exports = {
     }
   },
   down: async ({ context: queryInterface }) => {
+    await queryInterface.dropTable('session');
     await queryInterface.dropTable('bug_report');
     await queryInterface.dropTable('radical_translation');
     await queryInterface.dropTable('kanji_radical');

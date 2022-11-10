@@ -3,6 +3,7 @@ const AccountCard = require('./account/accountCard');
 const AccountDeckSettings = require('./account/accountDeckSettings');
 const AccountReview = require('./account/accountReview');
 const Admin = require('./account/admin');
+const Session = require('./account/session');
 const Card = require('./card/card');
 const CardList = require('./card/cardList');
 const Language = require('./language/language');
@@ -26,6 +27,20 @@ Account.hasOne(Admin, {
   }
 });
 Admin.belongsTo(Account, {
+  targetKey: 'id',
+  foreignKey: 'accountId'
+});
+
+// Account can have many sessions, on delete cascade to session table
+// Session can belong to only one account
+Account.hasMany(Session, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+  foreignKey: {
+    allowNull: false
+  }
+});
+Session.belongsTo(Account, {
   targetKey: 'id',
   foreignKey: 'accountId'
 });
@@ -323,5 +338,6 @@ module.exports = {
   CardList,
   Deck,
   DeckTranslation,
-  BugReport
+  BugReport,
+  Session
 };

@@ -40,9 +40,14 @@ const resolvers = {
       const passwordCorrect = await accountService.hashCompare(password, account.passwordHash);
       if (!passwordCorrect) return graphQlErrors.defaultError(errors.userOrPassIncorrectError);
 
+      const session = await accountService.createNewSession(account.id);
+
+
+      console.log(session);
+
       return { 
         __typename: 'AccountToken',
-        token: { value: jwt.sign( { id: account.id }, JWT_SECRET, { expiresIn: constants.jwtExpiryTime } )},
+        token: { value: jwt.sign( { id: account.id, session: session.id }, JWT_SECRET, { expiresIn: constants.jwtExpiryTime } )},
         user: { id: account.id, email: account.email }
       };
     },
@@ -60,8 +65,7 @@ const resolvers = {
         account.passwordHash = passwordHash;
         await account.save();
       } catch(error) {
-        console.log(error);
-        return graphQlErrors.internalServerError();
+        return graphQlErrors.internalServerError(error);
       }
 
       return { 
