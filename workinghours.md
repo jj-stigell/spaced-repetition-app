@@ -29,5 +29,6 @@
 | 2.11. | 3 | Refactor card resolvers and typedefs, add validators, clean code, add first deck tests |
 | 5.11. | 1 | tests and refactoring |
 | 8.11. | 1 | validators and dummy data |
+| 10.11. | 4 | Add session tracking, bug reporting, query for fetching stats |
 |  |  |  |
-| total | 68 |  | 
+| total | 72 |  | 
