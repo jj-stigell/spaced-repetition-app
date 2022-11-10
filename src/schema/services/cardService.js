@@ -211,11 +211,11 @@ const fetchDueCards = async (deckId, accountId, limitReviews, selectedLanguage) 
   }
 };
 
-const fetchCardsByType = async (type, accountId, selectedLanguage) => {
+const fetchCardsByType = async (cardType, accountId, selectedLanguage) => {
   try {
     return await models.Card.findAll({
       where: {
-        'type': type,
+        'type': cardType,
         'active': true
       },
       subQuery: false,
@@ -296,6 +296,22 @@ const findDueReviewsCount = async (limitReviews, accountId) => {
   }
 };
 
+const findLearningProgressByType = async (cardType , accountId) => {
+  try {
+    return await sequelize.query(rawQueries.groupByTypeAndLearningStatus, {
+      replacements: {
+        cardType : cardType ,
+        accountId: accountId
+      },
+      type: sequelize.QueryTypes.SELECT,
+      raw: true
+    });
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
+
 const pushAllCards = async (days, accountId) => {
   try {
     await sequelize.query(rawQueries.pushAllCardsNDays, {
@@ -352,6 +368,7 @@ module.exports = {
   fetchCardsByType,
   findReviewHistory,
   findDueReviewsCount,
+  findLearningProgressByType,
   pushAllCards,
   pushCardsInDeck,
   findAccountCard
