@@ -3,7 +3,7 @@ const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
 const { JWT_SECRET, NODE_ENV } = require('./config');
 const schema = require('../schema');
 const jwt = require('jsonwebtoken');
-const { Account } = require('../models');
+//const { Account } = require('../models');
 const errorLogger = require('./errors/errorLogger');
 
 const server = new ApolloServer({
@@ -14,11 +14,12 @@ const server = new ApolloServer({
     const auth = req ? req.headers.authorization : null;
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       try {
-        const decodedToken = jwt.verify(
+        const currentUser = jwt.verify(
           auth.substring(7), JWT_SECRET
         );
-        const currentUser = await Account.findByPk(decodedToken.id);
-        return { currentUser };
+        const userAgent = req?.headers['user-agent'] ? req?.headers['user-agent'] : null;
+        //const currentUser = await Account.findByPk(decodedToken.id);
+        return { currentUser, userAgent };
       } catch(error) {
         errorLogger(error);
       } 
