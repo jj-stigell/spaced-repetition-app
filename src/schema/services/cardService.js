@@ -5,6 +5,11 @@ const { Op } = require('sequelize');
 const constants = require('../../util/constants');
 const rawQueries = require('./rawQueries');
 
+/**
+ * Find card by its id (PK)
+ * @param {integer} cardId 
+ * @returns Card found
+ */
 const findCardById = async (cardId) => {
   try {
     return await models.Card.findByPk(cardId);
@@ -345,6 +350,12 @@ const pushCardsInDeck = async (deckId, days, accountId) => {
   }
 };
 
+/**
+ * Find account card (with account specific data) by card and account id
+ * @param {integer} cardId 
+ * @param {integer} accountId 
+ * @returns Found card
+ */
 const findAccountCard = async (cardId, accountId) => {
   try {
     return await models.AccountCard.findOne({
