@@ -17,6 +17,18 @@ Session.init({
       key: 'id'
     }
   },
+  browser: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  os: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  device: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
