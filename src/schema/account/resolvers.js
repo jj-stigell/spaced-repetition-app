@@ -4,61 +4,78 @@ const errors = require('../../util/errors/errors');
 const constants = require('../../util/constants');
 const validator = require('../../util/validation//validator');
 const graphQlErrors = require('../../util/errors/graphQlErrors');
-const accountService = require('../services/accountService');
+const services = require('../services');
+const { parseUserAgent } = require('../../util/helper');
 
 const resolvers = {
   Query: {
     emailAvailable: async (_, { email }) => {
       await validator.validateEmail(email);
-      const emailInUse = await accountService.findAccountByEmail(email);
+      const emailInUse = await services.accountService.findAccountByEmail(email);
+      
+      return { status: emailInUse ? false : true };
+    },
+    fetchSessions: async (root, args, { currentUser }) => {
+      if (!currentUser) graphQlErrors.notAuthError();
+      const sessions = await services.sessionService.findAllSessions(currentUser.id);
+      if (sessions.length === 0) return graphQlErrors.defaultError(errors.session.sessionNotFoundError);
 
-      return { 
-        __typename: 'Success',
-        status: emailInUse ? false : true
-      };
+      return sessions;
     },
   },
   Mutation: {
     createAccount: async (_, { email, password, passwordConfirmation, languageId }) => {
       await validator.validateNewAccount(email, password, passwordConfirmation, languageId);
-      const emailInUse = await accountService.findAccountByEmail(email);
+      const emailInUse = await services.accountService.findAccountByEmail(email);
       if (emailInUse) return graphQlErrors.defaultError(errors.emailInUseError);
-      const passwordHash = await accountService.hashPassword(password);
+      const passwordHash = await services.accountService.hashPassword(password);
       // Create a new account if all validations pass
-      const account = await accountService.createNewAccount(email, passwordHash);
+      const account = await services.accountService.createNewAccount(email, passwordHash);
 
       return {
-        __typename: 'Account',
         id: account.id,
         email: account.email,
       };
     },
-    login: async (_, { email, password }) => {
+    login: async (_, { email, password }, { userAgent }) => {
       await validator.validateLogin(email, password);
-      const account = await accountService.findAccountByEmail(email);
+      const account = await services.accountService.findAccountByEmail(email);
       if (!account?.passwordHash) return graphQlErrors.defaultError(errors.userOrPassIncorrectError);
-      const passwordCorrect = await accountService.hashCompare(password, account.passwordHash);
+      const passwordCorrect = await services.accountService.hashCompare(password, account.passwordHash);
       if (!passwordCorrect) return graphQlErrors.defaultError(errors.userOrPassIncorrectError);
-
-      const session = await accountService.createNewSession(account.id);
-
-
-      console.log(session);
+      const parsedUserAgent = parseUserAgent(userAgent);
+      const session = await services.sessionService.createNewSession(account.id, parsedUserAgent);
 
       return { 
-        __typename: 'AccountToken',
-        token: { value: jwt.sign( { id: account.id, session: session.id }, JWT_SECRET, { expiresIn: constants.jwtExpiryTime } )},
+        token: { value: jwt.sign( { id: account.id, session: session.id }, JWT_SECRET, { expiresIn: constants.login.jwtExpiryTime } )},
         user: { id: account.id, email: account.email }
       };
+    },
+    logout: async (root, args, { currentUser }) => {
+      if (!currentUser) graphQlErrors.notAuthError();
+      const res = await services.sessionService.deleteSession(currentUser.session);
+      if (res === 0) return graphQlErrors.defaultError(errors.session.sessionNotFoundError);
+
+      return { status: true };
+    },
+    deleteSession: async (root, { sessionId }, { currentUser }) => {
+      if (!currentUser) graphQlErrors.notAuthError();
+      await validator.validateUUID(sessionId);
+      const session = await services.sessionService.findSessionById(sessionId);
+      if (session === null) return graphQlErrors.defaultError(errors.session.sessionNotFoundError);
+      if (session.accountId !== currentUser.id) return graphQlErrors.defaultError(errors.session.notOwnerOfSession);
+      await services.sessionService.deleteSession(sessionId);
+
+      return { status: true };
     },
     changePassword: async (_, { currentPassword, newPassword, newPasswordConfirmation }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateChangePassword(currentPassword, newPassword, newPasswordConfirmation);
-      const account = await accountService.findAccountById(currentUser.id);
+      const account = await services.accountService.findAccountById(currentUser.id);
       if (!account?.passwordHash) return graphQlErrors.defaultError(errors.userOrPassIncorrectError);
-      const passwordCorrect = await accountService.hashCompare(currentPassword, account.passwordHash);
+      const passwordCorrect = await services.accountService.hashCompare(currentPassword, account.passwordHash);
       if (!passwordCorrect) return graphQlErrors.defaultError(errors.currentPasswordIncorrect);
-      const passwordHash = await accountService.hashPassword(newPassword);
+      const passwordHash = await services.accountService.hashPassword(newPassword);
 
       try {
         // Update password if all validations pass
@@ -68,10 +85,7 @@ const resolvers = {
         return graphQlErrors.internalServerError(error);
       }
 
-      return { 
-        __typename: 'Success',
-        status: true
-      };
+      return { status: true };
     },
   }
 };
