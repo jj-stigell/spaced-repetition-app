@@ -17,15 +17,18 @@ Frontend time keeping is in the frontend GitHub repository
 
 
 ## Tech stack
-- [GraphQL](https://graphql.org/)
-- [PostgreSQL](https://www.postgresql.org/) database, with [Sequelize](https://sequelize.org/)
+- [NodeJs](https://nodejs.org/en/), cross-platform JavaScript runtime environment. [License information](https://github.com/nodejs/node/blob/main/LICENSE)
+- [GraphQL](https://graphql.org/), query language for APIs and a runtime for fulfilling those queries with your existing data. [MIT License](https://github.com/graphql/graphql-js/blob/main/LICENSE)
+- [PostgreSQL](https://www.postgresql.org/), relational database. [PostgreSQL License](https://www.postgresql.org/about/licence/)
 
 
 ## Libraries
+- [Sequelize](https://sequelize.org/), modern TypeScript and Node.js ORM.
 - [JSON web token](https://www.npmjs.com/package/jsonwebtoken) or [JWT](https://jwt.io/) for user authorization. [MIT License](https://github.com/auth0/node-jsonwebtoken/blob/HEAD/LICENSE)
-- [bcrypt](https://www.npmjs.com/package/bcrypt) for hashing user passwords. [MIT License](https://github.com/kelektiv/node.bcrypt.js/blob/master/LICENSE)
-- [validator.js](https://www.npmjs.com/package/validator), validating user input on the server side. [MIT License](https://github.com/validatorjs/validator.js/blob/master/LICENSE)
-- [Yup](https://www.npmjs.com/package/yup), Yup is a JavaScript schema builder for value parsing and validation.
+- [bcrypt](https://www.npmjs.com/package/bcrypt), for hashing user passwords. [MIT License](https://github.com/kelektiv/node.bcrypt.js/blob/master/LICENSE)
+- [Yup](https://www.npmjs.com/package/yup), Yup is a JavaScript schema builder for value parsing and validation. [MIT License](https://github.com/jquense/yup/blob/master/LICENSE.md)
+- [UAParser.js](https://www.npmjs.com/package/ua-parser-js], javaScript library to detect Browser, Engine, OS, CPU, and Device type/model from User-Agent data. [MIT License](https://github.com/faisalman/ua-parser-js/blob/master/license.md)
+- [Umzug](https://github.com/sequelize/umzug), framework-agnostic migration tool for Node. It provides a clean API for running and rolling back tasks. [MIT License](https://github.com/sequelize/umzug/blob/main/LICENSE)
 
 
 ## TODOs
@@ -45,6 +48,7 @@ Frontend time keeping is in the frontend GitHub repository
     - [ ] Catch internal server errors, no (possible) db errors to client
 - [ ] Service functionality
     - [ ] User related
+        - [ ] transactions (where needed)
         - [X] User registration
             - [X] Validate input (Validator lib, RegExp, Yup)
             - [X] Check that username, email etc not taken
@@ -55,20 +59,19 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] add session
             - [X] Succesfully create and return token
                 - [X] token content (user id, exp), expiry time set in constants
-        - [ ] User logout
-            - [ ] Delete session
-        - [ ] User change password/personal data
+        - [X] User logout
+            - [X] Delete session
+        - [X] User change password/personal data
             - [X] Old password matches hash in DB
             - [X] Validate new, confirmation must match, cannot be same as old one
-            - [ ] show open sessions (location, device, expiry date)
-            - [ ] delete session
-        - [ ] Recover account (e.g. password forgotten)
+            - [X] show open sessions (location, device, expiry date)
+            - [X] delete session
     - [ ] Card related
         - [ ] transactions (where needed)
         - [X] Validation of user input, including error messages
             - [X] Install and configure Yup
             - [X] Match validation rules with front-end
-        - [ ] Card and deck mutations
+        - [X] Card and deck mutations
             - [X] Reschedule card
             - [X] Add custom card hint
             - [X] Add custom card story
@@ -89,12 +92,17 @@ Frontend time keeping is in the frontend GitHub repository
     - [ ] misc.
         - [ ] Bug report tool
             - [X] Model and realtion to other models
-            - [ ] query
+            - [ ] query (admin only)
+                - [ ] fetch all bug reports
+                - [ ] fetch bug report by id, type etc.
             - [ ] mutation
+                - [ ] post bug report
+                - [ ] solve bug report (admin only)
+                - [ ] delete bug report (admin only)
 - [ ] PostgreSQL / Sequelize
     - [X] Translate db to Sequelize
     - [X] Create models and associations
-    - [ ] Load initial sql file containing decks, cards and translations
+    - [X] Load initial sql file containing decks, cards and translations
         - [X] Kanji
         - [X] Radicals
         - [X] Translations
@@ -104,12 +112,13 @@ Frontend time keeping is in the frontend GitHub repository
         - [ ] unique (email, deck names)
         - [ ] range: integers, varchar
     - [ ] DB testing/optimizing
-        - [X] Generate [mock data](https://www.mockaroo.com/)
+        - [X] Generate mock data
         - [ ] Optimize queries
         - [ ] Optimize indexes
 - [ ] Testing
-    - [ ] Unit testing for functions
+    - [ ] Unit tests
         - [ ] Helper functions
+        - [ ] Services
     - [ ] Integration tests
         - [X] ACCOUNT
             - [X] Account creation
@@ -122,7 +131,6 @@ Frontend time keeping is in the frontend GitHub repository
             - [ ] Add custom card story
             - [ ] set deck as favorite
             - [ ] Sick day
-            - [ ] Optimize schedule
         - [ ] QUERIES
             - [ ] Fetch due cards
             - [ ] Fetch new cards
