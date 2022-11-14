@@ -47,6 +47,14 @@ const errors = {
   noCardsFound: 'noCardsFound',
   noRecordsFoundError: 'noRecordsFoundError',
   nonActiveDeckError: 'nonActiveDeckError',
+  admin: {
+    noAdminRightsError: 'noAdminRightsError',
+    noAdminReadRights: 'noAdminReadRights',
+    noAdminWriteRights: 'noAdminWriteRights'
+  },
+  bug: {
+    bugByIdNotFound: 'bugByIdNotFound'
+  },
   deckErrors: {
     noDecksFoundError: 'noDecksFoundError'
   },
@@ -57,10 +65,10 @@ const errors = {
     validationError: 'VALIDATION_ERROR',
     defaultError: 'DEFAULT_ERROR',
   },
-  cardErrors: {
+  card: {
 
   },
-  validationError: {
+  validation: {
 
   },
   session: {
