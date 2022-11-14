@@ -17,10 +17,21 @@ type Success {
   status: Boolean!
 }
 
+type Session {
+  id: String
+  browser: String
+  os: String
+  device: String
+  createdAt: Date
+  expireAt: Date
+}
+
 type Query {
   emailAvailable(
     email: String!
   ): Success!
+
+  fetchSessions: [Session!]!
 }
 
 type Mutation {
@@ -35,6 +46,12 @@ type Mutation {
     email: String!
     password: String!
   ): AccountToken!
+
+  logout: Success!
+
+  deleteSession(
+    sessionId: String!
+  ): Success!
 
   changePassword(
     currentPassword: String!
