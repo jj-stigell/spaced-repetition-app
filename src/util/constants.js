@@ -20,8 +20,11 @@ const constants = {
   maxAmountOfDecks: 50,
   passwordMaxLength: 50,
   passwordMinLength: 8,
-  jwtExpiryTime: 60*60*300,
-  saltRounds: 10,
+  login: {
+    jwtExpiryTime: 60*60*24*28,
+    sessionLifetime: 28,                                                // How long a new session will last in days, same as jwt expiry time
+    saltRounds: 10,
+  },
   card: {
     storyMinLength: 1,
     storyMaxLength: 160,
