@@ -40,11 +40,12 @@ const resolvers = {
     },
   },
   Mutation: {
-    sendBugMessage: async (_, { type, bugMessage }, { currentUser }) => {
+    sendBugMessage: async (_, { type, bugMessage, cardId }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
-      const admin = services.accountService.findAdminById(currentUser.id);
-      console.log(admin);
+      await validator.validateNewBug(type, bugMessage, cardId);
+      const newBugReport = await services.bugService.createNewBugReport(type, bugMessage, currentUser.id, cardId);
 
+      return newBugReport;
     },
     solveBugMessage: async (_, { bugId, solvedMessage, solved }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();

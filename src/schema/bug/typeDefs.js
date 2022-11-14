@@ -1,5 +1,6 @@
 const typeDefs = `
 type Bug {
+  id: ID
   accountId: Int
   cardId: Int
   type: String
@@ -28,7 +29,8 @@ type Mutation {
   sendBugMessage(
     type: String!
     bugMessage: String!
-  ): Success!
+    cardId: Int
+  ): Bug!
 
   solveBugMessage(
     bugId: Int!

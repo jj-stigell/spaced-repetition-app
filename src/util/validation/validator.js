@@ -137,6 +137,14 @@ const validateBugType = async (bugType) => {
   }
 };
 
+const validateNewBug = async (bugType, bugMessage, cardId) => {
+  try {
+    await schema.newBug.validate({ bugType, bugMessage, cardId }, { abortEarly: constants.yupAbortEarly  });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
 module.exports = {
   validateEmail,
   validateNewAccount,
@@ -153,5 +161,6 @@ module.exports = {
   validateFetchKanji,
   validateFetchCardsByType,
   validateCardType,
-  validateBugType
+  validateBugType,
+  validateNewBug
 };

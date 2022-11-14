@@ -134,6 +134,11 @@ const hint = yup
   .min(constants.card.hintMinLength, errors.hintTooShortError)
   .max(constants.card.hintMaxLength, errors.hintTooLongError);
 
+const bugMessage = yup
+  .string(errors.inputValueTypeError)
+  .min(constants.bugs.bugMessageMinLength, errors.bug.bugMessageTooShortError)
+  .max(constants.bugs.bugMessageMaxLength, errors.bug.bugMessageTooLongError);
+
 module.exports = {
   deckId,
   deckIdRequired,
@@ -159,5 +164,6 @@ module.exports = {
   newCardsPerDay,
   days,
   story,
-  hint
+  hint,
+  bugMessage
 };

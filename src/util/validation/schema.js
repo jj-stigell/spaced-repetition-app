@@ -40,6 +40,12 @@ const bugType = yup.object().shape({
   bugType: validationRules.bugType
 });
 
+const newBug = yup.object().shape({
+  bugType: validationRules.bugType,
+  bugMessage: validationRules.bugMessage,
+  cardId: validationRules.integer
+});
+
 const fetchKanji = yup.object().shape({
   kanjiId: validationRules.integer,
   includeAccountCard: validationRules.isBoolean
@@ -100,6 +106,7 @@ module.exports = {
   UUID,
   cardType,
   bugType,
+  newBug,
   fetchKanji,
   deckSettings,
   pushCards,
