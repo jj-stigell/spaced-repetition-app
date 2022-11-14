@@ -36,7 +36,7 @@ const constants = {
     bugMessageMinLength: 5,
     bugMessageMaxLength: 100,
     solvedMessageMinLength: 1,
-    solcedMessageMaxLength: 160,
+    solvedMessageMaxLength: 160,
     bugTypes: ['translation', 'user-interface', 'functionality', 'other']
   },
   lowercaseRegex: /^(?=.*[a-z])/,
