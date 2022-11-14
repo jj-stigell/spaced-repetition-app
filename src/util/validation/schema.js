@@ -28,6 +28,10 @@ const integer = yup.object().shape({
   id: validationRules.integer
 });
 
+const UUID = yup.object().shape({
+  UUID: validationRules.UUID
+});
+
 const cardType = yup.object().shape({
   cardType: validationRules.cardType
 });
@@ -89,6 +93,7 @@ module.exports = {
   deckId,
   id,
   integer,
+  UUID,
   cardType,
   fetchKanji,
   deckSettings,
