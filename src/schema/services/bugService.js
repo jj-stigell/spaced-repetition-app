@@ -20,6 +20,18 @@ const findAllBugReports = async () => {
   }
 };
 
+const findAllBugReportsByType = async (type) => {
+  try {
+    return await models.BugReport.findAll({
+      where: {
+        type: type
+      }
+    });
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
 const createNewBugReport = async (email, passwordHash) => {
   try {
     return await models.BugReport.create({
@@ -34,5 +46,6 @@ const createNewBugReport = async (email, passwordHash) => {
 module.exports = {
   findBugReportById,
   findAllBugReports,
+  findAllBugReportsByType,
   createNewBugReport
 };
