@@ -32,7 +32,7 @@ const fetchDailyReviewHistoryNDays = `SELECT created_at::date AS date, COUNT(*) 
 const fetchDueReviewsNDays = `SELECT due_at::date AS date, COUNT(*) AS reviews FROM account_card WHERE account_id = :accountId GROUP BY due_at::date
 ORDER BY due_at::date ASC LIMIT :limitReviews`;
 
-// Fetch by accounts learning progress, grouped by  "matured", "learning", and "new"
+// Fetch by accounts learning progress, grouped by "matured", "learning", and "new"
 const groupByTypeAndLearningStatus = `
 SELECT 'matured' AS status, COUNT(acc.mature) FROM card INNER JOIN account_card AS acc
 ON acc.card_id = card.id WHERE card.type = :cardType AND acc.account_id = :accountId AND acc.mature = true GROUP BY acc.mature
