@@ -4,10 +4,11 @@ const { makeExecutableSchema } = require('@graphql-tools/schema');
 const { typeDefs: Account, resolvers: accountResolvers } = require('./account/');
 const { typeDefs: Card, resolvers: cardResolvers } = require('./card/');
 const { typeDefs: Kanji, resolvers: kanjiResolvers } = require('./kanji/');
+const { typeDefs: Bug, resolvers: bugResolvers } = require('./bug/');
 
 const schema = makeExecutableSchema({
-  typeDefs: [ Account, Card, Kanji ],
-  resolvers: merge(accountResolvers, cardResolvers, kanjiResolvers),
+  typeDefs: [ Account, Card, Kanji, Bug ],
+  resolvers: merge(accountResolvers, cardResolvers, kanjiResolvers, bugResolvers),
 });
 
 module.exports = schema;
