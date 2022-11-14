@@ -4,9 +4,9 @@ const { internalServerError } = require('../../util/errors/graphQlErrors');
 const constants = require('../../util/constants');
 const models = require('../../models');
 
-const findBugReportById = async (bugId) => {
+const findBugReportById = async (id) => {
   try {
-    return await models.BugReport.findByPk(bugId);
+    return await models.BugReport.findByPk(id);
   } catch (error) {
     return internalServerError(error);
   }
@@ -32,12 +32,28 @@ const findAllBugReportsByType = async (type) => {
   }
 };
 
-const createNewBugReport = async (email, passwordHash) => {
+const createNewBugReport = async (type, message, accountId, cardId) => {
   try {
     return await models.BugReport.create({
-      email: email.toLowerCase(),
-      passwordHash: passwordHash,
+      accountId: accountId,
+      cardId: cardId ? cardId : null,
+      type: type,
+      bugMessage: message
     });
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
+const solveBugReport = async (bugId, solvedMessage, solved) => {
+  try {
+    const bugReport = await findBugReportById(bugId);
+    bugReport.set({
+      solvedMessage: solvedMessage ? solvedMessage : null,
+      solved: solved ? true : false
+    });
+    bugReport.save();
+    return bugReport;
   } catch (error) {
     return internalServerError(error);
   }
@@ -47,5 +63,6 @@ module.exports = {
   findBugReportById,
   findAllBugReports,
   findAllBugReportsByType,
-  createNewBugReport
+  createNewBugReport,
+  solveBugReport
 };

@@ -49,8 +49,12 @@ const resolvers = {
     },
     solveBugMessage: async (_, { bugId, solvedMessage, solved }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
-      const admin = services.accountService.findAdminById(currentUser.id);
-      console.log(admin);
+      await validator.validateBugSolve(bugId, solvedMessage, solved);
+      const admin = await services.accountService.findAdminById(currentUser.id);
+      if (admin === null) return graphQlErrors.defaultError(errors.admin.noAdminRightsError);
+      if (!admin.write) return graphQlErrors.defaultError(errors.admin.noAdminWriteRights);
+
+      return await services.bugService.solveBugReport(bugId, solvedMessage, solved);
     },
   }
 };
