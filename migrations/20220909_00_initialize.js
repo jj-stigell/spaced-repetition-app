@@ -128,6 +128,16 @@ module.exports = {
         allowNull: false,
         defaultValue: true
       },
+      read: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      write: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -918,6 +928,18 @@ module.exports = {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       },
+      browser: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      os: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      device: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -944,7 +966,7 @@ module.exports = {
     await queryInterface.sequelize.query(kanji_translation_en);
     await queryInterface.sequelize.query(word);
     await queryInterface.sequelize.query(word_translation_en);
-    if (NODE_ENV !== 'production' && NODE_ENV !== 'test') {
+    if (NODE_ENV !== 'production' && NODE_ENV !== 'test' && NODE_ENV !== 'development') {
       console.log('Not in production/test, loading dummy data');
       await queryInterface.sequelize.query(dummy_accounts);
       await queryInterface.sequelize.query(account_deck_settings);
