@@ -53,7 +53,11 @@ const errors = {
     noAdminWriteRights: 'noAdminWriteRights'
   },
   bug: {
-    bugByIdNotFound: 'bugByIdNotFound'
+    bugByIdNotFound: 'bugByIdNotFound',
+    bugMessageTooShortError: 'bugMessageTooShortError',
+    bugMessageTooLongError: 'bugMessageTooLongError',
+    bugSolveMessageTooShortError: 'bugSolveMessageTooShortError',
+    bugSolveMessageTooLongError: 'bugSolveMessageTooLongError'
   },
   deckErrors: {
     noDecksFoundError: 'noDecksFoundError'

@@ -139,6 +139,11 @@ const bugMessage = yup
   .min(constants.bugs.bugMessageMinLength, errors.bug.bugMessageTooShortError)
   .max(constants.bugs.bugMessageMaxLength, errors.bug.bugMessageTooLongError);
 
+const bugSolveMessage = yup
+  .string(errors.inputValueTypeError)
+  .min(constants.bugs.solvedMessageMinLength, errors.bug.bugSolveMessageTooShortError)
+  .max(constants.bugs.solvedMessageMaxLength, errors.bug.bugSolveMessageTooLongError);
+
 module.exports = {
   deckId,
   deckIdRequired,
@@ -165,5 +170,6 @@ module.exports = {
   days,
   story,
   hint,
-  bugMessage
+  bugMessage,
+  bugSolveMessage
 };
