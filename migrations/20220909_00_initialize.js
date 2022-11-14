@@ -23,6 +23,7 @@ const account_deck_settings = fs.readFileSync(path.resolve(__dirname, '../setup/
 const account_card = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_card.sql'), 'utf8');
 const account_review = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_review.sql'), 'utf8');
 const dummy_accounts = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/dummy_accounts.sql'), 'utf8');
+const bug_Reports = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/bug_reports.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -966,9 +967,10 @@ module.exports = {
     await queryInterface.sequelize.query(kanji_translation_en);
     await queryInterface.sequelize.query(word);
     await queryInterface.sequelize.query(word_translation_en);
+    await queryInterface.sequelize.query(dummy_accounts);
+    await queryInterface.sequelize.query(bug_Reports);
     if (NODE_ENV !== 'production' && NODE_ENV !== 'test' && NODE_ENV !== 'development') {
-      console.log('Not in production/test, loading dummy data');
-      await queryInterface.sequelize.query(dummy_accounts);
+      console.log('Not in production/test, loading dummy review data');
       await queryInterface.sequelize.query(account_deck_settings);
       await queryInterface.sequelize.query(account_card);
       await queryInterface.sequelize.query(account_review);
