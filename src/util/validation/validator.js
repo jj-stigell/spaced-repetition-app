@@ -73,6 +73,14 @@ const validateInteger = async (integer) => {
   }
 };
 
+const validateUUID = async (UUID) => {
+  try {
+    await schema.UUID.validate({ UUID }, { abortEarly: constants.yupAbortEarly  });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
 const validatePushCards = async (deckId, days) => {
   try {
     await schema.pushCards.validate({ deckId, days }, { abortEarly: constants.yupAbortEarly  });
@@ -130,6 +138,7 @@ module.exports = {
   validateRescheduleCard,
   validateDeckSettings,
   validateInteger,
+  validateUUID,
   validatePushCards,
   validateDeckId,
   validateEditAccountCard,

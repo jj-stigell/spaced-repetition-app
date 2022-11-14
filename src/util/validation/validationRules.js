@@ -86,6 +86,11 @@ const integer = yup
   .min(1, errors.negativeNumberTypeError)
   .integer(errors.inputValueTypeError);
 
+const UUID = yup
+  .string(errors.inputValueTypeError)
+  .uuid(errors.inputValueTypeError)
+  .required(errors.inputValueMissingError);
+
 const reviewInterval = yup
   .number(errors.inputValueTypeError)
   .min(constants.minReviewInterval, errors.minReviewIntervalError)
@@ -141,6 +146,7 @@ module.exports = {
   isBoolean,
   cardType,
   integer,
+  UUID,
   reviewInterval,
   reviewIntervalRequired,
   reviewsPerDay,

@@ -47,6 +47,9 @@ const errors = {
   noCardsFound: 'noCardsFound',
   noRecordsFoundError: 'noRecordsFoundError',
   nonActiveDeckError: 'nonActiveDeckError',
+  deckErrors: {
+    noDecksFoundError: 'noDecksFoundError'
+  },
   graphQlErrors: {
     badUserInput: 'BAD_USER_INPUT',
     unauthenticated: 'UNAUTHENTICATED',
@@ -59,6 +62,13 @@ const errors = {
   },
   validationError: {
 
+  },
+  session: {
+    sessionNotFoundError: 'sessionNotFoundError',
+    notOwnerOfSession: 'notOwnerOfSession',
+  },
+  login: {
+    
   }
 };
 
