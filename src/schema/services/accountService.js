@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const { internalServerError } = require('../../util/errors/graphQlErrors');
 const constants = require('../../util/constants');
-const { Account, Session } = require('../../models');
+const models = require('../../models');
 
 /**
  * Fecth account from database by id number
@@ -10,7 +10,7 @@ const { Account, Session } = require('../../models');
  */
 const findAccountById = async (accountId) => {
   try {
-    return await Account.findByPk(accountId);
+    return await models.Account.findByPk(accountId);
   } catch (error) {
     return internalServerError(error);
   }
@@ -23,7 +23,24 @@ const findAccountById = async (accountId) => {
  */
 const findAccountByEmail = async (email) => {
   try {
-    return await Account.findOne({ where: { email: email.toLowerCase() } });
+    return await models.Account.findOne({ where: { email: email.toLowerCase() } });
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
+/**
+ * Find admin entry from db
+ * @param {integer} accountId, accounts id number
+ * @returns {Admin} admin found from based on id
+ */
+const findAdminById = async (accountId) => {
+  try {
+    return await models.Admin.findOne({
+      where: {
+        accountId: accountId
+      }
+    });
   } catch (error) {
     return internalServerError(error);
   }
@@ -37,7 +54,7 @@ const findAccountByEmail = async (email) => {
  */
 const createNewAccount = async (email, passwordHash) => {
   try {
-    return await Account.create({
+    return await models.Account.create({
       email: email.toLowerCase(),
       passwordHash: passwordHash,
     });
@@ -67,24 +84,8 @@ const hashCompare = async (password, hash) => {
  */
 const hashPassword = async (password) => {
   try {
-    return await bcrypt.hash(password, constants.saltRounds);
+    return await bcrypt.hash(password, constants.login.saltRounds);
   } catch(error) {
-    return internalServerError(error);
-  }
-};
-
-/**
- * Create a new session for the user, set expiry same as JWT expiry, placeholder for now
- * @param {integer} accountId, accounts id number
- * @returns New session object
- */
-const createNewSession = async (accountId) => {
-  try {
-    return await Session.create({
-      accountId: accountId,
-      expireAt: '2022-11-29',
-    });
-  } catch (error) {
     return internalServerError(error);
   }
 };
@@ -92,8 +93,8 @@ const createNewSession = async (accountId) => {
 module.exports = {
   findAccountById,
   findAccountByEmail,
+  findAdminById,
   createNewAccount,
   hashCompare,
-  hashPassword,
-  createNewSession
+  hashPassword
 };
