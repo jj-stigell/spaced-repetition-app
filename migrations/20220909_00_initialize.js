@@ -893,7 +893,7 @@ module.exports = {
         validate: {
           len: [
             constants.bugs.solvedMessageMinLength,
-            constants.bugs.solcedMessageMaxLength
+            constants.bugs.solvedMessageMaxLength
           ]
         }
       },
