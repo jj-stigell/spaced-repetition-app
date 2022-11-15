@@ -85,10 +85,28 @@ const solveBugReport = async (bugId, solvedMessage, solved) => {
   }
 };
 
+/**
+ * Delete bug reports by its id
+ * @param {integer} bugId Id of the bug report
+ * @returns {BugReport} Deleted bug report
+ */
+const deleteBugReport = async (bugId) => {
+  try {
+    return await models.BugReport.destroy({
+      where: {
+        id: bugId
+      }
+    });
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
 module.exports = {
   findBugReportById,
   findAllBugReports,
   findAllBugReportsByType,
   createNewBugReport,
-  solveBugReport
+  solveBugReport,
+  deleteBugReport
 };

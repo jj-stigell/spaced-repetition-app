@@ -14,29 +14,33 @@ type Success {
 }
 
 type Query {
-  fetchAllBugs: [Bug!]!
+  fetchAllBugReports: [Bug!]!
 
-  fetchBugById(
+  fetchBugReportById(
     bugId: Int!
   ): Bug!
   
-  fetchBugsByType(
+  fetchBugReportsByType(
     type: String!
   ): [Bug!]!
 }
 
 type Mutation {
-  sendBugMessage(
+  sendBugReport(
     type: String!
     bugMessage: String!
     cardId: Int
   ): Bug!
 
-  solveBugMessage(
+  solveBugReport(
     bugId: Int!
     solvedMessage: String
     solved: Boolean
   ): Bug!
+
+  deleteBugReport(
+    bugId: Int!
+  ): Success!
 }`;
 
 module.exports = typeDefs;

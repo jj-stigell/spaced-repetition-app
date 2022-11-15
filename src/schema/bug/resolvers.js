@@ -1,13 +1,11 @@
-/* eslint-disable no-unused-vars */
 const errors = require('../../util/errors/errors');
-const constants = require('../../util/constants');
 const validator = require('../../util/validation//validator');
 const graphQlErrors = require('../../util/errors/graphQlErrors');
 const services = require('../services');
 
 const resolvers = {
   Query: {
-    fetchAllBugs: async (root, args, { currentUser }) => {
+    fetchAllBugReports: async (root, args, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       const admin = await services.accountService.findAdminById(currentUser.id);
       if (admin === null) return graphQlErrors.defaultError(errors.admin.noAdminRightsError);
@@ -15,7 +13,7 @@ const resolvers = {
 
       return await services.bugService.findAllBugReports();    
     },
-    fetchBugById: async (root, { bugId }, { currentUser }) => {
+    fetchBugReportById: async (root, { bugId }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateInteger(bugId);
       const admin = await services.accountService.findAdminById(currentUser.id);
@@ -27,27 +25,23 @@ const resolvers = {
 
       return bug;
     },
-    fetchBugsByType: async (root, { type }, { currentUser }) => {
+    fetchBugReportsByType: async (root, { type }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateBugType(type);
       const admin = await services.accountService.findAdminById(currentUser.id);
       if (admin === null) return graphQlErrors.defaultError(errors.admin.noAdminRightsError);
       if (!admin.read) return graphQlErrors.defaultError(errors.admin.noAdminReadRights);
 
-      const bugs = await services.bugService.findAllBugReportsByType(type);
-      
-      return bugs;
+      return await services.bugService.findAllBugReportsByType(type);
     },
   },
   Mutation: {
-    sendBugMessage: async (_, { type, bugMessage, cardId }, { currentUser }) => {
+    sendBugReport: async (_, { type, bugMessage, cardId }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateNewBug(type, bugMessage, cardId);
-      const newBugReport = await services.bugService.createNewBugReport(type, bugMessage, currentUser.id, cardId);
-
-      return newBugReport;
+      return await services.bugService.createNewBugReport(type, bugMessage, currentUser.id, cardId);
     },
-    solveBugMessage: async (_, { bugId, solvedMessage, solved }, { currentUser }) => {
+    solveBugReport: async (_, { bugId, solvedMessage, solved }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateBugSolve(bugId, solvedMessage, solved);
       const admin = await services.accountService.findAdminById(currentUser.id);
@@ -55,6 +49,16 @@ const resolvers = {
       if (!admin.write) return graphQlErrors.defaultError(errors.admin.noAdminWriteRights);
 
       return await services.bugService.solveBugReport(bugId, solvedMessage, solved);
+    },
+    deleteBugReport: async (_, { bugId }, { currentUser }) => {
+      if (!currentUser) graphQlErrors.notAuthError();
+      await validator.validateInteger(bugId);
+      const admin = await services.accountService.findAdminById(currentUser.id);
+      if (admin === null) return graphQlErrors.defaultError(errors.admin.noAdminRightsError);
+      if (!admin.write) return graphQlErrors.defaultError(errors.admin.noAdminWriteRights);
+      await services.bugService.deleteBugReport(bugId);
+
+      return { status: true };
     },
   }
 };
