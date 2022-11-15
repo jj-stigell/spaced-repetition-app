@@ -28,12 +28,10 @@ DeckTranslation.init({
   title: {
     type: DataTypes.STRING(60),
     allowNull: false,
-    unique: true,
   },
   description: {
     type: DataTypes.STRING(60),
     allowNull: false,
-    unique: true,
   },
   active: {
     type: DataTypes.BOOLEAN,
