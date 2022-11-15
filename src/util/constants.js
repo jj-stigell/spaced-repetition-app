@@ -21,7 +21,7 @@ const constants = {
   passwordMaxLength: 50,
   passwordMinLength: 8,
   login: {
-    jwtExpiryTime: 60*60*24*28,
+    jwtExpiryTime: 2419200,
     sessionLifetime: 28,                                                // How long a new session will last in days, same as jwt expiry time
     saltRounds: 10,
   },
