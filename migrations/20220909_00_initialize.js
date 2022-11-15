@@ -196,7 +196,6 @@ module.exports = {
         defaultValue: DataTypes.NOW
       }
     }),
-
     await queryInterface.addIndex('deck', ['id', 'language_id'], {
       unique: true
     }),
@@ -229,12 +228,10 @@ module.exports = {
       title: {
         type: DataTypes.STRING(60),
         allowNull: false,
-        unique: true,
       },
       description: {
         type: DataTypes.STRING(60),
         allowNull: false,
-        unique: true
       },
       active: {
         type: DataTypes.BOOLEAN,
@@ -457,6 +454,9 @@ module.exports = {
         defaultValue: DataTypes.NOW,
         allowNull: false
       },
+    }),
+    await queryInterface.addIndex('kanji', ['card_id', 'kanji'], {
+      unique: true
     }),
     await queryInterface.createTable('radical', {
       id: {
@@ -951,6 +951,9 @@ module.exports = {
         allowNull: false
       },
     }),
+    await queryInterface.addIndex('session', ['id', 'account_id'], {
+      unique: true
+    }),
     await queryInterface.sequelize.query(alter_tables);
     await queryInterface.sequelize.query(language);
     await queryInterface.sequelize.query(account);
@@ -999,5 +1002,6 @@ module.exports = {
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_card_type;');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_deck_type;');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_account_review_result;');
+    await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_bug_report_type;');
   },
 };
