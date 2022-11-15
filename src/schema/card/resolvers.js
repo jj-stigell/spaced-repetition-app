@@ -1,6 +1,7 @@
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
 const graphQlErrors = require('../../util/errors/graphQlErrors');
+const { calculateDate } = require('../../util/helper');
 const cardService = require('../services/cardService');
 const deckService = require('../services/deckService');
 const validator = require('../../util/validation//validator');
@@ -49,10 +50,7 @@ const resolvers = {
 
       if (!cards) return graphQlErrors.defaultError(errors.noDueCardsError);
 
-      return {
-        __typename: 'Cardset',
-        Cards: cards
-      };
+      return { Cards: cards };
     },
     fetchCardsByType: async (_, { cardType, languageId }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
@@ -70,21 +68,13 @@ const resolvers = {
       // No cards found with the type
       if (cards.length === 0) return graphQlErrors.defaultError(errors.noCardsFound);
 
-      console.log(cards.length);
-
-      return {
-        __typename: 'Cardset',
-        Cards: cards
-      };
+      return { Cards: cards };
     },
     fetchDecks: async (root, args, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       const decks = await deckService.findAllDecks(false);
-
-      return {
-        __typename: 'DeckList',
-        Decks: decks
-      };
+      if (decks.length === 0) return graphQlErrors.defaultError(errors.deckErrors.noDecksFoundError);
+      return { Decks: decks };
     },
     fecthDeckSettings: async (_, { deckId }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
@@ -99,7 +89,6 @@ const resolvers = {
       }
 
       return {
-        __typename: 'DeckSettings',
         id: deckSettings.id,
         accountId: deckSettings.accountId,
         deckId: deckSettings.deckId,
@@ -116,28 +105,19 @@ const resolvers = {
       await validator.validateInteger(limitReviews);
       const reviewHistory = await cardService.findReviewHistory(limitReviews, currentUser.id);
       if (reviewHistory.length === 0) return graphQlErrors.defaultError(errors.noRecordsFoundError);
-
-      return { 
-        __typename: 'Reviews',
-        reviews: reviewHistory
-      };
+      return { reviews: reviewHistory };
     },
     fetchDueCount: async (_, { limitReviews }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateInteger(limitReviews);
       const dueReviews = await cardService.findDueReviewsCount(limitReviews, currentUser.id);
       if (dueReviews.length === 0) return graphQlErrors.defaultError(errors.noDueCardsError);
-
-      return { 
-        __typename: 'Reviews',
-        reviews: dueReviews
-      };
+      return { reviews: dueReviews };
     },
     fetchLearningStatistics: async (_, { cardType }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateCardType(cardType);
-      const statistics = await cardService.findLearningProgressByType(cardType, currentUser.id);
-      return statistics;
+      return await cardService.findLearningProgressByType(cardType, currentUser.id);
     },
   },
   Mutation: {
@@ -146,9 +126,8 @@ const resolvers = {
       await validator.validateRescheduleCard(cardId, reviewResult.toLowerCase(), newInterval, newEasyFactor, extraReview, timing);
 
       let status = false;
-      // Create new (due) date object
-      let newDueDate = new Date();
-      newDueDate.setDate(newDueDate.getDate() + newInterval);
+      // Calculate new duedate
+      const newDueDate = calculateDate(newInterval);
 
       // Check if card exists for the user for that card id
       let accountCard = await cardService.findAccountCard(cardId, currentUser.id);
@@ -177,10 +156,7 @@ const resolvers = {
       const newReviewHistory = await cardService.createAccountReview(cardId, currentUser.id, reviewResult, extraReview, timing);
       if (newReviewHistory) status = true;
 
-      return { 
-        __typename: 'Success',
-        status: status,
-      };
+      return { status: status };
     },
     changeDeckSettings: async (_, { deckId, favorite, reviewInterval, reviewsPerDay, newCardsPerDay }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
@@ -212,7 +188,6 @@ const resolvers = {
       }
 
       return {
-        __typename: 'DeckSettings',
         id: deckSettings.id,
         accountId: deckSettings.accountId,
         deckId: deckSettings.deckId,
@@ -233,10 +208,7 @@ const resolvers = {
         await cardService.pushAllCards(days, currentUser.id);
       }
       
-      return { 
-        __typename: 'Success',
-        status: true
-      };
+      return { status: true };
     },
     editAccountCard: async (_, { cardId, story, hint }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
@@ -262,10 +234,7 @@ const resolvers = {
           return graphQlErrors.internalServerError(error);
         }
       }
-      return { 
-        __typename: 'AccountCard',
-        accountCard
-      };
+      return { accountCard };
     },
   }
 };
