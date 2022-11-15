@@ -91,14 +91,15 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] Add row to review history
     - [ ] misc.
         - [ ] Bug report tool
+            - [ ] transactions (where needed)
             - [X] Model and realtion to other models
-            - [ ] query (admin only)
-                - [ ] fetch all bug reports
-                - [ ] fetch bug report by id, type etc.
-            - [ ] mutation
-                - [ ] post bug report
-                - [ ] solve bug report (admin only)
-                - [ ] delete bug report (admin only)
+            - [X] query (admin only)
+                - [X] fetch all bug reports
+                - [X] fetch bug report by id, type etc.
+            - [X] mutation
+                - [X] post bug report
+                - [X] solve bug report (admin only)
+                - [X] delete bug report (admin only)
 - [ ] PostgreSQL / Sequelize
     - [X] Translate db to Sequelize
     - [X] Create models and associations
@@ -108,13 +109,32 @@ Frontend time keeping is in the frontend GitHub repository
         - [X] Translations
         - [X] Decks
         - [X] Cards
-    - [ ] Add constraints to initial database migration
-        - [ ] unique (email, deck names)
-        - [ ] range: integers, varchar
+    - [X] Constraints
+        - [X] unique (email, admin accountId, deck name, kanji and its card id, radical)
+        - [X] range: integers (max intervals etc.), varchar (stories, message etc.)
+        - [X] onDelete and onUpdate
+    - [X] Enums (defined in constants)
+        - deck type
+        - card type
+        - review result type
+        - bug type
+    - [X] Indexes
+        - deck, ['id', 'language_id']
+        - deck_translation, ['deck_id', 'language_id']
+        - card, ['id', 'language_id']
+        - card_list, ['deck_id', 'card_id']
+        - account_deck_settings, ['account_id', 'deck_id'],
+        - radical_translation, ['radical_id', 'language_id']
+        - kanji_radical, ['radical_id', 'kanji_id']
+        - kanji_translation, ['kanji_id', 'language_id']
+        - word_translation, ['word_id', 'language_id']
+        - account_review, ['id', 'account_id', 'card_id']
+        - account_card, ['account_id', 'card_id']
+        - session, ['id', 'account_id']
+        - kanji, ['card_id', 'kanji']
     - [ ] DB testing/optimizing
         - [X] Generate mock data
         - [ ] Optimize queries
-        - [ ] Optimize indexes
 - [ ] Testing
     - [ ] Unit tests
         - [ ] Helper functions
@@ -125,19 +145,29 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] Login
             - [X] Password changing
             - [ ] Logout
-        - [ ] MUTATIONS
-            - [ ] Reschedule card
-            - [ ] Add custom card hint
-            - [ ] Add custom card story
-            - [ ] set deck as favorite
-            - [ ] Sick day
-        - [ ] QUERIES
-            - [ ] Fetch due cards
-            - [ ] Fetch new cards
-            - [X] Fetch decks
-            - [ ] Fetch due per date, one or multiple
-        
-    
+        - [ ] CARDS
+            - [ ] Mutations
+                - [ ] Reschedule card
+                - [ ] Add custom card hint
+                - [ ] Add custom card story
+                - [ ] set deck as favorite
+                - [ ] Sick day
+            - [ ] Queries
+                - [ ] Fetch due cards
+                - [ ] Fetch new cards
+                - [X] Fetch decks
+                - [ ] Fetch due per date, one or multiple
+        - [ ] BUGS
+            - [ ] Mutations
+                - [ ] create report
+                - [ ] delete report
+                - [ ] solve report
+                - [ ] 
+            - [ ] Queries
+                - [ ] fetch by id
+                - [ ] fetch by type
+                - [ ] fetch all
+
 
 ## Deployment
 Deployment to done from branch `production` only if tests pass succesfully and deployment is indicated in the commit message. Render fetches automatically changes made to the production branch and releases the newest version of the production version. Currently deployed to [Render](https://render.com/)
