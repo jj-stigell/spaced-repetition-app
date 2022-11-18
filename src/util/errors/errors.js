@@ -7,11 +7,7 @@ const errors = {
   notEmailError: 'notEmailError',
   emailMaxLengthError: 'emailMaxLengthError',
   requiredEmailError: 'requiredEmailError',
-  requiredResultTypeError: 'requiredResultTypeError',
-  usernameValidationError: 'usernameValidationError',
-  emailInUseError: 'emailInUseError',
-  usernameInUseError: 'usernameInUseError',
-  //internalServerError: 'internalServerError',
+  requiredResultTypeError: 'requiredResultTypeError', 
   userOrPassIncorrectError: 'userOrPassIncorrectError',
   notAuthError: 'notAuthError',
   changePasswordValueMissingError: 'changePasswordValueMissingError',
@@ -52,6 +48,14 @@ const errors = {
     noAdminReadRights: 'noAdminReadRights',
     noAdminWriteRights: 'noAdminWriteRights'
   },
+  account: {
+    usernameValidationError: 'usernameValidationError',
+    usernameInUseError: 'usernameInUseError',
+    usernameMaxLengthError: 'usernameMaxLengthError',
+    usernameMinLengthError: 'usernameMinLengthError',
+    requiredUsernameError: 'requiredUsernameError',
+    emailInUseError: 'emailInUseError',
+  },
   bug: {
     bugByIdNotFound: 'bugByIdNotFound',
     bugMessageTooShortError: 'bugMessageTooShortError',
@@ -65,6 +69,7 @@ const errors = {
   graphQlErrors: {
     badUserInput: 'BAD_USER_INPUT',
     unauthenticated: 'UNAUTHENTICATED',
+    unauthorized: 'UNAUTHORIZED',
     internalServerError: 'INTERNAL_SERVER_ERROR',
     validationError: 'VALIDATION_ERROR',
     defaultError: 'DEFAULT_ERROR',

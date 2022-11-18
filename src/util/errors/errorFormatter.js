@@ -1,7 +1,7 @@
 /**
  * Format Yup validation errors.
  * @param {array} errors, yup errors
- * @returns string array, each error from errors list
+ * @returns {Array<string>} string array, each error from errors list
  */
 const formatYupError = (errors) => {
   const errorArray = [];
