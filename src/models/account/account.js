@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../database');
+const constants = require('../../util/constants');
 
 class Account extends Model {}
 
@@ -15,6 +16,17 @@ Account.init({
     allowNull: false,
     validate: {
       isEmail: true,
+    }
+  },
+  username: {
+    type: DataTypes.STRING,
+    unique: true,
+    allowNull: false,
+    validate: {
+      len: [
+        constants.account.usernameMinLength,
+        constants.account.usernameMaxLength
+      ]
     }
   },
   emailVerified: {
@@ -34,7 +46,7 @@ Account.init({
   languageId: {
     type: DataTypes.CHAR(2),
     allowNull: false,
-    defaultValue: 'en',
+    defaultValue: 'EN',
     references: {
       model: 'language',
       key: 'id'

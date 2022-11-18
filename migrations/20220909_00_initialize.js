@@ -66,6 +66,17 @@ module.exports = {
           isEmail: true
         }
       },
+      username: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+        validate: {
+          len: [
+            constants.account.usernameMinLength,
+            constants.account.usernameMaxLength
+          ]
+        }
+      },
       email_verified: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
