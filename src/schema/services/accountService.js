@@ -1,5 +1,6 @@
 const { internalServerError } = require('../../util/errors/graphQlErrors');
 const models = require('../../models');
+const { Op } = require('sequelize');
 
 /**
  * Fecth account from database by id number
@@ -28,13 +29,26 @@ const findAccountByEmail = async (email) => {
 };
 
 /**
- * Check if username is taken by someone, case insensitive
- * @param {string} username - email address
+ * Check if username is taken by someone, case sensitive
+ * @param {string} username - username
  * @returns {Account} account found from db
  */
 const findAccountByUsername = async (username) => {
   try {
     return await models.Account.findOne({ where: { username: username.toLowerCase() } });
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
+/**
+ * Check if username is taken by someone, case insensitive
+ * @param {string} username - username
+ * @returns {Account} account found from db
+ */
+const findAccountByUsernameCaseInsensitive = async (username) => {
+  try {
+    return await models.Account.findOne({ where: { username: { [Op.iLike]: username } } } );
   } catch (error) {
     return internalServerError(error);
   }
@@ -82,6 +96,7 @@ module.exports = {
   findAccountById,
   findAccountByEmail,
   findAccountByUsername,
+  findAccountByUsernameCaseInsensitive,
   findAdminByAccountId,
   createNewAccount
 };

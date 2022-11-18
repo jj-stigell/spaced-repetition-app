@@ -17,7 +17,7 @@ const resolvers = {
     },
     usernameAvailable: async (_, { username }) => {
       await validator.validateUsername(username);
-      const usernameInUse = await services.accountService.findAccountByUsername(username);
+      const usernameInUse = await services.accountService.findAccountByUsernameCaseInsensitive(username);
       return usernameInUse ? false : true;
     },
     fetchSessions: async (root, args, { currentUser }) => {
@@ -32,7 +32,7 @@ const resolvers = {
       await validator.validateNewAccount(email, username, password, passwordConfirmation, languageId);
       const emailInUse = await services.accountService.findAccountByEmail(email);
       if (emailInUse) return graphQlErrors.defaultError(errors.account.emailInUseError);
-      const usernameInUse = await services.accountService.findAccountByUsername(username);
+      const usernameInUse = await services.accountService.findAccountByUsernameCaseInsensitive(username);
       if (usernameInUse) return graphQlErrors.defaultError(errors.account.usernameInUseError);
       const passwordHash = await hashPassword(password);
       // Create a new account if all validations pass
