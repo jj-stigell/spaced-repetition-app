@@ -3,7 +3,7 @@ const models = require('../../models');
 
 /**
  * Find specific bug report by id (PK)
- * @param {integer} id of the bug report
+ * @param {integer} id - id of the bug report
  * @returns {BugReport} Bug report object
  */
 const findBugReportById = async (id) => {
@@ -28,7 +28,7 @@ const findAllBugReports = async () => {
 
 /**
  * Find all bug reports by type
- * @param {string} type Type of the bug, possible types defined in constants file
+ * @param {string} type - type of the bug, possible types defined in constants file
  * @returns {Array<BugReport>} An array of all bug reports of type
  */
 const findAllBugReportsByType = async (type) => {
@@ -45,10 +45,10 @@ const findAllBugReportsByType = async (type) => {
 
 /**
  * Create new bug report
- * @param {string} type Type of the bug, possible types defined in constants file 
- * @param {string} message Message to describe the bug
- * @param {integer} accountId accounts id number
- * @param {integer} cardId card id, if bug connected to certain card, can be null
+ * @param {string} type - type of the bug, possible types defined in constants file 
+ * @param {string} message - message to describe the bug
+ * @param {integer} accountId - accounts id number
+ * @param {integer} cardId - card id, if bug connected to certain card, can be null
  * @returns {BugReport} Newly created bug report
  */
 const createNewBugReport = async (type, message, accountId, cardId) => {
@@ -66,9 +66,9 @@ const createNewBugReport = async (type, message, accountId, cardId) => {
 
 /**
  * Admin solve/edit bug report
- * @param {integer} bugId Id of the bug report
- * @param {string} solvedMessage Message describing how bug was handled
- * @param {boolean} solved true if bug fixed, false otherwise, no null values
+ * @param {integer} bugId - id of the bug report
+ * @param {string} solvedMessage - message describing how bug was handled
+ * @param {boolean} solved - true if bug fixed, false otherwise, no null values
  * @returns {BugReport} Edited bug report
  */
 const solveBugReport = async (bugId, solvedMessage, solved) => {
@@ -87,7 +87,7 @@ const solveBugReport = async (bugId, solvedMessage, solved) => {
 
 /**
  * Delete bug reports by its id
- * @param {integer} bugId Id of the bug report
+ * @param {integer} bugId - id of the bug report
  * @returns {BugReport} Deleted bug report
  */
 const deleteBugReport = async (bugId) => {
