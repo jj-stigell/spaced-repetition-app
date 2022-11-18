@@ -1,16 +1,21 @@
 const typeDefs = `
+enum BugType {
+  TRANSLATION
+  UI
+  FUNCTIONALITY
+  OTHER
+}
+
 type Bug {
   id: ID
   accountId: Int
   cardId: Int
-  type: String
+  type: BugType
   bugMessage: String
   solvedMessage: String
   solved: Boolean
-}
-
-type Success {
-  status: Boolean!
+  createdAt: Date
+  updatedAt: Date
 }
 
 type Query {
@@ -19,15 +24,15 @@ type Query {
   fetchBugReportById(
     bugId: Int!
   ): Bug!
-  
+
   fetchBugReportsByType(
-    type: String!
+    type: BugType! = OTHER
   ): [Bug!]!
 }
 
 type Mutation {
   sendBugReport(
-    type: String!
+    type: BugType! = OTHER
     bugMessage: String!
     cardId: Int
   ): Bug!
@@ -40,7 +45,7 @@ type Mutation {
 
   deleteBugReport(
     bugId: Int!
-  ): Success!
+  ): Int!
 }`;
 
 module.exports = typeDefs;
