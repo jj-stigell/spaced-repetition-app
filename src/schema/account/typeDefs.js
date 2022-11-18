@@ -1,24 +1,33 @@
 const typeDefs = `
+enum Language {
+  EN
+  FI
+  JP
+  VN
+}
+
 type Account {
-  id: ID!
+  id: ID
   email: String
+  emailVerified: Boolean
+  username: String
+  languageId: Language
+  lastLogin: Date
+  createdAt: Date
+  updatedAt: Date
 }
 
 type Token {
-  value: String!
+  value: ID!
 }
 
 type AccountToken {
   token: Token!
-  user: Account!
-}
-
-type Success {
-  status: Boolean!
+  account: Account!
 }
 
 type Session {
-  id: String
+  id: ID
   browser: String
   os: String
   device: String
@@ -29,7 +38,11 @@ type Session {
 type Query {
   emailAvailable(
     email: String!
-  ): Success!
+  ): Boolean!
+
+  usernameAvailable(
+    username: String!
+  ): Boolean!
 
   fetchSessions: [Session!]!
 }
@@ -37,9 +50,10 @@ type Query {
 type Mutation {
   createAccount(
     email: String!
+    username: String!
     password: String!
     passwordConfirmation: String!
-    languageId: String
+    languageId: Language! = EN
   ): Account!
 
   login(
@@ -47,17 +61,17 @@ type Mutation {
     password: String!
   ): AccountToken!
 
-  logout: Success!
+  logout: String!
 
   deleteSession(
     sessionId: String!
-  ): Success!
+  ): String!
 
   changePassword(
     currentPassword: String!
     newPassword: String!
     newPasswordConfirmation: String!
-  ): Success!
+  ): Account!
 }`;
 
 module.exports = typeDefs;
