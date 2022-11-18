@@ -1,8 +1,9 @@
 const queries = {
   emailAvailableQuery: `query emailAvailable($email: String!) {
-    emailAvailable(email: $email) {
-      status
-    }
+    emailAvailable(email: $email)
+  }`,
+  usernameAvailableQuery: `query usernameAvailable($username: String!) {
+    usernameAvailable(username: $username)
   }`,
   fetchDecksQuery: `query FetchDecks {
     fetchDecks {

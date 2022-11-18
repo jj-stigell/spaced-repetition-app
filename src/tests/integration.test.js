@@ -43,25 +43,32 @@ describe('Integration tests', () => {
 
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.createAccount.email).toBe(account.email);
+      expect(response.body.data.createAccount.username).toBe(account.username);
+      expect(response.body.data.createAccount.languageId).toBe(account.languageId);
+      expect(response.body.data.createAccount.id).toBeDefined();
+      expect(response.body.data.createAccount.lastLogin).toBeDefined();
+      expect(response.body.data.createAccount.createdAt).toBeDefined();
+      expect(response.body.data.createAccount.updatedAt).toBeDefined();
     });
 
     it('Error when email already taken', async () => {
-      const response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.registerMutation, variables: account });
-
-      expect(response.body.data?.createAccount).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.emailInUseError);
-    });
-
-    it('Error when email already taken, uppercase', async () => {
-      const newAccount = { ...account, email: account.email.toUpperCase() };
+      const newAccount = { ...account, username: stringData.availableUsername };
       const response = await request(testUrl)
         .post('/')
         .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.body.data?.createAccount).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.emailInUseError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.emailInUseError);
+    });
+
+    it('Error when email already taken, uppercase', async () => {
+      const newAccount = { ...account, email: account.email.toUpperCase(), username: stringData.availableUsername };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.body.data?.createAccount).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.emailInUseError);
     });
 
     it('Error when email not valid', async () => {
@@ -74,6 +81,49 @@ describe('Integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.notEmailError);
     });
 
+
+
+
+
+
+
+    /*
+    it('Error when username already taken', async () => {
+      const newAccount = { ...account, email: stringData.availableEmail };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.body.data?.createAccount).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.usernameInUseError);
+    });
+
+    it('Error when username already taken, uppercase', async () => {
+      const newAccount = { ...account, email: stringData.availableEmail, username: account.username.toUpperCase() };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.body.data?.createAccount).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.usernameInUseError);
+    });
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     it('Error when empty value, email', async () => {
       const newAccount = { ...account, email: '' };
       const response = await request(testUrl)
@@ -82,6 +132,17 @@ describe('Integration tests', () => {
 
       expect(response.body.data?.createAccount.email).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredEmailError);
+    });
+
+    it('Error when empty value, username', async () => {
+      const newAccount = { ...account, username: '' };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.body.data?.createAccount.email).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.usernameMinLengthError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.requiredUsernameError);
     });
 
     it('Error when empty value, password', async () => {
@@ -108,6 +169,16 @@ describe('Integration tests', () => {
 
     it('Error when value with wrong type, email', async () => {
       const newAccount = { ...account, email: 1 };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.body.data?.createAccount.email).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when value with wrong type, username', async () => {
+      const newAccount = { ...account, username: 1 };
       const response = await request(testUrl)
         .post('/')
         .send({ query: mutations.registerMutation, variables: newAccount });
@@ -230,7 +301,7 @@ describe('Integration tests', () => {
         .send({ query: mutations.registerMutation, variables: newAccount });
 
       expect(response.body.data?.createAccount.email).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.invalidLanguageIdError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
   });
 
@@ -243,8 +314,13 @@ describe('Integration tests', () => {
 
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.login.token).toBeDefined();
-      expect(response.body.data.login.user).toBeDefined();
-      expect(response.body.data.login.user.email).toBe(account.email);
+      expect(response.body.data.login.account.email).toBe(account.email);
+      expect(response.body.data.login.account.username).toBe(account.username);
+      expect(response.body.data.login.account.languageId).toBe(account.languageId);
+      expect(response.body.data.login.account.id).toBeDefined();
+      expect(response.body.data.login.account.lastLogin).toBeDefined();
+      expect(response.body.data.login.account.createdAt).toBeDefined();
+      expect(response.body.data.login.account.updatedAt).toBeDefined();
     });
 
     it('Error when empty value, email', async () => {
@@ -327,9 +403,14 @@ describe('Integration tests', () => {
         .send({ query: mutations.loginMutation, variables: account });
       
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.login.token).toBeDefined();
-      expect(response.body.data.login.user).toBeDefined();
-      expect(response.body.data.login.user.email).toBe(account.email);
+      expect(response.body.data.login.token.value).toBeDefined();
+      expect(response.body.data.login.account.email).toBe(account.email);
+      expect(response.body.data.login.account.username).toBe(account.username);
+      expect(response.body.data.login.account.languageId).toBe(account.languageId);
+      expect(response.body.data.login.account.id).toBeDefined();
+      expect(response.body.data.login.account.lastLogin).toBeDefined();
+      expect(response.body.data.login.account.createdAt).toBeDefined();
+      expect(response.body.data.login.account.updatedAt).toBeDefined();
 
       authToken = response.body.data.login.token.value;
       //set token as auth header and change password
@@ -339,7 +420,13 @@ describe('Integration tests', () => {
         .send({ query: mutations.changePasswordMutation, variables: passwordData });
 
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.changePassword.status).toBeTruthy();
+      expect(response.body.data.changePassword.email).toBe(account.email);
+      expect(response.body.data.changePassword.username).toBe(account.username);
+      expect(response.body.data.changePassword.languageId).toBe(account.languageId);
+      expect(response.body.data.changePassword.id).toBeDefined();
+      expect(response.body.data.changePassword.lastLogin).toBeDefined();
+      expect(response.body.data.changePassword.createdAt).toBeDefined();
+      expect(response.body.data.changePassword.updatedAt).toBeDefined();
 
       //login with new password
       response = await request(testUrl)
@@ -348,9 +435,14 @@ describe('Integration tests', () => {
 
       authToken = response.body.data.login.token.value;
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.login.token).toBeDefined();
-      expect(response.body.data.login.user).toBeDefined();
-      expect(response.body.data.login.user.email).toBe(account.email);
+      expect(response.body.data.login.token.value).toBeDefined();
+      expect(response.body.data.login.account.email).toBe(account.email);
+      expect(response.body.data.login.account.username).toBe(account.username);
+      expect(response.body.data.login.account.languageId).toBe(account.languageId);
+      expect(response.body.data.login.account.id).toBeDefined();
+      expect(response.body.data.login.account.lastLogin).toBeDefined();
+      expect(response.body.data.login.account.createdAt).toBeDefined();
+      expect(response.body.data.login.account.updatedAt).toBeDefined();
     });
 
     it('Error when no token, not authenticated', async () => {
@@ -548,8 +640,7 @@ describe('Integration tests', () => {
         .send({ query: queries.emailAvailableQuery, variables: { email: stringData.availableEmail } });
 
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.emailAvailable.status).toBeDefined();
-      expect(response.body.data.emailAvailable.status).toBeTruthy();
+      expect(response.body.data.emailAvailable).toBeTruthy();
     });
     
     it('Should receive boolean false when email not available', async () => {
@@ -558,8 +649,7 @@ describe('Integration tests', () => {
         .send({ query: queries.emailAvailableQuery, variables: { email: account.email } });
 
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.emailAvailable.status).toBeDefined();
-      expect(response.body.data.emailAvailable.status).toBeFalsy();
+      expect(response.body.data.emailAvailable).toBeFalsy();
     });
     
     it('Error when email not valid', async () => {
@@ -567,7 +657,7 @@ describe('Integration tests', () => {
         .post('/')
         .send({ query: queries.emailAvailableQuery, variables: { email: stringData.nonValidEmail } });
 
-      expect(response.body.data?.emailAvailable.status).toBeUndefined();
+      expect(response.body.data?.emailAvailable).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.notEmailError);
     });
 
@@ -576,7 +666,7 @@ describe('Integration tests', () => {
         .post('/')
         .send({ query: queries.emailAvailableQuery, variables: { email: '' } });
 
-      expect(response.body.data?.emailAvailable.status).toBeUndefined();
+      expect(response.body.data?.emailAvailable).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredEmailError);
     });
 
@@ -585,7 +675,65 @@ describe('Integration tests', () => {
         .post('/')
         .send({ query: queries.emailAvailableQuery, variables: { email: 1 } });
 
-      expect(response.body.data?.emailAvailable.status).toBeUndefined();
+      expect(response.body.data?.emailAvailable).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+  });
+
+  describe('Username availability', () => {
+
+    it('Should receive boolean true when username available', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.usernameAvailableQuery, variables: { username: stringData.availableUsername } });
+
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.usernameAvailable).toBeTruthy();
+    });
+    
+    it('Should receive boolean false when username not available', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.usernameAvailableQuery, variables: { username: account.username } });
+
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.usernameAvailable).toBeFalsy();
+    });
+    
+    it('Error when username too short', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.usernameAvailableQuery, variables: { username: stringData.tooShortUsername } });
+
+      expect(response.body.data?.usernameAvailable).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.usernameMinLengthError);
+    });
+
+    it('Error when username too long', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.usernameAvailableQuery, variables: { username: stringData.tooLongUsername } });
+
+      expect(response.body.data?.usernameAvailable).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.usernameMaxLengthError);
+    });
+
+    it('Error when username is empty value', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.usernameAvailableQuery, variables: { username: '' } });
+
+      expect(response.body.data?.usernameAvailable).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.usernameMinLengthError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.requiredUsernameError);
+    });
+
+    it('Error when username value is wrong type', async () => {
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: queries.usernameAvailableQuery, variables: { username: 1 } });
+
+      expect(response.body.data?.usernameAvailable.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
   });
@@ -607,9 +755,14 @@ describe('Integration tests', () => {
         .send({ query: mutations.loginMutation, variables: { ...account, password: passwordData.newPassword } });
       
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.login.token).toBeDefined();
-      expect(response.body.data.login.user).toBeDefined();
-      expect(response.body.data.login.user.email).toBe(account.email);
+      expect(response.body.data.login.token.value).toBeDefined();
+      expect(response.body.data.login.account.email).toBe(account.email);
+      expect(response.body.data.login.account.username).toBe(account.username);
+      expect(response.body.data.login.account.languageId).toBe(account.languageId);
+      expect(response.body.data.login.account.id).toBeDefined();
+      expect(response.body.data.login.account.lastLogin).toBeDefined();
+      expect(response.body.data.login.account.createdAt).toBeDefined();
+      expect(response.body.data.login.account.updatedAt).toBeDefined();
 
       authToken = response.body.data.login.token.value;
       response = await request(testUrl)

@@ -1,8 +1,14 @@
 const mutations = {
-  registerMutation: `mutation createAccount($email: String!, $password: String!, $passwordConfirmation: String!, $languageId: String) {
-    createAccount(email: $email, password: $password, passwordConfirmation: $passwordConfirmation, languageId: $languageId) {
+  registerMutation: `mutation createAccount($email: String!, $username: String!, $password: String!, $passwordConfirmation: String!, $languageId: Language!) {
+    createAccount(email: $email, username: $username, password: $password, passwordConfirmation: $passwordConfirmation, languageId: $languageId) {
       id
       email
+      emailVerified
+      username
+      languageId
+      lastLogin
+      createdAt
+      updatedAt
     }
   }`,
   loginMutation: `mutation login($email: String!, $password: String!) {
@@ -10,15 +16,28 @@ const mutations = {
       token {
         value
       }
-      user {
-        id,
+      account {
+        id
         email
+        emailVerified
+        username
+        languageId
+        lastLogin
+        createdAt
+        updatedAt
       }
     }
   }`,
   changePasswordMutation: `mutation changePassword($currentPassword: String!, $newPassword: String!, $newPasswordConfirmation: String!) {
     changePassword(currentPassword: $currentPassword, newPassword: $newPassword, newPasswordConfirmation: $newPasswordConfirmation) {
-      status
+      id
+      email
+      emailVerified
+      username
+      languageId
+      lastLogin
+      createdAt
+      updatedAt
     }
   }`,
 };
