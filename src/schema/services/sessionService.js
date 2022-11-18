@@ -6,7 +6,7 @@ const { Session } = require('../../models');
 /**
  * Create a new session for the user, set expiry same as JWT expiry, placeholder for now
  * @param {integer} accountId, accounts id number
- * @returns New session object
+ * @returns {Session} Newly created session
  */
 const createNewSession = async (accountId, userAgent) => {
   try {
@@ -26,7 +26,7 @@ const createNewSession = async (accountId, userAgent) => {
 /**
  * Delete session by PK
  * @param {string} sessionId version 4 UUID
- * @returns found row count, 1 if session found and deleted, 0 if none found
+ * @returns {integer} found row count, 1 if session found and deleted, 0 if none found
  */
 const deleteSession = async (sessionId) => {
   try {
@@ -43,7 +43,7 @@ const deleteSession = async (sessionId) => {
 /**
  * Find non-expired session by its PK
  * @param {string} sessionId version 4 UUID
- * @returns Session found with the sessionId
+ * @returns {Session} Session found with the sessionId
  */
 const findSessionById = async (sessionId) => {
   try {
@@ -56,7 +56,7 @@ const findSessionById = async (sessionId) => {
 /**
  * Find all non expired sessions for the user
  * @param {integer} accountId account id
- * @returns List of all existing sessions user has.
+ * @returns {Array<Session>} Array of all existing sessions user has.
  */
 const findAllSessions = async (accountId) => {
   try {

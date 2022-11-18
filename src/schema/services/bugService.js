@@ -29,7 +29,7 @@ const findAllBugReports = async () => {
 /**
  * Find all bug reports by type
  * @param {string} type Type of the bug, possible types defined in constants file
- * @returns {Array<models.BugReport>} An array of all bug reports of type
+ * @returns {Array<BugReport>} An array of all bug reports of type
  */
 const findAllBugReportsByType = async (type) => {
   try {
@@ -49,7 +49,7 @@ const findAllBugReportsByType = async (type) => {
  * @param {string} message Message to describe the bug
  * @param {integer} accountId accounts id number
  * @param {integer} cardId card id, if bug connected to certain card, can be null
- * @returns Newly created bug report
+ * @returns {BugReport} Newly created bug report
  */
 const createNewBugReport = async (type, message, accountId, cardId) => {
   try {
@@ -69,7 +69,7 @@ const createNewBugReport = async (type, message, accountId, cardId) => {
  * @param {integer} bugId Id of the bug report
  * @param {string} solvedMessage Message describing how bug was handled
  * @param {boolean} solved true if bug fixed, false otherwise, no null values
- * @returns Edited bug report
+ * @returns {BugReport} Edited bug report
  */
 const solveBugReport = async (bugId, solvedMessage, solved) => {
   try {
