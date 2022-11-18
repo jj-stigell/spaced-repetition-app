@@ -1,10 +1,10 @@
 const constants = {
   matureInterval: 21,
-  defaultLanguage: 'en',
-  availableLanguages: ['en', 'fi'],
-  resultTypes: ['again', 'good'],
-  deckTypes: ['recall', 'recognise'],
-  cardTypes: ['kanji', 'hiragana', 'katakana', 'word', 'sentence'],
+  defaultLanguage: 'EN',
+  availableLanguages: ['EN', 'FI', 'VN', 'JP'],
+  resultTypes: ['AGAIN', 'GOOD'],
+  deckTypes: ['RECALL', 'RECOGNISE'],
+  cardTypes: ['KANJI', 'HIRAGANA', 'KATAKANA', 'WORD', 'SENTENCE'],
   jltpLevels: [1, 2, 3, 4, 5],                                          // Available JLPT levels, officially
   maxLimitReviews: 999,
   minLimitReviews: 0,
@@ -37,7 +37,7 @@ const constants = {
     bugMessageMaxLength: 100,
     solvedMessageMinLength: 1,
     solvedMessageMaxLength: 160,
-    bugTypes: ['translation', 'user-interface', 'functionality', 'other']
+    bugTypes: ['TRANSLATION', 'UI', 'FUNCTIONALITY', 'OTHER']
   },
   lowercaseRegex: /^(?=.*[a-z])/,
   uppercaseRegex: /^(?=.*[A-Z])/,
