@@ -39,6 +39,12 @@ const email = yup
   .max(255, errors.emailMaxLengthError)
   .required(errors.requiredEmailError);
 
+const username = yup
+  .string(errors.inputValueTypeError)
+  .max(constants.account.usernameMaxLength, errors.account.usernameMaxLengthError)
+  .min(constants.account.usernameMinLength, errors.account.usernameMinLengthError)
+  .required(errors.account.requiredUsernameError);
+
 const languageId = yup
   .string(errors.inputValueTypeError)
   .oneOf(constants.availableLanguages, errors.invalidLanguageIdError);
@@ -153,6 +159,7 @@ module.exports = {
   easyFactor,
   timing,
   email,
+  username,
   languageId,
   password,
   currentPassword,

@@ -54,7 +54,8 @@ const solveBug = yup.object().shape({
 
 const fetchKanji = yup.object().shape({
   kanjiId: validationRules.integer,
-  includeAccountCard: validationRules.isBoolean
+  includeAccountCard: validationRules.isBoolean,
+  languageId: validationRules.languageId
 });
 
 const deckSettings = yup.object().shape({
@@ -74,6 +75,10 @@ const email = yup.object().shape({
   email: validationRules.email
 });
 
+const username = yup.object().shape({
+  username: validationRules.username
+});
+
 const editAccountCard = yup.object().shape({
   cardId: validationRules.cardId,
   story: validationRules.story,
@@ -82,6 +87,7 @@ const editAccountCard = yup.object().shape({
 
 const createAccount = yup.object().shape({
   email: validationRules.email,
+  username: validationRules.username,
   password: validationRules.password,
   passwordConfirmation: validationRules.passwordConfirmation,
   languageId: validationRules.languageId
@@ -99,7 +105,7 @@ const changePassword = yup.object().shape({
 });
 
 const fetchCardsByType = yup.object().shape({
-  cardType: validationRules.cardType,
+  type: validationRules.cardType,
   languageId: validationRules.languageId
 });
 
@@ -118,6 +124,7 @@ module.exports = {
   deckSettings,
   pushCards,
   email,
+  username,
   editAccountCard,
   createAccount,
   login,

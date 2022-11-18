@@ -11,9 +11,17 @@ const validateEmail = async (email) => {
   }
 };
 
-const validateNewAccount = async (email, password, passwordConfirmation, languageId) => {
+const validateUsername = async (username) => {
   try {
-    await schema.createAccount.validate({ email, password, passwordConfirmation, languageId }, { abortEarly: constants.yupAbortEarly });
+    await schema.username.validate({ username }, { abortEarly: constants.yupAbortEarly });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
+const validateNewAccount = async (email, username, password, passwordConfirmation, languageId) => {
+  try {
+    await schema.createAccount.validate({ email, username, password, passwordConfirmation, languageId }, { abortEarly: constants.yupAbortEarly });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
@@ -105,17 +113,17 @@ const validateEditAccountCard = async (cardId, story, hint) => {
   }
 };
 
-const validateFetchKanji = async (kanjiId, includeAccountCard) => {
+const validateFetchKanji = async (kanjiId, includeAccountCard, languageId) => {
   try {
-    await schema.fetchKanji.validate({ kanjiId, includeAccountCard }, { abortEarly: constants.yupAbortEarly  });
+    await schema.fetchKanji.validate({ kanjiId, includeAccountCard, languageId }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
 };
 
-const validateFetchCardsByType = async (cardType, languageId) => {
+const validateFetchCardsByType = async (type, languageId) => {
   try {
-    await schema.fetchCardsByType.validate({ cardType, languageId }, { abortEarly: constants.yupAbortEarly  });
+    await schema.fetchCardsByType.validate({ type, languageId }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
@@ -155,6 +163,7 @@ const validateBugSolve = async (bugId, solvedMessage, solved) => {
 
 module.exports = {
   validateEmail,
+  validateUsername,
   validateNewAccount,
   validateLogin,
   validateChangePassword,
