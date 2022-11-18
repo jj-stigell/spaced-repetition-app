@@ -4,7 +4,7 @@ const constants = require('../../util/constants');
 
 /**
  * Find deck by its id (PK)
- * @param {integer} deckId id of the deck
+ * @param {integer} deckId - id of the deck
  * @returns {Deck} found deck
  */
 const findDeckById = async (deckId) => {
@@ -17,7 +17,7 @@ const findDeckById = async (deckId) => {
 
 /**
  * Find all decks
- * @param {boolean} includeInactive include decks that are not active at the moment
+ * @param {boolean} includeInactive - include decks that are not active at the moment
  * @returns {Array<Deck>} Array of all decks
  */
 const findAllDecks = async (includeInactive) => {
@@ -53,8 +53,8 @@ const findAllDecks = async (includeInactive) => {
 
 /**
  * Find account specific deck
- * @param {integer} deckId id of the deck
- * @param {integer} accountId account id
+ * @param {integer} deckId - id of the deck
+ * @param {integer} accountId - account id
  * @returns {AccountDeckSettings} Account specific settings
  */
 const findAccountDeckSettings = async (deckId, accountId) => {
@@ -73,12 +73,12 @@ const findAccountDeckSettings = async (deckId, accountId) => {
 
 /**
  * Create a new deck settings for account
- * @param {integer} deckId id of the deck
- * @param {integer} accountId account id
- * @param {boolean} favorite is deck favorited or not
- * @param {integer} reviewInterval interval
- * @param {integer} reviewsPerDay maximum reviews per day for the deck
- * @param {integer} newCardsPerDay maximum amount of new cards for the deck
+ * @param {integer} deckId - id of the deck
+ * @param {integer} accountId - account id
+ * @param {boolean} favorite - is deck favorited or not
+ * @param {integer} reviewInterval - maximum review interval
+ * @param {integer} reviewsPerDay - maximum reviews per day for the deck
+ * @param {integer} newCardsPerDay - maximum amount of new cards for the deck
  * @returns {AccountDeckSettings} newly created account deck settings
  */
 const createAccountDeckSettings = async (
