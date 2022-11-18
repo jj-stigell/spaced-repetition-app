@@ -11,13 +11,13 @@ const server = new ApolloServer({
   schema,
   introspection: NODE_ENV === 'development',
   context: async ({ req }) => {
-    const auth = req ? req.headers.authorization : null;
+    const auth = req?.headers?.authorization ?? null;
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       try {
         const currentUser = jwt.verify(
           auth.substring(7), JWT_SECRET
         );
-        const userAgent = req?.headers['user-agent'] ? req?.headers['user-agent'] : null;
+        const userAgent = req?.headers['user-agent'] ?? null;
         //const currentUser = await Account.findByPk(decodedToken.id);
         return { currentUser, userAgent };
       } catch(error) {

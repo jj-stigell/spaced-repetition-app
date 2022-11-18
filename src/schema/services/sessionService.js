@@ -58,7 +58,7 @@ const findSessionById = async (sessionId) => {
  * @param {integer} accountId account id
  * @returns {Array<Session>} Array of all existing sessions user has.
  */
-const findAllSessions = async (accountId) => {
+const findAllSessionsByAccountId = async (accountId) => {
   try {
     return await Session.findAll({
       where: {
@@ -74,5 +74,5 @@ module.exports = {
   createNewSession,
   deleteSession,
   findSessionById,
-  findAllSessions
+  findAllSessionsByAccountId
 };
