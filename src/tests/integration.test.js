@@ -81,13 +81,6 @@ describe('Integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.notEmailError);
     });
 
-
-
-
-
-
-
-    /*
     it('Error when username already taken', async () => {
       const newAccount = { ...account, email: stringData.availableEmail };
       const response = await request(testUrl)
@@ -107,22 +100,16 @@ describe('Integration tests', () => {
       expect(response.body.data?.createAccount).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.account.usernameInUseError);
     });
-    */
 
+    it('Error when username already taken, lowercase', async () => {
+      const newAccount = { ...account, email: stringData.availableEmail, username: account.username.toLocaleLowerCase() };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+      expect(response.body.data?.createAccount).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.account.usernameInUseError);
+    });
 
     it('Error when empty value, email', async () => {
       const newAccount = { ...account, email: '' };
