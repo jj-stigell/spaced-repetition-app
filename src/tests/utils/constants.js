@@ -1,8 +1,9 @@
 const account = {
   email: 'testing@test.com',
+  username: 'testUsername',
   password: 'ThisIsValid123',
   passwordConfirmation: 'ThisIsValid123',
-  languageId: 'en'
+  languageId: 'EN'
 };
 
 const passwordData = {
@@ -13,8 +14,9 @@ const passwordData = {
 
 const stringData = {
   availableEmail: 'emailnottaken@test.com',
+  availableUsername: 'ava1labuseR',
   nonExistingEmail: 'nonExistingEmail@test.com',
-  notAvailableLanguage: 'xu',
+  notAvailableLanguage: 'XU',
   incorrectPassword: 'ThisIsNotCorrect123',
   noNumbersPass: 'noNumbersInThisOne',
   notLongEnoughPass: '1234Len',
@@ -23,7 +25,8 @@ const stringData = {
   noLowerCasePass: 'THISISNOTVALID123',
   nonValidEmail: 'emailgoogle.com',
   nonAlphaNumeric: 'Len_Is_;OK',
-  tooLongUsername: 'LenIsMoreThan14'
+  tooLongUsername: 'LenIsMoreThan14',
+  tooShortUsername: 'Le3'
 };
 
 module.exports = {

@@ -20,6 +20,10 @@ const constants = {
   maxAmountOfDecks: 50,
   passwordMaxLength: 50,
   passwordMinLength: 8,
+  account: {
+    usernameMaxLength: 14,
+    usernameMinLength: 4
+  },
   login: {
     jwtExpiryTime: 2419200,
     sessionLifetime: 28,                                                // How long a new session will last in days, same as jwt expiry time
