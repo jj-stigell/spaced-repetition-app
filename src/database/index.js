@@ -48,7 +48,7 @@ const connectToDatabase = async () => {
   try {
     await sequelize.authenticate();
     await runMigrations();
-    console.log('database connected to:', NODE_ENV);
+    console.log('database connected to environment', NODE_ENV);
   } catch (error) {
     errorLogger(`connecting to ${NODE_ENV} database failed`, error);
     return process.exit(1);
