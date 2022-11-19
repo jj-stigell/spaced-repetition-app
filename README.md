@@ -46,6 +46,7 @@ Frontend time keeping is in the frontend GitHub repository
     - [ ] Set request limit per connection/ip-address
     - [ ] Cache
     - [ ] Catch internal server errors, no (possible) db errors to client
+- [ ] Query and mutation documentation
 - [ ] Service functionality
     - [ ] User related
         - [ ] transactions (where needed)
@@ -137,14 +138,15 @@ Frontend time keeping is in the frontend GitHub repository
         - [ ] Optimize queries
 - [ ] Testing
     - [ ] Unit tests
-        - [ ] Helper functions
+        - [X] Helper functions
         - [ ] Services
     - [ ] Integration tests
         - [X] ACCOUNT
             - [X] Account creation
             - [X] Login
             - [X] Password changing
-            - [ ] Logout
+            - [X] Username changing
+            - [ ] Logout, check that session does not exists and work anymore
         - [ ] CARDS
             - [ ] Mutations
                 - [ ] Reschedule card
@@ -159,10 +161,9 @@ Frontend time keeping is in the frontend GitHub repository
                 - [ ] Fetch due per date, one or multiple
         - [ ] BUGS
             - [ ] Mutations
-                - [ ] create report
+                - [X] create report
                 - [ ] delete report
                 - [ ] solve report
-                - [ ] 
             - [ ] Queries
                 - [ ] fetch by id
                 - [ ] fetch by type

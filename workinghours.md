@@ -31,5 +31,6 @@
 | 8.11. | 1 | validators and dummy data |
 | 10.11. | 4 | Add session tracking, bug reporting, query for fetching stats |
 | 15.11. | 5 | Add session handling and extract user-agent data for session to help distinguish between sessions. Add all bug report queries and mutations, limit some of the m to admins only |
+| 19.11. | 6 | Fix tests, add username, refactor code. Separate tests, add bug testing |
 |  |  |  |
-| total | 77 |  | 
+| total | 83 |  | 
