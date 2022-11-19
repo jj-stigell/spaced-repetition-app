@@ -10,7 +10,7 @@ const server = require('../util/server');
 const constants = require('../util/constants');
 const helpers = require('./utils/helper');
 
-describe('Integration tests', () => {
+describe('Deck integration tests', () => {
   let testServer, testUrl, authToken;
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
@@ -26,19 +26,19 @@ describe('Integration tests', () => {
     await testServer?.close();
   });
 
-  it('Server should respond 200 ok to health check', async () => {
-    const response = await request(`${testUrl}.well-known/apollo/server-health`)
-      .post('/')
-      .send({ query: mutations.registerMutation, variables: account });
+  describe('Setup test environment', () => {
 
-    expect(response.body.status).toBeDefined();
-    expect(response.status).toBe(200);
-    expect(response.body.status).toBe('pass');
-  });
+    it('Server should respond 200 ok to health check', async () => {
+      const response = await request(`${testUrl}.well-known/apollo/server-health`)
+        .post('/')
+        .send();
+  
+      expect(response.body.status).toBeDefined();
+      expect(response.status).toBe(200);
+      expect(response.body.status).toBe('pass');
+    });
 
-  describe('Create and log in to new account for tests', () => {
-
-    it('New account created succesfully', async () => {
+    it('Create and log in to new account for tests', async () => {
       let response = await request(testUrl)
         .post('/')
         .send({ query: mutations.registerMutation, variables: account });
@@ -69,7 +69,7 @@ describe('Integration tests', () => {
     });
   });
 
-  describe('Fetching decks and cards', () => {
+  describe('Fetching decks', () => {
 
     it('Fetch active decks leads to auth error when not logged in', async () => {
       let response = await request(testUrl)

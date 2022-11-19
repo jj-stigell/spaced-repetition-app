@@ -6,6 +6,16 @@ const account = {
   languageId: 'EN'
 };
 
+const adminReadRights = {
+  email: 'read@admin.com',
+  password: 'TestPassword123'
+};
+
+const adminWriteRights = {
+  email: 'write@admin.com',
+  password: 'TestPassword123'
+};
+
 const passwordData = {
   currentPassword: account.password,
   newPassword: 'ThisIsNewPass123',
@@ -29,8 +39,23 @@ const stringData = {
   tooShortUsername: 'Le3'
 };
 
+const validBugReport = {
+  bugMessage: 'This is message for the bug report for integration tests',
+  type: 'UI',
+  cardId: 23
+};
+
+const solveBugReport = {
+  solved: true,
+  solvedMessage: 'This is message the solve message for bug report'
+};
+
 module.exports = {
   account,
+  adminReadRights,
+  adminWriteRights,
   passwordData,
-  stringData
+  stringData,
+  validBugReport,
+  solveBugReport
 };

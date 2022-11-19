@@ -40,6 +40,32 @@ const mutations = {
       updatedAt
     }
   }`,
+  sendBugReportMutation: `mutation sendBugReport($bugMessage: String!, $type: BugType!, $cardId: Int) {
+    sendBugReport(bugMessage: $bugMessage, type: $type, cardId: $cardId) {
+      id
+      accountId
+      cardId
+      type
+      bugMessage
+      solvedMessage
+      solved
+      createdAt
+      updatedAt
+    }
+  }`,
+  solveBugReportMutation: `mutation solveBugReport($bugId: Int!, $solved: Boolean, $solvedMessage: String) {
+    solveBugReport(bugId: $bugId, solved: $solved, solvedMessage: $solvedMessage) {
+      id
+      accountId
+      cardId
+      type
+      bugMessage
+      solvedMessage
+      solved
+      createdAt
+      updatedAt
+    }
+  }`,
 };
 
 module.exports = mutations;
