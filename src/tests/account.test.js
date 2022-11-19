@@ -8,12 +8,14 @@ const queries = require('./utils/queries');
 const errors = require('../util/errors/errors');
 const server = require('../util/server');
 const constants = require('../util/constants');
+const helpers = require('./utils/helper');
 
-describe('Integration tests', () => {
+describe('account integration tests', () => {
   let testServer, testUrl, authToken;
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
+    await helpers.resetDatabaseEntries('account');
     const serverInfo = await server.listen({ port: PORT });
     testServer = serverInfo.server;
     testUrl = serverInfo.url;
