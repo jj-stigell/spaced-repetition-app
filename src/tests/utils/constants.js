@@ -36,7 +36,8 @@ const stringData = {
   nonValidEmail: 'emailgoogle.com',
   nonAlphaNumeric: 'Len_Is_;OK',
   tooLongUsername: 'LenIsMoreThan14',
-  tooShortUsername: 'Le3'
+  tooShortUsername: 'Le3',
+  notValidEnum: 'THISISNOTVALID'
 };
 
 const validBugReport = {
