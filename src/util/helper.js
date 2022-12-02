@@ -65,6 +65,7 @@ const hashPassword = async (password) => {
 /**
  * Check if user has required admin rights to acces or edit a resource
  * Throws an error if account does not have the required permissions
+ * If user has write rights, they are also expected to have read rights
  * @param {integer} accountId 
  * @param {string} permission which permission is checked, either READ or WRITE
  * @returns {integer} 1, if required permissions found
@@ -75,7 +76,7 @@ const checkAdminPermission = async (accountId, permission) => {
 
   switch (permission) {
   case 'READ':
-    if (!admin.read) graphQlErrors.notAuthorizedError(errors.admin.noAdminReadRights);
+    if (!admin.read && !admin.write) graphQlErrors.notAuthorizedError(errors.admin.noAdminReadRights);
     break;
   case 'WRITE':
     if (!admin.write) graphQlErrors.notAuthorizedError(errors.admin.noAdminWriteRights);
