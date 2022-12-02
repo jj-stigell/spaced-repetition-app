@@ -73,9 +73,9 @@ const validateDeckSettings = async (deckId, favorite, reviewInterval, reviewsPer
   }
 };
 
-const validateInteger = async (integer) => {
+const validateInteger = async (id) => {
   try {
-    await schema.integer.validate({ integer }, { abortEarly: constants.yupAbortEarly  });
+    await schema.integer.validate({ id }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
