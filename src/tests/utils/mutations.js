@@ -66,6 +66,9 @@ const mutations = {
       updatedAt
     }
   }`,
+  deleteBugReportMutation: `mutation deleteBugReport($bugId: Int!) {
+    deleteBugReport(bugId: $bugId)
+  }`,
 };
 
 module.exports = mutations;

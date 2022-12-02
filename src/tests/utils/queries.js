@@ -41,6 +41,45 @@ const queries = {
       updatedAt
     }
   }`,
+  fetchAllBugReports: `query FetchAllBugReports {
+    fetchAllBugReports {
+      id
+      accountId
+      cardId
+      type
+      bugMessage
+      solvedMessage
+      solved
+      createdAt
+      updatedAt
+    }
+  }`,
+  fetchBugReportById: `query FetchAllBugReports($bugId: Int!) {
+    fetchBugReportById(bugId: $bugId) {
+      id
+      accountId
+      cardId
+      type
+      bugMessage
+      solvedMessage
+      solved
+      createdAt
+      updatedAt
+    }
+  }`,
+  fetchBugReportsByType: `query FetchBugReportsByType($type: BugType!) {
+    fetchBugReportsByType(type: $type) {
+      id
+      accountId
+      cardId
+      type
+      bugMessage
+      solvedMessage
+      solved
+      createdAt
+      updatedAt
+    }
+  }`,
 };
 
 module.exports = queries;
