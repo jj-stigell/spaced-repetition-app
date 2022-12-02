@@ -42,7 +42,8 @@ const resolvers = {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateInteger(bugId);
       await checkAdminPermission(currentUser.id, 'WRITE');
-      await services.bugService.deleteBugReport(bugId);
+      const deletedBug = await services.bugService.deleteBugReport(bugId);
+      if (!deletedBug) return graphQlErrors.defaultError(errors.bug.bugByIdNotFound);
       return bugId;
     },
   }
