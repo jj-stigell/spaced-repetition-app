@@ -6,8 +6,7 @@ const errorLogger = require('../util/errors/errorLogger');
 const sequelize = new Sequelize(DATABASE_URL, {
   dialectOptions: {
     ssl: {
-      require: true,
-      rejectUnauthorized: false
+      require: true
     },
   },
   define: {
