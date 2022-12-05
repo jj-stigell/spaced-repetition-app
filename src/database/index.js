@@ -17,7 +17,6 @@ const sequelize = new Sequelize(DATABASE_URL, {
   logging: NODE_ENV === 'development'
 });
 
-
 const migrationConf = {
   migrations: {
     glob: 'migrations/*.js',
@@ -41,7 +40,6 @@ const rollbackMigration = async () => {
   await migrator.down();
   sequelize.close();
 };
-
 
 const connectToDatabase = async () => {
   try {

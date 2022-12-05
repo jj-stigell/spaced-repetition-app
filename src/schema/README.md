@@ -4,6 +4,7 @@ All card related queries and murtations require user to be authenticated and jwt
 
 * [Queries](#queries)
   * [fetchCards](#fetchcards)
+  * [fetchAllBugReports](#fetchallbugreports)
 * [Mutations](#mutations)
   * [createAccount](#createaccount)
   * [login](#login)
@@ -38,6 +39,8 @@ Fetch either cards that are due for review or new cards.
   * invalid language id
   * connection error to db
 
+
+**Query:**
 ```
 query {
   fetchCards(
@@ -99,6 +102,54 @@ query {
   }
 }
 ```
+
+
+
+
+
+
+
+
+## fetchAllBugReports
+
+Fetch all submitted bug reports, only accessible to admins with read permission.
+Returns array or bug reports.
+
+**fields:**
+  * `id` bug report id, integer
+  * `accountId` report submitter account id, integer
+  * `cardId` report submitter account id, integer
+  * `type` type which the bug report concerns (translation, UI, etc.), enum
+  * `bugMessage` message describing the encountered bug, max length defined in constants, string
+  * `solvedMessage` admin response to the bug, string
+  * `solved` id bug solved by admin, boolean
+  * `createdAt` date when any bug report was posted by user, string (Date scalar)
+  * `updatedAt` date when any row updated in the entry, string (Date scalar)
+
+**Possible error throwing situations:**
+  * not authenticated
+  * not an admin with read permission
+  * connection error to db
+
+**Query:**
+```
+query {
+  fetchAllBugReports {
+    id
+    accountId
+    cardId
+    type
+    bugMessage
+    solvedMessage
+    solved
+    createdAt
+    updatedAt
+  }
+}
+```
+
+
+
 
 
 ## Mutations
