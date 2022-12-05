@@ -1,7 +1,7 @@
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
 const graphQlErrors = require('../../util/errors/graphQlErrors');
-const { calculateDate } = require('../../util/helper');
+const { calculateDate, formStatistics } = require('../../util/helper');
 const cardService = require('../services/cardService');
 const deckService = require('../services/deckService');
 const validator = require('../../util/validation//validator');
@@ -110,13 +110,14 @@ const resolvers = {
     fetchLearningStatistics: async (_, { cardType }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateCardType(cardType);
-      return await cardService.findLearningProgressByType(cardType, currentUser.id);
+      const statsFromDb = await cardService.findLearningProgressByType(cardType, currentUser.id);
+      return formStatistics(statsFromDb);
     },
   },
   Mutation: {
     rescheduleCard: async (_, { cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
-      await validator.validateRescheduleCard(cardId, reviewResult.toLowerCase(), newInterval, newEasyFactor, extraReview, timing);
+      await validator.validateRescheduleCard(cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing);
 
       let status = false;
       // Calculate new duedate

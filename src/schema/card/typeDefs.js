@@ -129,8 +129,9 @@ type DeckSettings {
 }
 
 type Statistics {
-  status: String
-  count: Int
+  matured: Int
+  learning: Int
+  new: Int
 }
 
 type Day {
@@ -164,7 +165,7 @@ type Query {
 
   fetchLearningStatistics(
     cardType: String!
-  ): [Statistics!]!
+  ): Statistics!
 
   fetchDecks: DeckList!
 
