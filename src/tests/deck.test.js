@@ -80,7 +80,7 @@ describe('Deck integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
-    it('Fetch active decks after authenticated', async () => {
+    it('Fetch active decks succesful after authenticated', async () => {
       const response = await request(testUrl)
         .post('/')
         .set('Authorization', `bearer ${authToken}`)

@@ -23,7 +23,6 @@ const createAccountCard = async (cardId, accountId, story, hint) => {
     return await models.AccountCard.create({
       accountId: accountId,
       cardId: cardId,
-      dueAt: sequelize.DataTypes.NOW,
       easyFactor: constants.card.defaultEasyFactor,
       reviewCount: 0,
       accountStory: story ? story : null,
@@ -39,7 +38,6 @@ const updateAccountCard = async (cardId, accountId, story, hint) => {
     return await models.AccountCard.create({
       accountId: accountId,
       cardId: cardId,
-      dueAt: sequelize.DataTypes.NOW,
       easyFactor: constants.card.defaultEasyFactor,
       reviewCount: 0,
       accountStory: story ? story : null,
@@ -220,8 +218,8 @@ const fetchCardsByType = async (cardType, accountId, selectedLanguage) => {
   try {
     return await models.Card.findAll({
       where: {
-        'type': cardType,
-        'active': true
+        type: cardType,
+        active: true
       },
       subQuery: false,
       nest: true,
@@ -249,6 +247,7 @@ const fetchCardsByType = async (cardType, accountId, selectedLanguage) => {
         },
         {
           model: models.AccountCard,
+          required: false,
           where: {
             accountId: accountId
           }
