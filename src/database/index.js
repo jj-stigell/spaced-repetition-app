@@ -21,9 +21,24 @@ const migrationConf = {
   migrations: {
     glob: 'migrations/*.js',
   },
-  storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
+  storage: new SequelizeStorage({
+    sequelize,
+    tableName: 'migrations'
+  }),
   context: sequelize.getQueryInterface(),
   logger: console,
+};
+
+const seederConf = {
+  migrations: {
+    glob: 'seeders/*.js',
+  },
+  storage: new SequelizeStorage({
+    sequelize,
+    modelName: 'seeders',
+  }),
+  context: sequelize.getQueryInterface(),
+  logger: console
 };
 
 const runMigrations = async () => {
@@ -37,6 +52,21 @@ const runMigrations = async () => {
 const rollbackMigration = async () => {
   await sequelize.authenticate();
   const migrator = new Umzug(migrationConf);
+  await migrator.down();
+  sequelize.close();
+};
+
+const runSeeds = async () => {
+  const seeder = new Umzug(seederConf);
+  const seeds = await seeder.up();
+  console.log('Seeds up to date', {
+    files: seeds.map((mig) => mig.name),
+  });
+};
+
+const rollbackSeed = async () => {
+  await sequelize.authenticate();
+  const migrator = new Umzug(seederConf);
   await migrator.down();
   sequelize.close();
 };
@@ -57,5 +87,7 @@ module.exports = {
   connectToDatabase,
   runMigrations,
   rollbackMigration,
+  runSeeds,
+  rollbackSeed,
   sequelize
 };
