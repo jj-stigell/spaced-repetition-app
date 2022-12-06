@@ -477,7 +477,6 @@ describe('Deck integration tests', () => {
     });
 
     it('Toggling only favorite boolean should not change other values', async () => {
-
       // fetch current settings for deck id 1
       let response = await request(testUrl)
         .post('/')
@@ -499,8 +498,8 @@ describe('Deck integration tests', () => {
       expect(response.body.data.changeDeckSettings.reviewInterval).toBe(currentSettings.reviewInterval);
       expect(response.body.data.changeDeckSettings.reviewsPerDay).toBe(currentSettings.reviewsPerDay);
       expect(response.body.data.changeDeckSettings.newCardsPerDay).toBe(currentSettings.newCardsPerDay);
-      expect(response.body.data.changeDeckSettings.createdAt).toBeDefined();
-      expect(response.body.data.changeDeckSettings.updatedAt).toBeDefined();
+      expect(response.body.data.changeDeckSettings.createdAt).toBe(currentSettings.createdAt);
+      expect(response.body.data.changeDeckSettings.updatedAt).not.toBe(currentSettings.updatedAt);
       currentSettings = response.body.data.changeDeckSettings;
 
       // send just deckId and new value for favorite
@@ -517,10 +516,152 @@ describe('Deck integration tests', () => {
       expect(response.body.data.changeDeckSettings.reviewInterval).toBe(currentSettings.reviewInterval);
       expect(response.body.data.changeDeckSettings.reviewsPerDay).toBe(currentSettings.reviewsPerDay);
       expect(response.body.data.changeDeckSettings.newCardsPerDay).toBe(currentSettings.newCardsPerDay);
-      expect(response.body.data.changeDeckSettings.createdAt).toBeDefined();
-      expect(response.body.data.changeDeckSettings.updatedAt).toBeDefined();
+      expect(response.body.data.changeDeckSettings.createdAt).toBe(currentSettings.createdAt);
+      expect(response.body.data.changeDeckSettings.updatedAt).not.toBe(currentSettings.updatedAt);
     });
+
+    it('Toggling only review interval should not change other values', async () => {
+      // fetch current settings for deck id 1
+      let response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: queries.deckSettings, variables: { deckId: 1 } });
+
+      let currentSettings = response.body.data.deckSettings;
+      // send all current settings, but set favorite = !favorite
+      response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, reviewInterval: currentSettings.reviewInterval + 5 } });
+
+
+      console.log(currentSettings);
+
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.changeDeckSettings).toBeDefined();
+      expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
+      expect(response.body.data.changeDeckSettings.deckId).toBe(currentSettings.deckId);
+      expect(response.body.data.changeDeckSettings.favorite).toBe(currentSettings.favorite);
+      expect(response.body.data.changeDeckSettings.reviewInterval).toBe(currentSettings.reviewInterval + 5);
+      expect(response.body.data.changeDeckSettings.reviewsPerDay).toBe(currentSettings.reviewsPerDay);
+      expect(response.body.data.changeDeckSettings.newCardsPerDay).toBe(currentSettings.newCardsPerDay);
+      expect(response.body.data.changeDeckSettings.createdAt).toBe(currentSettings.createdAt);
+      expect(response.body.data.changeDeckSettings.updatedAt).not.toBe(currentSettings.updatedAt);
+      currentSettings = response.body.data.changeDeckSettings;
+
+      console.log(currentSettings);
+
+      // send just deckId and new value for favorite
+      response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, reviewInterval: currentSettings.reviewInterval + 2 } });
+
+      console.log(response.body.data.changeDeckSettings);
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.changeDeckSettings).toBeDefined();
+      expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
+      expect(response.body.data.changeDeckSettings.deckId).toBe(currentSettings.deckId);
+      expect(response.body.data.changeDeckSettings.favorite).toBe(currentSettings.favorite);
+      expect(response.body.data.changeDeckSettings.reviewInterval).toBe(currentSettings.reviewInterval + 2);
+      expect(response.body.data.changeDeckSettings.reviewsPerDay).toBe(currentSettings.reviewsPerDay);
+      expect(response.body.data.changeDeckSettings.newCardsPerDay).toBe(currentSettings.newCardsPerDay);
+      expect(response.body.data.changeDeckSettings.createdAt).toBe(currentSettings.createdAt);
+      expect(response.body.data.changeDeckSettings.updatedAt).not.toBe(currentSettings.updatedAt);
+
+      
+    });
+
+    it('Toggling only reviews per day should not change other values', async () => {
+      // fetch current settings for deck id 1
+      let response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: queries.deckSettings, variables: { deckId: 1 } });
+
+      let currentSettings = response.body.data.deckSettings;
+      // send all current settings, but set favorite = !favorite
+      response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, reviewsPerDay: currentSettings.reviewsPerDay + 5 } });
+
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.changeDeckSettings).toBeDefined();
+      expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
+      expect(response.body.data.changeDeckSettings.deckId).toBe(currentSettings.deckId);
+      expect(response.body.data.changeDeckSettings.favorite).toBe(currentSettings.favorite);
+      expect(response.body.data.changeDeckSettings.reviewInterval).toBe(currentSettings.reviewInterval);
+      expect(response.body.data.changeDeckSettings.reviewsPerDay).toBe(currentSettings.reviewsPerDay + 5);
+      expect(response.body.data.changeDeckSettings.newCardsPerDay).toBe(currentSettings.newCardsPerDay);
+      expect(response.body.data.changeDeckSettings.createdAt).toBe(currentSettings.createdAt);
+      expect(response.body.data.changeDeckSettings.updatedAt).not.toBe(currentSettings.updatedAt);
+      currentSettings = response.body.data.changeDeckSettings;
+
+      // send just deckId and new value for favorite
+      response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, reviewsPerDay: currentSettings.reviewsPerDay + 2 } });
+
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.changeDeckSettings).toBeDefined();
+      expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
+      expect(response.body.data.changeDeckSettings.deckId).toBe(currentSettings.deckId);
+      expect(response.body.data.changeDeckSettings.favorite).toBe(currentSettings.favorite);
+      expect(response.body.data.changeDeckSettings.reviewInterval).toBe(currentSettings.reviewInterval);
+      expect(response.body.data.changeDeckSettings.reviewsPerDay).toBe(currentSettings.reviewsPerDay + 2);
+      expect(response.body.data.changeDeckSettings.newCardsPerDay).toBe(currentSettings.newCardsPerDay);
+      expect(response.body.data.changeDeckSettings.createdAt).toBe(currentSettings.createdAt);
+      expect(response.body.data.changeDeckSettings.updatedAt).not.toBe(currentSettings.updatedAt);
+    });
+
+    it('Toggling only reviews per day should not change other values', async () => {
+      // fetch current settings for deck id 1
+      let response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: queries.deckSettings, variables: { deckId: 1 } });
+
+      let currentSettings = response.body.data.deckSettings;
+      // send all current settings, but set favorite = !favorite
+      response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, reviewsPerDay: currentSettings.reviewsPerDay + 5 } });
+
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.changeDeckSettings).toBeDefined();
+      expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
+      expect(response.body.data.changeDeckSettings.deckId).toBe(currentSettings.deckId);
+      expect(response.body.data.changeDeckSettings.favorite).toBe(currentSettings.favorite);
+      expect(response.body.data.changeDeckSettings.reviewInterval).toBe(currentSettings.reviewInterval);
+      expect(response.body.data.changeDeckSettings.reviewsPerDay).toBe(currentSettings.reviewsPerDay + 5);
+      expect(response.body.data.changeDeckSettings.newCardsPerDay).toBe(currentSettings.newCardsPerDay);
+      expect(response.body.data.changeDeckSettings.createdAt).toBe(currentSettings.createdAt);
+      expect(response.body.data.changeDeckSettings.updatedAt).not.toBe(currentSettings.updatedAt);
+      currentSettings = response.body.data.changeDeckSettings;
+
+      // send just deckId and new value for favorite
+      response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, reviewsPerDay: currentSettings.reviewsPerDay + 2 } });
+
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.changeDeckSettings).toBeDefined();
+      expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
+      expect(response.body.data.changeDeckSettings.deckId).toBe(currentSettings.deckId);
+      expect(response.body.data.changeDeckSettings.favorite).toBe(currentSettings.favorite);
+      expect(response.body.data.changeDeckSettings.reviewInterval).toBe(currentSettings.reviewInterval);
+      expect(response.body.data.changeDeckSettings.reviewsPerDay).toBe(currentSettings.reviewsPerDay + 2);
+      expect(response.body.data.changeDeckSettings.newCardsPerDay).toBe(currentSettings.newCardsPerDay);
+      expect(response.body.data.changeDeckSettings.createdAt).toBe(currentSettings.createdAt);
+      expect(response.body.data.changeDeckSettings.updatedAt).not.toBe(currentSettings.updatedAt);
+    });
+
 
   });
   
+
 });
