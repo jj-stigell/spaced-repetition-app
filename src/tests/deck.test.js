@@ -69,9 +69,9 @@ describe('Deck integration tests', () => {
     });
   });
 
-  describe('Fetching decks', () => {
+  describe('Fetching decks and cards', () => {
 
-    it('Fetch active decks leads to auth error when not logged in', async () => {
+    it('Fetch decks leads to auth error when not logged in', async () => {
       let response = await request(testUrl)
         .post('/')
         .send({ query: queries.fetchDecksQuery});
@@ -80,8 +80,8 @@ describe('Deck integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
-    it('Fetch active decks succesful after authenticated', async () => {
-      const response = await request(testUrl)
+    it('Fetch all available decks, 3 at the moment', async () => {
+      let response = await request(testUrl)
         .post('/')
         .set('Authorization', `bearer ${authToken}`)
         .send({ query: queries.fetchDecksQuery});
@@ -92,7 +92,7 @@ describe('Deck integration tests', () => {
     });
 
     it('Fetch deck settings leads to auth error when not logged in', async () => {
-      const response = await request(testUrl)
+      let response = await request(testUrl)
         .post('/')
         .send({ query: queries.fetchDeckSettings, variables: { deckId: 1 } });
 
@@ -101,7 +101,7 @@ describe('Deck integration tests', () => {
     });
 
     it('Fetch deck setting for deck id 1, settings should be default, defined in constants', async () => {
-      const response = await request(testUrl)
+      let response = await request(testUrl)
         .post('/')
         .set('Authorization', `bearer ${authToken}`)
         .send({ query: queries.fetchDeckSettings, variables: { deckId: 1 } });
@@ -115,5 +115,4 @@ describe('Deck integration tests', () => {
       expect(response.body.data.fecthDeckSettings.newCardsPerDay).toBe(constants.defaultNewPerDay);
     });
   });
-
 });
