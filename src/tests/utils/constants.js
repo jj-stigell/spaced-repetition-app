@@ -51,6 +51,14 @@ const solveBugReport = {
   solvedMessage: 'This is message the solve message for bug report'
 };
 
+const newDeckSettings = {
+  deckId: 1,
+  newCardsPerDay: 15,
+  reviewsPerDay: 16,
+  reviewInterval: 17,
+  favorite: true
+};
+
 module.exports = {
   account,
   adminReadRights,
@@ -58,5 +66,6 @@ module.exports = {
   passwordData,
   stringData,
   validBugReport,
-  solveBugReport
+  solveBugReport,
+  newDeckSettings
 };

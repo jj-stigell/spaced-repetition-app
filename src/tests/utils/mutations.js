@@ -69,6 +69,19 @@ const mutations = {
   deleteBugReportMutation: `mutation deleteBugReport($bugId: Int!) {
     deleteBugReport(bugId: $bugId)
   }`,
+  changeDeckSettings: `mutation ChangeDeckSettings($deckId: Int!, $newCardsPerDay: Int, $reviewsPerDay: Int, $reviewInterval: Int, $favorite: Boolean) {
+    changeDeckSettings(deckId: $deckId, newCardsPerDay: $newCardsPerDay, reviewsPerDay: $reviewsPerDay, reviewInterval: $reviewInterval, favorite: $favorite) {
+      id
+      accountId
+      deckId
+      favorite
+      reviewInterval
+      reviewsPerDay
+      newCardsPerDay
+      createdAt
+      updatedAt
+    }
+  }`,
 };
 
 module.exports = mutations;
