@@ -6,12 +6,20 @@
   "scripts": {
     "start": "NODE_ENV=production node src/index.js",
     "dev": "NODE_ENV=development nodemon src/index.js",
-    "test": "npm run test:migration:down && npm run jestTest",
-    "jestTest": "NODE_ENV=test jest --verbose --runInBand --detectOpenHandles --coverage",
+    "test": "NODE_ENV=test jest -t deck --verbose --runInBand --detectOpenHandles --coverage",
     "lint": "eslint .",
-    "prod:migration:down": "NODE_ENV=production node src/database/rollback.js",
-    "dev:migration:down": "NODE_ENV=development node src/database/rollback.js",
-    "test:migration:down": "NODE_ENV=test node src/database/rollback.js"
+    "prod:migration:up": "NODE_ENV=production node src/database/runMigrations.js",
+    "dev:migration:up": "NODE_ENV=development node src/database/runMigrations.js",
+    "test:migration:up": "NODE_ENV=test node src/database/runMigrations.js",
+    "prod:migration:down": "NODE_ENV=production node src/database/rollbackMigration.js",
+    "dev:migration:down": "NODE_ENV=development node src/database/rollbackMigration.js",
+    "test:migration:down": "NODE_ENV=test node src/database/rollbackMigration.js",
+    "prod:seed:up": "NODE_ENV=production node src/database/runSeeds.js",
+    "dev:seed:up": "NODE_ENV=development node src/database/runSeeds.js",
+    "test:seed:up": "NODE_ENV=test node src/database/runSeeds.js",
+    "prod:seed:down": "NODE_ENV=production node src/database/rollbackSeed.js",
+    "dev:seed:down": "NODE_ENV=development node src/database/rollbackSeed.js",
+    "test:seed:down": "NODE_ENV=test node src/database/rollbackSeed.js"
   },
   "repository": {
     "type": "git",
