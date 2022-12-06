@@ -1,29 +1,5 @@
 const { DataTypes } = require('sequelize');
-const fs = require('fs');
-const path = require('path');
 const constants = require('../src/util/constants');
-const { NODE_ENV } = require('../src/util/config');
-const alter_tables = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/alter_tables.sql'), 'utf8');
-const language = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/language.sql'), 'utf8');
-const account = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account.sql'), 'utf8');
-const admin = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/admin.sql'), 'utf8');
-const deck = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/deck.sql'), 'utf8');
-const deck_translation = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/deck_translation.sql'), 'utf8');
-const card = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/card.sql'), 'utf8');
-const card_list = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/card_list.sql'), 'utf8');
-const radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/radical.sql'), 'utf8');
-const radical_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/radical_translation_en.sql'), 'utf8');
-const kanji = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji.sql'), 'utf8');
-const kanji_radical = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_radical.sql'), 'utf8');
-const kanji_translation_fi = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_fi.sql'), 'utf8');
-const kanji_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_en.sql'), 'utf8');
-const word = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/word.sql'), 'utf8');
-const word_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/word_translation_en.sql'), 'utf8');
-const account_deck_settings = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_deck_settings.sql'), 'utf8');
-const account_card = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_card.sql'), 'utf8');
-const account_review = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/account_review.sql'), 'utf8');
-const dummy_accounts = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/dummy_accounts.sql'), 'utf8');
-const bug_Reports = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/bug_reports.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -207,9 +183,6 @@ module.exports = {
         defaultValue: DataTypes.NOW
       }
     }),
-    await queryInterface.addIndex('deck', ['id', 'language_id'], {
-      unique: true
-    }),
     await queryInterface.createTable('deck_translation', {
       id: {
         type: DataTypes.INTEGER,
@@ -260,9 +233,6 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('deck_translation', ['deck_id', 'language_id'], {
-      unique: true
-    }),
     await queryInterface.createTable('card', {
       id: {
         type: DataTypes.INTEGER,
@@ -298,9 +268,6 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       },
-    }),
-    await queryInterface.addIndex('card', ['id', 'language_id'], {
-      unique: true
     }),
     await queryInterface.createTable('card_list', {
       id: {
@@ -341,9 +308,6 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       },
-    }),
-    await queryInterface.addIndex('card_list', ['deck_id', 'card_id'], {
-      unique: true
     }),
     await queryInterface.createTable('account_deck_settings', {
       id: {
@@ -414,9 +378,6 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('account_deck_settings', ['account_id', 'deck_id'], {
-      unique: true
-    }),
     await queryInterface.createTable('kanji', {
       id: {
         type: DataTypes.INTEGER,
@@ -465,9 +426,6 @@ module.exports = {
         defaultValue: DataTypes.NOW,
         allowNull: false
       },
-    }),
-    await queryInterface.addIndex('kanji', ['card_id', 'kanji'], {
-      unique: true
     }),
     await queryInterface.createTable('radical', {
       id: {
@@ -545,9 +503,6 @@ module.exports = {
         allowNull: false
       },
     }),
-    await queryInterface.addIndex('radical_translation', ['radical_id', 'language_id'], {
-      unique: true
-    }),
     await queryInterface.createTable('kanji_radical', {
       id: {
         type: DataTypes.INTEGER,
@@ -584,9 +539,6 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       },
-    }),
-    await queryInterface.addIndex('kanji_radical', ['radical_id', 'kanji_id'], {
-      unique: true
     }),
     await queryInterface.createTable('kanji_translation', {
       id: {
@@ -639,9 +591,6 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       },
-    }),
-    await queryInterface.addIndex('kanji_translation', ['kanji_id', 'language_id'], {
-      unique: true
     }),
     await queryInterface.createTable('word', {
       id: {
@@ -735,9 +684,6 @@ module.exports = {
         defaultValue: DataTypes.NOW
       },
     }),
-    await queryInterface.addIndex('word_translation', ['word_id', 'language_id'], {
-      unique: true
-    }),
     await queryInterface.createTable('account_review', {
       id: {
         type: DataTypes.INTEGER,
@@ -779,9 +725,6 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       }
-    }),
-    await queryInterface.addIndex('account_review', ['id', 'account_id', 'card_id'], {
-      unique: true
     }),
     await queryInterface.createTable('account_card', {
       id: {
@@ -856,9 +799,6 @@ module.exports = {
         allowNull: false,
         defaultValue: DataTypes.NOW
       },
-    }),
-    await queryInterface.addIndex('account_card', ['account_id', 'card_id'], {
-      unique: true
     }),
     await queryInterface.createTable('bug_report', {
       id: {
@@ -961,34 +901,7 @@ module.exports = {
         type: DataTypes.DATE,
         allowNull: false
       },
-    }),
-    await queryInterface.addIndex('session', ['id', 'account_id'], {
-      unique: true
-    }),
-    await queryInterface.sequelize.query(alter_tables);
-    await queryInterface.sequelize.query(language);
-    await queryInterface.sequelize.query(account);
-    await queryInterface.sequelize.query(admin);
-    await queryInterface.sequelize.query(deck);
-    await queryInterface.sequelize.query(deck_translation);
-    await queryInterface.sequelize.query(card);
-    await queryInterface.sequelize.query(card_list);
-    await queryInterface.sequelize.query(radical);
-    await queryInterface.sequelize.query(radical_translation_en);
-    await queryInterface.sequelize.query(kanji);
-    await queryInterface.sequelize.query(kanji_radical);
-    await queryInterface.sequelize.query(kanji_translation_fi);
-    await queryInterface.sequelize.query(kanji_translation_en);
-    await queryInterface.sequelize.query(word);
-    await queryInterface.sequelize.query(word_translation_en);
-    await queryInterface.sequelize.query(dummy_accounts);
-    await queryInterface.sequelize.query(bug_Reports);
-    if (NODE_ENV !== 'production' && NODE_ENV !== 'test' && NODE_ENV !== 'development') {
-      console.log('Not in production/test, loading dummy review data');
-      await queryInterface.sequelize.query(account_deck_settings);
-      await queryInterface.sequelize.query(account_card);
-      await queryInterface.sequelize.query(account_review);
-    }
+    });
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('session');
