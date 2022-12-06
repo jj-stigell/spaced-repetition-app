@@ -11,7 +11,8 @@ const constants = require('../util/constants');
 const helpers = require('./utils/helper');
 
 describe('Deck integration tests', () => {
-  let testServer, testUrl, nonAdminAuthToken, adminAuthReadToken, adminAuthWriteToken;
+  // eslint-disable-next-line no-unused-vars
+  let testServer, testUrl, nonAdminAuthToken, adminAuthReadToken, adminAuthWriteToken, nonAdminAccount;
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
@@ -48,6 +49,7 @@ describe('Deck integration tests', () => {
         .post('/')
         .send({ query: mutations.loginMutation, variables: account });
 
+      nonAdminAccount = response.body.data.login.account;
       nonAdminAuthToken = response.body.data.login.token.value;
 
       response = await request(testUrl)
@@ -66,10 +68,10 @@ describe('Deck integration tests', () => {
 
   describe('Fetching decks', () => {
 
-    it('Fetch decks leads to auth error when not logged in', async () => {
+    it('Fetch decks leads to authentication error when not logged in', async () => {
       let response = await request(testUrl)
         .post('/')
-        .send({ query: queries.fetchDecksQuery});
+        .send({ query: queries.fetchDecks});
 
       expect(response.body.data?.fetchDecks).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
@@ -79,12 +81,15 @@ describe('Deck integration tests', () => {
       let response = await request(testUrl)
         .post('/')
         .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: queries.fetchDecksQuery});
+        .send({ query: queries.fetchDecks});
 
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.fetchDecks.Decks).toBeDefined();
       expect(response.body.data.fetchDecks.Decks.length).toBe(3);
     });
+  });
+
+  describe('Fetching deck settings', () => {
 
     it('Fetch deck settings leads to auth error when not logged in', async () => {
       let response = await request(testUrl)
@@ -95,7 +100,67 @@ describe('Deck integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
-    it('Fetch deck setting for deck id 1, settings should be default, defined in constants', async () => {
+    it('Error when authenticated but deck id negative integer', async () => {
+      let response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: queries.fetchDeckSettings, variables: { deckId: -1 } });
+
+      expect(response.body.data?.fecthDeckSettings).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+    });
+
+    it('Error when authenticated but deck id zero integer', async () => {
+      let response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: queries.fetchDeckSettings, variables: { deckId: 0 } });
+
+      expect(response.body.data?.fecthDeckSettings).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+    });
+    
+    it('Error when authenticated but deck id wrong type (string)', async () => {
+      let response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: queries.fetchDeckSettings, variables: { deckId: '1' } });
+
+      expect(response.body.data?.fecthDeckSettings).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when authenticated but deck id wrong type (float)', async () => {
+      let response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: queries.fetchDeckSettings, variables: { deckId: 1.01 } });
+
+      expect(response.body.data?.fecthDeckSettings).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when authenticated but deck id not send', async () => {
+      let response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: queries.fetchDeckSettings });
+
+      expect(response.body.data?.fecthDeckSettings).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when authenticated but non-existing deck id', async () => {
+      let response = await request(testUrl)
+        .post('/')
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .send({ query: queries.fetchDeckSettings, variables: { deckId: 9999 } });
+
+      expect(response.body.data?.fecthDeckSettings).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.nonExistingDeckError);
+    });
+
+    it('Fetch deck setting for deck id 1, settings should be default for initial fetch, defined in constants', async () => {
       let response = await request(testUrl)
         .post('/')
         .set('Authorization', `bearer ${nonAdminAuthToken}`)
@@ -103,12 +168,15 @@ describe('Deck integration tests', () => {
 
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.fecthDeckSettings).toBeDefined();
+      expect(response.body.data.fecthDeckSettings.accountId).toBe(parseInt(nonAdminAccount.id));
       expect(response.body.data.fecthDeckSettings.deckId).toBe(1);
       expect(response.body.data.fecthDeckSettings.favorite).toBe(false);
       expect(response.body.data.fecthDeckSettings.reviewInterval).toBe(constants.defaultInterval);
       expect(response.body.data.fecthDeckSettings.reviewsPerDay).toBe(constants.defaultReviewPerDay);
       expect(response.body.data.fecthDeckSettings.newCardsPerDay).toBe(constants.defaultNewPerDay);
+      expect(response.body.data.fecthDeckSettings.createdAt).toBeDefined();
+      expect(response.body.data.fecthDeckSettings.updatedAt).toBeDefined();
     });
-
   });
+
 });

@@ -419,7 +419,7 @@ describe('Bug integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
-    it('Error when write permission but bug id not supplied', async () => {
+    it('Error when write permission but bug id not send', async () => {
       let response = await request(testUrl)
         .post('/')
         .set('Authorization', `bearer ${adminAuthWriteToken}`)
@@ -609,7 +609,7 @@ describe('Bug integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugByIdNotFound);
     });
 
-    it('Error when write permission but bug id not supplied', async () => {
+    it('Error when write permission but bug id not send', async () => {
       let response = await request(testUrl)
         .post('/')
         .set('Authorization', `bearer ${adminAuthReadToken}`)
