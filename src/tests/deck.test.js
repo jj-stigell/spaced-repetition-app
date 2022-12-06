@@ -2,7 +2,7 @@ const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
 const request = require('supertest');
 const { PORT } = require('../util/config');
 const { connectToDatabase } = require('../database');
-const { account } = require('./utils/constants'); 
+const { account, adminReadRights, adminWriteRights } = require('./utils/constants'); 
 const mutations = require('./utils/mutations');
 const queries = require('./utils/queries');
 const errors = require('../util/errors/errors');
@@ -11,7 +11,7 @@ const constants = require('../util/constants');
 const helpers = require('./utils/helper');
 
 describe('Deck integration tests', () => {
-  let testServer, testUrl, authToken;
+  let testServer, testUrl, nonAdminAuthToken, adminAuthReadToken, adminAuthWriteToken;
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
@@ -38,38 +38,33 @@ describe('Deck integration tests', () => {
       expect(response.body.status).toBe('pass');
     });
 
-    it('Create and log in to new account for tests', async () => {
+    it('Fetch tokens for accounts and admins', async () => {
+
       let response = await request(testUrl)
         .post('/')
         .send({ query: mutations.registerMutation, variables: account });
-
-      expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.createAccount.email).toBe(account.email);
-      expect(response.body.data.createAccount.username).toBe(account.username);
-      expect(response.body.data.createAccount.languageId).toBe(account.languageId);
-      expect(response.body.data.createAccount.id).toBeDefined();
-      expect(response.body.data.createAccount.lastLogin).toBeDefined();
-      expect(response.body.data.createAccount.createdAt).toBeDefined();
-      expect(response.body.data.createAccount.updatedAt).toBeDefined();
 
       response = await request(testUrl)
         .post('/')
         .send({ query: mutations.loginMutation, variables: account });
 
-      expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.login.token).toBeDefined();
-      expect(response.body.data.login.account.email).toBe(account.email);
-      expect(response.body.data.login.account.username).toBe(account.username);
-      expect(response.body.data.login.account.languageId).toBe(account.languageId);
-      expect(response.body.data.login.account.id).toBeDefined();
-      expect(response.body.data.login.account.lastLogin).toBeDefined();
-      expect(response.body.data.login.account.createdAt).toBeDefined();
-      expect(response.body.data.login.account.updatedAt).toBeDefined();
-      authToken = response.body.data.login.token.value;
+      nonAdminAuthToken = response.body.data.login.token.value;
+
+      response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.loginMutation, variables: adminReadRights });
+
+      adminAuthReadToken = response.body.data.login.token.value;
+
+      response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.loginMutation, variables: adminWriteRights });
+
+      adminAuthWriteToken = response.body.data.login.token.value;
     });
   });
 
-  describe('Fetching decks and cards', () => {
+  describe('Fetching decks', () => {
 
     it('Fetch decks leads to auth error when not logged in', async () => {
       let response = await request(testUrl)
@@ -83,7 +78,7 @@ describe('Deck integration tests', () => {
     it('Fetch all available decks, 3 at the moment', async () => {
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${authToken}`)
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
         .send({ query: queries.fetchDecksQuery});
 
       expect(response.body.errors).toBeUndefined();
@@ -103,7 +98,7 @@ describe('Deck integration tests', () => {
     it('Fetch deck setting for deck id 1, settings should be default, defined in constants', async () => {
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${authToken}`)
+        .set('Authorization', `bearer ${nonAdminAuthToken}`)
         .send({ query: queries.fetchDeckSettings, variables: { deckId: 1 } });
 
       expect(response.body.errors).toBeUndefined();
@@ -114,5 +109,6 @@ describe('Deck integration tests', () => {
       expect(response.body.data.fecthDeckSettings.reviewsPerDay).toBe(constants.defaultReviewPerDay);
       expect(response.body.data.fecthDeckSettings.newCardsPerDay).toBe(constants.defaultNewPerDay);
     });
+
   });
 });
