@@ -5,15 +5,15 @@ const validator = require('../../util/validation/validator');
 
 const resolvers = {
   Query: {
-    fetchDecks: async (root, args, { currentUser }) => {
+    decks: async (root, args, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       const decks = await deckService.findAllDecks(false);
       if (decks.length === 0) return graphQlErrors.defaultError(errors.deckErrors.noDecksFoundError);
-      return { Decks: decks };
+      return decks;
     },
-    fecthDeckSettings: async (_, { deckId }, { currentUser }) => {
+    deckSettings: async (_, { deckId }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
-      await validator.validateDeckId(deckId);
+      await validator.validateInteger(deckId);
       const deck = await deckService.findDeckById(deckId);
       if (!deck) return graphQlErrors.defaultError(errors.nonExistingDeckError);
       let deckSettings = await deckService.findAccountDeckSettings(deckId, currentUser.id);
@@ -55,7 +55,7 @@ const resolvers = {
         deckSettings = await deckService.createAccountDeckSettings(deckId, currentUser.id, favorite, reviewInterval, reviewsPerDay, newCardsPerDay);
       }
 
-      // Update existing deck settings
+      // Update deck settings
       try {
         deckSettings.favorite = favorite ? true : false;
         deckSettings.reviewInterval = reviewInterval ? reviewInterval : deckSettings.reviewInterval,
