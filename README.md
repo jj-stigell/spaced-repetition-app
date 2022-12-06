@@ -159,15 +159,15 @@ Frontend time keeping is in the frontend GitHub repository
                 - [ ] Fetch new cards
                 - [X] Fetch decks
                 - [ ] Fetch due per date, one or multiple
-        - [ ] BUGS
-            - [ ] Mutations
+        - [X] BUGS
+            - [X] Mutations
                 - [X] create report
-                - [ ] delete report
-                - [ ] solve report
-            - [ ] Queries
-                - [ ] fetch by id
-                - [ ] fetch by type
-                - [ ] fetch all
+                - [X] delete report
+                - [X] solve report
+            - [X] Queries
+                - [X] fetch by id
+                - [X] fetch by type
+                - [X] fetch all
 
 
 ## Deployment
