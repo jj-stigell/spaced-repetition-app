@@ -94,40 +94,6 @@ type Card {
   word: Word
 }
 
-type DeckTranslation {
-  id: Int
-  languageId: String
-  title: String
-  description: String
-  active: Boolean
-  createdAt: Date
-  updatedAt: Date
-}
-
-type Deck {
-  id: Int
-  deckName: String
-  type: String
-  subscriberOnly: Boolean
-  languageId: String
-  active: Boolean
-  createdAt: Date
-  updatedAt: Date
-  deck_translations: [DeckTranslation]
-}
-
-type DeckSettings {
-  id: Int
-  accountId: Int
-  deckId: Int
-  favorite: Boolean
-  reviewInterval: Int
-  reviewsPerDay: Int
-  newCardsPerDay: Int
-  createdAt: Date
-  updatedAt: Date
-}
-
 type Statistics {
   matured: Int
   learning: Int
@@ -147,10 +113,6 @@ type Cardset {
   Cards: [Card]
 }
 
-type DeckList {
-  Decks: [Deck]
-}
-
 type Query {
   fetchCards(
     deckId: Int!
@@ -166,12 +128,6 @@ type Query {
   fetchLearningStatistics(
     cardType: String!
   ): Statistics!
-
-  fetchDecks: DeckList!
-
-  fecthDeckSettings(
-    deckId: Int!
-  ): DeckSettings!
 
   fetchReviewHistory(
     limitReviews: Int!
@@ -191,14 +147,6 @@ type Mutation {
     extraReview: Boolean
     timing: Float
   ): Success!
-
-  changeDeckSettings(
-    deckId: Int!
-    favorite: Boolean
-    reviewInterval: Int
-    reviewsPerDay: Int
-    newCardsPerDay: Int
-  ): DeckSettings!
 
   pushCards(
     deckId: Int
