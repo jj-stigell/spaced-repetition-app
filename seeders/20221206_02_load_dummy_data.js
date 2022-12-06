@@ -17,7 +17,7 @@ module.exports = {
       await queryInterface.sequelize.query(admin, { transaction });
       await queryInterface.sequelize.query(dummy_accounts, { transaction });
       await queryInterface.sequelize.query(bug_Reports, { transaction });
-      if (NODE_ENV !== 'production' && NODE_ENV !== 'test' && NODE_ENV !== 'development') {
+      if (NODE_ENV !== 'production' && NODE_ENV !== 'test') {
         console.log('Not in production/test, loading dummy review data');
         await queryInterface.sequelize.query(account_deck_settings, { transaction });
         await queryInterface.sequelize.query(account_card, { transaction });
