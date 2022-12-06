@@ -923,6 +923,8 @@ module.exports = {
     await queryInterface.dropTable('deck');
     await queryInterface.dropTable('card');
     await queryInterface.dropTable('language');
+    // Seeder table dropped if whole db run down
+    await queryInterface.dropTable('seeders');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_card_type;');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_deck_type;');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_account_review_result;');
