@@ -35,14 +35,10 @@ type DeckSettings {
   updatedAt: Date
 }
 
-type DeckList {
-  Decks: [Deck]
-}
-
 type Query {
-  fetchDecks: DeckList!
+  decks: [Deck!]!
 
-  fecthDeckSettings(
+  deckSettings(
     deckId: Int!
   ): DeckSettings!
 }
