@@ -3,7 +3,7 @@ const models = require('../../models');
 const { Op } = require('sequelize');
 
 /**
- * Fecth account from database by id number
+ * Fetch account from database by id number
  * @param {integer} accountId - accounts id number
  * @returns {Account} account found from db
  */
