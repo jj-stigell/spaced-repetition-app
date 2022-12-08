@@ -9,8 +9,8 @@ const errors = require('./errors/errors');
 /**
  * Parse request user-agent
  * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent
- * @param {string} userAgent raw from request header
- * @returns {json} payload with browser, os, and device information
+ * @param {string} userAgent - raw from request header
+ * @returns {Object} - payload with browser, os, and device information
  */
 const parseUserAgent = (userAgent) => {
   try {
@@ -26,9 +26,9 @@ const parseUserAgent = (userAgent) => {
 };
 
 /**
- * Create anew date by summing days to the curent date
- * @param {integer} days Amount of full days
- * @returns {Date} new date n days from today
+ * Create a new date by summing days to the current date
+ * @param {Integer} days - amount of full days
+ * @returns {Date} - new date n days from today
  */
 const calculateDate = (days) => {
   const newDate = new Date();
@@ -37,8 +37,8 @@ const calculateDate = (days) => {
 
 /**
  * Compare user submitted plain-text password to hash
- * @param {string} password, user submitted password
- * @param {string} hash, account hashed password from db
+ * @param {string} password - user submitted password
+ * @param {string} hash - account hashed password from db
  * @returns {boolean} true if hash match, false if no match
  */
 const hashCompare = async (password, hash) => {
@@ -51,7 +51,7 @@ const hashCompare = async (password, hash) => {
 
 /**
  * Hash user submitted plain-text password to hash
- * @param {string} password, user submitted password
+ * @param {string} password - user submitted password
  * @returns {string} hashed password string
  */
 const hashPassword = async (password) => {
@@ -66,9 +66,9 @@ const hashPassword = async (password) => {
  * Check if user has required admin rights to acces or edit a resource
  * Throws an error if account does not have the required permissions
  * If user has write rights, they are also expected to have read rights
- * @param {integer} accountId 
- * @param {string} permission which permission is checked, either READ or WRITE
- * @returns {integer} 1, if required permissions found
+ * @param {integer} accountId - accounts id
+ * @param {string} permission - which permission is checked, either READ or WRITE
+ * @returns {integer} 1 - if required permissions found
  */
 const checkAdminPermission = async (accountId, permission) => {
   const admin = await findAdminByAccountId(accountId);
@@ -88,10 +88,41 @@ const checkAdminPermission = async (accountId, permission) => {
   return 1;
 };
 
+/**
+ * Reformat statistics from database
+ * @param {Object} stats - statistics from database
+ * @returns {Object}
+ */
+const formStatistics = async (stats) => {
+
+  const statistics = {
+    matured: 0,
+    learning: 0,
+    new: 0
+  };
+
+  stats.forEach(value => {
+    switch (value.status) {
+    case 'matured':
+      statistics.matured = value.count;
+      break;
+    case 'learning':
+      statistics.learning = value.count;
+      break;
+    case 'new':
+      statistics.new = value.count;
+      break;
+    }
+  });
+
+  return statistics;
+};
+
 module.exports = {
   parseUserAgent,
   calculateDate,
   hashCompare,
   hashPassword,
-  checkAdminPermission
+  checkAdminPermission,
+  formStatistics
 };

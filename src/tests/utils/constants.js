@@ -58,6 +58,40 @@ const deckSettings = {
   favorite: true
 };
 
+
+const userAgents = [
+  {
+    agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36',
+    browser: 'Chrome',
+    os: 'Windows',
+    device: '-'
+  },
+  {
+    agent: 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; Media Center PC 6.0; InfoPath.3; MS-RTC LM 8; Zune 4.7)',
+    browser: 'IE',
+    os: 'Windows',
+    device: '-'
+  },
+  {
+    agent: 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:54.0) Gecko/20100101 Firefox/58.0',
+    browser: 'Firefox',
+    os: 'Windows',
+    device: '-'
+  },
+  {
+    agent: 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; es-es) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
+    browser: 'Safari',
+    os: 'Mac OS',
+    device: '-'
+  },
+  {
+    agent: 'Opera/9.80 (X11; Linux x86_64; U; fr) Presto/2.9.168 Version/11.50',
+    browser: 'Opera',
+    os: 'Linux',
+    device: '-'
+  }
+];
+
 module.exports = {
   account,
   adminReadRights,
@@ -66,5 +100,6 @@ module.exports = {
   stringData,
   validBugReport,
   solveBugReport,
-  deckSettings
+  deckSettings,
+  userAgents
 };
