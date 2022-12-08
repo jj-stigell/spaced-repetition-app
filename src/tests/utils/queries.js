@@ -5,31 +5,29 @@ const queries = {
   usernameAvailableQuery: `query usernameAvailable($username: String!) {
     usernameAvailable(username: $username)
   }`,
-  fetchDecksQuery: `query FetchDecks {
-    fetchDecks {
-      Decks {
+  decks: `query Decks {
+    decks {
+      id
+      deckName
+      type
+      subscriberOnly
+      languageId
+      active
+      createdAt
+      updatedAt
+      deck_translations {
         id
-        deckName
-        type
-        subscriberOnly
         languageId
+        title
+        description
         active
         createdAt
         updatedAt
-        deck_translations {
-          id
-          languageId
-          title
-          description
-          active
-          createdAt
-          updatedAt
-        }
       }
     }
   }`,
-  fetchDeckSettings: `query FecthDeckSettings($deckId: Int!) {
-    fecthDeckSettings(deckId: $deckId) {
+  deckSettings: `query DeckSettings($deckId: Int!) {
+    deckSettings(deckId: $deckId) {
       id
       accountId
       deckId

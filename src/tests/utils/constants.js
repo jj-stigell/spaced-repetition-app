@@ -51,8 +51,7 @@ const solveBugReport = {
   solvedMessage: 'This is message the solve message for bug report'
 };
 
-const newDeckSettings = {
-  deckId: 1,
+const deckSettings = {
   newCardsPerDay: 15,
   reviewsPerDay: 16,
   reviewInterval: 17,
@@ -67,5 +66,5 @@ module.exports = {
   stringData,
   validBugReport,
   solveBugReport,
-  newDeckSettings
+  deckSettings
 };
