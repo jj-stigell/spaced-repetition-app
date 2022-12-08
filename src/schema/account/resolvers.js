@@ -1,11 +1,8 @@
-const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = require('../../util/config');
 const errors = require('../../util/errors/errors');
-const constants = require('../../util/constants');
 const validator = require('../../util/validation//validator');
 const graphQlErrors = require('../../util/errors/graphQlErrors');
 const services = require('../services');
-const { parseUserAgent } = require('../../util/helper');
+const { parseUserAgent, signJWT } = require('../../util/helper');
 const { hashPassword, hashCompare } = require('../../util/helper');
 
 const resolvers = {
@@ -56,9 +53,10 @@ const resolvers = {
       if (!passwordCorrect) return graphQlErrors.defaultError(errors.userOrPassIncorrectError);
       const parsedUserAgent = parseUserAgent(userAgent);
       const session = await services.sessionService.createNewSession(account.id, parsedUserAgent);
+      const token = signJWT(account.id, session.id);
 
       return { 
-        token: { value: jwt.sign( { id: account.id, session: session.id }, JWT_SECRET, { expiresIn: constants.login.jwtExpiryTime } )},
+        token: { value: token },
         account: {
           id: account.id,
           email: account.email,

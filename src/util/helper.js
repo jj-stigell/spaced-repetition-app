@@ -1,7 +1,9 @@
 const parser = require('ua-parser-js');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { internalServerError } = require('./errors/graphQlErrors');
 const constants = require('./constants');
+const { JWT_SECRET } = require('./config');
 const { findAdminByAccountId } = require('../schema/services/accountService');
 const graphQlErrors = require('./errors/graphQlErrors');
 const errors = require('./errors/errors');
@@ -20,6 +22,20 @@ const parseUserAgent = (userAgent) => {
       os: parsedUserAgent?.os.name ? parsedUserAgent?.os.name : '-',
       device: parsedUserAgent?.device.type ? parsedUserAgent.device.type : '-'
     };
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
+/**
+ * Sign a new jwt token
+ * @param {integer} accountId = account identifier
+ * @param {UUIDV4} sessionId - UUID of the session
+ * @returns new signed jwt token
+ */
+const signJWT = (accountId, sessionId) => {
+  try {
+    return jwt.sign( { id: accountId, session: sessionId }, JWT_SECRET, { expiresIn: constants.login.jwtExpiryTime } );
   } catch (error) {
     return internalServerError(error);
   }
@@ -120,6 +136,7 @@ const formStatistics = async (stats) => {
 
 module.exports = {
   parseUserAgent,
+  signJWT,
   calculateDate,
   hashCompare,
   hashPassword,
