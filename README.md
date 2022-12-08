@@ -39,7 +39,7 @@ Frontend time keeping is in the frontend GitHub repository
     - [X] Set styling rules on lint etc.
 - [ ] Deployment pipeline
     - [X] Run tests with #test
-    - [ ] Version numbering (command?)
+    - [ ] Version numbering
     - [X] Deploy to production with #deploy
 - [ ] GraphQL server
     - [ ] Limit query depth
@@ -102,6 +102,8 @@ Frontend time keeping is in the frontend GitHub repository
                 - [X] solve bug report (admin only)
                 - [X] delete bug report (admin only)
 - [ ] PostgreSQL / Sequelize
+    - [X] Generate mock data
+    - [ ] Optimize queries
     - [X] Translate db to Sequelize
     - [X] Create models and associations
     - [X] Load initial sql file containing decks, cards and translations
@@ -133,32 +135,38 @@ Frontend time keeping is in the frontend GitHub repository
         - account_card, ['account_id', 'card_id']
         - session, ['id', 'account_id']
         - kanji, ['card_id', 'kanji']
-    - [ ] DB testing/optimizing
-        - [X] Generate mock data
-        - [ ] Optimize queries
 - [ ] Testing
     - [ ] Unit tests
         - [X] Helper functions
         - [ ] Services
+            - [ ] account
+            - [ ] bug
+            - [ ] card
+            - [ ] deck
+            - [ ] session
     - [ ] Integration tests
         - [X] ACCOUNT
             - [X] Account creation
             - [X] Login
             - [X] Password changing
             - [X] Username changing
-            - [ ] Logout, check that session does not exists and work anymore
+            - [ ] Logout
         - [ ] CARDS
             - [ ] Mutations
                 - [ ] Reschedule card
                 - [ ] Add custom card hint
                 - [ ] Add custom card story
-                - [ ] set deck as favorite
                 - [ ] Sick day
             - [ ] Queries
                 - [ ] Fetch due cards
                 - [ ] Fetch new cards
-                - [X] Fetch decks
                 - [ ] Fetch due per date, one or multiple
+         - [X] DECKS
+            - [X] Mutations
+                - [X] edit deck settings (set favorites, interval, etc.)
+            - [X] Queries
+                - [X] Fetch decks
+                - [X] Fetch deck settings
         - [X] BUGS
             - [X] Mutations
                 - [X] create report
