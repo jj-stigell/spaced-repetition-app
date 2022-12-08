@@ -47,15 +47,15 @@ const username = yup
 
 const languageId = yup
   .string(errors.inputValueTypeError)
-  .oneOf(constants.availableLanguages, errors.invalidLanguageIdError);
+  .oneOf(constants.general.availableLanguages, errors.invalidLanguageIdError);
 
 const password = yup
   .string(errors.inputValueTypeError)
   .max(constants.passwordMaxLength, errors.passwordMaxLengthError)
   .min(constants.passwordMinLength, errors.passwordMinLengthError)
-  .matches(constants.lowercaseRegex, errors.passwordLowercaseError)
-  .matches(constants.uppercaseRegex, errors.passwordUppercaseError)
-  .matches(constants.numberRegex, errors.passwordNumberError)
+  .matches(constants.regex.lowercaseRegex, errors.passwordLowercaseError)
+  .matches(constants.regex.uppercaseRegex, errors.passwordUppercaseError)
+  .matches(constants.regex.numberRegex, errors.passwordNumberError)
   .required(errors.requiredPasswordError);
 
 const currentPassword = yup
@@ -69,9 +69,9 @@ const newPassword = yup
   .notOneOf([yup.ref('currentPassword'), null], errors.currAndNewPassEqualError)
   .max(constants.passwordMaxLength, errors.passwordMaxLengthError)
   .min(constants.passwordMinLength, errors.passwordMinLengthError)
-  .matches(constants.lowercaseRegex, errors.passwordLowercaseError)
-  .matches(constants.uppercaseRegex, errors.passwordUppercaseError)
-  .matches(constants.numberRegex, errors.passwordNumberError)
+  .matches(constants.regex.lowercaseRegex, errors.passwordLowercaseError)
+  .matches(constants.regex.uppercaseRegex, errors.passwordUppercaseError)
+  .matches(constants.regex.numberRegex, errors.passwordNumberError)
   .required(errors.requiredPasswordError);
 
 const passwordConfirmation = yup

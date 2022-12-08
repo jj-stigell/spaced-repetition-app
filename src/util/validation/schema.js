@@ -16,9 +16,11 @@ const rescheduleCard = yup.object().shape({
   timing: validationRules.timing
 });
 
+/*
 const deckId = yup.object().shape({
   deckId: validationRules.deckIdRequired
 });
+*/
 
 const id = yup.object().shape({
   id: validationRules.integer
@@ -112,7 +114,7 @@ const fetchCardsByType = yup.object().shape({
 module.exports = {
   fetchCards,
   rescheduleCard,
-  deckId,
+  //deckId,
   id,
   integer,
   UUID,
