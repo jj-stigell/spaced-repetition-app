@@ -1,7 +1,9 @@
 const constants = {
+  general: {
+    defaultLanguage: 'EN',
+    availableLanguages: ['EN', 'FI', 'VN', 'JP'],
+  },
   matureInterval: 21,
-  defaultLanguage: 'EN',
-  availableLanguages: ['EN', 'FI', 'VN', 'JP'],
   resultTypes: ['AGAIN', 'GOOD'],
   deckTypes: ['RECALL', 'RECOGNISE'],
   cardTypes: ['KANJI', 'HIRAGANA', 'KATAKANA', 'WORD', 'SENTENCE'],
@@ -29,6 +31,9 @@ const constants = {
     sessionLifetime: 28,                                                // How long a new session will last in days, same as jwt expiry time
     saltRounds: 10,
   },
+  deck: {
+
+  },
   card: {
     storyMinLength: 1,
     storyMaxLength: 160,
@@ -43,10 +48,12 @@ const constants = {
     solvedMessageMaxLength: 160,
     bugTypes: ['TRANSLATION', 'UI', 'FUNCTIONALITY', 'OTHER']
   },
-  lowercaseRegex: /^(?=.*[a-z])/,
-  uppercaseRegex: /^(?=.*[A-Z])/,
-  numberRegex: /^(?=.*[0-9])/,
-  yupAbortEarly: false                      // Abort validation early, or validate everything
+  regex: {
+    lowercaseRegex: /^(?=.*[a-z])/,
+    uppercaseRegex: /^(?=.*[A-Z])/,
+    numberRegex: /^(?=.*[0-9])/,
+  },
+  yupAbortEarly: false                      // Abort validation early (true), or validate everything and return all erros (false)
 };
 
 module.exports = constants;

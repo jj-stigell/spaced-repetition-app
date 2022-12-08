@@ -112,6 +112,46 @@ describe('account integration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.account.usernameInUseError);
     });
 
+    it('Error when value not sent, email', async () => {
+      const newAccount = { ...account, email: undefined };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.body.data?.createAccount.email).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toBe(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when value not sent, username', async () => {
+      const newAccount = { ...account, username: undefined };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.body.data?.createAccount.email).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toBe(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when value not sent, password', async () => {
+      const newAccount = { ...account, password: undefined };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.body.data?.createAccount.email).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toBe(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when value not sent, password confirmation', async () => {
+      const newAccount = { ...account, passwordConfirmation: undefined };
+      const response = await request(testUrl)
+        .post('/')
+        .send({ query: mutations.registerMutation, variables: newAccount });
+
+      expect(response.body.data?.createAccount.email).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toBe(errors.graphQlErrors.badUserInput);
+    });
+
     it('Error when empty value, email', async () => {
       const newAccount = { ...account, email: '' };
       const response = await request(testUrl)

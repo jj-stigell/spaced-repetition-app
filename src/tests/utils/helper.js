@@ -1,5 +1,11 @@
 const { sequelize } = require('../../database');
 
+/**
+ * Reset database for the next tests
+ * Removes all existing user related input from database
+ * Adds new admin accounts
+ * @param {string} testType - string describing with kind of test is ran.
+ */
 const resetDatabaseEntries = async (testType) => {
   try {
     const queryInterface = sequelize.getQueryInterface();
