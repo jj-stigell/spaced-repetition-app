@@ -16,7 +16,7 @@ const resolvers = {
       let selectedLanguage;
       // If language id is empty, set to default 'en'
       if (!languageId) {
-        selectedLanguage = constants.defaultLanguage;
+        selectedLanguage = constants.general.defaultLanguage;
       } {
         selectedLanguage = languageId;
       }
@@ -55,7 +55,7 @@ const resolvers = {
     fetchCardsByType: async (_, { type, languageId }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateFetchCardsByType(type, languageId);
-      const selectedLanguage = languageId ? languageId : constants.defaultLanguage;
+      const selectedLanguage = languageId ? languageId : constants.general.defaultLanguage;
       const cards = await cardService.fetchCardsByType(type, currentUser.id, selectedLanguage);
       
       // No cards found with the type

@@ -1,87 +1,45 @@
 /* eslint-disable no-unused-vars */
-const validator = require('validator');
-const { Op } = require('sequelize');
-const {
-  Deck,
-  DeckTranslation,
-  AccountDeckSettings,
-  Kanji,
-  Radical,
-  RadicalTranslation,
-  Card,
-  CardList,
-  KanjiTranslation,
-  AccountCard,
-  AccountReview,
-  Word,
-  WordTranslation
-} = require('../../models');
-const { sequelize } = require('../../database');
+const models = require('../../models');
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
-const { validateFetchKanji } = require('../../util/validation/schema');
-const formatYupError = require('../../util/errors/errorFormatter');
+const validator = require('../../util/validation//validator');
+const graphQlErrors = require('../../util/errors/graphQlErrors');
+const services = require('../services');
 
 const resolvers = {
   Query: {
-    fetchKanji: async (_, { kanjiId, includeAccountCard }, { currentUser }) => {
+    fetchKanji: async (_, { kanjiId, languageId }, { currentUser }) => {
+      if (!currentUser) graphQlErrors.notAuthError();
+      await validator.validateFetchKanji(kanjiId, false, languageId);
+      const selectedLanguage = languageId ? languageId : 'en';
+      const kanji = await services.kanjiService.findKanjiById(kanjiId, selectedLanguage);
 
-      // Check that user is logged in
-      if (!currentUser) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.notAuthError]
-        };
-      }
+      if (kanji.length === null) return graphQlErrors.defaultError(errors.noCardsFound);
+      return kanji;
+    },
+    fetchAllKanji: async (_, { languageId }, { currentUser }) => {
+      if (!currentUser) graphQlErrors.notAuthError();
+      await validator.validateFetchKanji(1, true, languageId);
+      const selectedLanguage = languageId ? languageId : 'en';
+      const allKanji = await services.kanjiService.findAllKanji(selectedLanguage, currentUser.id);
 
-      // validate input
-      try {
-        await validateFetchKanji.validate({ kanjiId, includeAccountCard }, { abortEarly: false });
-      } catch (error) {
-        return { 
-          __typename: 'Error',
-          errorCodes: formatYupError(error)
-        };
-      }
+      if (allKanji.length === 0) return graphQlErrors.defaultError(errors.noCardsFound);
 
+      console.log(allKanji);
 
-      if (kanjiId) {
-        //fecth only one kanji by id, include accountcard if includeAccountCard TRUE
-      }
+      return allKanji;
+    },
+    fetchKanjiCard: async (_, { cardId, languageId }, { currentUser }) => {
+      if (!currentUser) graphQlErrors.notAuthError();
+      //await validator.validateFetchKanji(1, true, languageId);
+      const selectedLanguage = languageId ? languageId : 'en';
+      const kanjiCard = await services.kanjiService.findKanjiCardById(cardId, selectedLanguage, currentUser.id);
 
+      if (kanjiCard === null) return graphQlErrors.defaultError(errors.noCardsFound);
 
-      let kanjiList;
-      try {
-        kanjiList = await Kanji.findAll({
-          //where: { 'type': 'kanji' },
-          subQuery: false,
-          nest: true,
-          raw: true,
-          //include: { model: Kanji },
-          order: [['id', 'ASC']],
-        });
-      } catch(error) {
-        console.log(error);
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.internalServerError]
-        };
-      }
+      console.log(kanjiCard);
 
-      //console.log('found cards:', kanjiList);
-
-      // No deck found with an id
-      if (kanjiList.length === 0) {
-        return { 
-          __typename: 'Error',
-          errorCodes: [errors.noCardsFound]
-        };
-      }
-
-      return {
-        __typename: 'Kanjiset',
-        KanjiList: kanjiList
-      };
+      return kanjiCard;
     },
   },
   Mutation: {

@@ -56,13 +56,21 @@ type Kanjiset {
   KanjiList: [Kanji]
 }
 
-union KanjiCardPayload = Kanjiset | Kanji
-
 type Query {
   fetchKanji(
-    kanjiId: Int
-    includeAccountCard: Boolean
-  ): KanjiCardPayload!
+    kanjiId: Int!
+    languageId: String
+  ): Kanji!
+
+  fetchAllKanji(
+    languageId: String
+  ): [Card!]!
+
+  fetchKanjiCard(
+    cardId: Int!
+    languageId: String
+  ): Card!
+  
 }`;
 
 module.exports = typeDefs;

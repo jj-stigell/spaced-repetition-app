@@ -57,7 +57,7 @@ const resolvers = {
 
       // Update deck settings
       try {
-        deckSettings.favorite = favorite ? true : false;
+        deckSettings.favorite = favorite === undefined ? deckSettings.favorite : favorite,
         deckSettings.reviewInterval = reviewInterval ? reviewInterval : deckSettings.reviewInterval,
         deckSettings.reviewsPerDay = reviewsPerDay ? reviewsPerDay : deckSettings.reviewsPerDay,
         deckSettings.newCardsPerDay = newCardsPerDay ? newCardsPerDay : deckSettings.newCardsPerDay,
