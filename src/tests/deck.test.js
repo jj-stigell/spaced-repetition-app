@@ -2,17 +2,18 @@ const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
 const request = require('supertest');
 const { PORT } = require('../util/config');
 const { connectToDatabase } = require('../database');
-const { account, adminReadRights, adminWriteRights, deckSettings } = require('./utils/constants'); 
+const { account, nonMemberAccount, adminReadRights, adminWriteRights, deckSettings } = require('./utils/constants'); 
 const mutations = require('./utils/mutations');
 const queries = require('./utils/queries');
 const errors = require('../util/errors/errors');
 const server = require('../util/server');
 const constants = require('../util/constants');
 const helpers = require('./utils/helper');
+const sendRequest = require('./utils/request');
 
-describe('Deck integration tests', () => {
+describe('Deckintegration tests', () => {
   // eslint-disable-next-line no-unused-vars
-  let testServer, testUrl, nonAdminAuthToken, adminAuthReadToken, adminAuthWriteToken, nonAdminAccount, newDeckSettings, originalDeckSettings;
+  let testServer, testUrl, originalDeckSettings, newDeckSettings, memberAuthToken, adminAuthReadToken, adminAuthWriteToken, nonMemberAuthToken, memberAcc, nonMemberAcc, adminReadAcc, adminWriteAcc;
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
@@ -30,59 +31,27 @@ describe('Deck integration tests', () => {
   describe('Setup test environment', () => {
 
     it('Server should respond 200 ok to health check', async () => {
-      const response = await request(`${testUrl}.well-known/apollo/server-health`)
-        .post('/')
-        .send();
-  
-      expect(response.body.status).toBeDefined();
-      expect(response.status).toBe(200);
-      expect(response.body.status).toBe('pass');
+      helpers.healthCheck(testUrl);
     });
 
     it('Fetch tokens for accounts and admins', async () => {
-
-      let response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.registerMutation, variables: account });
-
-      response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.loginMutation, variables: account });
-
-      nonAdminAccount = response.body.data.login.account;
-      nonAdminAuthToken = response.body.data.login.token.value;
-
-      response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.loginMutation, variables: adminReadRights });
-
-      adminAuthReadToken = response.body.data.login.token.value;
-
-      response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.loginMutation, variables: adminWriteRights });
-
-      adminAuthWriteToken = response.body.data.login.token.value;
+      [ memberAuthToken, memberAcc ] = await helpers.getToken(testUrl, account);
+      [ nonMemberAuthToken, nonMemberAcc ] = await helpers.getToken(testUrl, nonMemberAccount);
+      [ adminAuthReadToken, adminReadAcc ] = await helpers.getToken(testUrl, adminReadRights);
+      [ adminAuthWriteToken, adminWriteAcc ] = await helpers.getToken(testUrl, adminWriteRights);
     });
   });
 
   describe('Fetching decks', () => {
 
     it('Fetch decks leads to authentication error when not logged in', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .send({ query: queries.decks});
-
+      const response = await sendRequest(testUrl, null, queries.decks, null);
       expect(response.body.data?.decks).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
     it('Fetch all available decks, 3 at the moment', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: queries.decks});
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.decks, null);
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.decks).toBeDefined();
       expect(response.body.data.decks.length).toBe(3);
@@ -101,85 +70,54 @@ describe('Deck integration tests', () => {
   describe('Fetching deck settings', () => {
 
     it('Fetch deck settings leads to auth error when not logged in', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .send({ query: queries.deckSettings, variables: { deckId: 1 } });
-
+      const response = await sendRequest(testUrl, null, queries.deckSettings, { deckId: 1 });
       expect(response.body.data?.deckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
     it('Error when authenticated but deck id negative integer', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: queries.deckSettings, variables: { deckId: -1 } });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: -1 });
       expect(response.body.data?.deckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when authenticated but deck id zero integer', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: queries.deckSettings, variables: { deckId: 0 } });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: 0 });
       expect(response.body.data?.deckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
     
     it('Error when authenticated but deck id wrong type (string)', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: queries.deckSettings, variables: { deckId: '1' } });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: '1' });
       expect(response.body.data?.deckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when authenticated but deck id wrong type (float)', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: queries.deckSettings, variables: { deckId: 1.01 } });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: 1.01 });
       expect(response.body.data?.deckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when authenticated but deck id not send', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: queries.deckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, null);
       expect(response.body.data?.deckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when authenticated but non-existing deck id', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: queries.deckSettings, variables: { deckId: 9999 } });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: 9999 });
       expect(response.body.data?.deckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.nonExistingDeckError);
     });
 
     it('Fetch deck setting for deck id 1, settings should be default for initial fetch, defined in constants', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: queries.deckSettings, variables: { deckId: 1 } });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: 1 });
       originalDeckSettings = response.body.data.deckSettings;
       newDeckSettings = { ...deckSettings, deckId: response.body.data.deckSettings.deckId };
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.deckSettings).toBeDefined();
-      expect(response.body.data.deckSettings.accountId).toBe(parseInt(nonAdminAccount.id));
+      expect(response.body.data.deckSettings.accountId).toBeDefined();
       expect(response.body.data.deckSettings.deckId).toBe(1);
       expect(response.body.data.deckSettings.favorite).toBe(false);
       expect(response.body.data.deckSettings.reviewInterval).toBe(constants.defaultInterval);
@@ -193,135 +131,78 @@ describe('Deck integration tests', () => {
   describe('Edit deck settings', () => {
 
     it('Editing deck settings leads to auth error when not logged in', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.changeDeckSettings, variables: newDeckSettings });
-
+      const response = await sendRequest(testUrl, null, mutations.changeDeckSettings, newDeckSettings);
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
     it('Error when authenticated but deck with id non existing', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, deckId: 9999 };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, deckId: 9999 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.nonExistingDeckError);
     });
 
     it('Error when authenticated but deck id not send', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: {
-          favorite: newDeckSettings.favorite,
-          reviewInterval: newDeckSettings.reviewInterval,
-          reviewsPerDay: newDeckSettings.reviewsPerDay,
-          newCardsPerDay: newDeckSettings.newCardsPerDay
-        } });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, {
+        favorite: newDeckSettings.favorite,
+        reviewInterval: newDeckSettings.reviewInterval,
+        reviewsPerDay: newDeckSettings.reviewsPerDay,
+        newCardsPerDay: newDeckSettings.newCardsPerDay
+      });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when authenticated but deck id negative integer', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, deckId: -1 };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, deckId: -1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when authenticated but deck id zero integer', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, deckId: 0 };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, deckId: 0 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when authenticated but deck id wrong type (string)', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, deckId: '1' };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, deckId: '1' });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when authenticated but favorite wrong type (string)', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, favorite: 'true' };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, favorite: 'true' });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when authenticated but favorite wrong type (integer)', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, favorite: 1 };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, favorite: 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when authenticated but reviewInterval wrong type (string)', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, reviewInterval: '1' };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, reviewInterval: '1' });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when authenticated but reviewInterval too high', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, reviewInterval: constants.maxReviewInterval + 1 };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, reviewInterval: constants.maxReviewInterval + 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.maxReviewIntervalError);
     });
 
     it('Error when authenticated but reviewInterval too low', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, reviewInterval: constants.minReviewInterval - 1 };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, reviewInterval: constants.minReviewInterval - 1  });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.minReviewIntervalError);
     });
 
     it('Error when authenticated but reviewsPerDay wrong type (string)', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, reviewsPerDay: '1' };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, reviewsPerDay: '1' });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
@@ -330,7 +211,7 @@ describe('Deck integration tests', () => {
       const invalidDeckSettings = { ...newDeckSettings, reviewsPerDay: constants.maxLimitReviews + 1 };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
 
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
@@ -341,7 +222,7 @@ describe('Deck integration tests', () => {
       const invalidDeckSettings = { ...newDeckSettings, reviewsPerDay: constants.minLimitReviews - 1 };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
 
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
@@ -352,7 +233,7 @@ describe('Deck integration tests', () => {
       const invalidDeckSettings = { ...newDeckSettings, newCardsPerDay: '1' };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
 
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
@@ -363,7 +244,7 @@ describe('Deck integration tests', () => {
       const invalidDeckSettings = { ...newDeckSettings, newCardsPerDay: constants.maxNewReviews + 1 };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
 
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
@@ -374,7 +255,7 @@ describe('Deck integration tests', () => {
       const invalidDeckSettings = { ...newDeckSettings, newCardsPerDay: constants.minNewReviews - 1 };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
 
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
@@ -384,7 +265,7 @@ describe('Deck integration tests', () => {
     it('Succesfully change settings after authentication', async () => {
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: newDeckSettings });
 
       expect(response.body.errors).toBeUndefined();
@@ -403,14 +284,14 @@ describe('Deck integration tests', () => {
       // fetch current settings for deck id 1
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: queries.deckSettings, variables: { deckId: 1 } });
 
       let currentSettings = response.body.data.deckSettings;
       // send all current settings, but set favorite = !favorite
       response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, favorite: !currentSettings.favorite } });
 
       expect(response.body.errors).toBeUndefined();
@@ -428,7 +309,7 @@ describe('Deck integration tests', () => {
       // send just deckId and new value for favorite
       response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, favorite: !currentSettings.favorite } });
 
       expect(response.body.errors).toBeUndefined();
@@ -447,14 +328,14 @@ describe('Deck integration tests', () => {
       // fetch current settings for deck id 1
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: queries.deckSettings, variables: { deckId: 1 } });
 
       let currentSettings = response.body.data.deckSettings;
       // send all current settings, but set review interval += 5
       response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, reviewInterval: currentSettings.reviewInterval + 5 } });
 
       expect(response.body.errors).toBeUndefined();
@@ -472,7 +353,7 @@ describe('Deck integration tests', () => {
       // send just deckId and new value for review interval
       response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, reviewInterval: currentSettings.reviewInterval + 2 } });
 
       expect(response.body.errors).toBeUndefined();
@@ -491,14 +372,14 @@ describe('Deck integration tests', () => {
       // fetch current settings for deck id 1
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: queries.deckSettings, variables: { deckId: 1 } });
 
       let currentSettings = response.body.data.deckSettings;
       // send all current settings, but set revies per day += 5
       response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, reviewsPerDay: currentSettings.reviewsPerDay + 5 } });
 
       expect(response.body.errors).toBeUndefined();
@@ -516,7 +397,7 @@ describe('Deck integration tests', () => {
       // send just deckId and new value for reviews per day
       response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, reviewsPerDay: currentSettings.reviewsPerDay + 2 } });
 
       expect(response.body.errors).toBeUndefined();
@@ -535,14 +416,14 @@ describe('Deck integration tests', () => {
       // fetch current settings for deck id 1
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: queries.deckSettings, variables: { deckId: 1 } });
 
       let currentSettings = response.body.data.deckSettings;
       // send all current settings, but set new cards per day += 5
       response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, newCardsPerDay: currentSettings.newCardsPerDay + 5 } });
 
       expect(response.body.errors).toBeUndefined();
@@ -560,7 +441,7 @@ describe('Deck integration tests', () => {
       // send just deckId and new value for new cards per day
       response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, newCardsPerDay: currentSettings.newCardsPerDay + 2 } });
 
       expect(response.body.errors).toBeUndefined();
