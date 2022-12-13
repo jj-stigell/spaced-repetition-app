@@ -17,7 +17,7 @@ const resolvers = {
       const usernameInUse = await services.accountService.findAccountByUsernameCaseInsensitive(username);
       return usernameInUse ? false : true;
     },
-    fetchSessions: async (root, args, { currentUser }) => {
+    sessions: async (root, args, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       const sessions = await services.sessionService.findAllSessionsByAccountId(currentUser.id);
       if (sessions.length === 0) return graphQlErrors.defaultError(errors.session.sessionNotFoundError);
@@ -56,7 +56,8 @@ const resolvers = {
       const token = signJWT(account.id, session.id);
 
       return { 
-        token: { value: token },
+        token: token,
+        session: session.id,
         account: {
           id: account.id,
           email: account.email,
@@ -70,10 +71,8 @@ const resolvers = {
     },
     logout: async (root, args, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
-      const res = await services.sessionService.deleteSession(currentUser.session);
-      if (res === 0) return graphQlErrors.defaultError(errors.session.sessionNotFoundError);
-
-      return currentUser.session;
+      const session = await services.sessionService.deactivateSession(currentUser.session);
+      return session.id;
     },
     deleteSession: async (root, { sessionId }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();

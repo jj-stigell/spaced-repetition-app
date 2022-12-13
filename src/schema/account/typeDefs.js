@@ -17,12 +17,9 @@ type Account {
   updatedAt: Date
 }
 
-type Token {
-  value: ID!
-}
-
 type AccountToken {
-  token: Token!
+  token: String!
+  session: String!
   account: Account!
 }
 
@@ -44,7 +41,7 @@ type Query {
     username: String!
   ): Boolean!
 
-  fetchSessions: [Session!]!
+  sessions: [Session!]!
 }
 
 type Mutation {
