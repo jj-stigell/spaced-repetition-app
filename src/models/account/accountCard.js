@@ -47,7 +47,7 @@ AccountCard.init({
   reviewCount: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    default: 1
+    default: 0
   },
   easyFactor: {
     type: DataTypes.REAL,
