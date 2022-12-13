@@ -1,6 +1,14 @@
 const typeDefs = `
 scalar Date
 
+enum CardType {
+  KANJI
+  HIRAGANA
+  KATAKANA
+  WORD
+  SENTENCE
+}
+
 type Account {
   id: ID!
   email: String
@@ -20,6 +28,8 @@ type AccountCard {
   accountHint: String
   dueAt: Date
   mature: Boolean
+  createdAt: Date
+  updatedAt: Date
 }
 
 type KanjiTranslation {
@@ -54,7 +64,7 @@ type Radical {
   strokeCount: Int
   createdAt: Date
   updatedAt: Date
-  radical_translations: [RadicalTranslation]
+  translation: RadicalTranslation
 }
 
 type Kanji {
@@ -68,7 +78,7 @@ type Kanji {
   strokeCount: Int
   createdAt: Date
   updatedAt: Date
-  kanji_translations: [KanjiTranslation]
+  translation: KanjiTranslation
   radicals: [Radical]
 }
 
@@ -81,7 +91,7 @@ type Word {
   readingRomaji: String
   createdAt: Date
   updatedAt: Date
-  word_translations: [WordTranslation]
+  translation: WordTranslation
 }
 
 type Card {
@@ -89,7 +99,7 @@ type Card {
   type: String
   createdAt: Date
   updatedAt: Date
-  account_cards: [AccountCard]
+  accountCard: AccountCard
   kanji: Kanji
   word: Word
 }
@@ -109,33 +119,29 @@ type Reviews {
   reviews: [Day]
 }
 
-type Cardset {
-  Cards: [Card]
-}
-
 type Query {
   fetchCards(
     deckId: Int!
-    languageId: String
+    languageId: Language! = EN
     newCards: Boolean
-  ): Cardset!
+  ): [Card!]!
 
-  fetchCardsByType(
-    type: String!
-    languageId: String
-  ): Cardset!
+  cardsByType(
+    cardType: CardType!
+    languageId: Language! = EN
+  ): [Card!]!
 
-  fetchLearningStatistics(
-    cardType: String!
+  reviewHistory(
+    limitReviews: Int!
+  ): [Day!]!
+
+  dueCount(
+    limitReviews: Int!
+  ): [Day!]!
+
+  learningStatistics(
+    cardType: CardType!
   ): Statistics!
-
-  fetchReviewHistory(
-    limitReviews: Int!
-  ): Reviews!
-
-  fetchDueCount(
-    limitReviews: Int!
-  ): Reviews!
 }
 
 type Mutation {
@@ -145,8 +151,8 @@ type Mutation {
     newInterval: Int!
     newEasyFactor: Float!
     extraReview: Boolean
-    timing: Float
-  ): Success!
+    timing: Int
+  ): AccountCard!
 
   pushCards(
     deckId: Int

@@ -1,7 +1,10 @@
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
 const graphQlErrors = require('../../util/errors/graphQlErrors');
-const { calculateDate, formStatistics } = require('../../util/helper');
+const { calculateDate } = require('../../util/helper');
+const { formStatistics, cardFormatter } = require('../../util/formatter');
+const { validateMember, checkAdminPermission } = require('../../util/authorization');
+//const services = require('../services');
 const cardService = require('../services/cardService');
 const deckService = require('../services/deckService');
 const validator = require('../../util/validation//validator');
@@ -52,32 +55,44 @@ const resolvers = {
 
       return { Cards: cards };
     },
-    fetchCardsByType: async (_, { type, languageId }, { currentUser }) => {
+    cardsByType: async (_, { cardType, languageId }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
-      await validator.validateFetchCardsByType(type, languageId);
-      const selectedLanguage = languageId ? languageId : constants.general.defaultLanguage;
-      const cards = await cardService.fetchCardsByType(type, currentUser.id, selectedLanguage);
-      
-      // No cards found with the type
-      if (cards.length === 0) return graphQlErrors.defaultError(errors.noCardsFound);
+      await checkAdminPermission(currentUser.id, 'READ');
+      //await validator.validateFetchCardsByType(cardType, languageId);
+      //const selectedLanguage = languageId ? languageId : constants.general.defaultLanguage;
+      let cards = await cardService.fetchCardsByType(cardType, currentUser.id, languageId);
 
-      return { Cards: cards };
+      // No cards found with the card type, return empty array
+      if (cards.length === 0) return [];
+      return cardFormatter(cards);
     },
-    fetchReviewHistory: async (_, { limitReviews }, { currentUser }) => {
+    reviewHistory: async (_, { limitReviews }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateInteger(limitReviews);
       const reviewHistory = await cardService.findReviewHistory(limitReviews, currentUser.id);
-      if (reviewHistory.length === 0) return graphQlErrors.defaultError(errors.noRecordsFoundError);
-      return { reviews: reviewHistory };
+      if (reviewHistory.length === 0) return [];
+      return reviewHistory;
     },
-    fetchDueCount: async (_, { limitReviews }, { currentUser }) => {
+    dueCount: async (_, { limitReviews }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateInteger(limitReviews);
       const dueReviews = await cardService.findDueReviewsCount(limitReviews, currentUser.id);
-      if (dueReviews.length === 0) return graphQlErrors.defaultError(errors.noDueCardsError);
-      return { reviews: dueReviews };
+      if (dueReviews.length === 0) return [];
+
+      // Group all reviews before or today in one day, future reviews in their own days
+      const currentDate = new Date().toISOString().split('T')[0];
+      const dueAfterToday = dueReviews.filter(value => value.date > currentDate);
+      const dueTodayOrBefore = dueReviews.filter(value => value.date <= currentDate);
+      const initialValue = 0;
+      const sumWithInitial = dueTodayOrBefore.reduce(
+        (accumulator, currentValue) => accumulator + parseInt(currentValue.reviews),
+        initialValue
+      );
+
+      // concat only if current date has reviews due
+      return sumWithInitial > 0 ? [{ date: currentDate, reviews: sumWithInitial.toString() }].concat(dueAfterToday) : dueAfterToday;
     },
-    fetchLearningStatistics: async (_, { cardType }, { currentUser }) => {
+    learningStatistics: async (_, { cardType }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateCardType(cardType);
       const statsFromDb = await cardService.findLearningProgressByType(cardType, currentUser.id);
@@ -88,9 +103,6 @@ const resolvers = {
     rescheduleCard: async (_, { cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
       await validator.validateRescheduleCard(cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing);
-
-      let status = false;
-      // Calculate new duedate
       const newDueDate = calculateDate(newInterval);
 
       // Check if card exists for the user for that card id
@@ -101,29 +113,40 @@ const resolvers = {
         // Check that card actually exists in the database
         const card = cardService.findCardById(cardId);
         if (!card) return graphQlErrors.defaultError(errors.nonExistingId);
-        accountCard = await cardService.createAccountCard(cardId, currentUser.id);
+        accountCard = await cardService.createAccountCard(cardId, currentUser.id, null, null, newEasyFactor, newDueDate, newInterval, true);
       } else {
         // Update existing user card
         try {
           // Update and save changes, card is set to mature if the interval is higher than set maturing interval
           accountCard.set({
             easyFactor: newEasyFactor,
-            dueDate: newDueDate,
-            mature: newInterval > constants.matureInterval ? true : false
+            dueAt: newDueDate,
+            mature: newInterval > constants.matureInterval ? true : false,
+            reviewCount: accountCard.reviewCount + 1
           });
-          accountCard.save();
+          await accountCard.save();
         } catch(error) {
           return graphQlErrors.internalServerError(error);
         }
       }
       // Add new row to review history
-      const newReviewHistory = await cardService.createAccountReview(cardId, currentUser.id, reviewResult, extraReview, timing);
-      if (newReviewHistory) status = true;
+      await cardService.createAccountReview(cardId, currentUser.id, reviewResult, extraReview, timing);
 
-      return { status: status };
+      return {
+        id: accountCard.id,
+        reviewCount: accountCard.reviewCount,
+        easyFactor: accountCard.easyFactor,
+        accountStory: accountCard.accountStory,
+        accountHint: accountCard.accountHint,
+        dueAt: accountCard.dueAt,
+        mature: accountCard.mature,
+        createdAt: accountCard.createdAt,
+        updatedAt: accountCard.updatedAt
+      };
     },
     pushCards: async (_, { deckId, days }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
+      await validateMember(currentUser.id);
       await validator.validatePushCards(deckId, days);
       if (deckId) {
         await cardService.pushCardsInDeck(deckId, days, currentUser.id);
@@ -135,15 +158,20 @@ const resolvers = {
     },
     editAccountCard: async (_, { cardId, story, hint }, { currentUser }) => {
       if (!currentUser) graphQlErrors.notAuthError();
+      await validateMember(currentUser.id);
       await validator.validateEditAccountCard(cardId, story, hint);
+
+      // If no story or hint provided return id back to the user
+      if (!story && !hint) graphQlErrors.defaultError(errors.provideStoryOrHintError);
+
+      // Check that card actually exists in the database
+      const card = await cardService.findCardById(cardId);
+      if (!card) graphQlErrors.defaultError(errors.nonExistingIdError);
       let accountCard = await cardService.findAccountCard(cardId, currentUser.id);
 
       // Create new custom card for the user, if none found the current user id and kanji id
       if (!accountCard) {
-        // Check that card actually exists in the database
-        const card = cardService.findCardById(cardId);
-        if (!card) return graphQlErrors.defaultError(errors.nonExistingId);
-        accountCard = await cardService.createAccountCard(cardId, currentUser.id, story, hint);
+        accountCard = await cardService.createAccountCard(cardId, currentUser.id, story, hint, null, null, null, false);
       } else {
         // Update existing user card
         try {
@@ -157,7 +185,18 @@ const resolvers = {
           return graphQlErrors.internalServerError(error);
         }
       }
-      return { accountCard };
+
+      return {
+        id: accountCard.id,
+        reviewCount: accountCard.reviewCount,
+        easyFactor: accountCard.easyFactor,
+        accountStory: accountCard.accountStory,
+        accountHint: accountCard.accountHint,
+        dueAt: accountCard.dueAt,
+        mature: accountCard.mature,
+        createdAt: accountCard.createdAt,
+        updatedAt: accountCard.updatedAt
+      };
     },
   }
 };
