@@ -31,6 +31,31 @@ const checkAdminPermission = async (accountId, permission) => {
   return 1;
 };
 
+/**
+ * Validate that session is found and active
+ * @param {string} sessionId - version 4 UUID
+ * @returns integer one if passes check
+ */
+const validateSession = async (sessionId) => {
+  const session = await findSessionById(sessionId);
+  if (!session) defaultError(errors.session.sessionNotFoundError);
+  if (!session.active) defaultError(errors.session.sessionExpiredError);
+  return 1;
+};
+
+/**
+ * Check if account is active member
+ * @param {integer} accountId - accounts id
+ * @returns integer one if passes check
+ */
+const validateMember = async (accountId) => {
+  const account = await findAccountById(accountId);
+  if (!account.member) return graphQlErrors.notAuthorizedError(errors.account.memberFeatureError);
+  return 1;
+};
+
 module.exports = {
   checkAdminPermission,
+  validateSession,
+  validateMember
 };
