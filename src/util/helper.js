@@ -4,9 +4,6 @@ const bcrypt = require('bcrypt');
 const { internalServerError } = require('./errors/graphQlErrors');
 const constants = require('./constants');
 const { JWT_SECRET } = require('./config');
-const { findAdminByAccountId } = require('../schema/services/accountService');
-const graphQlErrors = require('./errors/graphQlErrors');
-const errors = require('./errors/errors');
 
 /**
  * Parse request user-agent
@@ -78,68 +75,10 @@ const hashPassword = async (password) => {
   }
 };
 
-/**
- * Check if user has required admin rights to acces or edit a resource
- * Throws an error if account does not have the required permissions
- * If user has write rights, they are also expected to have read rights
- * @param {integer} accountId - accounts id
- * @param {string} permission - which permission is checked, either READ or WRITE
- * @returns {integer} 1 - if required permissions found
- */
-const checkAdminPermission = async (accountId, permission) => {
-  const admin = await findAdminByAccountId(accountId);
-  if (admin === null) return graphQlErrors.notAuthorizedError(errors.admin.noAdminRightsError);
-
-  switch (permission) {
-  case 'READ':
-    if (!admin.read && !admin.write) graphQlErrors.notAuthorizedError(errors.admin.noAdminReadRights);
-    break;
-  case 'WRITE':
-    if (!admin.write) graphQlErrors.notAuthorizedError(errors.admin.noAdminWriteRights);
-    break;
-  default:
-    graphQlErrors.internalServerError();
-  }
-
-  return 1;
-};
-
-/**
- * Reformat statistics from database
- * @param {Object} stats - statistics from database
- * @returns {Object}
- */
-const formStatistics = async (stats) => {
-
-  const statistics = {
-    matured: 0,
-    learning: 0,
-    new: 0
-  };
-
-  stats.forEach(value => {
-    switch (value.status) {
-    case 'matured':
-      statistics.matured = value.count;
-      break;
-    case 'learning':
-      statistics.learning = value.count;
-      break;
-    case 'new':
-      statistics.new = value.count;
-      break;
-    }
-  });
-
-  return statistics;
-};
-
 module.exports = {
   parseUserAgent,
   signJWT,
   calculateDate,
   hashCompare,
-  hashPassword,
-  checkAdminPermission,
-  formStatistics
+  hashPassword
 };
