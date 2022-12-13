@@ -1,5 +1,5 @@
 const mutations = {
-  registerMutation: `mutation createAccount($email: String!, $username: String!, $password: String!, $passwordConfirmation: String!, $languageId: Language!) {
+  register: `mutation createAccount($email: String!, $username: String!, $password: String!, $passwordConfirmation: String!, $languageId: Language!) {
     createAccount(email: $email, username: $username, password: $password, passwordConfirmation: $passwordConfirmation, languageId: $languageId) {
       id
       email
@@ -11,11 +11,10 @@ const mutations = {
       updatedAt
     }
   }`,
-  loginMutation: `mutation login($email: String!, $password: String!) {
+  login: `mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
-      token {
-        value
-      }
+      token
+      session
       account {
         id
         email
@@ -27,6 +26,9 @@ const mutations = {
         updatedAt
       }
     }
+  }`,
+  logout: `mutation Mutation {
+    logout
   }`,
   changePasswordMutation: `mutation changePassword($currentPassword: String!, $newPassword: String!, $newPasswordConfirmation: String!) {
     changePassword(currentPassword: $currentPassword, newPassword: $newPassword, newPasswordConfirmation: $newPasswordConfirmation) {
@@ -78,6 +80,32 @@ const mutations = {
       reviewInterval
       reviewsPerDay
       newCardsPerDay
+      createdAt
+      updatedAt
+    }
+  }`,
+  editAccountCard: `mutation EditAccountCard($cardId: Int!, $story: String, $hint: String) {
+    editAccountCard(cardId: $cardId, story: $story, hint: $hint) {
+      id
+      reviewCount
+      easyFactor
+      accountStory
+      accountHint
+      dueAt
+      mature
+      createdAt
+      updatedAt
+    }
+  }`,
+  rescheduleCard: `mutation EditAccountCard($cardId: Int!, $reviewResult: String!, $newInterval: Int!, $newEasyFactor: Float!, $timing: Int, $extraReview: Boolean) {
+    rescheduleCard(cardId: $cardId, reviewResult: $reviewResult, newInterval: $newInterval, newEasyFactor: $newEasyFactor, timing: $timing, extraReview: $extraReview) {
+      id
+      reviewCount
+      easyFactor
+      accountStory
+      accountHint
+      dueAt
+      mature
       createdAt
       updatedAt
     }
