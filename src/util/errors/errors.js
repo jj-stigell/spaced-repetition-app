@@ -43,6 +43,7 @@ const errors = {
   noCardsFound: 'noCardsFound',
   noRecordsFoundError: 'noRecordsFoundError',
   nonActiveDeckError: 'nonActiveDeckError',
+  provideStoryOrHintError: 'provideStoryOrHintError',
   admin: {
     noAdminRightsError: 'noAdminRightsError',
     noAdminReadRights: 'noAdminReadRights',
@@ -55,6 +56,7 @@ const errors = {
     usernameMinLengthError: 'usernameMinLengthError',
     requiredUsernameError: 'requiredUsernameError',
     emailInUseError: 'emailInUseError',
+    memberFeatureError: 'memberFeatureError'
   },
   bug: {
     bugByIdNotFound: 'bugByIdNotFound',
@@ -82,7 +84,8 @@ const errors = {
   },
   session: {
     sessionNotFoundError: 'sessionNotFoundError',
-    notOwnerOfSession: 'notOwnerOfSession',
+    sessionExpiredError: 'sessionExpiredError',
+    notOwnerOfSessionError: 'notOwnerOfSessionError',
   },
   login: {
     
