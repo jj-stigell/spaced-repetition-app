@@ -1,9 +1,13 @@
+const { expect } = require('@jest/globals');
+const request = require('supertest');
 const { sequelize } = require('../../database');
+const mutations = require('./mutations');
+const { account, accountUnconfirmedEmail, nonMemberAccount, adminReadRights, adminWriteRights } = require('./constants');
 
 /**
  * Reset database for the next tests
  * Removes all existing user related input from database
- * Adds new admin accounts
+ * Adds new accounts (2 regular with confirmed and unconfirmed emails, 2 admin account with read and write rights)
  * @param {string} testType - string describing with kind of test is ran.
  */
 const resetDatabaseEntries = async (testType) => {
@@ -14,15 +18,35 @@ const resetDatabaseEntries = async (testType) => {
     // Truncate all data that might have been affected by the tests
     await queryInterface.sequelize.query('TRUNCATE account, admin, account_deck_settings, account_review, account_card, bug_report, session;');
 
+    await queryInterface.sequelize.query(`
+    INSERT INTO account (email, username, email_verified, password_hash, member, language_id, last_login, created_at, updated_at) VALUES
+    ('${account.email}', '${account.username}', ${account.emailVerified}, '$2b$10$lx.EiIbvANCQDyOKTF3jsu.SuYvgGxxbYSViDKdzf7RB1qxodOb/m', 
+    ${account.member}, '${account.languageId}', NOW(), NOW(), NOW());
+    `);
+
+    await queryInterface.sequelize.query(`
+    INSERT INTO account (email, username, email_verified, password_hash, member, language_id, last_login, created_at, updated_at) VALUES
+    ('${accountUnconfirmedEmail.email}', '${accountUnconfirmedEmail.username}', ${accountUnconfirmedEmail.emailVerified}, '$2b$10$lx.EiIbvANCQDyOKTF3jsu.SuYvgGxxbYSViDKdzf7RB1qxodOb/m', 
+    ${accountUnconfirmedEmail.member}, '${accountUnconfirmedEmail.languageId}', NOW(), NOW(), NOW());
+    `);
+
+    await queryInterface.sequelize.query(`
+    INSERT INTO account (email, username, email_verified, password_hash, member, language_id, last_login, created_at, updated_at) VALUES
+    ('${nonMemberAccount.email}', '${nonMemberAccount.username}', ${nonMemberAccount.emailVerified}, '$2b$10$lx.EiIbvANCQDyOKTF3jsu.SuYvgGxxbYSViDKdzf7RB1qxodOb/m', 
+    ${nonMemberAccount.member}, '${nonMemberAccount.languageId}', NOW(), NOW(), NOW());
+    `);
+
     const accountForAdminReadRights = await queryInterface.sequelize.query(`
     INSERT INTO account (email, username, email_verified, password_hash, member, language_id, last_login, created_at, updated_at) VALUES
-    ('read@admin.com', 'adminReadRights', false, '$2b$10$lx.EiIbvANCQDyOKTF3jsu.SuYvgGxxbYSViDKdzf7RB1qxodOb/m', true, 'EN', NOW(), NOW(), NOW())
+    ('${adminReadRights.email}', '${adminReadRights.username}', ${adminReadRights.emailVerified}, '$2b$10$lx.EiIbvANCQDyOKTF3jsu.SuYvgGxxbYSViDKdzf7RB1qxodOb/m', 
+    ${adminReadRights.member}, '${adminReadRights.languageId}', NOW(), NOW(), NOW())
     RETURNING id;
     `);
 
     const accountForAdminWriteRights = await queryInterface.sequelize.query(`
     INSERT INTO account (email, username, email_verified, password_hash, member, language_id, last_login, created_at, updated_at) VALUES
-    ('write@admin.com', 'adminWriteRights', false, '$2b$10$lx.EiIbvANCQDyOKTF3jsu.SuYvgGxxbYSViDKdzf7RB1qxodOb/m', true, 'EN', NOW(), NOW(), NOW())
+    ('${adminWriteRights.email}', '${adminWriteRights.username}', ${adminWriteRights.emailVerified}, '$2b$10$lx.EiIbvANCQDyOKTF3jsu.SuYvgGxxbYSViDKdzf7RB1qxodOb/m', 
+    ${adminWriteRights.member}, '${adminWriteRights.languageId}', NOW(), NOW(), NOW())
     RETURNING id;
     `);
 
@@ -60,6 +84,50 @@ const resetDatabaseEntries = async (testType) => {
   }
 };
 
+const addReviews = async (accountId, amount) => {
+  try {
+    const queryInterface = sequelize.getQueryInterface();
+    const date = new Date();
+    for (let i = 10; i < amount + 10; i++) {
+      let newDate = date.setDate(date.getDate() - i);
+      newDate = new Date(newDate);
+      await queryInterface.sequelize.query(`
+      INSERT INTO account_review (account_id, card_id, extra_review, timing, result, created_at) VALUES
+      ('${accountId}', '${i}', true, 13.5, 'AGAIN', '${newDate.toISOString().split('T')[0]}');
+      `);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const healthCheck = async (testUrl) => {
+  const response = await request(`${testUrl}.well-known/apollo/server-health`)
+    .post('/')
+    .send();
+  expect(response.body.status).toBeDefined();
+  expect(response.status).toBe(200);
+  expect(response.body.status).toBe('pass');
+};
+
+const registerAccount = async (testUrl, registerData) => {
+  const response = await request(testUrl)
+    .post('/')
+    .send({ query: mutations.register, variables: registerData });
+  return response.body.data.createAccount;
+};
+
+const getToken = async (testUrl, loginData) => {
+  const response = await request(testUrl)
+    .post('/')
+    .send({ query: mutations.login, variables: loginData });
+  return [response.body.data.login.token, response.body.data.login.account];
+};
+
 module.exports = {
-  resetDatabaseEntries
+  resetDatabaseEntries,
+  addReviews,
+  healthCheck,
+  registerAccount,
+  getToken
 };
