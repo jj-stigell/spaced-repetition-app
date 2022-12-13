@@ -2,7 +2,7 @@ const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
 const request = require('supertest');
 const { PORT } = require('../util/config');
 const { connectToDatabase } = require('../database');
-const { account, adminReadRights, adminWriteRights, validBugReport, solveBugReport, stringData } = require('./utils/constants'); 
+const { account, nonMemberAccount, adminReadRights, adminWriteRights, validBugReport, solveBugReport, stringData } = require('./utils/constants'); 
 const mutations = require('./utils/mutations');
 const errors = require('../util/errors/errors');
 const server = require('../util/server');
@@ -10,8 +10,10 @@ const helpers = require('./utils/helper');
 const constants = require('../util/constants');
 const queries = require('./utils/queries');
 
-describe('Bug integration tests', () => {
-  let testServer, testUrl, nonAdminAuthToken, adminAuthReadToken, adminAuthWriteToken, bugReportToSolve, bugSubmitterId;
+describe('Bugintegration tests', () => {
+  // eslint-disable-next-line no-unused-vars
+  let testServer, testUrl, memberAuthToken, adminAuthReadToken, adminAuthWriteToken, nonMemberAuthToken, memberAcc, nonMemberAcc, adminReadAcc, adminWriteAcc, bugReportToSolve, bugSubmitterId;
+
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
@@ -29,38 +31,14 @@ describe('Bug integration tests', () => {
   describe('Setup test environment', () => {
 
     it('Server should respond 200 ok to health check', async () => {
-      const response = await request(`${testUrl}.well-known/apollo/server-health`)
-        .post('/')
-        .send();
-  
-      expect(response.body.status).toBeDefined();
-      expect(response.status).toBe(200);
-      expect(response.body.status).toBe('pass');
+      helpers.healthCheck(testUrl);
     });
 
     it('Fetch tokens for accounts and admins', async () => {
-
-      let response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.registerMutation, variables: account });
-
-      response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.loginMutation, variables: account });
-
-      nonAdminAuthToken = response.body.data.login.token.value;
-
-      response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.loginMutation, variables: adminReadRights });
-
-      adminAuthReadToken = response.body.data.login.token.value;
-
-      response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.loginMutation, variables: adminWriteRights });
-
-      adminAuthWriteToken = response.body.data.login.token.value;
+      [ memberAuthToken, memberAcc ] = await helpers.getToken(testUrl, account);
+      [ nonMemberAuthToken, nonMemberAcc ] = await helpers.getToken(testUrl, nonMemberAccount);
+      [ adminAuthReadToken, adminReadAcc ] = await helpers.getToken(testUrl, adminReadRights);
+      [ adminAuthWriteToken, adminWriteAcc ] = await helpers.getToken(testUrl, adminWriteRights);
     });
   });
 
@@ -79,7 +57,7 @@ describe('Bug integration tests', () => {
       const invalidTypeBugReport = { ...validBugReport, type: 'NOTVALID' };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: invalidTypeBugReport });
 
       expect(response.body.data?.sendBugReport).toBeUndefined();
@@ -90,7 +68,7 @@ describe('Bug integration tests', () => {
       const invalidTypeBugReport = { ...validBugReport, bugMessage: 'x'.repeat(constants.bugs.solvedMessageMinLength - 1) };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: invalidTypeBugReport });
 
       expect(response.body.data?.sendBugReport).toBeUndefined();
@@ -101,7 +79,7 @@ describe('Bug integration tests', () => {
       const invalidTypeBugReport = { ...validBugReport, bugMessage: 'x'.repeat(constants.bugs.bugMessageMaxLength + 1) };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: invalidTypeBugReport });
 
       expect(response.body.data?.sendBugReport).toBeUndefined();
@@ -112,7 +90,7 @@ describe('Bug integration tests', () => {
       const invalidTypeBugReport = { ...validBugReport, bugMessage: 1 };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: invalidTypeBugReport });
 
       expect(response.body.data?.sendBugReport).toBeUndefined();
@@ -123,7 +101,7 @@ describe('Bug integration tests', () => {
       const invalidTypeBugReport = { ...validBugReport, bugMessage: null };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: invalidTypeBugReport });
 
       expect(response.body.data?.sendBugReport).toBeUndefined();
@@ -134,7 +112,7 @@ describe('Bug integration tests', () => {
       const invalidTypeBugReport = { ...validBugReport, cardId: -1 };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: invalidTypeBugReport });
 
       expect(response.body.data?.sendBugReport).toBeUndefined();
@@ -145,7 +123,7 @@ describe('Bug integration tests', () => {
       const invalidTypeBugReport = { ...validBugReport, cardId: 0 };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: invalidTypeBugReport });
 
       expect(response.body.data?.sendBugReport).toBeUndefined();
@@ -156,7 +134,7 @@ describe('Bug integration tests', () => {
       const invalidTypeBugReport = { ...validBugReport, cardId: 'x' };
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: invalidTypeBugReport });
 
       expect(response.body.data?.sendBugReport).toBeUndefined();
@@ -166,7 +144,7 @@ describe('Bug integration tests', () => {
     it('Sending bug report works after authentication, all arguments according to validation rules', async () => {
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: validBugReport });
 
       expect(response.body.errors).toBeUndefined();
@@ -186,7 +164,7 @@ describe('Bug integration tests', () => {
     it('Sending bug report succesfull without card id', async () => {
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: { type: validBugReport.type, bugMessage: validBugReport.bugMessage } });
 
       expect(response.body.errors).toBeUndefined();
@@ -216,7 +194,7 @@ describe('Bug integration tests', () => {
     it('Unauthorized error when logged in but not admin', async () => {
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.solveBugReportMutation, variables: bugReportToSolve });
 
       expect(response.body.data?.solveBugReport).toBeUndefined();
@@ -372,7 +350,7 @@ describe('Bug integration tests', () => {
     it('Unauthorized error when logged in but not admin', async () => {
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.deleteBugReportMutation, variables: { bugId: bugReportToSolve.bugId } });
 
       expect(response.body.data?.deleteBugReport).toBeUndefined();
@@ -442,7 +420,7 @@ describe('Bug integration tests', () => {
     it('Delete bug report succesfully when admin with write permisson', async () => {
       const newBugReport = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: mutations.sendBugReportMutation, variables: { type: validBugReport.type, bugMessage: validBugReport.bugMessage } });
 
       expect(newBugReport.body.errors).toBeUndefined();
@@ -474,7 +452,7 @@ describe('Bug integration tests', () => {
     it('Unauthorized error when logged in but not admin', async () => {
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: queries.fetchAllBugReports });
 
       expect(response.body.data?.fetchAllBugReports).toBeUndefined();
@@ -562,7 +540,7 @@ describe('Bug integration tests', () => {
     it('Unauthorized error when logged in but not admin', async () => {
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: queries.fetchBugReportById, variables: { bugId: searchForBugId } });
 
       expect(response.body.data?.fetchBugReportById).toBeUndefined();
@@ -670,7 +648,7 @@ describe('Bug integration tests', () => {
     it('Unauthorized error when logged in but not admin', async () => {
       let response = await request(testUrl)
         .post('/')
-        .set('Authorization', `bearer ${nonAdminAuthToken}`)
+        .set('Authorization', `bearer ${nonMemberAuthToken}`)
         .send({ query: queries.fetchBugReportsByType, variables: { type: findTypeFirst } });
 
       expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
