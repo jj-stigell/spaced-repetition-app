@@ -191,20 +191,6 @@ AccountReview.belongsTo(Card, {
 
 // Deck & card association through CardList join table
 // delete/update entry from join table When either one is deleted
-/*
-Deck.belongsToMany(Card, {
-  onDelete: 'CASCADE',
-  onUpdate: 'CASCADE',
-  through: CardList
-});
-
-Card.belongsToMany(Deck, {
-  onDelete: 'CASCADE',
-  onUpdate: 'CASCADE',
-  through: CardList
-});
-*/
-
 Deck.hasMany(CardList, {
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
