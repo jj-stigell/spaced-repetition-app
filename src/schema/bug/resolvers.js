@@ -2,7 +2,7 @@ const errors = require('../../util/errors/errors');
 const validator = require('../../util/validation//validator');
 const graphQlErrors = require('../../util/errors/graphQlErrors');
 const services = require('../services');
-const { checkAdminPermission } = require('../../util/helper');
+const { checkAdminPermission } = require('../../util/authorization');
 
 const resolvers = {
   Query: {
