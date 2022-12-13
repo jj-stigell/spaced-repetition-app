@@ -1,19 +1,59 @@
-const account = {
-  email: 'testing@test.com',
-  username: 'testUsername',
-  password: 'ThisIsValid123',
-  passwordConfirmation: 'ThisIsValid123',
+const createAccount = {
+  email: 'newaccount@test.com',
+  username: 'testNew',
+  password: 'TestPassword123',
+  passwordConfirmation: 'TestPassword123',
   languageId: 'EN'
+};
+
+const account = {
+  email: 'account@test.com',
+  username: 'testUsername',
+  password: 'TestPassword123',
+  passwordConfirmation: 'TestPassword123',
+  languageId: 'EN',
+  emailVerified: true,
+  member: true
+};
+
+const accountUnconfirmedEmail = {
+  email: 'unconfirmed@test.com',
+  username: 'unconfirmUser',
+  password: 'TestPassword123',
+  passwordConfirmation: 'TestPassword123',
+  languageId: 'EN',
+  emailVerified: false,
+  member: false
+};
+
+const nonMemberAccount = {
+  email: 'nonmember@test.com',
+  username: 'nonMember',
+  password: 'TestPassword123',
+  passwordConfirmation: 'TestPassword123',
+  languageId: 'EN',
+  emailVerified: true,
+  member: false
 };
 
 const adminReadRights = {
   email: 'read@admin.com',
-  password: 'TestPassword123'
+  password: 'TestPassword123',
+  username: 'adminReadRights',
+  passwordConfirmation: 'TestPassword123',
+  languageId: 'EN',
+  emailVerified: true,
+  member: true
 };
 
 const adminWriteRights = {
   email: 'write@admin.com',
-  password: 'TestPassword123'
+  password: 'TestPassword123',
+  username: 'adminWriteRights',
+  passwordConfirmation: 'TestPassword123',
+  languageId: 'EN',
+  emailVerified: true,
+  member: true
 };
 
 const passwordData = {
@@ -58,6 +98,20 @@ const deckSettings = {
   favorite: true
 };
 
+const accountCard = {
+  cardId: 1,
+  story: 'This is valid story',
+  hint: 'This is valid hint'
+};
+
+const accountReview = {
+  cardId: 1,
+  reviewResult: 'GOOD',
+  newInterval: 1,
+  newEasyFactor: 1.0,
+  timing: 5,
+  extraReview: false
+};
 
 const userAgents = [
   {
@@ -93,7 +147,10 @@ const userAgents = [
 ];
 
 module.exports = {
+  createAccount,
   account,
+  accountUnconfirmedEmail,
+  nonMemberAccount,
   adminReadRights,
   adminWriteRights,
   passwordData,
@@ -101,5 +158,7 @@ module.exports = {
   validBugReport,
   solveBugReport,
   deckSettings,
+  accountCard,
+  accountReview,
   userAgents
 };
