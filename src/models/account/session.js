@@ -17,6 +17,11 @@ Session.init({
       key: 'id'
     }
   },
+  active: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true
+  },
   browser: {
     type: DataTypes.STRING,
     allowNull: false,

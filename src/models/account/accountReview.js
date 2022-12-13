@@ -30,7 +30,7 @@ AccountKanjiReview.init({
     defaultValue: false
   },
   timing: {
-    type: DataTypes.REAL,
+    type: DataTypes.INTEGER,
   },
   result: {
     type: DataTypes.ENUM(constants.resultTypes),

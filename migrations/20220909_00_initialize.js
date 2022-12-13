@@ -714,7 +714,7 @@ module.exports = {
         defaultValue: false
       },
       timing: {
-        type: DataTypes.REAL
+        type: DataTypes.INTEGER
       },
       result: {
         type: DataTypes.ENUM(constants.resultTypes),
@@ -773,7 +773,7 @@ module.exports = {
       review_count: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        default: 1
+        default: 0
       },
       easy_factor: {
         type: DataTypes.REAL,
@@ -798,7 +798,7 @@ module.exports = {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW
-      },
+      }
     }),
     await queryInterface.createTable('bug_report', {
       id: {
@@ -862,7 +862,7 @@ module.exports = {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW
-      },
+      }
     }),
     await queryInterface.createTable('session', {
       id: {
@@ -879,6 +879,11 @@ module.exports = {
         },
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
+      },
+      active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
       },
       browser: {
         type: DataTypes.STRING,
@@ -900,7 +905,7 @@ module.exports = {
       expire_at: {
         type: DataTypes.DATE,
         allowNull: false
-      },
+      }
     });
   },
   down: async ({ context: queryInterface }) => {
