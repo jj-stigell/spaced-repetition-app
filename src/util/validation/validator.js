@@ -123,6 +123,7 @@ const validateFetchKanji = async (kanjiId, includeAccountCard, languageId) => {
   }
 };
 
+/*
 const validateFetchCardsByType = async (type, languageId) => {
   try {
     await schema.fetchCardsByType.validate({ type, languageId }, { abortEarly: constants.yupAbortEarly  });
@@ -130,6 +131,7 @@ const validateFetchCardsByType = async (type, languageId) => {
     return validationError(formatYupError(errors));
   }
 };
+*/
 
 const validateCardType = async (cardType) => {
   try {
@@ -178,7 +180,7 @@ module.exports = {
   //validateDeckId,
   validateEditAccountCard,
   validateFetchKanji,
-  validateFetchCardsByType,
+  //validateFetchCardsByType,
   validateCardType,
   validateBugType,
   validateNewBug,
