@@ -41,6 +41,22 @@ const deleteSession = async (sessionId) => {
 };
 
 /**
+ * Deactivate session by PK
+ * @param {string} sessionId - version 4 UUID
+ * @returns {session} session found with id, active field set to false
+ */
+const deactivateSession = async (sessionId) => {
+  try {
+    const session = await Session.findByPk(sessionId);
+    session.set({ active: false });
+    await session.save();
+    return session;
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
+/**
  * Find non-expired session by its PK
  * @param {string} sessionId - version 4 UUID
  * @returns {Session} Session found with the sessionId
@@ -62,7 +78,8 @@ const findAllSessionsByAccountId = async (accountId) => {
   try {
     return await Session.findAll({
       where: {
-        accountId: accountId
+        accountId: accountId,
+        active: true
       }
     });
   } catch (error) {
@@ -73,6 +90,7 @@ const findAllSessionsByAccountId = async (accountId) => {
 module.exports = {
   createNewSession,
   deleteSession,
+  deactivateSession,
   findSessionById,
   findAllSessionsByAccountId
 };
