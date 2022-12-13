@@ -33,4 +33,6 @@
 | 15.11. | 5 | Add session handling and extract user-agent data for session to help distinguish between sessions. Add all bug report queries and mutations, limit some of the m to admins only |
 | 19.11. | 6 | Fix tests, add username, refactor code. Separate tests, add bug testing |
 | 6.12. | 4 | Separate deck and cards resolvers, separate seeds from migrations, set up seeder for database, add deck tests |
-| total | 87 |  | 
+| 13.12. | 7 | add tests and queries + mutations for testing, add authorization functions, clean old code, reformat code, add helpers |
+|  |  |  |
+| total | 94 |  | 

@@ -45,7 +45,7 @@ Frontend time keeping is in the frontend GitHub repository
     - [ ] Limit query depth
     - [ ] Set request limit per connection/ip-address
     - [ ] Cache
-    - [ ] Catch internal server errors, no (possible) db errors to client
+    - [X] Catch internal server errors, no (possible) db errors to client
 - [ ] Query and mutation documentation
 - [ ] Service functionality
     - [ ] User related
@@ -150,17 +150,19 @@ Frontend time keeping is in the frontend GitHub repository
             - [X] Login
             - [X] Password changing
             - [X] Username changing
-            - [ ] Logout
+            - [X] Logout
         - [ ] CARDS
             - [ ] Mutations
-                - [ ] Reschedule card
-                - [ ] Add custom card hint
-                - [ ] Add custom card story
+                - [X] Reschedule card
+                - [X] Add custom card hint
+                - [X] Add custom card story
                 - [ ] Sick day
             - [ ] Queries
                 - [ ] Fetch due cards
                 - [ ] Fetch new cards
-                - [ ] Fetch due per date, one or multiple
+                - [X] Fetch cards by type
+                - [X] Fetch due per date, one or multiple
+                - [X] Fetch history per card type
          - [X] DECKS
             - [X] Mutations
                 - [X] edit deck settings (set favorites, interval, etc.)
