@@ -6,6 +6,7 @@ const constants = {
   matureInterval: 21,
   resultTypes: ['AGAIN', 'GOOD'],
   deckTypes: ['RECALL', 'RECOGNISE'],
+  reviewTypes: ['RECALL', 'RECOGNISE'],
   cardTypes: ['KANJI', 'HIRAGANA', 'KATAKANA', 'WORD', 'SENTENCE'],
   jltpLevels: [1, 2, 3, 4, 5],                                          // Available JLPT levels, officially
   maxLimitReviews: 999,
