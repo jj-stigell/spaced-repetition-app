@@ -11,7 +11,7 @@ const { findAccountById } = require('../schema/services/accountService');
  * If user has write rights, they are also expected to have read rights
  * @param {integer} accountId - accounts id
  * @param {string} permission - which permission is checked, either READ or WRITE
- * @returns {integer} 1 - if required permissions found
+ * @returns {integer} 1 if required permissions found
  */
 const checkAdminPermission = async (accountId, permission) => {
   const admin = await findAdminByAccountId(accountId);
@@ -34,7 +34,7 @@ const checkAdminPermission = async (accountId, permission) => {
 /**
  * Validate that session is found and active
  * @param {string} sessionId - version 4 UUID
- * @returns integer one if passes check
+ * @returns {integer} 1 if required permissions found
  */
 const validateSession = async (sessionId) => {
   const session = await findSessionById(sessionId);
@@ -46,7 +46,7 @@ const validateSession = async (sessionId) => {
 /**
  * Check if account is active member
  * @param {integer} accountId - accounts id
- * @returns integer one if passes check
+ * @returns {integer} 1 if required permissions found
  */
 const validateMember = async (accountId) => {
   const account = await findAccountById(accountId);
