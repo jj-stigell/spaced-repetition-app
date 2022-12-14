@@ -148,10 +148,6 @@ module.exports = {
         allowNull: false,
         unique: true
       },
-      type: {
-        type: DataTypes.ENUM(constants.deckTypes),
-        allowNull: false
-      },
       subscriber_only: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

@@ -1,6 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../database');
-const constants = require('../../util/constants');
 
 class Deck extends Model {}
 
@@ -14,10 +13,6 @@ Deck.init({
     type: DataTypes.STRING(60),
     allowNull: false,
     unique: true,
-  },
-  type: {
-    type: DataTypes.ENUM(constants.deckTypes),
-    allowNull: false
   },
   subscriberOnly: {
     type: DataTypes.BOOLEAN,
