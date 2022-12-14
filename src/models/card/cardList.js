@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../database');
+const constants = require('../../util/constants');
 
 class CardList extends Model {}
 
@@ -27,6 +28,10 @@ CardList.init({
   },
   learningOrder: {
     type: DataTypes.INTEGER
+  },
+  reviewType: {
+    type: DataTypes.ENUM(constants.reviewTypes),
+    allowNull: false
   },
   createdAt: {
     type: DataTypes.DATE,

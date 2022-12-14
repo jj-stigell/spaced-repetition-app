@@ -298,6 +298,10 @@ module.exports = {
       learning_order: {
         type: DataTypes.INTEGER
       },
+      review_type: {
+        type: DataTypes.ENUM(constants.reviewTypes),
+        allowNull: false
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -934,5 +938,6 @@ module.exports = {
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_deck_type;');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_account_review_result;');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_bug_report_type;');
+    await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_card_list_review_type;');
   },
 };
