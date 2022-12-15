@@ -61,8 +61,8 @@ const findAccountDeckSettings = async (deckId, accountId) => {
   try {
     return await models.AccountDeckSettings.findOne({
       where: {
-        'account_id': accountId,
-        'deck_id': deckId
+        accountId: accountId,
+        deckId: deckId
       },
       nest: true
     });
@@ -101,9 +101,30 @@ const createAccountDeckSettings = async (
   }
 };
 
+/**
+ * Find decks translation information based on deck id and translation id
+ * @param {integer} deckId - id of the deck
+ * @param {string} languageId - what translations are used
+ * @returns 
+ */
+const findDeckTranslation = async (deckId, languageId) => {
+  try {
+    return await models.DeckTranslation.findAll({
+      where: {
+        deckId: deckId,
+        languageId: languageId
+      },
+      nest: true
+    });
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
 module.exports = {
   findDeckById,
   findAllDecks,
   findAccountDeckSettings,
-  createAccountDeckSettings
+  createAccountDeckSettings,
+  findDeckTranslation
 };
