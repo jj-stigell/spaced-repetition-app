@@ -7,8 +7,8 @@ const rawQueries = require('./rawQueries');
 
 /**
  * Find card by its id (PK)
- * @param {integer} cardId 
- * @returns Card found
+ * @param {integer} cardId - id of the card
+ * @returns {Card} card found
  */
 const findCardById = async (cardId) => {
   try {
@@ -18,21 +18,56 @@ const findCardById = async (cardId) => {
   }
 };
 
-const createAccountCard = async (cardId, accountId, story, hint) => {
+/**
+ * Creates a new account card, can be during review.
+ * @param {integer} cardId - id of the card
+ * @param {integer} accountId - accounts id number
+ * @param {string} story - custom account specific story
+ * @param {string} hint - custom account specific hint
+ * @param {float} easyFactor - float to determine next reviews new interval
+ * @param {date} newDueDate - date when card is next due
+ * @param {integer} newInterval - new interval in days, used to set card mature
+ * @param {boolean} isReview - if review; dueAt and mature also set
+ * @returns {AccountCard} newly created account card
+ */
+const createAccountCard = async (cardId, accountId, story, hint, easyFactor, newDueDate, newInterval, isReview) => {
   try {
+    if (isReview) {
+      return await models.AccountCard.create({
+        accountId: accountId,
+        cardId: cardId,
+        dueAt: newDueDate,
+        mature: newInterval > constants.matureInterval ? true : false,
+        easyFactor: easyFactor ? easyFactor : constants.card.defaultEasyFactor,
+        reviewCount: 1,
+        accountStory: story ? story : null,
+        accountHint: hint ? hint : null
+      });
+    }
+
     return await models.AccountCard.create({
       accountId: accountId,
       cardId: cardId,
-      easyFactor: constants.card.defaultEasyFactor,
       reviewCount: 0,
+      easyFactor: constants.card.defaultEasyFactor,
       accountStory: story ? story : null,
       accountHint: hint ? hint : null
     });
+
   } catch (error) {
     return internalServerError(error);
   }
 };
 
+
+/**
+ * Update existing account card
+ * @param {integer} cardId - id of the card
+ * @param {integer} accountId - accounts id number
+ * @param {string} story - custom account specific story
+ * @param {string} hint - custom account specific hint
+ * @returns 
+ */
 const updateAccountCard = async (cardId, accountId, story, hint) => {
   try {
     return await models.AccountCard.create({
@@ -50,12 +85,12 @@ const updateAccountCard = async (cardId, accountId, story, hint) => {
 
 /**
  * Add new row to review history
- * @param {*} cardId 
- * @param {*} accountId 
- * @param {*} reviewResult 
- * @param {*} extraReview 
- * @param {*} timing 
- * @returns 
+ * @param {integer} cardId - id of the card
+ * @param {integer} accountId - accounts id number
+ * @param {string} reviewResult - ENUM string representing result of the review
+ * @param {boolean} extraReview - if user does more than one review of the card on due date
+ * @param {integer} timing - time user spent reviewing the card
+ * @returns {AccountReview} created account review
  */
 const createAccountReview = async (cardId, accountId, reviewResult, extraReview, timing) => {
   try {
@@ -71,7 +106,15 @@ const createAccountReview = async (cardId, accountId, reviewResult, extraReview,
   }
 };
 
-const fetchNewCards = async (deckId, accountId, limitReviews, selectedLanguage) => {
+/**
+ * Fetch unreviewed cards from deck
+ * @param {integer} deckId - id of the deck
+ * @param {integer} accountId - accounts id number
+ * @param {integer} limitReviews - how many cards are taken from the deck
+ * @param {string} languageId - what translations are used
+ * @returns {object} cards found
+ */
+const fetchNewCards = async (deckId, accountId, limitReviews, languageId) => {
   try {
     const cardIds = await sequelize.query(rawQueries.selectNewCardIds, {
       replacements: {
@@ -84,53 +127,56 @@ const fetchNewCards = async (deckId, accountId, limitReviews, selectedLanguage) 
       raw: true
     });
 
+    if (cardIds.length === 0) return null;
+
     const idInLearningOrder = cardIds.map(listItem => listItem.card_id);
 
-    const cards = await models.Card.findAll({
+    const cards = await models.CardList.findAll({
       where: {
-        'id': { [Op.in]: idInLearningOrder },
-        'active': true
+        deckId: deckId,
+        cardId: { [Op.in]: idInLearningOrder }
       },
       subQuery: false,
       nest: true,
-      include: [
-        {
-          model: models.Kanji,
-          include: [
-            {
-              model: models.KanjiTranslation,
-              where: {
-                language_id: selectedLanguage
-              },
-            },
-            {
-              model: models.Radical,
-              attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
-              include: {
-                model: models.RadicalTranslation,
+      include: {
+        model: models.Card,
+        where: {
+          active: true
+        },
+        include: [
+          {
+            model: models.Kanji,
+            include: [
+              {
+                model: models.KanjiTranslation,
                 where: {
-                  language_id: selectedLanguage
-                }
+                  language_id: languageId
+                },
+              },
+              {
+                model: models.Radical,
+                attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+                include: {
+                  model: models.RadicalTranslation,
+                  where: {
+                    language_id: languageId
+                  }
+                },
+              }
+            ]
+          },
+          {
+            model: models.Word,
+            include: {
+              model: models.WordTranslation,
+              where: {
+                language_id: languageId
               },
             }
-          ]
-        },
-        {
-          model: models.Word,
-          include: {
-            model: models.WordTranslation,
-            where: {
-              language_id: selectedLanguage
-            },
           }
-        }
-      ]
-    });
-
-    if (cardIds.length === 0) return null;
-
-    cards.sort(function (a, b) {
-      return idInLearningOrder.indexOf(a.id) - idInLearningOrder.indexOf(b.id);
+        ]
+      },
+      order: [['learningOrder', 'ASC']]
     });
 
     return cards;
@@ -139,9 +185,16 @@ const fetchNewCards = async (deckId, accountId, limitReviews, selectedLanguage) 
   }
 };
 
-const fetchDueCards = async (deckId, accountId, limitReviews, selectedLanguage) => {
+/**
+ * Fetch unreviewed cards from deck
+ * @param {integer} deckId - id of the deck
+ * @param {integer} accountId - accounts id number
+ * @param {integer} limitReviews - how many cards are taken from the deck
+ * @param {string} languageId - what translations are used
+ * @returns {object} cards found
+ */
+const fetchDueCards = async (deckId, accountId, limitReviews, languageId) => {
   try {
-
     const cardIds = await sequelize.query(rawQueries.selectDueCardIds, {
       replacements: {
         deckId: deckId,
@@ -153,68 +206,77 @@ const fetchDueCards = async (deckId, accountId, limitReviews, selectedLanguage) 
       raw: true
     });
 
+    if (cardIds.length === 0) return null;
+
     const idInLearningOrder = cardIds.map(listItem => listItem.card_id);
 
-    const cards = await models.Card.findAll({
+    const cards = await models.CardList.findAll({
       where: {
-        'id': { [Op.in]: idInLearningOrder },
-        'active': true
+        deckId: deckId,
+        cardId: { [Op.in]: idInLearningOrder }
       },
       subQuery: false,
       nest: true,
-      include: [
-        {
-          model: models.Kanji,
-          include: [
-            {
-              model: models.KanjiTranslation,
-              where: {
-                language_id: selectedLanguage
-              },
-            },
-            {
-              model: models.Radical,
-              attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
-              include: {
-                model: models.RadicalTranslation,
+      include: {
+        model: models.Card,
+        where: {
+          active: true
+        },
+        include: [
+          {
+            model: models.Kanji,
+            include: [
+              {
+                model: models.KanjiTranslation,
                 where: {
-                  language_id: selectedLanguage
-                }
+                  language_id: languageId
+                },
+              },
+              {
+                model: models.Radical,
+                attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+                include: {
+                  model: models.RadicalTranslation,
+                  where: {
+                    language_id: languageId
+                  }
+                },
+              }
+            ]
+          },
+          {
+            model: models.AccountCard,
+            where: {
+              accountId: accountId
+            }
+          },
+          {
+            model: models.Word,
+            include: {
+              model: models.WordTranslation,
+              where: {
+                language_id: languageId
               },
             }
-          ]
-        },
-        {
-          model: models.AccountCard,
-          where: {
-            accountId: accountId
           }
-        },
-        {
-          model: models.Word,
-          include: {
-            model: models.WordTranslation,
-            where: {
-              language_id: selectedLanguage
-            },
-          }
-        }
-      ]
+        ]
+      },
+      order: [['learningOrder', 'ASC']]
     });
-
-    if (cardIds.length === 0) return null;
-
-    cards.sort(function (a, b) {
-      return idInLearningOrder.indexOf(a.id) - idInLearningOrder.indexOf(b.id);
-    });
-
     return cards;
   } catch (error) {
     return internalServerError(error);
   }
 };
 
-const fetchCardsByType = async (cardType, accountId, selectedLanguage) => {
+/**
+ * Fetch all cards based on their type
+ * @param {string} cardType - type of the car, 'KANJI', 'WORD', etc.
+ * @param {integer} accountId - accounts id number
+ * @param {string} languageId - what translations are used
+ * @returns {object} cards found
+ */
+const fetchCardsByType = async (cardType, accountId, languageId) => {
   try {
     return await models.Card.findAll({
       where: {
@@ -230,7 +292,7 @@ const fetchCardsByType = async (cardType, accountId, selectedLanguage) => {
             {
               model: models.KanjiTranslation,
               where: {
-                language_id: selectedLanguage
+                language_id: languageId
               },
             },
             {
@@ -239,7 +301,7 @@ const fetchCardsByType = async (cardType, accountId, selectedLanguage) => {
               include: {
                 model: models.RadicalTranslation,
                 where: {
-                  language_id: selectedLanguage
+                  language_id: languageId
                 }
               },
             }
@@ -257,7 +319,7 @@ const fetchCardsByType = async (cardType, accountId, selectedLanguage) => {
           include: {
             model: models.WordTranslation,
             where: {
-              language_id: selectedLanguage
+              language_id: languageId
             },
           }
         }
@@ -268,6 +330,13 @@ const fetchCardsByType = async (cardType, accountId, selectedLanguage) => {
   }
 };
 
+/**
+ * Find how many reviews account has made in the past 'limitReviews' days.
+ * Only days with reviews are returned, if zero reviews those are omitted.
+ * @param {integer} limitReviews - for how many days back is history fetched
+ * @param {integer} accountId - accounts id number
+ * @returns {object} count of past reviews grouped by date
+ */
 const findReviewHistory = async (limitReviews, accountId) => {
   try {
     return await sequelize.query(rawQueries.fetchDailyReviewHistoryNDays, {
@@ -284,6 +353,13 @@ const findReviewHistory = async (limitReviews, accountId) => {
   }
 };
 
+/**
+ * Find how many reviews account has due in the future for 'limitReviews' days.
+ * Only days with reviews are returned, if zero reviews those are omitted.
+ * @param {integer} limitReviews - for how many days forward is there due data fetched
+ * @param {integer} accountId - accounts id number
+ * @returns {object} count of due reviews grouped by date
+ */
 const findDueReviewsCount = async (limitReviews, accountId) => {
   try {
     return await sequelize.query(rawQueries.fetchDueReviewsNDays, {
@@ -300,6 +376,13 @@ const findDueReviewsCount = async (limitReviews, accountId) => {
   }
 };
 
+/**
+ * Find learning progress by card type.
+ * Set to three categories {new, learning, mature}.
+ * @param {string} cardType - type of the car, 'KANJI', 'WORD', etc.
+ * @param {integer} accountId - accounts id number
+ * @returns {object} grouped by learning status
+ */
 const findLearningProgressByType = async (cardType , accountId) => {
   try {
     return await sequelize.query(rawQueries.groupByTypeAndLearningStatus, {
@@ -315,7 +398,11 @@ const findLearningProgressByType = async (cardType , accountId) => {
   }
 };
 
-
+/**
+ * Push all cards in to the future for account with 'accountId'
+ * @param {integer} days - how many days cards are pushed forward
+ * @param {integer} accountId - accounts id number
+ */
 const pushAllCards = async (days, accountId) => {
   try {
     await sequelize.query(rawQueries.pushAllCardsNDays, {
@@ -332,6 +419,12 @@ const pushAllCards = async (days, accountId) => {
   }
 };
 
+/**
+ * Push all cards in deck 'deckId' for account with 'accountId'
+ * @param {integer} deckId - id of the deck
+ * @param {integer} days - how many days cards are pushed forward
+ * @param {integer} accountId - accounts id number
+ */
 const pushCardsInDeck = async (deckId, days, accountId) => {
   try {
     await sequelize.query(rawQueries.pushCardsInDeckIdNDays, {
@@ -351,9 +444,9 @@ const pushCardsInDeck = async (deckId, days, accountId) => {
 
 /**
  * Find account card (with account specific data) by card and account id
- * @param {integer} cardId 
- * @param {integer} accountId 
- * @returns Found card
+ * @param {integer} cardId - id of the card
+ * @param {integer} accountId - accounts id number
+ * @returns {AccountCard} found account card
  */
 const findAccountCard = async (cardId, accountId) => {
   try {
