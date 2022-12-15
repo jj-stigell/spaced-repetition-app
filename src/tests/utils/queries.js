@@ -110,7 +110,7 @@ const queries = {
   cardsByType: `query CardsByType($cardType: CardType!, $languageId: Language) {
     cardsByType(cardType: $cardType, languageId: $languageId) {
       id
-      type
+      cardType
       createdAt
       updatedAt
       accountCard {
