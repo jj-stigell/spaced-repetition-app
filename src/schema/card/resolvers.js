@@ -1,6 +1,6 @@
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
-const graphQlErrors = require('../../util/errors/graphQlErrors');
+const { notAuthError, defaultError, internalServerError} = require('../../util/errors/graphQlErrors');
 const { calculateDate } = require('../../util/helper');
 const { formStatistics, cardFormatter } = require('../../util/formatter');
 const { validateMember, checkAdminPermission } = require('../../util/authorization');
@@ -12,26 +12,27 @@ const validator = require('../../util/validation//validator');
 const resolvers = {
   Query: {
     // Fetch cards that are due or new cards based on the newCards boolean value, defaults to false.
-    fetchCards: async (_, { deckId, languageId, newCards }, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
-      await validator.validateFetchCards(deckId, languageId, newCards);
-
-      let selectedLanguage;
-      // If language id is empty, set to default 'en'
-      if (!languageId) {
-        selectedLanguage = constants.general.defaultLanguage;
-      } {
-        selectedLanguage = languageId;
-      }
+    cardsFromDeck: async (_, { deckId, languageId, newCards }, { currentUser }) => {
+      if (!currentUser) notAuthError();
+      await validator.validateInteger(deckId);
+      let selectedLanguage = 'EN', cards = [];
 
       // Check that deck exists
       const deck = await deckService.findDeckById(deckId);
 
       // No deck found with an id
-      if (!deck) return graphQlErrors.defaultError(errors.nonExistingDeckError);
+      if (!deck) defaultError(errors.nonExistingDeckError);
 
       // Deck not active
-      if (!deck.active) return graphQlErrors.defaultError(errors.nonActiveDeckError);
+      if (!deck.active) defaultError(errors.nonActiveDeckError);
+
+      // check that user is member, if the deck is member deck
+      if (deck.subscriberOnly) await validateMember(currentUser.id);
+
+      const deckTranslation = await deckService.findDeckTranslation(deckId, languageId);
+      if (deckTranslation.length !== 0 && deckTranslation[0].active) {
+        selectedLanguage = deckTranslation[0].languageId;
+      }
 
       // Check if deck has an account specific settings
       let accountDeckSettings = await deckService.findAccountDeckSettings(deckId, currentUser.id);
@@ -41,22 +42,21 @@ const resolvers = {
         accountDeckSettings = await deckService.createAccountDeckSettings(deckId, currentUser.id);
       }
 
-      let cards = [];
-
       if (newCards) {
         // Fetch new cards
         cards = await cardService.fetchNewCards(deckId, currentUser.id, accountDeckSettings.newCardsPerDay, selectedLanguage);
+        //cards = cards.map(card => card.card);
       } else {
         // Fetch due cards
         cards = await cardService.fetchDueCards(deckId, currentUser.id, accountDeckSettings.reviewsPerDay, selectedLanguage);
       }
 
-      if (!cards) return graphQlErrors.defaultError(errors.noDueCardsError);
+      if (!cards) defaultError(errors.noDueCardsError);
 
-      return { Cards: cards };
+      return cardFormatter(cards);
     },
     cardsByType: async (_, { cardType, languageId }, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
+      if (!currentUser) notAuthError();
       await checkAdminPermission(currentUser.id, 'READ');
       //await validator.validateFetchCardsByType(cardType, languageId);
       //const selectedLanguage = languageId ? languageId : constants.general.defaultLanguage;
@@ -64,17 +64,17 @@ const resolvers = {
 
       // No cards found with the card type, return empty array
       if (cards.length === 0) return [];
-      return cardFormatter(cards);
+      return cardFormatter(cards, true);
     },
     reviewHistory: async (_, { limitReviews }, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
+      if (!currentUser) notAuthError();
       await validator.validateInteger(limitReviews);
       const reviewHistory = await cardService.findReviewHistory(limitReviews, currentUser.id);
       if (reviewHistory.length === 0) return [];
       return reviewHistory;
     },
     dueCount: async (_, { limitReviews }, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
+      if (!currentUser) notAuthError();
       await validator.validateInteger(limitReviews);
       const dueReviews = await cardService.findDueReviewsCount(limitReviews, currentUser.id);
       if (dueReviews.length === 0) return [];
@@ -93,7 +93,7 @@ const resolvers = {
       return sumWithInitial > 0 ? [{ date: currentDate, reviews: sumWithInitial.toString() }].concat(dueAfterToday) : dueAfterToday;
     },
     learningStatistics: async (_, { cardType }, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
+      if (!currentUser) notAuthError();
       await validator.validateCardType(cardType);
       const statsFromDb = await cardService.findLearningProgressByType(cardType, currentUser.id);
       return formStatistics(statsFromDb);
@@ -101,7 +101,7 @@ const resolvers = {
   },
   Mutation: {
     rescheduleCard: async (_, { cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing }, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
+      if (!currentUser) notAuthError();
       await validator.validateRescheduleCard(cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing);
       const newDueDate = calculateDate(newInterval);
 
@@ -112,7 +112,7 @@ const resolvers = {
       if (!accountCard) {
         // Check that card actually exists in the database
         const card = cardService.findCardById(cardId);
-        if (!card) return graphQlErrors.defaultError(errors.nonExistingId);
+        if (!card) defaultError(errors.nonExistingId);
         accountCard = await cardService.createAccountCard(cardId, currentUser.id, null, null, newEasyFactor, newDueDate, newInterval, true);
       } else {
         // Update existing user card
@@ -126,7 +126,7 @@ const resolvers = {
           });
           await accountCard.save();
         } catch(error) {
-          return graphQlErrors.internalServerError(error);
+          internalServerError(error);
         }
       }
       // Add new row to review history
@@ -145,7 +145,7 @@ const resolvers = {
       };
     },
     pushCards: async (_, { deckId, days }, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
+      if (!currentUser) notAuthError();
       await validateMember(currentUser.id);
       await validator.validatePushCards(deckId, days);
       if (deckId) {
@@ -157,16 +157,15 @@ const resolvers = {
       return { status: true };
     },
     editAccountCard: async (_, { cardId, story, hint }, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
+      if (!currentUser) notAuthError();
+      // If no story or hint provided return id back to the user
+      if (!story && !hint) defaultError(errors.provideStoryOrHintError);
       await validateMember(currentUser.id);
       await validator.validateEditAccountCard(cardId, story, hint);
 
-      // If no story or hint provided return id back to the user
-      if (!story && !hint) graphQlErrors.defaultError(errors.provideStoryOrHintError);
-
       // Check that card actually exists in the database
       const card = await cardService.findCardById(cardId);
-      if (!card) graphQlErrors.defaultError(errors.nonExistingIdError);
+      if (!card) defaultError(errors.nonExistingIdError);
       let accountCard = await cardService.findAccountCard(cardId, currentUser.id);
 
       // Create new custom card for the user, if none found the current user id and kanji id
@@ -182,7 +181,7 @@ const resolvers = {
           });
           accountCard.save();
         } catch(error) {
-          return graphQlErrors.internalServerError(error);
+          internalServerError(error);
         }
       }
 
