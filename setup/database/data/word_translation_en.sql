@@ -28,7 +28,7 @@ INSERT INTO word_translation(word_id,language_id,translation,hint,description,cr
 INSERT INTO word_translation(word_id,language_id,translation,hint,description,created_at,updated_at) VALUES (28,'EN','(humble) older brother','placeholder','placeholder','NOW()','NOW()');
 INSERT INTO word_translation(word_id,language_id,translation,hint,description,created_at,updated_at) VALUES (29,'EN','(humble) older sister','placeholder','placeholder','NOW()','NOW()');
 INSERT INTO word_translation(word_id,language_id,translation,hint,description,created_at,updated_at) VALUES (30,'EN','that over there','placeholder','placeholder','NOW()','NOW()');
-INSERT INTO word_translation(word_id,language_id,translation,hint,description,created_at,updated_at) VALUES (31,'EN','apartmENt','placeholder','placeholder','NOW()','NOW()');
+INSERT INTO word_translation(word_id,language_id,translation,hint,description,created_at,updated_at) VALUES (31,'EN','apartment','placeholder','placeholder','NOW()','NOW()');
 INSERT INTO word_translation(word_id,language_id,translation,hint,description,created_at,updated_at) VALUES (32,'EN','to bathe,to shower','placeholder','placeholder','NOW()','NOW()');
 INSERT INTO word_translation(word_id,language_id,translation,hint,description,created_at,updated_at) VALUES (33,'EN','dangerous','placeholder','placeholder','NOW()','NOW()');
 INSERT INTO word_translation(word_id,language_id,translation,hint,description,created_at,updated_at) VALUES (34,'EN','sweet','placeholder','placeholder','NOW()','NOW()');
