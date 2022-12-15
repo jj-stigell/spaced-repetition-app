@@ -9,6 +9,11 @@ enum CardType {
   SENTENCE
 }
 
+enum ReviewType {
+  RECALL
+  RECOGNISE
+}
+
 type Account {
   id: ID!
   email: String
@@ -96,7 +101,8 @@ type Word {
 
 type Card {
   id: Int
-  type: String
+  cardType: CardType
+  reviewType: ReviewType
   createdAt: Date
   updatedAt: Date
   accountCard: AccountCard
@@ -120,7 +126,7 @@ type Reviews {
 }
 
 type Query {
-  fetchCards(
+  cardsFromDeck(
     deckId: Int!
     languageId: Language! = EN
     newCards: Boolean
