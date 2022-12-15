@@ -13,6 +13,7 @@ const kanji_translation_fi = fs.readFileSync(path.resolve(__dirname, '../setup/d
 const kanji_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/kanji_translation_en.sql'), 'utf8');
 const word = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/word.sql'), 'utf8');
 const word_translation_en = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/word_translation_en.sql'), 'utf8');
+const word_translation_fi = fs.readFileSync(path.resolve(__dirname, '../setup/database/data/word_translation_fi.sql'), 'utf8');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -31,6 +32,7 @@ module.exports = {
       await queryInterface.sequelize.query(kanji_translation_en, { transaction });
       await queryInterface.sequelize.query(word, { transaction });
       await queryInterface.sequelize.query(word_translation_en, { transaction });
+      await queryInterface.sequelize.query(word_translation_fi, { transaction });
       await transaction.commit();
     } catch (error) {
       await transaction.rollback();
