@@ -5,8 +5,8 @@ const request = require('supertest');
  * @param {string} testUrl - url for the server running the backend
  * @param {string} token - authorization token for accessing the server
  * @param {string} query - graphql query
- * @param {object} data - objevt containing the data for the query
- * @returns 
+ * @param {object} data - object containing the data for the query
+ * @returns reponse to the request
  */
 const sendRequest = async (testUrl, token, query, payload) => {
   if (token) {

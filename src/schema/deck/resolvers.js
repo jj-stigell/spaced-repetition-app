@@ -1,26 +1,26 @@
 const errors = require('../../util/errors/errors');
-const graphQlErrors = require('../../util/errors/graphQlErrors');
-const deckService = require('../services/deckService');
-const validator = require('../../util/validation/validator');
+const { notAuthError, defaultError, internalServerError } = require('../../util/errors/graphQlErrors');
+const { findAllDecks, findDeckById, findAccountDeckSettings, createAccountDeckSettings } = require('../services/deckService');
+const { validateInteger, validateDeckSettings } = require('../../util/validation/validator');
 
 const resolvers = {
   Query: {
     decks: async (root, args, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
-      const decks = await deckService.findAllDecks(false);
-      if (decks.length === 0) return graphQlErrors.defaultError(errors.deckErrors.noDecksFoundError);
+      if (!currentUser) notAuthError();
+      const decks = await findAllDecks(false);
+      if (decks.length === 0) defaultError(errors.deckErrors.noDecksFoundError);
       return decks;
     },
     deckSettings: async (_, { deckId }, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
-      await validator.validateInteger(deckId);
-      const deck = await deckService.findDeckById(deckId);
-      if (!deck) return graphQlErrors.defaultError(errors.nonExistingDeckError);
-      let deckSettings = await deckService.findAccountDeckSettings(deckId, currentUser.id);
+      if (!currentUser) notAuthError();
+      await validateInteger(deckId);
+      const deck = await findDeckById(deckId);
+      if (!deck) defaultError(errors.nonExistingDeckError);
+      let deckSettings = await findAccountDeckSettings(deckId, currentUser.id);
 
       //create new accoung deck settings if no existing one
       if (!deckSettings) {
-        deckSettings = await deckService.createAccountDeckSettings(deckId, currentUser.id);
+        deckSettings = await createAccountDeckSettings(deckId, currentUser.id);
       }
 
       return {
@@ -38,21 +38,21 @@ const resolvers = {
   },
   Mutation: {
     changeDeckSettings: async (_, { deckId, favorite, reviewInterval, reviewsPerDay, newCardsPerDay }, { currentUser }) => {
-      if (!currentUser) graphQlErrors.notAuthError();
-      await validator.validateDeckSettings(deckId, favorite, reviewInterval, reviewsPerDay, newCardsPerDay);
+      if (!currentUser) notAuthError();
+      await validateDeckSettings(deckId, favorite, reviewInterval, reviewsPerDay, newCardsPerDay);
 
       // Check that deck exists
-      const deck = await deckService.findDeckById(deckId);
+      const deck = await findDeckById(deckId);
 
       // No deck found with an id
-      if (!deck) return graphQlErrors.defaultError(errors.nonExistingDeckError);
+      if (!deck) defaultError(errors.nonExistingDeckError);
 
       // Check if deck has an account specific settings
-      let deckSettings = await deckService.findAccountDeckSettings(deckId, currentUser.id);
+      let deckSettings = await findAccountDeckSettings(deckId, currentUser.id);
 
       //create new accoung deck settings if no existing one
       if (!deckSettings) {
-        deckSettings = await deckService.createAccountDeckSettings(deckId, currentUser.id, favorite, reviewInterval, reviewsPerDay, newCardsPerDay);
+        deckSettings = await createAccountDeckSettings(deckId, currentUser.id, favorite, reviewInterval, reviewsPerDay, newCardsPerDay);
       }
 
       // Update deck settings
@@ -63,7 +63,7 @@ const resolvers = {
         deckSettings.newCardsPerDay = newCardsPerDay ? newCardsPerDay : deckSettings.newCardsPerDay,
         await deckSettings.save();
       } catch(error) {
-        return graphQlErrors.internalServerError(error);
+        internalServerError(error);
       }
 
       return {

@@ -74,9 +74,9 @@ const findAdminByAccountId = async (accountId) => {
 /**
  * Create a new account
  * @param {string} email - new email for the account
- * @param {*} username - username
- * @param {*} languageId - language selected, default EN
- * @param {*} passwordHash - password hash
+ * @param {string} username - username
+ * @param {string} languageId - language selected, default EN
+ * @param {string} passwordHash - password hash
  * @returns {Account} newly created account
  */
 const createNewAccount = async (email, username, languageId, passwordHash) => {
