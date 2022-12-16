@@ -157,9 +157,9 @@ Frontend time keeping is in the frontend GitHub repository
                 - [X] Add custom card hint
                 - [X] Add custom card story
                 - [ ] Sick day (push cards all or in deck)
-            - [ ] Queries
-                - [ ] Fetch due cards
-                - [ ] Fetch new cards
+            - [X] Queries
+                - [X] Fetch due cards
+                - [X] Fetch new cards
                 - [X] Fetch cards by type
                 - [X] Fetch due per date, one or multiple
                 - [X] Fetch history per card type
