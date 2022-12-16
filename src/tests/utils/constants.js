@@ -146,6 +146,9 @@ const userAgents = [
   }
 ];
 
+const expiredToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwic2Vzc2lvbiI6MSwiaWF0IjoxNj
+cxMTY3Njk0LCJleHAiOjE2NzExNjc3MDR9.OUqeCUiZ4fMaku8ZY23HXeLqE6xVS0ntb4XjpqgWh-o`;
+
 module.exports = {
   createAccount,
   account,
@@ -160,5 +163,6 @@ module.exports = {
   deckSettings,
   accountCard,
   accountReview,
-  userAgents
+  userAgents,
+  expiredToken
 };
