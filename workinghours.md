@@ -34,5 +34,6 @@
 | 19.11. | 6 | Fix tests, add username, refactor code. Separate tests, add bug testing |
 | 6.12. | 4 | Separate deck and cards resolvers, separate seeds from migrations, set up seeder for database, add deck tests |
 | 13.12. | 7 | add tests and queries + mutations for testing, add authorization functions, clean old code, reformat code, add helpers |
+| 15.12. | 4 | refactor the card resolver, add card translation ,add card testing, fix small things |
 |  |  |  |
-| total | 94 |  | 
+| total | 98 |  | 

@@ -117,7 +117,7 @@ Frontend time keeping is in the frontend GitHub repository
         - [X] range: integers (max intervals etc.), varchar (stories, message etc.)
         - [X] onDelete and onUpdate
     - [X] Enums (defined in constants)
-        - deck type
+        - review type
         - card type
         - review result type
         - bug type
@@ -156,7 +156,7 @@ Frontend time keeping is in the frontend GitHub repository
                 - [X] Reschedule card
                 - [X] Add custom card hint
                 - [X] Add custom card story
-                - [ ] Sick day
+                - [ ] Sick day (push cards all or in deck)
             - [ ] Queries
                 - [ ] Fetch due cards
                 - [ ] Fetch new cards
