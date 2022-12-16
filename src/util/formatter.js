@@ -33,14 +33,24 @@ const formatRadicals = (radicals) => {
  * @param {Object} word - word object
  * @returns {object} of reformatted word card
  */
-const formWordCard = (word, reviewType) => {
+const formWordCard = (word, reviewType, includeCustomData) => {
   return {
     id: word.id,
     cardType: word.type,
     reviewType: reviewType,
     createdAt: word.createdAt,
     updatedAt: word.updatedAt,
-    accountCard: word?.account_cards ? word.account_cards[0] : null,
+    accountCard: (word?.account_cards && word?.account_cards[0]) ? {
+      id: word.account_cards[0].id,
+      reviewCount: word.account_cards[0].reviewCount,
+      easyFactor: word.account_cards[0].easyFactor,
+      accountStory: includeCustomData ? word.account_cards[0].accountStory : null,
+      accountHint: includeCustomData ? word.account_cards[0].accountHint : null,
+      dueAt: word.account_cards[0].dueAt,
+      mature: word.account_cards[0].mature,
+      createdAt: word.account_cards[0].createdAt,
+      updatedAt: word.account_cards[0].updatedAt
+    } : null,
     word: {
       id: word.word.id,
       word: word.word.word,
@@ -66,14 +76,24 @@ const formWordCard = (word, reviewType) => {
  * @param {Object} kanji - kanji object
  * @returns {object} of reformatted kanji card
  */
-const formKanjiCard = (kanji, reviewType) => {
+const formKanjiCard = (kanji, reviewType, includeCustomData) => {
   return {
     id: kanji.id,
     cardType: kanji.type,
     reviewType: reviewType,
     createdAt: kanji.createdAt,
     updatedAt: kanji.updatedAt,
-    accountCard: kanji?.account_cards ? kanji.account_cards[0] : null,
+    accountCard: (kanji?.account_cards && kanji?.account_cards[0]) ? {
+      id: kanji.account_cards[0].id,
+      reviewCount: kanji.account_cards[0].reviewCount,
+      easyFactor: kanji.account_cards[0].easyFactor,
+      accountStory: includeCustomData ? kanji.account_cards[0].accountStory : null,
+      accountHint: includeCustomData ? kanji.account_cards[0].accountHint : null,
+      dueAt: kanji.account_cards[0].dueAt,
+      mature: kanji.account_cards[0].mature,
+      createdAt: kanji.account_cards[0].createdAt,
+      updatedAt: kanji.account_cards[0].updatedAt
+    } : null,
     radicals: formatRadicals(kanji.kanji.radicals),
     kanji: {
       id: kanji.kanji.id,
@@ -104,19 +124,18 @@ const formKanjiCard = (kanji, reviewType) => {
  * @param {object} cards - set of cards
  * @returns set of reformatted cards
  */
-const cardFormatter = (cards, byType = false) => {
+const cardFormatter = (cards, byType = false, includeCustomData = false) => {
   const formedCards = [];
   let formattedCard;
-
 
   if (byType) {
     cards.forEach(card => {
       switch (card.type) {
       case 'WORD':
-        formattedCard = formWordCard(card, null);
+        formattedCard = formWordCard(card, null, includeCustomData);
         break;
       case 'KANJI':
-        formattedCard = formKanjiCard(card, null);
+        formattedCard = formKanjiCard(card, null, includeCustomData);
         break;
       default:
         formattedCard = null;
@@ -128,10 +147,10 @@ const cardFormatter = (cards, byType = false) => {
     cards.forEach(card => {
       switch (card.card.type) {
       case 'WORD':
-        formattedCard = formWordCard(card.card, card.reviewType);
+        formattedCard = formWordCard(card.card, card.reviewType, includeCustomData);
         break;
       case 'KANJI':
-        formattedCard = formKanjiCard(card.card, card.reviewType);
+        formattedCard = formKanjiCard(card.card, card.reviewType, includeCustomData);
         break;
       default:
         formattedCard = null;
