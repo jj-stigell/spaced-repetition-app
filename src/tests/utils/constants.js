@@ -113,6 +113,12 @@ const accountReview = {
   extraReview: false
 };
 
+const cardsFromDeck = {
+  deckId: 1,
+  languageId: 'EN',
+  newCards: true
+};
+
 const userAgents = [
   {
     agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36',
@@ -162,6 +168,7 @@ module.exports = {
   deckSettings,
   accountCard,
   accountReview,
+  cardsFromDeck,
   userAgents,
   expiredToken
 };

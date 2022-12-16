@@ -1,6 +1,6 @@
 const constants = require('../../util/constants');
 const errors = require('../../util/errors/errors');
-const { notAuthError, defaultError, internalServerError} = require('../../util/errors/graphQlErrors');
+const { notAuthError, defaultError, internalServerError, notAuthorizedError } = require('../../util/errors/graphQlErrors');
 const { calculateDate } = require('../../util/helper');
 const { formStatistics, cardFormatter } = require('../../util/formatter');
 const { validateMember, checkAdminPermission } = require('../../util/authorization');
@@ -8,6 +8,7 @@ const { validateMember, checkAdminPermission } = require('../../util/authorizati
 const cardService = require('../services/cardService');
 const deckService = require('../services/deckService');
 const validator = require('../../util/validation//validator');
+const { findAccountById } = require('../services/accountService');
 
 const resolvers = {
   Query: {
@@ -15,7 +16,7 @@ const resolvers = {
     cardsFromDeck: async (_, { deckId, languageId, newCards }, { currentUser }) => {
       if (!currentUser) notAuthError();
       await validator.validateInteger(deckId);
-      let selectedLanguage = 'EN', cards = [];
+      let selectedLanguage = constants.general.defaultLanguage, cards = [];
 
       // Check that deck exists
       const deck = await deckService.findDeckById(deckId);
@@ -26,8 +27,10 @@ const resolvers = {
       // Deck not active
       if (!deck.active) defaultError(errors.nonActiveDeckError);
 
+      let account = await findAccountById(currentUser.id);
+
       // check that user is member, if the deck is member deck
-      if (deck.subscriberOnly) await validateMember(currentUser.id);
+      if (deck.subscriberOnly && !account.member) notAuthorizedError(errors.account.memberFeatureError);
 
       const deckTranslation = await deckService.findDeckTranslation(deckId, languageId);
       if (deckTranslation.length !== 0 && deckTranslation[0].active) {
@@ -53,18 +56,16 @@ const resolvers = {
 
       if (!cards) defaultError(errors.noDueCardsError);
 
-      return cardFormatter(cards);
+      return cardFormatter(cards, false, account.member);
     },
     cardsByType: async (_, { cardType, languageId }, { currentUser }) => {
       if (!currentUser) notAuthError();
       await checkAdminPermission(currentUser.id, 'READ');
-      //await validator.validateFetchCardsByType(cardType, languageId);
-      //const selectedLanguage = languageId ? languageId : constants.general.defaultLanguage;
       let cards = await cardService.fetchCardsByType(cardType, currentUser.id, languageId);
 
       // No cards found with the card type, return empty array
       if (cards.length === 0) return [];
-      return cardFormatter(cards, true);
+      return cardFormatter(cards, true, true);
     },
     reviewHistory: async (_, { limitReviews }, { currentUser }) => {
       if (!currentUser) notAuthError();

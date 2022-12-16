@@ -46,12 +46,12 @@ const validateSession = async (sessionId) => {
 /**
  * Check if account is active member
  * @param {integer} accountId - accounts id
- * @returns {integer} 1 if required permissions found
+ * @returns {boolean} if user is active member
  */
 const validateMember = async (accountId) => {
   const account = await findAccountById(accountId);
   if (!account.member) return graphQlErrors.notAuthorizedError(errors.account.memberFeatureError);
-  return 1;
+  return true;
 };
 
 module.exports = {
