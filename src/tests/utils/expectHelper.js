@@ -1,20 +1,27 @@
 const { expect } = require('@jest/globals');
+const { accountCard } = require('./constants');
 
-const cardEvaluator = (card, newCard) => {
+
+const cardEvaluator = (card, newCard, isMember, hasReviewType) => {
   expect(card).toBeDefined();
   expect(card.id).toBeDefined();
   expect(card.cardType).toBeDefined();
-  expect(card.reviewType).toBeDefined();
+  if (hasReviewType) expect(card.reviewType).toBeDefined();
   expect(card.createdAt).toBeDefined();
   expect(card.updatedAt).toBeDefined();
   expect(card.accountCard).toBeDefined();
 
   if (!newCard) {
+    if (isMember) {
+      expect(card.accountCard.accountStory).toBe(accountCard.story);
+      expect(card.accountCard.accountHint).toBe(accountCard.hint);
+    } else {
+      expect(card.accountCard.accountStory).toBe(null);
+      expect(card.accountCard.accountHint).toBe(null);
+    }
     expect(card.accountCard.id).toBeDefined();
     expect(card.accountCard.reviewCount).toBeDefined();
     expect(card.accountCard.easyFactor).toBeDefined();
-    expect(card.accountCard.accountStory).toBeDefined();
-    expect(card.accountCard.accountHint).toBeDefined();
     expect(card.accountCard.dueAt).toBeDefined();
     expect(card.accountCard.mature).toBeDefined();
     expect(card.accountCard.createdAt).toBeDefined();

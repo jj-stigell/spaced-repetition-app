@@ -92,17 +92,135 @@ describe('Cardintegration tests', () => {
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
-    describe('Fetch new cards from kanji deck', () => {
+    describe('Fetch new cards from kanji deck (id = 1)', () => {
 
       it('Succesfully fetch new cards as non-member account', async () => {
         const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, cardsFromDeck);
-        response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, true));
+        response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, true, false, true));
         expect(response.body.errors).toBeUndefined();
       });
 
       it('Succesfully fetch new cards as member account', async () => {
         const response = await sendRequest(testUrl, memberAuthToken, queries.cardsFromDeck, cardsFromDeck);
-        response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, true));
+        response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, true, true, true));
+        expect(response.body.errors).toBeUndefined();
+      });
+    });
+
+    describe('Fetch new cards from word deck (id = 2)', () => {
+
+      it('Succesfully fetch new cards as non-member account', async () => {
+        const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, deckId: 2 });
+        response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, true, false, true));
+        expect(response.body.errors).toBeUndefined();
+      });
+
+      it('Succesfully fetch new cards as member account', async () => {
+        const response = await sendRequest(testUrl, memberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, deckId: 2 });
+        response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, true, true, true));
+        expect(response.body.errors).toBeUndefined();
+      });
+    });
+  });
+
+  describe('Fetch due cards', () => {
+    
+    it('Authentication error when not logged in', async () => {
+      const response = await sendRequest(testUrl, null, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false });
+      expect(response.body.data?.cardsFromDeck).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
+    });
+
+    it('Error when deck id not send', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, null);
+      expect(response.body.data?.cardsFromDeck).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when deck id wrong type (string)', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false, deckId: '1' });
+      expect(response.body.data?.cardsFromDeck).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when limit reviews negative integer', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false, deckId: -1 });
+      expect(response.body.data?.cardsFromDeck).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+    });
+
+    it('Error when limit reviews zero integer', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false, deckId: 0 });
+      expect(response.body.data?.cardsFromDeck).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+    });
+
+    it('Error when language id non existing ENUM', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false, languageId: 'XX' });
+      expect(response.body.data?.cardsFromDeck).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when language id wrong type (integer)', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false, languageId: 1 });
+      expect(response.body.data?.cardsFromDeck).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+    
+    it('Error when new cards wrong type (string)', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: 'false' });
+      expect(response.body.data?.cardsFromDeck).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when no due cards', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false });
+      expect(response.body.data?.cardsFromDeck).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.noDueCardsError);
+    });
+
+    describe('Fetch due cards from kanji deck (id = 1)', () => {
+
+      it('Add reviews to the deck', async () => {
+        await helpers.addDueReviewsForThisDay(nonMemberAcc.id, 20, 1);
+        await helpers.addDueReviewsForThisDay(memberAcc.id, 20, 1);
+        expect(1).toBe(1);
+      });
+
+      it('Succesfully fetch new cards as non-member account', async () => {
+        const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false });
+        response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, false, false, true));
+        expect(response.body.data.cardsFromDeck.length).toBe(20);
+        expect(response.body.errors).toBeUndefined();
+      });
+
+      it('Succesfully fetch new cards as member account', async () => {
+        const response = await sendRequest(testUrl, memberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false });
+        response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, false, true, true));
+        expect(response.body.data.cardsFromDeck.length).toBe(20);
+        expect(response.body.errors).toBeUndefined();
+      });
+    });
+
+    describe('Fetch due cards from word deck (id = 2)', () => {
+
+      it('Add reviews to the deck', async () => {
+        await helpers.addDueReviewsForThisDay(nonMemberAcc.id, 20, 200);
+        await helpers.addDueReviewsForThisDay(memberAcc.id, 20, 200);
+        expect(1).toBe(1);
+      });
+
+      it('Succesfully fetch new cards as non-member account', async () => {
+        const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, deckId: 2, newCards: false });
+        response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, false, false, true));
+        expect(response.body.data.cardsFromDeck.length).toBe(20);
+        expect(response.body.errors).toBeUndefined();
+      });
+
+      it('Succesfully fetch new cards as member account', async () => {
+        const response = await sendRequest(testUrl, memberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, deckId: 2, newCards: false });
+        response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, false, true, true));
+        expect(response.body.data.cardsFromDeck.length).toBe(20);
         expect(response.body.errors).toBeUndefined();
       });
     });
@@ -147,7 +265,7 @@ describe('Cardintegration tests', () => {
       expect(response.body.data.dueCount.length).toBe(0);
     });
 
-    it('Succesfully fetch next 10 days reviews after inserting revies', async () => {
+    it('Succesfully fetch next 10 days reviews after inserting reviews', async () => {
       const newDate = new Date();
       const fixedDate = newDate.setDate(newDate.getDate() + 10);
       const anotherDate = new Date(fixedDate);
@@ -330,90 +448,26 @@ describe('Cardintegration tests', () => {
 
     it('Succesfully fetch all KANJI cards when admin (read), language id set EN', async () => {
       const response = await sendRequest(testUrl, adminAuthReadToken, queries.cardsByType, { cardType: 'KANJI', languageId: 'EN' });
+      response.body.data.cardsByType.forEach(card => cardEvaluator(card, true, true, false));
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.cardsByType).toBeDefined();
-      expect(response.body.data.cardsByType[0].id).toBeDefined();
-      expect(response.body.data.cardsByType[0].cardType).toBeDefined();
-      expect(response.body.data.cardsByType[0].createdAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].updatedAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].accountCard).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.id).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.kanji).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.jlptLevel).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.onyomi).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.onyomiRomaji).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.kunyomi).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.kunyomiRomaji).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.strokeCount).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.updatedAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.createdAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.translation).toBeDefined();
     });
 
     it('Succesfully fetch all KANJI cards when admin (read), language id not set, defaults to EN', async () => {
       const response = await sendRequest(testUrl, adminAuthReadToken, queries.cardsByType, { cardType: 'KANJI' });
+      response.body.data.cardsByType.forEach(card => cardEvaluator(card, true, true, false));
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.cardsByType).toBeDefined();
-      expect(response.body.data.cardsByType[0].id).toBeDefined();
-      expect(response.body.data.cardsByType[0].cardType).toBeDefined();
-      expect(response.body.data.cardsByType[0].createdAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].updatedAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].accountCard).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.id).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.kanji).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.jlptLevel).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.onyomi).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.onyomiRomaji).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.kunyomi).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.kunyomiRomaji).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.strokeCount).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.updatedAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.createdAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].kanji.translation).toBeDefined();
     });
 
     it('Succesfully fetch all WORD cards when admin (read), language id set EN', async () => {
       const response = await sendRequest(testUrl, adminAuthReadToken, queries.cardsByType, { cardType: 'WORD', languageId: 'EN' });
+      response.body.data.cardsByType.forEach(card => cardEvaluator(card, true, true, false));
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.cardsByType).toBeDefined();
-      expect(response.body.data.cardsByType[0].id).toBeDefined();
-      expect(response.body.data.cardsByType[0].cardType).toBeDefined();
-      expect(response.body.data.cardsByType[0].createdAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].updatedAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].accountCard).toBeDefined();
-      expect(response.body.data.cardsByType[0].word).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.id).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.word).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.jlptLevel).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.furigana).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.reading).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.readingRomaji).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.createdAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.updatedAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.translation).toBeDefined();
     });
 
     it('Succesfully fetch all WORD cards when admin (read), language id not set, defaults to EN', async () => {
       const response = await sendRequest(testUrl, adminAuthReadToken, queries.cardsByType, { cardType: 'WORD' });
+      response.body.data.cardsByType.forEach(card => cardEvaluator(card, true, true, false));
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.cardsByType).toBeDefined();
-      expect(response.body.data.cardsByType[0].id).toBeDefined();
-      expect(response.body.data.cardsByType[0].cardType).toBeDefined();
-      expect(response.body.data.cardsByType[0].createdAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].updatedAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].accountCard).toBeDefined();
-      expect(response.body.data.cardsByType[0].word).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.id).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.word).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.jlptLevel).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.furigana).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.reading).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.readingRomaji).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.createdAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.updatedAt).toBeDefined();
-      expect(response.body.data.cardsByType[0].word.translation).toBeDefined();
     });
 
     it('Succesfully fetch when admin (write)', async () => {

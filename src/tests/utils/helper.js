@@ -2,7 +2,7 @@ const { expect } = require('@jest/globals');
 const request = require('supertest');
 const { sequelize } = require('../../database');
 const mutations = require('./mutations');
-const { account, accountUnconfirmedEmail, nonMemberAccount, adminReadRights, adminWriteRights } = require('./constants');
+const { account, accountUnconfirmedEmail, nonMemberAccount, adminReadRights, adminWriteRights, accountCard } = require('./constants');
 
 /**
  * Reset database for the next tests
@@ -84,6 +84,22 @@ const resetDatabaseEntries = async (testType) => {
   }
 };
 
+const addDueReviewsForThisDay = async (accountId, amount, cardStartId) => {
+  try {
+    const queryInterface = sequelize.getQueryInterface();
+    const date = new Date();
+    for (let i = cardStartId; i < amount + cardStartId; i++) {
+      let newDate = date.setDate(date.getDate());
+      newDate = new Date(newDate);
+      await queryInterface.sequelize.query(`INSERT INTO account_card (account_id, card_id, account_story, 
+      account_hint, review_count, easy_factor, mature, due_at, created_at, updated_at)
+      VALUES ('${accountId}', '${i}', '${accountCard.story}', '${accountCard.hint}', 0, 1.5, false, '${newDate.toISOString().split('T')[0]}', NOW(), NOW());`);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const addReviews = async (accountId, amount) => {
   try {
     const queryInterface = sequelize.getQueryInterface();
@@ -126,6 +142,7 @@ const getToken = async (testUrl, loginData) => {
 
 module.exports = {
   resetDatabaseEntries,
+  addDueReviewsForThisDay,
   addReviews,
   healthCheck,
   registerAccount,
