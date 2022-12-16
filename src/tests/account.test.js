@@ -2,7 +2,7 @@ const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
 const request = require('supertest');
 const { PORT } = require('../util/config');
 const { connectToDatabase } = require('../database');
-const { createAccount, passwordData, stringData } = require('./utils/constants'); 
+const { createAccount, passwordData, stringData, expiredToken } = require('./utils/constants'); 
 const mutations = require('./utils/mutations');
 const queries = require('./utils/queries');
 const errors = require('../util/errors/errors');
@@ -28,6 +28,12 @@ describe('accountintegration tests', () => {
 
   it('Server should respond 200 ok to health check', async () => {
     helpers.healthCheck(testUrl);
+  });
+
+  it('Expired JWT should return error', async () => {
+    const response = await sendRequest(testUrl, expiredToken, mutations.sendBugReportMutation, null);
+    expect(response.body.data).toBeUndefined();
+    expect(response.body.errors[0].extensions.code).toContain(errors.session.jwtExpiredError);
   });
 
   describe('Registering an account', () => {

@@ -146,8 +146,7 @@ const userAgents = [
   }
 ];
 
-const expiredToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwic2Vzc2lvbiI6MSwiaWF0IjoxNj
-cxMTY3Njk0LCJleHAiOjE2NzExNjc3MDR9.OUqeCUiZ4fMaku8ZY23HXeLqE6xVS0ntb4XjpqgWh-o`;
+const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwic2Vzc2lvbiI6MSwiaWF0IjoxNjcxMTY4MjY1LCJleHAiOjE2NzExNjgzNjV9.hjMvgdB5mGiF6ORu_L5Pp_rHB8GEx_w-8hX3cB5umac';
 
 module.exports = {
   createAccount,
