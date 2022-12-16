@@ -86,6 +86,7 @@ const errors = {
     sessionNotFoundError: 'sessionNotFoundError',
     sessionExpiredError: 'sessionExpiredError',
     notOwnerOfSessionError: 'notOwnerOfSessionError',
+    jwtExpiredError: 'jwtExpiredError'
   },
   login: {
     

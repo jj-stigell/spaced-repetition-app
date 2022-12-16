@@ -1,10 +1,11 @@
 const { ApolloServer } = require('apollo-server');
 const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
-const { internalServerError } = require('../util/errors/graphQlErrors');
+const { defaultError } = require('../util/errors/graphQlErrors');
 const { JWT_SECRET, NODE_ENV } = require('./config');
 const { validateSession } = require('./authorization');
 const schema = require('../schema');
 const jwt = require('jsonwebtoken');
+const errors = require('./errors/errors');
 
 const server = new ApolloServer({
   cache: new InMemoryLRUCache(),
@@ -19,7 +20,7 @@ const server = new ApolloServer({
           auth.substring(7), JWT_SECRET
         );
       } catch(error) {
-        return internalServerError(error);
+        return defaultError(errors.session.jwtExpiredError);
       }
       await validateSession(currentUser.session);
       const userAgent = req?.headers['user-agent'] ?? null;
