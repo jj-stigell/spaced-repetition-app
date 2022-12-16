@@ -178,6 +178,78 @@ const queries = {
       }
     }
   }`,
+  cardsFromDeck: `query CardsFromDeck($deckId: Int!, $languageId: Language!, $newCards: Boolean) {
+    cardsFromDeck(deckId: $deckId, languageId: $languageId, newCards: $newCards) {
+      id
+      cardType
+      reviewType
+      createdAt
+      updatedAt
+      accountCard {
+        id
+        reviewCount
+        easyFactor
+        accountStory
+        accountHint
+        dueAt
+        mature
+        createdAt
+        updatedAt
+      }
+      kanji {
+        id
+        kanji
+        jlptLevel
+        onyomi
+        onyomiRomaji
+        kunyomi
+        kunyomiRomaji
+        strokeCount
+        createdAt
+        updatedAt
+        translation {
+          keyword
+          story
+          hint
+          otherMeanings
+          description
+          createdAt
+          updatedAt
+        }
+        radicals {
+          radical
+          reading
+          readingRomaji
+          strokeCount
+          createdAt
+          updatedAt
+          translation {
+            translation
+            description
+            createdAt
+            updatedAt
+          }
+        }
+      }
+      word {
+        id
+        word
+        jlptLevel
+        furigana
+        reading
+        readingRomaji
+        createdAt
+        updatedAt
+        translation {
+          translation
+          hint
+          description
+          createdAt
+          updatedAt
+        }
+      }
+    }
+  }`
 };
 
 module.exports = queries;
