@@ -71,6 +71,19 @@ const cardEvaluator = (card, newCard, isMember, hasReviewType) => {
   }
 };
 
+const bugReportEvaluator = (bugReport) => {
+  expect(bugReport.id).toBeDefined();
+  expect(bugReport.accountId).toBeDefined();
+  expect(bugReport.cardId).toBeDefined();
+  expect(bugReport.type).toBeDefined();
+  expect(bugReport.bugMessage).toBeDefined();
+  expect(bugReport.solvedMessage).toBeDefined();
+  expect(bugReport.solved).toBeDefined();
+  expect(bugReport.createdAt).toBeDefined();
+  expect(bugReport.updatedAt).toBeDefined();
+};
+
 module.exports = {
-  cardEvaluator
+  cardEvaluator,
+  bugReportEvaluator
 };

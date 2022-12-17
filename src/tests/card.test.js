@@ -17,7 +17,7 @@ describe('Cardintegration tests', () => {
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
-    await helpers.resetDatabaseEntries('card');
+    await helpers.resetDatabaseEntries();
     const serverInfo = await server.listen({ port: PORT });
     testServer = serverInfo.server;
     testUrl = serverInfo.url;
@@ -229,7 +229,7 @@ describe('Cardintegration tests', () => {
   describe('Fetch all card due counts grouped by date', () => {
 
     it('Authentication error when not logged in', async () => {
-      const response = await sendRequest(testUrl, null, queries.dueCount, { limitReviews: 10 });
+      const response = await sendRequest(testUrl, null, queries.dueCount, { limitReviews: 10, date: new Date() });
       expect(response.body.data?.dueCount).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
@@ -241,25 +241,25 @@ describe('Cardintegration tests', () => {
     });
 
     it('Error when limit reviews wrong type (string)', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: '10' });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: '10', date: new Date() });
       expect(response.body.data?.dueCount).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when limit reviews negative integer', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: -1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: -1, date: new Date() });
       expect(response.body.data?.dueCount).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when limit reviews zero integer', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 0 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 0, date: new Date() });
       expect(response.body.data?.dueCount).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Should return empty array (length 0) if no cards due', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 10 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 10, date: new Date() });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.dueCount).toBeDefined();
       expect(response.body.data.dueCount.length).toBe(0);
@@ -272,7 +272,7 @@ describe('Cardintegration tests', () => {
       for (let i = 10; i < 30; i++) {
         await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, { ...accountReview, cardId: i, newInterval: i });
       }
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 10 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 10, date: new Date() });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.dueCount).toBeDefined();
       expect(response.body.data.dueCount[0].date).toBe(anotherDate.toISOString().split('T')[0]);
@@ -281,7 +281,7 @@ describe('Cardintegration tests', () => {
     });
 
     it('Succesfully fetch all by setting limitReviews high', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 9999 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 9999, date: new Date() });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.dueCount).toBeDefined();
       expect(response.body.data.dueCount[0].date).toBeDefined();
@@ -534,6 +534,134 @@ describe('Cardintegration tests', () => {
       expect(response.body.data.learningStatistics.new).toBe(newCount - 1);
     });
   });
+
+
+
+
+
+
+
+
+
+
+
+  /*
+
+    pushCards: async (_, { deckId, days }, { currentUser }) => {
+      if (!currentUser) notAuthError();
+      await validateMember(currentUser.id);
+      await validator.validatePushCards(deckId, days);
+      if (deckId) {
+        await cardService.pushCardsInDeck(deckId, days, currentUser.id);
+      } else {
+        await cardService.pushAllCards(days, currentUser.id);
+      }
+      
+      return { status: true };
+    },
+
+
+    const days = yup
+  .number(errors.inputValueTypeError)
+  .required(errors.inputValueMissingError)
+  .min(1, errors.negativeNumberTypeError)
+  .max(constants.maxPushReviewsDays, errors.pushReviewsLimitError)
+  .integer(errors.inputValueTypeError);
+
+
+
+  const deckId = yup
+  .number(errors.inputValueTypeError)
+  .min(1, errors.negativeNumberTypeError)
+  .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
+  .integer(errors.inputValueTypeError);
+
+*/
+
+
+  describe('Push cards to future', () => {
+
+
+
+
+
+
+    
+    /*
+
+    it('Authentication error when not logged in', async () => {
+      const response = await sendRequest(testUrl, null, queries.learningStatistics, { cardType: 'KANJI' });
+      expect(response.body.data?.learningStatistics).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
+    });
+
+    it('Error when card type not send', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.learningStatistics, null);
+      expect(response.body.data?.learningStatistics).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when card type non existing ENUM', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.learningStatistics,  { cardType: 'NONEXISTING' });
+      expect(response.body.data?.learningStatistics).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Error when card type wrong type (integer)', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.learningStatistics,  { cardType: 1 });
+      expect(response.body.data?.learningStatistics).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
+    });
+
+    it('Succesfully fetch KANJI type statistics', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.learningStatistics,  { cardType: 'KANJI' });
+      matureCount = response.body.data.learningStatistics.matured;
+      newCount = response.body.data.learningStatistics.new;
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.learningStatistics).toBeDefined();
+      expect(response.body.data.learningStatistics.matured).toBeDefined();
+      expect(response.body.data.learningStatistics.learning).toBeDefined();
+      expect(response.body.data.learningStatistics.new).toBeDefined();
+    });
+
+    it('Succesfully fetch WORD type statistics', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.learningStatistics,  { cardType: 'WORD' });
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.learningStatistics).toBeDefined();
+      expect(response.body.data.learningStatistics.matured).toBeDefined();
+      expect(response.body.data.learningStatistics.learning).toBeDefined();
+      expect(response.body.data.learningStatistics.new).toBeDefined();
+    });
+
+    it('Rescheduling one card as mature should increase KANJI type statistics mature field by one', async () => {
+      await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, { ...accountReview, cardId: 78, newInterval: constants.matureInterval + 1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.learningStatistics,  { cardType: 'KANJI' });
+      expect(response.body.errors).toBeUndefined();
+      expect(response.body.data.learningStatistics).toBeDefined();
+      expect(response.body.data.learningStatistics.matured).toBe(matureCount + 1);
+      expect(response.body.data.learningStatistics.learning).toBeDefined();
+      expect(response.body.data.learningStatistics.new).toBe(newCount - 1);
+    });
+    */
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   describe('Edit account card', () => {
 

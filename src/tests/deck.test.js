@@ -1,5 +1,4 @@
 const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
-const request = require('supertest');
 const { PORT } = require('../util/config');
 const { connectToDatabase } = require('../database');
 const { account, nonMemberAccount, adminReadRights, adminWriteRights, deckSettings } = require('./utils/constants'); 
@@ -17,7 +16,7 @@ describe('Deckintegration tests', () => {
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
-    await helpers.resetDatabaseEntries('deck');
+    await helpers.resetDatabaseEntries();
     const serverInfo = await server.listen({ port: PORT });
     testServer = serverInfo.server;
     testUrl = serverInfo.url;
@@ -208,66 +207,37 @@ describe('Deckintegration tests', () => {
     });
 
     it('Error when authenticated but reviewsPerDay too high', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, reviewsPerDay: constants.maxLimitReviews + 1 };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, reviewsPerDay: constants.maxLimitReviews + 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.maxLimitReviewsError);
     });
 
     it('Error when authenticated but reviewsPerDay too low', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, reviewsPerDay: constants.minLimitReviews - 1 };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, reviewsPerDay: constants.minLimitReviews - 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.minLimitReviewsError);
     });
 
     it('Error when authenticated but newCardsPerDay wrong type (string)', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, newCardsPerDay: '1' };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, newCardsPerDay: '1' });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when authenticated but newCardsPerDay too high', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, newCardsPerDay: constants.maxNewReviews + 1 };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, newCardsPerDay: constants.maxNewReviews + 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.maxNewReviewsError);
     });
 
     it('Error when authenticated but newCardsPerDay too low', async () => {
-      const invalidDeckSettings = { ...newDeckSettings, newCardsPerDay: constants.minNewReviews - 1 };
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: invalidDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...newDeckSettings, newCardsPerDay: constants.minNewReviews - 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.minNewReviewsError);
     });
 
     it('Succesfully change settings after authentication', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: newDeckSettings });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, newDeckSettings);
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.changeDeckSettings).toBeDefined();
       expect(response.body.data.changeDeckSettings.accountId).toBe(originalDeckSettings.accountId);
@@ -282,18 +252,11 @@ describe('Deckintegration tests', () => {
 
     it('Toggling only favorite boolean should not change other values', async () => {
       // fetch current settings for deck id 1
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: queries.deckSettings, variables: { deckId: 1 } });
-
+      let response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: 1 });
       let currentSettings = response.body.data.deckSettings;
-      // send all current settings, but set favorite = !favorite
-      response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, favorite: !currentSettings.favorite } });
 
+      // send all current settings, but set favorite = !favorite
+      response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...currentSettings, favorite: !currentSettings.favorite });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.changeDeckSettings).toBeDefined();
       expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
@@ -307,11 +270,7 @@ describe('Deckintegration tests', () => {
       currentSettings = response.body.data.changeDeckSettings;
 
       // send just deckId and new value for favorite
-      response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, favorite: !currentSettings.favorite } });
-
+      response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { deckId: currentSettings.deckId, favorite: !currentSettings.favorite });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.changeDeckSettings).toBeDefined();
       expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
@@ -326,18 +285,11 @@ describe('Deckintegration tests', () => {
 
     it('Toggling only review interval should not change other values', async () => {
       // fetch current settings for deck id 1
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: queries.deckSettings, variables: { deckId: 1 } });
-
+      let response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: 1 });
       let currentSettings = response.body.data.deckSettings;
-      // send all current settings, but set review interval += 5
-      response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, reviewInterval: currentSettings.reviewInterval + 5 } });
 
+      // send all current settings, but set review interval += 5
+      response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...currentSettings, reviewInterval: currentSettings.reviewInterval + 5 });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.changeDeckSettings).toBeDefined();
       expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
@@ -351,11 +303,7 @@ describe('Deckintegration tests', () => {
       currentSettings = response.body.data.changeDeckSettings;
 
       // send just deckId and new value for review interval
-      response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, reviewInterval: currentSettings.reviewInterval + 2 } });
-
+      response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { deckId: currentSettings.deckId, reviewInterval: currentSettings.reviewInterval + 2 });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.changeDeckSettings).toBeDefined();
       expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
@@ -370,18 +318,11 @@ describe('Deckintegration tests', () => {
 
     it('Toggling only reviews per day should not change other values', async () => {
       // fetch current settings for deck id 1
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: queries.deckSettings, variables: { deckId: 1 } });
-
+      let response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: 1 });
       let currentSettings = response.body.data.deckSettings;
-      // send all current settings, but set revies per day += 5
-      response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, reviewsPerDay: currentSettings.reviewsPerDay + 5 } });
 
+      // send all current settings, but set revies per day += 5
+      response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...currentSettings, reviewsPerDay: currentSettings.reviewsPerDay + 5 });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.changeDeckSettings).toBeDefined();
       expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
@@ -395,11 +336,7 @@ describe('Deckintegration tests', () => {
       currentSettings = response.body.data.changeDeckSettings;
 
       // send just deckId and new value for reviews per day
-      response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, reviewsPerDay: currentSettings.reviewsPerDay + 2 } });
-
+      response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { deckId: currentSettings.deckId, reviewsPerDay: currentSettings.reviewsPerDay + 2 });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.changeDeckSettings).toBeDefined();
       expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
@@ -414,18 +351,11 @@ describe('Deckintegration tests', () => {
 
     it('Toggling only new cards per day should not change other values', async () => {
       // fetch current settings for deck id 1
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: queries.deckSettings, variables: { deckId: 1 } });
-
+      let response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: 1 });
       let currentSettings = response.body.data.deckSettings;
-      // send all current settings, but set new cards per day += 5
-      response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: { ...currentSettings, newCardsPerDay: currentSettings.newCardsPerDay + 5 } });
 
+      // send all current settings, but set new cards per day += 5
+      response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...currentSettings, newCardsPerDay: currentSettings.newCardsPerDay + 5 });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.changeDeckSettings).toBeDefined();
       expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);
@@ -439,11 +369,7 @@ describe('Deckintegration tests', () => {
       currentSettings = response.body.data.changeDeckSettings;
 
       // send just deckId and new value for new cards per day
-      response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.changeDeckSettings, variables: { deckId: currentSettings.deckId, newCardsPerDay: currentSettings.newCardsPerDay + 2 } });
-
+      response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { deckId: currentSettings.deckId, newCardsPerDay: currentSettings.newCardsPerDay + 2 });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.changeDeckSettings).toBeDefined();
       expect(response.body.data.changeDeckSettings.accountId).toBe(currentSettings.accountId);

@@ -88,8 +88,8 @@ const queries = {
       updatedAt
     }
   }`,
-  dueCount: `query DueCount($limitReviews: Int!) {
-    dueCount(limitReviews: $limitReviews) {
+  dueCount: `query DueCount($limitReviews: Int!, $date: Date!) {
+    dueCount(limitReviews: $limitReviews, date: $date) {
       date
       reviews
     }
@@ -178,8 +178,8 @@ const queries = {
       }
     }
   }`,
-  cardsFromDeck: `query CardsFromDeck($deckId: Int!, $languageId: Language!, $newCards: Boolean) {
-    cardsFromDeck(deckId: $deckId, languageId: $languageId, newCards: $newCards) {
+  cardsFromDeck: `query CardsFromDeck($deckId: Int!, $date: Date, $languageId: Language!, $newCards: Boolean) {
+    cardsFromDeck(deckId: $deckId, date: $date, languageId: $languageId, newCards: $newCards) {
       id
       cardType
       reviewType

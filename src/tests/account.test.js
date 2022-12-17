@@ -15,7 +15,7 @@ describe('accountintegration tests', () => {
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
-    await helpers.resetDatabaseEntries('account');
+    await helpers.resetDatabaseEntries();
     const serverInfo = await server.listen({ port: PORT });
     testServer = serverInfo.server;
     testUrl = serverInfo.url;
@@ -337,10 +337,7 @@ describe('accountintegration tests', () => {
   describe('Login to an account', () => {
 
     it('Login succesfully to an existing account', async () => {
-      const response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.login, variables: createAccount });
-
+      const response = await sendRequest(testUrl, null, mutations.login, createAccount);
       firstToken = response.body.data.login.token;
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.login.token).toBeDefined();
@@ -355,71 +352,43 @@ describe('accountintegration tests', () => {
     });
 
     it('Error when empty value, email', async () => {
-      const newAccount = { ...createAccount, email: '' };
-      const response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.login, variables: newAccount });
-
+      const response = await sendRequest(testUrl, null, mutations.login, { ...createAccount, email: '' });
       expect(response.body.data?.login).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredEmailError);
     });
 
     it('Error when empty value, password', async () => {
-      const newAccount = { ...createAccount, password: '' };
-      const response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.login, variables: newAccount });
-
+      const response = await sendRequest(testUrl, null, mutations.login, { ...createAccount, password: '' });
       expect(response.body.data?.login).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredPasswordError);
     });
 
     it('Error when value with wrong type, email', async () => {
-      const newAccount = { ...createAccount, email: 1 };
-      const response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.login, variables: newAccount });
-
+      const response = await sendRequest(testUrl, null, mutations.login, { ...createAccount, email: 1 });
       expect(response.body.data?.login).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when value with wrong type, password', async () => {
-      const newAccount = { ...createAccount, password: 1 };
-      const response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.login, variables: newAccount });
-
+      const response = await sendRequest(testUrl, null, mutations.login, { ...createAccount, password: 1 });
       expect(response.body.data?.login).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when email not valid', async () => {
-      const newAccount = { ...createAccount, email: stringData.nonValidEmail };
-      const response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.login, variables: newAccount });
-
+      const response = await sendRequest(testUrl, null, mutations.login, { ...createAccount, email: stringData.nonValidEmail });
       expect(response.body.data?.login).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.notEmailError);
     });
 
     it('Error when account not found', async () => {
-      const newAccount = { ...createAccount, email: stringData.nonExistingEmail };
-      const response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.login, variables: newAccount });
-
+      const response = await sendRequest(testUrl, null, mutations.login, { ...createAccount, email: stringData.nonExistingEmail });
       expect(response.body.data?.login).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.userOrPassIncorrectError);
     });
 
     it('Error when password incorrect', async () => {
-      const newAccount = { ...createAccount, password: stringData.incorrectPassword };
-      const response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.login, variables: newAccount });
-
+      const response = await sendRequest(testUrl, null, mutations.login, { ...createAccount, password: stringData.incorrectPassword });
       expect(response.body.data?.login).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.userOrPassIncorrectError);
     });
@@ -429,10 +398,7 @@ describe('accountintegration tests', () => {
 
     it('Change password and login with new password succesfully', async () => {
       //login and receive token
-      let response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.login, variables: createAccount });
-      
+      let response = await sendRequest(testUrl, null, mutations.login, createAccount);
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.login.token).toBeDefined();
       expect(response.body.data.login.session).toBeDefined();
@@ -446,11 +412,7 @@ describe('accountintegration tests', () => {
 
       secondToken = response.body.data.login.token;
       //set token as auth header and change password
-      response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${secondToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: passwordData });
-
+      response = await sendRequest(testUrl, secondToken, mutations.changePasswordMutation, passwordData);
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.changePassword.email).toBe(createAccount.email);
       expect(response.body.data.changePassword.username).toBe(createAccount.username);
@@ -461,10 +423,7 @@ describe('accountintegration tests', () => {
       expect(response.body.data.changePassword.updatedAt).toBeDefined();
 
       //login with new password
-      response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.login, variables: {...createAccount, password: passwordData.newPassword} });
-
+      response = await sendRequest(testUrl, null, mutations.login, {...createAccount, password: passwordData.newPassword});
       thirdToken = response.body.data.login.token;
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.login.token).toBeDefined();
@@ -479,142 +438,85 @@ describe('accountintegration tests', () => {
     });
 
     it('Error when no token, not authenticated', async () => {
-      const response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.changePasswordMutation, variables: passwordData });
-
+      const response = await sendRequest(testUrl, null, mutations.changePasswordMutation, passwordData);
       expect(response.body.data?.changePassword).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
     
     it('Error when empty value, current password', async () => {
-      const data = { ...passwordData, currentPassword: '' };
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: data });
-
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, { ...passwordData, currentPassword: '' });
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredPasswordError);
     });
 
     it('Error when empty value, new password', async () => {
-      const data = { ...passwordData, newPassword: '' };
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: data });
-      
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, { ...passwordData, newPassword: '' });   
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredPasswordError);
     });
 
     it('Error when empty value, new password confirmation', async () => {
-      const data = { ...passwordData, newPasswordConfirmation: '' };
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: data });
-
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, { ...passwordData, newPasswordConfirmation: '' });
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.requiredPasswordConfirmError);
     });
 
-    it('Error when value with wrong type, current password', async () => {
-      const data = { ...passwordData, currentPassword: 1 };
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: data });
-
+    it('Error when value with wrong type, current password (integer)', async () => {
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, { ...passwordData, currentPassword: 1 });
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
-    it('Error when value with wrong type, new password', async () => {
-      const data = { ...passwordData, newPassword: 1 };
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: data });
-      
+    it('Error when value with wrong type, new password (integer)', async () => {
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, { ...passwordData, newPassword: 1 });
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
-    it('Error when value with wrong type, new password confirmation', async () => {
-      const data = { ...passwordData, newPasswordConfirmation: 1 };
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: data });
-
+    it('Error when value with wrong type, new password confirmation (integer)', async () => {
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, { ...passwordData, newPasswordConfirmation: 1 });
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when password and password confirmation do not match', async () => {
-      const data = { ...passwordData, newPassword: stringData.incorrectPassword };
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: data });
-
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, { ...passwordData, newPassword: stringData.incorrectPassword });
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.passwordMismatchError);
     });
 
     it('Error when new password is same as the old one', async () => {
-      const data = {
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, {
         ...passwordData,
         newPassword: passwordData.currentPassword,
         newPasswordConfirmation: passwordData.currentPassword
-      };
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: data });
-
+      });
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.currAndNewPassEqualError);
     });
 
     it('Error when authorized but current password does not match with DB hash', async () => {
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: passwordData });
-
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, passwordData);
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.currentPasswordIncorrect);
     });
 
     it('Error when new password not long enough', async () => {
-      const data = {
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, {
         ...passwordData,
         newPassword: stringData.notLongEnoughPass,
         newPasswordConfirmation: stringData.notLongEnoughPass
-      };
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: data });
-
+      });
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.passwordMinLengthError);
     });
 
     it('Error when new password is too long', async () => {
-      const data = {
+      const response = await sendRequest(testUrl, thirdToken, mutations.changePasswordMutation, {
         ...passwordData,
         newPassword: stringData.tooLongPassword,
         newPasswordConfirmation: stringData.tooLongPassword
-      };
-      const response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${thirdToken}`)
-        .send({ query: mutations.changePasswordMutation, variables: data });
-
+      });
       expect(response.body.data?.changePassword.status).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.passwordMaxLengthError);
     });

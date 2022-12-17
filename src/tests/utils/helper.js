@@ -8,12 +8,10 @@ const { account, accountUnconfirmedEmail, nonMemberAccount, adminReadRights, adm
  * Reset database for the next tests
  * Removes all existing user related input from database
  * Adds new accounts (2 regular with confirmed and unconfirmed emails, 2 admin account with read and write rights)
- * @param {string} testType - string describing with kind of test is ran.
  */
-const resetDatabaseEntries = async (testType) => {
+const resetDatabaseEntries = async () => {
   try {
     const queryInterface = sequelize.getQueryInterface();
-    console.log(`resetting db entries for ${testType} testing`);
 
     // Truncate all data that might have been affected by the tests
     await queryInterface.sequelize.query('TRUNCATE account, admin, account_deck_settings, account_review, account_card, bug_report, session;');
@@ -93,7 +91,7 @@ const addDueReviewsForThisDay = async (accountId, amount, cardStartId) => {
       newDate = new Date(newDate);
       await queryInterface.sequelize.query(`INSERT INTO account_card (account_id, card_id, account_story, 
       account_hint, review_count, easy_factor, mature, due_at, created_at, updated_at)
-      VALUES ('${accountId}', '${i}', '${accountCard.story}', '${accountCard.hint}', 0, 1.5, false, '${newDate.toISOString().split('T')[0]}', NOW(), NOW());`);
+      VALUES ('${accountId}', '${i}', '${accountCard.story}', '${accountCard.hint}', 0, 2.5, false, '${newDate.toISOString().split('T')[0]}', NOW(), NOW());`);
     }
   } catch (error) {
     console.log(error);

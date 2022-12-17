@@ -110,7 +110,8 @@ const accountReview = {
   newInterval: 1,
   newEasyFactor: 1.0,
   timing: 5,
-  extraReview: false
+  extraReview: false,
+  newDueDate: new Date()
 };
 
 const cardsFromDeck = {
