@@ -387,50 +387,31 @@ describe('Bugintegration tests', () => {
     beforeAll(async () => { await setUpEnvironment(); });
 
     it('Authentication error when trying to fetch bug report by id but not not logged in', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .send({ query: queries.fetchBugReportsByType, variables: { type: findTypeFirst } });
-
+      const response = await sendRequest(testUrl, null, queries.fetchBugReportsByType, { type: findTypeFirst });
       expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
     it('Unauthorized error when logged in but not admin', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: queries.fetchBugReportsByType, variables: { type: findTypeFirst } });
-
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.fetchBugReportsByType, { type: findTypeFirst });
       expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
     });
 
     it('Error when read permission but bug type enum invalid', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthReadToken}`)
-        .send({ query: queries.fetchBugReportsByType, variables: { type: stringData.notValidEnum } });
-
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportsByType, { type: stringData.notValidEnum });
       expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when read permission but bug type wrong type', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthReadToken}`)
-        .send({ query: queries.fetchBugReportsByType, variables: { type: 1 } });
-
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportsByType, { type: 1 });
       expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when read permission but bug type not send', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthReadToken}`)
-        .send({ query: queries.fetchBugReportsByType });
-
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportsByType, null);
       expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
