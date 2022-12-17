@@ -83,7 +83,20 @@ const bugReportEvaluator = (bugReport) => {
   expect(bugReport.updatedAt).toBeDefined();
 };
 
+const accountCardEvaluator = (accountCard, reviewCount = null, easyFactor = null, story = null, hint = null, mature = null) => {
+  expect(accountCard.id).toBeDefined();
+  reviewCount ? expect(accountCard.reviewCount).toBe(reviewCount) : expect(accountCard.reviewCount).toBeDefined();
+  easyFactor ? expect(accountCard.easyFactor).toBe(easyFactor) : expect(accountCard.easyFactor).toBeDefined();
+  story ? expect(accountCard.accountStory).toBe(story) : expect(accountCard.accountStory).toBeDefined();
+  hint ? expect(accountCard.accountHint).toBe(hint) : expect(accountCard.accountHint).toBeDefined();
+  expect(accountCard.dueAt).toBeDefined();
+  mature ? expect(accountCard.mature).toBe(mature) : expect(accountCard.mature).toBeDefined();
+  expect(accountCard.createdAt).toBeDefined();
+  expect(accountCard.updatedAt).toBeDefined();
+};
+
 module.exports = {
   cardEvaluator,
-  bugReportEvaluator
+  bugReportEvaluator,
+  accountCardEvaluator
 };

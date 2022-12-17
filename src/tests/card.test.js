@@ -1,9 +1,10 @@
-const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
+/* eslint-disable no-unused-vars */
+const { expect, describe, beforeAll, afterAll, beforeEach, it } = require('@jest/globals');
 const { PORT } = require('../util/config');
 const { connectToDatabase } = require('../database');
 const { account, adminReadRights, adminWriteRights, nonMemberAccount, accountCard, accountReview, cardsFromDeck } = require('./utils/constants'); 
 const mutations = require('./utils/mutations');
-const { cardEvaluator } = require('./utils/expectHelper');
+const { cardEvaluator, accountCardEvaluator } = require('./utils/expectHelper');
 const errors = require('../util/errors/errors');
 const server = require('../util/server');
 const helpers = require('./utils/helper');
@@ -12,12 +13,13 @@ const constants = require('../util/constants');
 const queries = require('./utils/queries');
 
 describe('Cardintegration tests', () => {
-  // eslint-disable-next-line no-unused-vars
-  let testServer, testUrl, memberAuthToken, adminAuthReadToken, adminAuthWriteToken, nonMemberAuthToken, memberAcc, nonMemberAcc, adminReadAcc, adminWriteAcc, matureCount, newCount;
+  let testServer, testUrl, memberAuthToken, adminAuthReadToken,
+    adminAuthWriteToken, nonMemberAuthToken, memberAcc, nonMemberAcc,
+    adminReadAcc, adminWriteAcc, matureCount, newCount, dateToday;
+  
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
-    await helpers.resetDatabaseEntries();
     const serverInfo = await server.listen({ port: PORT });
     testServer = serverInfo.server;
     testUrl = serverInfo.url;
@@ -28,19 +30,33 @@ describe('Cardintegration tests', () => {
     await testServer?.close();
   });
 
-  describe('Setup test environment', () => {
-
-    it('Server should respond 200 ok to health check', async () => {
-      helpers.healthCheck(testUrl);
-    });
-
-    it('Fetch tokens for accounts and admins', async () => {
-      [ memberAuthToken, memberAcc ] = await helpers.getToken(testUrl, account);
-      [ nonMemberAuthToken, nonMemberAcc ] = await helpers.getToken(testUrl, nonMemberAccount);
-      [ adminAuthReadToken, adminReadAcc ] = await helpers.getToken(testUrl, adminReadRights);
-      [ adminAuthWriteToken, adminWriteAcc ] = await helpers.getToken(testUrl, adminWriteRights);
-    });
+  beforeEach(async () => {
+    await helpers.resetDatabaseEntries();
+    [ memberAuthToken, memberAcc ] = await helpers.getToken(testUrl, account);
+    [ nonMemberAuthToken, nonMemberAcc ] = await helpers.getToken(testUrl, nonMemberAccount);
+    [ adminAuthReadToken, adminReadAcc ] = await helpers.getToken(testUrl, adminReadRights);
+    [ adminAuthWriteToken, adminWriteAcc ] = await helpers.getToken(testUrl, adminWriteRights);
+    dateToday = new Date();
   });
+
+  const addReviews = async () => {
+    //Add reviews to the deck 1 for both non-member and member
+    await helpers.addDueReviews(nonMemberAcc.id, 20, 1, new Date());
+    await helpers.addDueReviews(memberAcc.id, 20, 1, new Date());
+    //Add reviews to the deck 2 for both non-member and member
+    await helpers.addDueReviews(nonMemberAcc.id, 20, 200, new Date());
+    await helpers.addDueReviews(memberAcc.id, 20, 200, new Date());
+
+    /*
+    for (let i = 50; i < 70; i++) {
+      let newDate = new Date();
+      newDate = newDate.setDate(newDate.getDate() - i);
+      newDate = new Date(newDate);
+      await helpers.addDueReviews(nonMemberAcc.id, 1, i, newDate);
+      //await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, { ...accountReview, cardId: i, newInterval: i });
+    }
+    */
+  };
 
   describe('Fetch new cards', () => {
 
@@ -181,13 +197,8 @@ describe('Cardintegration tests', () => {
 
     describe('Fetch due cards from kanji deck (id = 1)', () => {
 
-      it('Add reviews to the deck', async () => {
-        await helpers.addDueReviewsForThisDay(nonMemberAcc.id, 20, 1);
-        await helpers.addDueReviewsForThisDay(memberAcc.id, 20, 1);
-        expect(1).toBe(1);
-      });
-
       it('Succesfully fetch new cards as non-member account', async () => {
+        await addReviews();
         const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false });
         response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, false, false, true));
         expect(response.body.data.cardsFromDeck.length).toBe(20);
@@ -195,6 +206,7 @@ describe('Cardintegration tests', () => {
       });
 
       it('Succesfully fetch new cards as member account', async () => {
+        await addReviews();
         const response = await sendRequest(testUrl, memberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false });
         response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, false, true, true));
         expect(response.body.data.cardsFromDeck.length).toBe(20);
@@ -204,13 +216,8 @@ describe('Cardintegration tests', () => {
 
     describe('Fetch due cards from word deck (id = 2)', () => {
 
-      it('Add reviews to the deck', async () => {
-        await helpers.addDueReviewsForThisDay(nonMemberAcc.id, 20, 200);
-        await helpers.addDueReviewsForThisDay(memberAcc.id, 20, 200);
-        expect(1).toBe(1);
-      });
-
       it('Succesfully fetch new cards as non-member account', async () => {
+        await addReviews();
         const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, deckId: 2, newCards: false });
         response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, false, false, true));
         expect(response.body.data.cardsFromDeck.length).toBe(20);
@@ -218,6 +225,7 @@ describe('Cardintegration tests', () => {
       });
 
       it('Succesfully fetch new cards as member account', async () => {
+        await addReviews();
         const response = await sendRequest(testUrl, memberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, deckId: 2, newCards: false });
         response.body.data.cardsFromDeck.forEach(card => cardEvaluator(card, false, true, true));
         expect(response.body.data.cardsFromDeck.length).toBe(20);
@@ -229,7 +237,7 @@ describe('Cardintegration tests', () => {
   describe('Fetch all card due counts grouped by date', () => {
 
     it('Authentication error when not logged in', async () => {
-      const response = await sendRequest(testUrl, null, queries.dueCount, { limitReviews: 10, date: new Date() });
+      const response = await sendRequest(testUrl, null, queries.dueCount, { limitReviews: 10, date: dateToday });
       expect(response.body.data?.dueCount).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
@@ -241,51 +249,65 @@ describe('Cardintegration tests', () => {
     });
 
     it('Error when limit reviews wrong type (string)', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: '10', date: new Date() });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: '10', date: dateToday });
       expect(response.body.data?.dueCount).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when limit reviews negative integer', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: -1, date: new Date() });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: -1, date: dateToday });
       expect(response.body.data?.dueCount).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when limit reviews zero integer', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 0, date: new Date() });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 0, date: dateToday });
       expect(response.body.data?.dueCount).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Should return empty array (length 0) if no cards due', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 10, date: new Date() });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 10, date: dateToday });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.dueCount).toBeDefined();
       expect(response.body.data.dueCount.length).toBe(0);
     });
 
-    it('Succesfully fetch next 10 days reviews after inserting reviews', async () => {
-      const newDate = new Date();
-      const fixedDate = newDate.setDate(newDate.getDate() + 10);
-      const anotherDate = new Date(fixedDate);
-      for (let i = 10; i < 30; i++) {
-        await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, { ...accountReview, cardId: i, newInterval: i });
-      }
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 10, date: new Date() });
+    it('Succesfully fetch next 10 days due review count grouped by date', async () => {
+
+
+
+      await addReviews();
+
+
+
+
+
+
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 10, date: dateToday });
+
+
+
+      console.log(response.body.data.dueCount);
+
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.dueCount).toBeDefined();
-      expect(response.body.data.dueCount[0].date).toBe(anotherDate.toISOString().split('T')[0]);
-      expect(response.body.data.dueCount[0].reviews).toBe(1);
-      expect(response.body.data.dueCount.length).toBe(10);
+      expect(response.body.data.dueCount[0].date).toBe(dateToday.toISOString().split('T')[0]);
+      expect(response.body.data.dueCount[0].reviews).toBe(40);
+      expect(response.body.data.dueCount.length).toBe(1);
     });
 
     it('Succesfully fetch all by setting limitReviews high', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 9999, date: new Date() });
+      await addReviews();
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 9999, date: dateToday });
+
+
+      console.log(response.body.data.dueCount);
+
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.dueCount).toBeDefined();
-      expect(response.body.data.dueCount[0].date).toBeDefined();
-      expect(response.body.data.dueCount[0].reviews).toBeDefined();
+      expect(response.body.data.dueCount[0].date).toBe(dateToday.toISOString().split('T')[0]);
+      expect(response.body.data.dueCount[0].reviews).toBe(40);
       expect(response.body.data.dueCount.length).toBe(20);
     });
   });
@@ -584,8 +606,6 @@ describe('Cardintegration tests', () => {
 
 
 
-
-
     
     /*
 
@@ -733,44 +753,20 @@ describe('Cardintegration tests', () => {
 
     it('Succesfully set story and hint after logged in and active member', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.editAccountCard, accountCard);
+      accountCardEvaluator(response.body.data.editAccountCard, 0, constants.card.defaultEasyFactor, accountCard.story, accountCard.hint, false);
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.editAccountCard.id).toBeDefined();
-      expect(response.body.data.editAccountCard.reviewCount).toBe(0);
-      expect(response.body.data.editAccountCard.easyFactor).toBe(constants.card.defaultEasyFactor);
-      expect(response.body.data.editAccountCard.accountStory).toBe(accountCard.story);
-      expect(response.body.data.editAccountCard.accountHint).toBe(accountCard.hint);
-      expect(response.body.data.editAccountCard.dueAt).toBeDefined();
-      expect(response.body.data.editAccountCard.mature).toBe(false);
-      expect(response.body.data.editAccountCard.createdAt).toBeDefined();
-      expect(response.body.data.editAccountCard.updatedAt).toBeDefined();
     });
 
     it('Succesfully set only story, hint stays the same', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.editAccountCard, { cardId: accountCard.cardId, story: accountCard.hint });
+      accountCardEvaluator(response.body.data.editAccountCard, 0, constants.card.defaultEasyFactor, accountCard.hint, accountCard.hint, false);
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.editAccountCard.id).toBeDefined();
-      expect(response.body.data.editAccountCard.reviewCount).toBe(0);
-      expect(response.body.data.editAccountCard.easyFactor).toBe(constants.card.defaultEasyFactor);
-      expect(response.body.data.editAccountCard.accountStory).toBe(accountCard.hint);
-      expect(response.body.data.editAccountCard.accountHint).toBe(accountCard.hint);
-      expect(response.body.data.editAccountCard.dueAt).toBeDefined();
-      expect(response.body.data.editAccountCard.mature).toBe(false);
-      expect(response.body.data.editAccountCard.createdAt).toBeDefined();
-      expect(response.body.data.editAccountCard.updatedAt).toBeDefined();
     });
 
     it('Succesfully set only hint, story stays the same', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.editAccountCard, { cardId: accountCard.cardId, hint: accountCard.story });
+      accountCardEvaluator(response.body.data.editAccountCard, 0, constants.card.defaultEasyFactor, accountCard.hint, accountCard.story, false);
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.editAccountCard.id).toBeDefined();
-      expect(response.body.data.editAccountCard.reviewCount).toBe(0);
-      expect(response.body.data.editAccountCard.easyFactor).toBe(constants.card.defaultEasyFactor);
-      expect(response.body.data.editAccountCard.accountStory).toBe(accountCard.hint);
-      expect(response.body.data.editAccountCard.accountHint).toBe(accountCard.story);
-      expect(response.body.data.editAccountCard.dueAt).toBeDefined();
-      expect(response.body.data.editAccountCard.mature).toBe(false);
-      expect(response.body.data.editAccountCard.createdAt).toBeDefined();
-      expect(response.body.data.editAccountCard.updatedAt).toBeDefined();
     });
   });
 
@@ -866,44 +862,20 @@ describe('Cardintegration tests', () => {
 
     it('Succesfull when all validations pass and logged in (non-member)', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, accountReview);
+      accountCardEvaluator(response.body.data.rescheduleCard, 1, accountReview.newEasyFactor);
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.rescheduleCard.id).toBeDefined();
-      expect(response.body.data.rescheduleCard.reviewCount).toBe(1);
-      expect(response.body.data.rescheduleCard.easyFactor).toBe(accountReview.newEasyFactor);
-      expect(response.body.data.rescheduleCard.accountStory).toBeDefined();
-      expect(response.body.data.rescheduleCard.accountHint).toBeDefined();
-      expect(response.body.data.rescheduleCard.dueAt).toBeDefined();
-      expect(response.body.data.rescheduleCard.mature).toBeDefined();
-      expect(response.body.data.rescheduleCard.createdAt).toBeDefined();
-      expect(response.body.data.rescheduleCard.updatedAt).toBeDefined();
     });
 
     it('Succesfull when all validations pass and logged in (member)', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.rescheduleCard, accountReview);
+      accountCardEvaluator(response.body.data.rescheduleCard, 1, accountReview.newEasyFactor);
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.rescheduleCard.id).toBeDefined();
-      expect(response.body.data.rescheduleCard.reviewCount).toBe(1);
-      expect(response.body.data.rescheduleCard.easyFactor).toBe(accountReview.newEasyFactor);
-      expect(response.body.data.rescheduleCard.accountStory).toBeDefined();
-      expect(response.body.data.rescheduleCard.accountHint).toBeDefined();
-      expect(response.body.data.rescheduleCard.dueAt).toBeDefined();
-      expect(response.body.data.rescheduleCard.mature).toBeDefined();
-      expect(response.body.data.rescheduleCard.createdAt).toBeDefined();
-      expect(response.body.data.rescheduleCard.updatedAt).toBeDefined();
     });
 
     it('Rescheduling again should increment review count by one', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.rescheduleCard, accountReview);
+      accountCardEvaluator(response.body.data.rescheduleCard, 2, accountReview.newEasyFactor);
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.rescheduleCard.id).toBeDefined();
-      expect(response.body.data.rescheduleCard.reviewCount).toBe(2);
-      expect(response.body.data.rescheduleCard.easyFactor).toBe(accountReview.newEasyFactor);
-      expect(response.body.data.rescheduleCard.accountStory).toBeDefined();
-      expect(response.body.data.rescheduleCard.accountHint).toBeDefined();
-      expect(response.body.data.rescheduleCard.dueAt).toBeDefined();
-      expect(response.body.data.rescheduleCard.mature).toBeDefined();
-      expect(response.body.data.rescheduleCard.createdAt).toBeDefined();
-      expect(response.body.data.rescheduleCard.updatedAt).toBeDefined();
     });
   });
 });
