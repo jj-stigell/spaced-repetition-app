@@ -15,10 +15,11 @@ const selectNewCardIds = `SELECT card_id FROM card_list WHERE deck_id = :deckId 
  * @param {integer} deckId - id of the deck
  * @param {integer} accountId - id of the account
  * @param {integer} limitReviews - limit how many new cards are fetched
+ * @param {Date} currentDate - current date for the client, can differ from server date
  */
 const selectDueCardIds = `SELECT card_list.card_id FROM card_list INNER JOIN 
 account_card ON account_card.card_id = card_list.card_id 
-WHERE card_list.deck_id = :deckId AND account_card.account_id = :accountId AND account_card.due_at <= NOW()
+WHERE card_list.deck_id = :deckId AND account_card.account_id = :accountId AND account_card.due_at <= :currentDate
 ORDER BY due_at ASC LIMIT :limitReviews`;
 
 /**
@@ -29,22 +30,39 @@ const findCard = 'SELECT 1 FROM card WHERE id = :cardId';
 
 /**
  * Pushes all cards owned by account with an id "accountId" with "days" days to future
- * @param {integer} days - amoun of days pushed
- * @param {integer} accountId - id of the account
+ * @param {Date} currentDate - current date for the client, can differ from server date
+ * @param {Date} newDueDate - new due date for cards due today
+ * @param {integer} days - number of days for cards with future due date
+ * @param {integer} accountId - accounts id number
  */
-const pushAllCardsNDays = 'UPDATE account_card SET due_at = due_at + :days WHERE account_id = :accountId';
+const pushAllCardsNDays = `
+UPDATE account_card
+SET due_at = (CASE
+                WHEN due_at <= :currentDate THEN :newDueDate
+                ELSE due_at + :days
+              END)
+WHERE account_id = :accountId
+`;
 
 /**
  * Pushes all cards in deck "deckId" owned by account with an id "accountId" with "days" days to future
+ * @param {Date} currentDate - current date for the client, can differ from server date
+ * @param {Date} newDueDate - new due date for cards due today
+ * @param {integer} days - number of days for cards with future due date
+ * @param {integer} accountId - accounts id number
  * @param {integer} deckId - id of the deck
- * @param {integer} accountId - id of the account
- * @param {integer} days - amoun of days pushed
  */
-const pushCardsInDeckIdNDays = `UPDATE account_card SET due_at = account_card.due_at + :days FROM
+const pushCardsInDeckIdNDays = `
+UPDATE account_card 
+SET due_at = (CASE
+  WHEN due_at <= :currentDate THEN :newDueDate
+  ELSE due_at + :days
+  END)
+FROM
   (SELECT card_list.card_id FROM card_list 
   INNER JOIN account_card ON account_card.card_id = card_list.card_id 
-  where deck_id = :deckId AND account_id = :accountId)
-  AS found WHERE found.card_id = account_card.card_id`;
+WHERE card_list.deck_id = :deckId AND account_card.account_id = :accountId) AS found 
+WHERE found.card_id = account_card.card_id`;
 
 /**
  * Fetch count per day of the accounts past reviews for "limitReviews" amount of days. Arrange from latest review to oldest

@@ -59,7 +59,6 @@ const createAccountCard = async (cardId, accountId, story, hint, easyFactor, new
   }
 };
 
-
 /**
  * Update existing account card
  * @param {integer} cardId - id of the card
@@ -191,15 +190,17 @@ const fetchNewCards = async (deckId, accountId, limitReviews, languageId) => {
  * @param {integer} accountId - accounts id number
  * @param {integer} limitReviews - how many cards are taken from the deck
  * @param {string} languageId - what translations are used
+ * @param {Date} currentDate - current date for the client, can differ from server date
  * @returns {object} cards found
  */
-const fetchDueCards = async (deckId, accountId, limitReviews, languageId) => {
+const fetchDueCards = async (deckId, accountId, limitReviews, languageId, currentDate) => {
   try {
     const cardIds = await sequelize.query(rawQueries.selectDueCardIds, {
       replacements: {
         deckId: deckId,
         accountId: accountId,
         limitReviews: limitReviews,
+        currentDate: currentDate
       },
       model: models.CardList,
       type: sequelize.QueryTypes.SELECT,
@@ -400,13 +401,17 @@ const findLearningProgressByType = async (cardType , accountId) => {
 
 /**
  * Push all cards in to the future for account with 'accountId'
- * @param {integer} days - how many days cards are pushed forward
+ * @param {Date} currentDate - current date for the client, can differ from server date
+ * @param {Date} newDueDate - new due date for cards due today
+ * @param {integer} days - number of days for cards with future due date
  * @param {integer} accountId - accounts id number
  */
-const pushAllCards = async (days, accountId) => {
+const pushAllCards = async (currentDate, newDueDate, days, accountId) => {
   try {
     await sequelize.query(rawQueries.pushAllCardsNDays, {
       replacements: {
+        currentDate: currentDate,
+        newDueDate: newDueDate,
         days: days,
         accountId: accountId
       },
@@ -421,17 +426,21 @@ const pushAllCards = async (days, accountId) => {
 
 /**
  * Push all cards in deck 'deckId' for account with 'accountId'
- * @param {integer} deckId - id of the deck
- * @param {integer} days - how many days cards are pushed forward
+ * @param {Date} currentDate - current date for the client, can differ from server date
+ * @param {Date} newDueDate - new due date for cards due today
+ * @param {integer} days - number of days for cards with future due date
  * @param {integer} accountId - accounts id number
+ * @param {integer} deckId - id of the deck
  */
-const pushCardsInDeck = async (deckId, days, accountId) => {
+const pushCardsInDeck = async (currentDate, newDueDate, days, accountId, deckId) => {
   try {
     await sequelize.query(rawQueries.pushCardsInDeckIdNDays, {
       replacements: {
+        currentDate: currentDate,
+        newDueDate: newDueDate,
         days: days,
-        deckId: deckId,
-        accountId: accountId
+        accountId: accountId,
+        deckId: deckId
       },
       model: models.AccountCard,
       type: sequelize.QueryTypes.UPDATE,
