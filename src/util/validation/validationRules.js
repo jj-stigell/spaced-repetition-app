@@ -1,6 +1,7 @@
 const yup = require('yup');
 const errors = require('../errors/errors');
 const constants = require('../constants');
+const { calculateDateToString } = require('../helper');
 
 const deckId = yup
   .number(errors.inputValueTypeError)
@@ -48,6 +49,14 @@ const username = yup
 const languageId = yup
   .string(errors.inputValueTypeError)
   .oneOf(constants.general.availableLanguages, errors.invalidLanguageIdError);
+
+const date = yup
+  .date(errors.validation.invalidDateError)
+  .min(calculateDateToString(-1), errors.validation.invalidDateError)
+  .max(calculateDateToString(constants.maxReviewInterval), errors.validation.invalidDateError);
+
+const dateRequired = date
+  .required(errors.validation.requiredDateError);
 
 const password = yup
   .string(errors.inputValueTypeError)
@@ -161,6 +170,8 @@ module.exports = {
   email,
   username,
   languageId,
+  date,
+  dateRequired,
   password,
   currentPassword,
   newPassword,

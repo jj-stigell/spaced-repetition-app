@@ -13,14 +13,9 @@ const rescheduleCard = yup.object().shape({
   newInterval: validationRules.reviewIntervalRequired,
   newEasyFactor: validationRules.easyFactor,
   extraReview: validationRules.isBoolean,
-  timing: validationRules.timing
+  timing: validationRules.timing,
+  newDueDate: validationRules.dateRequired
 });
-
-/*
-const deckId = yup.object().shape({
-  deckId: validationRules.deckIdRequired
-});
-*/
 
 const id = yup.object().shape({
   id: validationRules.integer
@@ -70,7 +65,12 @@ const deckSettings = yup.object().shape({
 
 const pushCards = yup.object().shape({
   deckId: validationRules.deckId,
-  days: validationRules.days
+  days: validationRules.days,
+  date: validationRules.dateRequired
+});
+
+const date = yup.object().shape({
+  date: validationRules.date
 });
 
 const email = yup.object().shape({
@@ -114,7 +114,6 @@ const fetchCardsByType = yup.object().shape({
 module.exports = {
   fetchCards,
   rescheduleCard,
-  //deckId,
   id,
   integer,
   UUID,
@@ -125,6 +124,7 @@ module.exports = {
   fetchKanji,
   deckSettings,
   pushCards,
+  date,
   email,
   username,
   editAccountCard,

@@ -45,20 +45,10 @@ const validateChangePassword = async (currentPassword, newPassword, newPasswordC
   }
 };
 
-/*
-const validateFetchCards = async (deckId, languageId, newCards) => {
-  try {
-    await schema.fetchCards.validate({ deckId, languageId, newCards }, { abortEarly: constants.yupAbortEarly  });
-  } catch (errors) {
-    return validationError(formatYupError(errors));
-  }
-};
-*/
-
-const validateRescheduleCard = async (cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing) => {
+const validateRescheduleCard = async (cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing, newDueDate) => {
   try {
     await schema.rescheduleCard.validate({
-      cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing
+      cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing, newDueDate
     }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
@@ -83,6 +73,14 @@ const validateInteger = async (id) => {
   }
 };
 
+const validateDate = async (date) => {
+  try {
+    await schema.date.validate({ date }, { abortEarly: constants.yupAbortEarly  });
+  } catch (errors) {
+    return validationError(formatYupError(errors));
+  }
+};
+
 const validateUUID = async (UUID) => {
   try {
     await schema.UUID.validate({ UUID }, { abortEarly: constants.yupAbortEarly  });
@@ -91,23 +89,13 @@ const validateUUID = async (UUID) => {
   }
 };
 
-const validatePushCards = async (deckId, days) => {
+const validatePushCards = async (deckId, days, date) => {
   try {
-    await schema.pushCards.validate({ deckId, days }, { abortEarly: constants.yupAbortEarly  });
+    await schema.pushCards.validate({ deckId, days, date }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
 };
-
-/*
-const validateDeckId = async (deckId) => {
-  try {
-    await schema.deckId.validate({ deckId }, { abortEarly: constants.yupAbortEarly  });
-  } catch (errors) {
-    return validationError(formatYupError(errors));
-  }
-};
-*/
 
 const validateEditAccountCard = async (cardId, story, hint) => {
   try {
@@ -124,16 +112,6 @@ const validateFetchKanji = async (kanjiId, includeAccountCard, languageId) => {
     return validationError(formatYupError(errors));
   }
 };
-
-/*
-const validateFetchCardsByType = async (type, languageId) => {
-  try {
-    await schema.fetchCardsByType.validate({ type, languageId }, { abortEarly: constants.yupAbortEarly  });
-  } catch (errors) {
-    return validationError(formatYupError(errors));
-  }
-};
-*/
 
 const validateCardType = async (cardType) => {
   try {
@@ -173,16 +151,14 @@ module.exports = {
   validateNewAccount,
   validateLogin,
   validateChangePassword,
-  //validateFetchCards,
   validateRescheduleCard,
   validateDeckSettings,
   validateInteger,
+  validateDate,
   validateUUID,
   validatePushCards,
-  //validateDeckId,
   validateEditAccountCard,
   validateFetchKanji,
-  //validateFetchCardsByType,
   validateCardType,
   validateBugType,
   validateNewBug,
