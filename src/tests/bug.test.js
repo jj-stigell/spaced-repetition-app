@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
+const { expect, describe, beforeAll, afterAll, beforeEach, it } = require('@jest/globals');
 const request = require('supertest');
 const { PORT } = require('../util/config');
 const { connectToDatabase } = require('../database');
@@ -32,7 +32,7 @@ describe('Bugintegration tests', () => {
     await testServer?.close();
   });
 
-  const setUpEnvironment = async () => {
+  beforeEach(async () => {
     await helpers.resetDatabaseEntries();
     [ memberAuthToken, memberAcc ] = await helpers.getToken(testUrl, account);
     [ nonMemberAuthToken, nonMemberAcc ] = await helpers.getToken(testUrl, nonMemberAccount);
@@ -46,10 +46,9 @@ describe('Bugintegration tests', () => {
       id: parseInt(response.body.data.sendBugReport.id),
       bugId: parseInt(response.body.data.sendBugReport.id)
     };
-  };
+  });
 
   describe('Send a bug report', () => {
-    beforeAll(async () => { await setUpEnvironment(); });
 
     it('Authentication error when not logged in', async () => {
       const response = await sendRequest(testUrl, null, mutations.sendBugReportMutation, validBugReport);
@@ -119,7 +118,6 @@ describe('Bugintegration tests', () => {
   });
 
   describe('Solving bug reports', () => {
-    beforeAll(async () => { await setUpEnvironment(); });
 
     it('Solving bug report leads to auth error when not logged in', async () => {
       let response = await request(testUrl)
@@ -239,7 +237,6 @@ describe('Bugintegration tests', () => {
   });
 
   describe('Deleting bug reports', () => {
-    beforeAll(async () => { await setUpEnvironment(); });
 
     it('Authentication error when trying to delete but not not logged in', async () => {
       const response = await sendRequest(testUrl, null, mutations.deleteBugReportMutation, { bugId: bugReportToSolve.bugId });
@@ -298,7 +295,6 @@ describe('Bugintegration tests', () => {
   });
 
   describe('Fetching bug reports', () => {
-    beforeAll(async () => { await setUpEnvironment(); });
 
     it('Authentication error when trying to fetch bug reports but not not logged in', async () => {
       const response = await sendRequest(testUrl, null, queries.fetchAllBugReports, null);
@@ -326,7 +322,6 @@ describe('Bugintegration tests', () => {
   });
 
   describe('Fetching bug report by id', () => {
-    beforeAll(async () => { await setUpEnvironment(); });
 
     it('Authentication error when trying to fetch bug report by id but not not logged in', async () => {
       const response = await sendRequest(testUrl, null, queries.fetchBugReportById, { bugId: bugReportToSolve.bugId });
@@ -384,7 +379,6 @@ describe('Bugintegration tests', () => {
   });
 
   describe('Fetching bug reports by type', () => {
-    beforeAll(async () => { await setUpEnvironment(); });
 
     it('Authentication error when trying to fetch bug report by id but not not logged in', async () => {
       const response = await sendRequest(testUrl, null, queries.fetchBugReportsByType, { type: findTypeFirst });
