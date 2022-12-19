@@ -21,7 +21,6 @@ const resolvers = {
     },
     bugReportsByType: async (root, { type }, { currentUser }) => {
       if (!currentUser) return notAuthError();
-      await validator.validateBugType(type);
       await checkAdminPermission(currentUser.id, 'READ');
       return await services.bugService.findAllBugReportsByType(type);
     },
@@ -29,7 +28,7 @@ const resolvers = {
   Mutation: {
     sendBugReport: async (_, { type, bugMessage, cardId }, { currentUser }) => {
       if (!currentUser) return notAuthError();
-      await validator.validateNewBug(type, bugMessage, cardId);
+      await validator.validateNewBug(bugMessage, cardId);
       return await services.bugService.createNewBugReport(type, bugMessage, currentUser.id, cardId);
     },
     solveBugReport: async (_, { bugId, solvedMessage, solved }, { currentUser }) => {

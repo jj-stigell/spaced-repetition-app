@@ -1,6 +1,4 @@
 const typeDefs = `
-scalar Date
-
 type DeckTranslation {
   id: Int
   languageId: String
