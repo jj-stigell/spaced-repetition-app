@@ -14,13 +14,12 @@ type DeckTranslation {
 type Deck {
   id: Int
   deckName: String
-  type: String
   subscriberOnly: Boolean
   languageId: String
   active: Boolean
   createdAt: Date
   updatedAt: Date
-  deck_translations: [DeckTranslation]
+  deckTranslations: [DeckTranslation]
 }
 
 type DeckSettings {
