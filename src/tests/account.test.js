@@ -1,4 +1,4 @@
-const { expect, describe, beforeAll, afterAll, it } = require('@jest/globals');
+const { expect, describe, beforeAll, afterAll, beforeEach, it } = require('@jest/globals');
 const request = require('supertest');
 const { PORT } = require('../util/config');
 const { connectToDatabase } = require('../database');
@@ -12,10 +12,10 @@ const sendRequest = require('./utils/request');
 
 describe('accountintegration tests', () => {
   let testServer, testUrl, firstToken, secondToken, thirdToken, loggedOutSession;
+
   // before the tests spin up an Apollo Server
   beforeAll(async () => {
     await connectToDatabase();
-    await helpers.resetDatabaseEntries();
     const serverInfo = await server.listen({ port: PORT });
     testServer = serverInfo.server;
     testUrl = serverInfo.url;
@@ -26,14 +26,21 @@ describe('accountintegration tests', () => {
     await testServer?.close();
   });
 
-  it('Server should respond 200 ok to health check', async () => {
-    helpers.healthCheck(testUrl);
+  beforeEach(async () => {
+    await helpers.resetDatabaseEntries();
   });
 
-  it('Expired JWT should return error', async () => {
-    const response = await sendRequest(testUrl, expiredToken, mutations.sendBugReportMutation, null);
-    expect(response.body.data).toBeUndefined();
-    expect(response.body.errors[0].extensions.code).toContain(errors.session.jwtExpiredError);
+  describe('Running server', () => {
+
+    it('Server should respond 200 ok to health check', async () => {
+      helpers.healthCheck(testUrl);
+    });
+  
+    it('Expired JWT should return error', async () => {
+      const response = await sendRequest(testUrl, expiredToken, mutations.changePasswordMutation, passwordData);
+      expect(response.body.data).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.session.jwtExpiredError);
+    });
   });
 
   describe('Registering an account', () => {

@@ -56,13 +56,12 @@ describe('Deckintegration tests', () => {
       expect(response.body.data.decks.length).toBe(3);
       expect(response.body.data.decks[0].id).toBeDefined();
       expect(response.body.data.decks[0].deckName).toBeDefined();
-      expect(response.body.data.decks[0].type).toBeDefined();
       expect(response.body.data.decks[0].subscriberOnly).toBeDefined();
       expect(response.body.data.decks[0].languageId).toBeDefined();
       expect(response.body.data.decks[0].active).toBeDefined();
       expect(response.body.data.decks[0].createdAt).toBeDefined();
       expect(response.body.data.decks[0].updatedAt).toBeDefined();
-      expect(response.body.data.decks[0].deck_translations).toBeDefined();
+      expect(response.body.data.decks[0].deckTranslations).toBeDefined();
     });
   });
 
