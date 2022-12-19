@@ -9,7 +9,6 @@ const fetchCards = yup.object().shape({
 
 const rescheduleCard = yup.object().shape({
   cardId: validationRules.cardIdRequired,
-  reviewResult: validationRules.resultType,
   newInterval: validationRules.reviewIntervalRequired,
   newEasyFactor: validationRules.easyFactor,
   extraReview: validationRules.isBoolean,
@@ -33,12 +32,7 @@ const cardType = yup.object().shape({
   cardType: validationRules.cardType
 });
 
-const bugType = yup.object().shape({
-  bugType: validationRules.bugType
-});
-
 const newBug = yup.object().shape({
-  bugType: validationRules.bugType,
   bugMessage: validationRules.bugMessage,
   cardId: validationRules.integer
 });
@@ -118,7 +112,6 @@ module.exports = {
   integer,
   UUID,
   cardType,
-  bugType,
   newBug,
   solveBug,
   fetchKanji,

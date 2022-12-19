@@ -96,11 +96,6 @@ const cardType = yup
   .oneOf(constants.cardTypes, errors.invalidCardType)
   .required(errors.inputValueMissingError);
 
-const bugType = yup
-  .string(errors.inputValueTypeError)
-  .oneOf(constants.bugs.bugTypes, errors.invalidCardType)
-  .required(errors.inputValueMissingError);
-
 const integer = yup
   .number(errors.inputValueTypeError)
   .min(1, errors.negativeNumberTypeError)
@@ -178,7 +173,6 @@ module.exports = {
   passwordConfirmation,
   isBoolean,
   cardType,
-  bugType,
   integer,
   UUID,
   reviewInterval,

@@ -45,10 +45,10 @@ const validateChangePassword = async (currentPassword, newPassword, newPasswordC
   }
 };
 
-const validateRescheduleCard = async (cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing, newDueDate) => {
+const validateRescheduleCard = async (cardId, newInterval, newEasyFactor, extraReview, timing, newDueDate, reviewType) => {
   try {
     await schema.rescheduleCard.validate({
-      cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing, newDueDate
+      cardId, newInterval, newEasyFactor, extraReview, timing, newDueDate, reviewType
     }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
@@ -129,9 +129,9 @@ const validateBugType = async (bugType) => {
   }
 };
 
-const validateNewBug = async (bugType, bugMessage, cardId) => {
+const validateNewBug = async (bugMessage, cardId) => {
   try {
-    await schema.newBug.validate({ bugType, bugMessage, cardId }, { abortEarly: constants.yupAbortEarly  });
+    await schema.newBug.validate({ bugMessage, cardId }, { abortEarly: constants.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));
   }
