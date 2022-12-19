@@ -46,11 +46,15 @@ module.exports = {
         unique: true,
         transaction
       });
-      await queryInterface.addIndex('account_card', ['account_id', 'card_id'], {
+      await queryInterface.addIndex('account_card', ['account_id', 'card_id', 'review_type'], {
         unique: true,
         transaction
       });
       await queryInterface.addIndex('session', ['id', 'account_id'], {
+        unique: true,
+        transaction
+      });
+      await queryInterface.addIndex('account_card_custom_data', ['account_id', 'card_id'], {
         unique: true,
         transaction
       });
@@ -76,6 +80,7 @@ module.exports = {
       await queryInterface.sequelize.query('DROP INDEX IF EXISTS account_review_id_account_id_card_id', { transaction });
       await queryInterface.sequelize.query('DROP INDEX IF EXISTS account_card_account_id_card_id', { transaction });
       await queryInterface.sequelize.query('DROP INDEX IF EXISTS session_id_account_id', { transaction });
+      await queryInterface.sequelize.query('DROP INDEX IF EXISTS account_card_custom_data_account_id_card_id', { transaction });
       await transaction.commit();
     } catch (error) {
       await transaction.rollback();

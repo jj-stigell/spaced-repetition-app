@@ -2,9 +2,9 @@ const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
 
-class AccountKanjiReview extends Model {}
+class AccountReview extends Model {}
 
-AccountKanjiReview.init({
+AccountReview.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -32,6 +32,10 @@ AccountKanjiReview.init({
   timing: {
     type: DataTypes.INTEGER,
   },
+  type: {
+    type: DataTypes.ENUM(constants.reviewTypes),
+    allowNull: false
+  },
   result: {
     type: DataTypes.ENUM(constants.resultTypes),
     allowNull: false
@@ -47,4 +51,4 @@ AccountKanjiReview.init({
   modelName: 'account_review'
 });
 
-module.exports = AccountKanjiReview;
+module.exports = AccountReview;

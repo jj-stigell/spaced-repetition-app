@@ -1,22 +1,23 @@
-const Account = require('./account/account');
-const AccountCard = require('./account/accountCard');
+const AccountCardCustomData = require('./account/accountCardCustomData');
 const AccountDeckSettings = require('./account/accountDeckSettings');
-const AccountReview = require('./account/accountReview');
-const Admin = require('./account/admin');
-const Session = require('./account/session');
-const Card = require('./card/card');
-const CardList = require('./card/cardList');
-const Language = require('./language/language');
-const Deck = require('./deck/deck');
-const DeckTranslation = require('./deck/deckTranslation');
-const Kanji = require('./kanji/kanji');
-const KanjiRadical = require('./kanji/kanjiRadical');
-const KanjiTranslation = require('./kanji/kanjiTranslation');
-const Radical = require('./radical/radical');
 const RadicalTranslation = require('./radical/radicalTranslation');
-const Word = require('./word/word');
+const KanjiTranslation = require('./kanji/kanjiTranslation');
+const DeckTranslation = require('./deck/deckTranslation');
 const WordTranslation = require('./word/wordTranslation');
-const BugReport = require('./bugReport/bugReport'); 
+const AccountReview = require('./account/accountReview');
+const KanjiRadical = require('./kanji/kanjiRadical');
+const AccountCard = require('./account/accountCard');
+const BugReport = require('./bugReport/bugReport');
+const Language = require('./language/language');
+const Session = require('./account/session');
+const Account = require('./account/account');
+const Radical = require('./radical/radical');
+const CardList = require('./card/cardList');
+const Admin = require('./account/admin');
+const Kanji = require('./kanji/kanji');
+const Card = require('./card/card');
+const Deck = require('./deck/deck');
+const Word = require('./word/word');
 
 // Account can have one admin entry, on delete cascade to admin table
 Account.hasOne(Admin, {
@@ -284,6 +285,57 @@ AccountDeckSettings.belongsTo(Deck, {
   foreignKey: 'deckId'
 });
 
+
+
+
+
+
+
+
+
+/*
+// Account card custom data (story, hint, etc.)
+AccountCard.hasOne(AccountCardCustomData, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+  foreignKey: {
+    allowNull: false
+  }
+});
+AccountCardCustomData.belongsTo(AccountCard, {
+  targetKey: 'cardId',
+  foreignKey: 'cardId'
+});
+*/
+
+Account.hasMany(AccountCardCustomData, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+AccountCardCustomData.belongsTo(Account, {
+  targetKey: 'id',
+  foreignKey: 'accountId'
+});
+
+Card.hasMany(AccountCardCustomData, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+AccountCardCustomData.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
+});
+
+
+
+
+
+
+
+
+
 // Bug reports belongs to some card and account, id PK, account_id and card_id FK
 // On delete set null so bug history stays intact
 Account.hasMany(BugReport, {
@@ -307,23 +359,24 @@ BugReport.belongsTo(Card, {
 });
 
 module.exports = {
+  AccountCardCustomData,
+  AccountDeckSettings,
+  RadicalTranslation,
+  KanjiTranslation,
+  DeckTranslation,
+  WordTranslation,
+  AccountReview,
+  KanjiRadical,
+  AccountCard,
+  BugReport,
+  Language,
+  Session,
   Account,
+  Radical,
+  CardList,
   Admin,
   Kanji,
-  Language,
-  Radical,
-  RadicalTranslation,
-  KanjiRadical,
-  KanjiTranslation,
-  Word,
-  WordTranslation,
-  AccountCard,
-  AccountReview,
-  AccountDeckSettings,
   Card,
-  CardList,
   Deck,
-  DeckTranslation,
-  BugReport,
-  Session
+  Word
 };

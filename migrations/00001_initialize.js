@@ -291,6 +291,11 @@ module.exports = {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       },
+      active: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       learning_order: {
         type: DataTypes.INTEGER
       },
@@ -716,6 +721,10 @@ module.exports = {
       timing: {
         type: DataTypes.INTEGER
       },
+      type: {
+        type: DataTypes.ENUM(constants.reviewTypes),
+        allowNull: false
+      },
       result: {
         type: DataTypes.ENUM(constants.resultTypes),
         allowNull: false
@@ -727,6 +736,66 @@ module.exports = {
       }
     }),
     await queryInterface.createTable('account_card', {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
+      account_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'account',
+          key: 'id'
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      },
+      card_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'card',
+          key: 'id'
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+      },
+      review_type: {
+        type: DataTypes.ENUM(constants.reviewTypes),
+        allowNull: false
+      },
+      review_count: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        default: 0
+      },
+      easy_factor: {
+        type: DataTypes.REAL,
+        allowNull: false,
+        default: constants.card.defaultEasyFactor
+      },
+      mature: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      due_at: {
+        type: DataTypes.DATEONLY,
+        defaultValue: DataTypes.NOW
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+      }
+    }),
+    await queryInterface.createTable('account_card_custom_data', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -770,25 +839,6 @@ module.exports = {
           ]
         }
       },
-      review_count: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        default: 0
-      },
-      easy_factor: {
-        type: DataTypes.REAL,
-        allowNull: false,
-        default: constants.card.defaultEasyFactor
-      },
-      mature: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false
-      },
-      due_at: {
-        type: DataTypes.DATEONLY,
-        defaultValue: DataTypes.NOW
-      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -798,7 +848,7 @@ module.exports = {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW
-      }
+      },
     }),
     await queryInterface.createTable('bug_report', {
       id: {
@@ -911,6 +961,7 @@ module.exports = {
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('session');
     await queryInterface.dropTable('bug_report');
+    await queryInterface.dropTable('account_card_custom_data');
     await queryInterface.dropTable('radical_translation');
     await queryInterface.dropTable('kanji_radical');
     await queryInterface.dropTable('kanji_translation');
@@ -931,8 +982,9 @@ module.exports = {
     // Seeder table dropped if whole db run down
     await queryInterface.dropTable('seeders');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_card_type;');
-    await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_deck_type;');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_account_review_result;');
+    await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_account_review_type;');
+    await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_account_card_review_type;');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_bug_report_type;');
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS enum_card_list_review_type;');
   },

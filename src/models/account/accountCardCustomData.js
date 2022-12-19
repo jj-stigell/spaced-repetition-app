@@ -2,9 +2,9 @@ const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../database');
 const constants = require('../../util/constants');
 
-class AccountCard extends Model {}
+class AccountCardCustomData extends Model {}
 
-AccountCard.init({
+AccountCardCustomData.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -26,28 +26,23 @@ AccountCard.init({
       key: 'id'
     }
   },
-  reviewType: {
-    type: DataTypes.ENUM(constants.reviewTypes),
-    allowNull: false
+  accountStory: {
+    type: DataTypes.STRING,
+    validate: {
+      len: [
+        constants.card.storyMinLength,
+        constants.card.storyMaxLength
+      ]
+    }
   },
-  reviewCount: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    default: 0
-  },
-  easyFactor: {
-    type: DataTypes.REAL,
-    allowNull: false,
-    default: constants.card.defaultEasyFactor
-  },
-  mature: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false
-  },
-  dueAt: {
-    type: DataTypes.DATEONLY,
-    defaultValue: DataTypes.NOW
+  accountHint: {
+    type: DataTypes.STRING,
+    validate: {
+      len: [
+        constants.card.hintMinLength,
+        constants.card.hintMaxLength
+      ]
+    }
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -61,7 +56,7 @@ AccountCard.init({
   },
 }, {
   sequelize,
-  modelName: 'account_card'
+  modelName: 'account_card_custom_data'
 });
 
-module.exports = AccountCard;
+module.exports = AccountCardCustomData;
