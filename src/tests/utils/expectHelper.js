@@ -1,7 +1,6 @@
 const { expect } = require('@jest/globals');
 const { accountCard } = require('./constants');
 
-
 const cardEvaluator = (card, newCard, isMember, hasReviewType) => {
   expect(card).toBeDefined();
   expect(card.id).toBeDefined();

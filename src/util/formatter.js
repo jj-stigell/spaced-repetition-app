@@ -1,7 +1,7 @@
 /** Various functions for formatting data in the resolvers */
 
 /**
- * Reformat radical object
+ * Reformat radical object.
  * @param {object} radicals - all radicals connected to a kanji card 
  * @returns {object} of reformatted radicals
  */
@@ -29,9 +29,9 @@ const formatRadicals = (radicals) => {
 };
 
 /**
- * Restructure account card structure to match the model
+ * Restructure account card structure to match the model.
  * @param {object} accountCard - account card object from db
- * @returns account card
+ * @returns {object} account card
  */
 const accountCardFormatter = (accountCard) => {
   return {
@@ -48,11 +48,11 @@ const accountCardFormatter = (accountCard) => {
 };
 
 /**
- * Reformat word card
+ * Reformat word card.
  * @param {Object} word - word object
  * @returns {object} of reformatted word card
  */
-const formWordCard = (word, reviewType, includeCustomData) => {
+const formWordCard = (word, reviewType, includeCustomData, isNewReview) => {
   return {
     id: word.id,
     cardType: word.type,
@@ -60,15 +60,15 @@ const formWordCard = (word, reviewType, includeCustomData) => {
     createdAt: word.createdAt,
     updatedAt: word.updatedAt,
     accountCard: (word?.account_cards && word?.account_cards[0]) ? {
-      id: word.account_cards[0].id,
-      reviewCount: word.account_cards[0].reviewCount,
-      easyFactor: word.account_cards[0].easyFactor,
+      id: isNewReview ? null : word.account_cards[0].id,
+      reviewCount: isNewReview ? null : word.account_cards[0].reviewCount,
+      easyFactor: isNewReview ? null : word.account_cards[0].easyFactor,
       accountStory: includeCustomData && word?.account_card_custom_data[0] ? word.account_card_custom_data[0].accountStory : null,
       accountHint: includeCustomData && word?.account_card_custom_data[0] ? word.account_card_custom_data[0].accountHint : null,
-      dueAt: word.account_cards[0].dueAt,
-      mature: word.account_cards[0].mature,
-      createdAt: word.account_cards[0].createdAt,
-      updatedAt: word.account_cards[0].updatedAt
+      dueAt: isNewReview ? null : word.account_cards[0].dueAt,
+      mature: isNewReview ? null : word.account_cards[0].mature,
+      createdAt: isNewReview ? null : word.account_cards[0].createdAt,
+      updatedAt: isNewReview ? null : word.account_cards[0].updatedAt
     } : null,
     word: {
       id: word.word.id,
@@ -91,11 +91,11 @@ const formWordCard = (word, reviewType, includeCustomData) => {
 };
 
 /**
- * Reformat kanji card
+ * Reformat kanji card.
  * @param {Object} kanji - kanji object
  * @returns {object} of reformatted kanji card
  */
-const formKanjiCard = (kanji, reviewType, includeCustomData) => {
+const formKanjiCard = (kanji, reviewType, includeCustomData, isNewReview) => {
   return {
     id: kanji.id,
     cardType: kanji.type,
@@ -103,15 +103,15 @@ const formKanjiCard = (kanji, reviewType, includeCustomData) => {
     createdAt: kanji.createdAt,
     updatedAt: kanji.updatedAt,
     accountCard: (kanji?.account_cards && kanji?.account_cards[0]) ? {
-      id: kanji.account_cards[0].id,
-      reviewCount: kanji.account_cards[0].reviewCount,
-      easyFactor: kanji.account_cards[0].easyFactor,
+      id: isNewReview ? null : kanji.account_cards[0].id,
+      reviewCount: isNewReview ? null : kanji.account_cards[0].reviewCount,
+      easyFactor: isNewReview ? null : kanji.account_cards[0].easyFactor,
       accountStory: includeCustomData && kanji?.account_card_custom_data[0] ? kanji.account_card_custom_data[0].accountStory : null,
       accountHint: includeCustomData && kanji?.account_card_custom_data[0] ? kanji.account_card_custom_data[0].accountHint : null,
-      dueAt: kanji.account_cards[0].dueAt,
-      mature: kanji.account_cards[0].mature,
-      createdAt: kanji.account_cards[0].createdAt,
-      updatedAt: kanji.account_cards[0].updatedAt
+      dueAt: isNewReview ? null : kanji.account_cards[0].dueAt,
+      mature: isNewReview ? null : kanji.account_cards[0].mature,
+      createdAt: isNewReview ? null : kanji.account_cards[0].createdAt,
+      updatedAt: isNewReview ? null : kanji.account_cards[0].updatedAt
     } : null,
     kanji: {
       id: kanji.kanji.id,
@@ -139,11 +139,11 @@ const formKanjiCard = (kanji, reviewType, includeCustomData) => {
 };
 
 /**
- * Restructure card structure to match the model
+ * Restructure card structure to match the model.
  * @param {object} cards - set of cards
- * @returns set of reformatted cards
+ * @returns {Array<object>} array of reformatted cards
  */
-const cardFormatter = (cards, byType = false, includeCustomData = false) => {
+const cardFormatter = (cards, byType = false, includeCustomData = false, isNewReview = false) => {
   const formedCards = [];
   let formattedCard;
 
@@ -151,10 +151,10 @@ const cardFormatter = (cards, byType = false, includeCustomData = false) => {
     cards.forEach(card => {
       switch (card.type) {
       case 'WORD':
-        formattedCard = formWordCard(card, null, includeCustomData);
+        formattedCard = formWordCard(card, null, includeCustomData, isNewReview);
         break;
       case 'KANJI':
-        formattedCard = formKanjiCard(card, null, includeCustomData);
+        formattedCard = formKanjiCard(card, null, includeCustomData, isNewReview);
         break;
       default:
         formattedCard = null;
@@ -166,10 +166,10 @@ const cardFormatter = (cards, byType = false, includeCustomData = false) => {
     cards.forEach(card => {
       switch (card.card.type) {
       case 'WORD':
-        formattedCard = formWordCard(card.card, card.reviewType, includeCustomData);
+        formattedCard = formWordCard(card.card, card.reviewType, includeCustomData, isNewReview);
         break;
       case 'KANJI':
-        formattedCard = formKanjiCard(card.card, card.reviewType, includeCustomData);
+        formattedCard = formKanjiCard(card.card, card.reviewType, includeCustomData, isNewReview);
         break;
       default:
         formattedCard = null;
@@ -182,9 +182,9 @@ const cardFormatter = (cards, byType = false, includeCustomData = false) => {
 };
 
 /**
- * Restructure deck structure to match the model
+ * Restructure deck structure to match the model.
  * @param {object} decks - set of decks
- * @returns set of reformatted decks
+ * @returns {Array<object>} array of reformatted decks
  */
 const deckFormatter = (decks) => {
   const formedDecks = [];
@@ -207,9 +207,9 @@ const deckFormatter = (decks) => {
 };
 
 /**
- * Restructure account deck settings structure to match the model
+ * Restructure account deck settings structure to match the model.
  * @param {object} deckSettings - account deck settings object from db
- * @returns account deck settings 
+ * @returns {object} account deck settings 
  */
 const deckSettingsFormatter = (deckSettings) => {
   return {
@@ -226,9 +226,9 @@ const deckSettingsFormatter = (deckSettings) => {
 };
 
 /**
- * Restructure account structure to match the model
+ * Restructure account structure to match the model.
  * @param {object} account - account object from db
- * @returns account
+ * @returns {object} account
  */
 const accountFormatter = (account) => {
   return {
@@ -244,9 +244,9 @@ const accountFormatter = (account) => {
 };
 
 /**
- * Restructure statistics from database
+ * Restructure statistics from database.
  * @param {Object} stats - statistics from database
- * @returns {Object} set of reformatted statistics
+ * @returns {Array<object>} array of reformatted statistics
  */
 const formStatistics = async (stats) => {
 

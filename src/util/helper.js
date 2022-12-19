@@ -2,14 +2,14 @@ const parser = require('ua-parser-js');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { internalServerError } = require('./errors/graphQlErrors');
-const constants = require('./constants');
 const { JWT_SECRET } = require('./config');
+const constants = require('./constants');
 
 /**
- * Parse request user-agent
+ * Parse request user-agent.
  * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent
  * @param {string} userAgent - raw from request header
- * @returns {Object} - payload with browser, os, and device information
+ * @returns {Object} object with browser, os, and device information
  */
 const parseUserAgent = (userAgent) => {
   try {
@@ -25,7 +25,7 @@ const parseUserAgent = (userAgent) => {
 };
 
 /**
- * Sign a new jwt token
+ * Sign a new jwt token.
  * @param {integer} accountId = account identifier
  * @param {UUIDV4} sessionId - UUID of the session
  * @returns new signed jwt token
@@ -39,15 +39,20 @@ const signJWT = (accountId, sessionId) => {
 };
 
 /**
- * Create a new date by summing days to the current date
+ * Create a new date by summing days to the current (server) date.
  * @param {Integer} days - amount of full days
- * @returns {Date} - new date n days from today
+ * @returns {Date} new date object n days from today
  */
 const calculateDate = (days) => {
   const newDate = new Date();
   return newDate.setDate(newDate.getDate() + days);
 };
 
+/**
+ * Create a new date string by summing days to the current (server) date.
+ * @param {Integer} days - amount of full days
+ * @returns {string} new date string n days from today
+ */
 const calculateDateToString = (days) => {
   const event = new Date();
   event.setDate(event.getDate() + days);
@@ -55,7 +60,7 @@ const calculateDateToString = (days) => {
 };
 
 /**
- * Compare user submitted plain-text password to hash
+ * Compare user submitted plain-text password to hash.
  * @param {string} password - user submitted password
  * @param {string} hash - account hashed password from db
  * @returns {boolean} true if hash match, false if no match
@@ -69,7 +74,7 @@ const hashCompare = async (password, hash) => {
 };
 
 /**
- * Hash user submitted plain-text password to hash
+ * Hash user submitted plain-text password to hash.
  * @param {string} password - user submitted password
  * @returns {string} hashed password string
  */

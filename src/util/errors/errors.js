@@ -56,7 +56,8 @@ const errors = {
     usernameMinLengthError: 'usernameMinLengthError',
     requiredUsernameError: 'requiredUsernameError',
     emailInUseError: 'emailInUseError',
-    memberFeatureError: 'memberFeatureError'
+    memberFeatureError: 'memberFeatureError',
+    emailNotVerifiedError: 'emailNotVerifiedError'
   },
   bug: {
     bugByIdNotFound: 'bugByIdNotFound',
@@ -80,7 +81,8 @@ const errors = {
 
   },
   validation: {
-
+    invalidDateError: 'invalidDateError',
+    requiredDateError: 'requiredDateError'
   },
   session: {
     sessionNotFoundError: 'sessionNotFoundError',

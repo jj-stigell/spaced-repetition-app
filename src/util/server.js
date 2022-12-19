@@ -1,11 +1,11 @@
-const { ApolloServer } = require('apollo-server');
 const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
-const { defaultError } = require('../util/errors/graphQlErrors');
-const { JWT_SECRET, NODE_ENV } = require('./config');
-const { validateSession } = require('./authorization');
-const schema = require('../schema');
+const { ApolloServer } = require('apollo-server');
 const jwt = require('jsonwebtoken');
+const { defaultError } = require('../util/errors/graphQlErrors');
+const { validateSession } = require('./authorization');
+const { JWT_SECRET, NODE_ENV } = require('./config');
 const errors = require('./errors/errors');
+const schema = require('../schema');
 
 const server = new ApolloServer({
   cache: new InMemoryLRUCache(),

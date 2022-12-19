@@ -1,13 +1,13 @@
 const { expect } = require('@jest/globals');
 const request = require('supertest');
+const { account, accountUnconfirmedEmail, nonMemberAccount, adminReadRights, adminWriteRights, accountCard } = require('./constants');
 const { sequelize } = require('../../database');
 const mutations = require('./mutations');
-const { account, accountUnconfirmedEmail, nonMemberAccount, adminReadRights, adminWriteRights, accountCard } = require('./constants');
 
 /**
- * Reset database for the next tests
- * Removes all existing user related input from database
- * Adds new accounts (2 regular with confirmed and unconfirmed emails, 2 admin account with read and write rights)
+ * Reset database for the next tests.
+ * Removes all existing user related input from database.
+ * Adds new accounts (2 regular with confirmed and unconfirmed emails, 2 admin account with read and write rights).
  */
 const resetDatabaseEntries = async () => {
   try {
