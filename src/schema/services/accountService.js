@@ -3,7 +3,7 @@ const models = require('../../models');
 const { Op } = require('sequelize');
 
 /**
- * Fetch account from database by id number
+ * Fetch account from database by id number.
  * @param {integer} accountId - accounts id number
  * @returns {Account} account found from db
  */
@@ -16,7 +16,7 @@ const findAccountById = async (accountId) => {
 };
 
 /**
- * Check if email is taken by someone, case insensitive
+ * Check if email is taken by someone, case insensitive.
  * @param {string} email - email address
  * @returns {Account} account found from db
  */
@@ -29,7 +29,7 @@ const findAccountByEmail = async (email) => {
 };
 
 /**
- * Check if username is taken by someone, case sensitive
+ * Check if username is taken by someone, case sensitive.
  * @param {string} username - username
  * @returns {Account} account found from db
  */
@@ -42,7 +42,7 @@ const findAccountByUsername = async (username) => {
 };
 
 /**
- * Check if username is taken by someone, case insensitive
+ * Check if username is taken by someone, case insensitive.
  * @param {string} username - username
  * @returns {Account} account found from db
  */
@@ -55,7 +55,7 @@ const findAccountByUsernameCaseInsensitive = async (username) => {
 };
 
 /**
- * Find admin entry from db
+ * Find admin entry from db.
  * @param {integer} accountId - accounts id number
  * @returns {Admin} admin found with account id
  */
@@ -72,7 +72,7 @@ const findAdminByAccountId = async (accountId) => {
 };
 
 /**
- * Create a new account
+ * Create a new account.
  * @param {string} email - new email for the account
  * @param {string} username - username
  * @param {string} languageId - language selected, default EN

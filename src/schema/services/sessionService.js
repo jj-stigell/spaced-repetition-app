@@ -4,9 +4,9 @@ const { calculateDate } = require('../../util/helper');
 const { Session } = require('../../models');
 
 /**
- * Create a new session for the user, set expiry same as JWT expiry, placeholder for now
+ * Create a new session for the user, set expiry same as JWT expiry, placeholder for now.
  * @param {integer} accountId - accounts id number
- * @returns {Session} Newly created session
+ * @returns {Session} newly created session object
  */
 const createNewSession = async (accountId, userAgent) => {
   try {
@@ -24,7 +24,7 @@ const createNewSession = async (accountId, userAgent) => {
 };
 
 /**
- * Delete session by PK
+ * Delete session by PK.
  * @param {string} sessionId - version 4 UUID
  * @returns {integer} found row count, 1 if session found and deleted, 0 if none found
  */
@@ -41,7 +41,7 @@ const deleteSession = async (sessionId) => {
 };
 
 /**
- * Deactivate session by PK
+ * Deactivate session by PK.
  * @param {string} sessionId - version 4 UUID
  * @returns {session} session found with id, active field set to false
  */
@@ -57,9 +57,9 @@ const deactivateSession = async (sessionId) => {
 };
 
 /**
- * Find non-expired session by its PK
+ * Find non-expired session by its PK.
  * @param {string} sessionId - version 4 UUID
- * @returns {Session} Session found with the sessionId
+ * @returns {Session} session found with the sessionId
  */
 const findSessionById = async (sessionId) => {
   try {
@@ -70,9 +70,9 @@ const findSessionById = async (sessionId) => {
 };
 
 /**
- * Find all non expired sessions for the user
+ * Find all non expired sessions for the user.
  * @param {integer} accountId - account id
- * @returns {Array<Session>} Array of all existing sessions user has.
+ * @returns {Array<Session>} array of all existing sessions user has.
  */
 const findAllSessionsByAccountId = async (accountId) => {
   try {
