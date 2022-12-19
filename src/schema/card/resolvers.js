@@ -1,120 +1,112 @@
-const constants = require('../../util/constants');
-const errors = require('../../util/errors/errors');
+const { findDeckById, findDeckTranslation, findAccountDeckSettings, createAccountDeckSettings } = require('../services/deckService');
 const { notAuthError, defaultError, internalServerError, notAuthorizedError } = require('../../util/errors/graphQlErrors');
-const { calculateDate } = require('../../util/helper');
-const { formStatistics, cardFormatter } = require('../../util/formatter');
+const { formStatistics, cardFormatter, accountCardFormatter } = require('../../util/formatter');
 const { validateMember, checkAdminPermission } = require('../../util/authorization');
-//const services = require('../services');
-const cardService = require('../services/cardService');
-const deckService = require('../services/deckService');
+const { cardService, accountService } = require('../services');
 const validator = require('../../util/validation//validator');
-const { findAccountById } = require('../services/accountService');
+const errors = require('../../util/errors/errors');
+const constants = require('../../util/constants');
 
 const resolvers = {
   Query: {
-    // Fetch cards that are due or new cards based on the newCards boolean value, defaults to false.
-    cardsFromDeck: async (_, { deckId, languageId, newCards }, { currentUser }) => {
-      if (!currentUser) notAuthError();
+    cardsFromDeck: async (_, { deckId, languageId, newCards, date }, { currentUser }) => {
+      if (!currentUser) return notAuthError();
       await validator.validateInteger(deckId);
-      let selectedLanguage = constants.general.defaultLanguage, cards = [];
+      if (date) await validator.validateDate(date);
+      let selectedLanguage = constants.general.defaultLanguage, cards = [], newDate;
 
       // Check that deck exists
-      const deck = await deckService.findDeckById(deckId);
+      const deck = await findDeckById(deckId);
 
       // No deck found with an id
-      if (!deck) defaultError(errors.nonExistingDeckError);
+      if (!deck) return defaultError(errors.nonExistingDeckError);
 
       // Deck not active
-      if (!deck.active) defaultError(errors.nonActiveDeckError);
+      if (!deck.active) return defaultError(errors.nonActiveDeckError);
 
-      let account = await findAccountById(currentUser.id);
+      const account = await accountService.findAccountById(currentUser.id);
 
       // check that user is member, if the deck is member deck
       if (deck.subscriberOnly && !account.member) notAuthorizedError(errors.account.memberFeatureError);
 
-      const deckTranslation = await deckService.findDeckTranslation(deckId, languageId);
-      if (deckTranslation.length !== 0 && deckTranslation[0].active) {
-        selectedLanguage = deckTranslation[0].languageId;
+      const deckTranslation = await findDeckTranslation(deckId, languageId);
+      if (deckTranslation.length !== 0 && deckTranslation[0]?.active) {
+        selectedLanguage = deckTranslation[0]?.languageId ? deckTranslation[0]?.languageId: constants.general.defaultLanguage;
       }
 
       // Check if deck has an account specific settings
-      let accountDeckSettings = await deckService.findAccountDeckSettings(deckId, currentUser.id);
+      let accountDeckSettings = await findAccountDeckSettings(deckId, currentUser.id);
       
       // Create new accoung deck settings if no existing one
       if (!accountDeckSettings) {
-        accountDeckSettings = await deckService.createAccountDeckSettings(deckId, currentUser.id);
+        accountDeckSettings = await createAccountDeckSettings(deckId, currentUser.id);
       }
 
       if (newCards) {
-        // Fetch new cards
         cards = await cardService.fetchNewCards(deckId, currentUser.id, accountDeckSettings.newCardsPerDay, selectedLanguage);
-        //cards = cards.map(card => card.card);
       } else {
-        // Fetch due cards
-        cards = await cardService.fetchDueCards(deckId, currentUser.id, accountDeckSettings.reviewsPerDay, selectedLanguage);
+        newDate = date ? new Date(date) : new Date();
+        const currentDate = newDate.toISOString().split('T')[0];
+        cards = await cardService.fetchDueCards(deckId, currentUser.id, accountDeckSettings.reviewsPerDay, selectedLanguage, currentDate);
       }
-
-      if (!cards) defaultError(errors.noDueCardsError);
-
-      return cardFormatter(cards, false, account.member);
+      if (!cards) return defaultError(errors.noDueCardsError);
+      return cardFormatter(cards, false, account.member, newCards);
     },
     cardsByType: async (_, { cardType, languageId }, { currentUser }) => {
-      if (!currentUser) notAuthError();
+      if (!currentUser) return notAuthError();
       await checkAdminPermission(currentUser.id, 'READ');
-      let cards = await cardService.fetchCardsByType(cardType, currentUser.id, languageId);
-
-      // No cards found with the card type, return empty array
+      const cards = await cardService.fetchCardsByType(cardType, currentUser.id, languageId);
       if (cards.length === 0) return [];
       return cardFormatter(cards, true, true);
     },
     reviewHistory: async (_, { limitReviews }, { currentUser }) => {
-      if (!currentUser) notAuthError();
+      if (!currentUser) return notAuthError();
       await validator.validateInteger(limitReviews);
       const reviewHistory = await cardService.findReviewHistory(limitReviews, currentUser.id);
       if (reviewHistory.length === 0) return [];
       return reviewHistory;
     },
-    dueCount: async (_, { limitReviews }, { currentUser }) => {
-      if (!currentUser) notAuthError();
+    dueCount: async (_, { limitReviews, date }, { currentUser }) => {
+      if (!currentUser) return notAuthError();
       await validator.validateInteger(limitReviews);
-      const dueReviews = await cardService.findDueReviewsCount(limitReviews, currentUser.id);
+      await validator.validateDate(date);
+      let dueReviews = await cardService.findDueReviewsCount(limitReviews, currentUser.id, date);
       if (dueReviews.length === 0) return [];
 
-      // Group all reviews before or today in one day, future reviews in their own days
-      const currentDate = new Date().toISOString().split('T')[0];
-      const dueAfterToday = dueReviews.filter(value => value.date > currentDate);
-      const dueTodayOrBefore = dueReviews.filter(value => value.date <= currentDate);
-      const initialValue = 0;
-      const sumWithInitial = dueTodayOrBefore.reduce(
-        (accumulator, currentValue) => accumulator + parseInt(currentValue.reviews),
-        initialValue
-      );
-
-      // concat only if current date has reviews due
-      return sumWithInitial > 0 ? [{ date: currentDate, reviews: sumWithInitial.toString() }].concat(dueAfterToday) : dueAfterToday;
+      dueReviews = dueReviews.reduce((acc, curr) => {
+        if (!acc[curr.date]) {
+          acc[curr.date] = { date: curr.date, reviews: 0 };
+        }
+        acc[curr.date].reviews += parseInt(curr.reviews);
+        return acc;
+      }, {});
+      return Object.values(dueReviews);
     },
-    learningStatistics: async (_, { cardType }, { currentUser }) => {
-      if (!currentUser) notAuthError();
-      await validator.validateCardType(cardType);
-      const statsFromDb = await cardService.findLearningProgressByType(cardType, currentUser.id);
-      return formStatistics(statsFromDb);
+    learningStatisticsByType: async (_, { cardType, reviewType }, { currentUser }) => {
+      if (!currentUser) return notAuthError();
+      const statistics = await cardService.findLearningProgressByType(cardType, reviewType, currentUser.id);
+      return formStatistics(statistics);
     },
   },
   Mutation: {
-    rescheduleCard: async (_, { cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing }, { currentUser }) => {
-      if (!currentUser) notAuthError();
-      await validator.validateRescheduleCard(cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing);
-      const newDueDate = calculateDate(newInterval);
+    rescheduleCard: async (_, { cardId, reviewResult, newInterval, newEasyFactor, extraReview, timing, date, reviewType }, { currentUser }) => {
+      if (!currentUser) return notAuthError();
+      await validator.validateRescheduleCard(cardId, newInterval, newEasyFactor, extraReview, timing, date);
+
+      let newDueDate = new Date(date);
+      const currentDate = newDueDate.toISOString().split('T')[0];
+      newDueDate.setDate(newDueDate.getDate() + newInterval);
+      newDueDate = newDueDate.toISOString().split('T')[0];
 
       // Check if card exists for the user for that card id
-      let accountCard = await cardService.findAccountCard(cardId, currentUser.id);
+      let accountCard = await cardService.findAccountCard(cardId, currentUser.id, reviewType);
 
       // Create new custom card for the user, if none found the current user id and kanji id
       if (!accountCard) {
         // Check that card actually exists in the database
         const card = cardService.findCardById(cardId);
-        if (!card) defaultError(errors.nonExistingId);
-        accountCard = await cardService.createAccountCard(cardId, currentUser.id, null, null, newEasyFactor, newDueDate, newInterval, true);
+        if (!card) return defaultError(errors.nonExistingId);
+        accountCard = await cardService.createAccountCard(cardId, currentUser.id, newEasyFactor, newDueDate, newInterval, reviewType);
       } else {
         // Update existing user card
         try {
@@ -131,72 +123,56 @@ const resolvers = {
         }
       }
       // Add new row to review history
-      await cardService.createAccountReview(cardId, currentUser.id, reviewResult, extraReview, timing);
-
-      return {
-        id: accountCard.id,
-        reviewCount: accountCard.reviewCount,
-        easyFactor: accountCard.easyFactor,
-        accountStory: accountCard.accountStory,
-        accountHint: accountCard.accountHint,
-        dueAt: accountCard.dueAt,
-        mature: accountCard.mature,
-        createdAt: accountCard.createdAt,
-        updatedAt: accountCard.updatedAt
-      };
+      await cardService.createAccountReview(cardId, currentUser.id, reviewResult, reviewType, extraReview, timing, currentDate);
+      return accountCardFormatter(accountCard);
     },
-    pushCards: async (_, { deckId, days }, { currentUser }) => {
-      if (!currentUser) notAuthError();
+    pushCards: async (_, { deckId, days, date }, { currentUser }) => {
+      if (!currentUser) return notAuthError();
       await validateMember(currentUser.id);
-      await validator.validatePushCards(deckId, days);
+      await validator.validatePushCards(deckId, days, date);
+
+      let newDueDate = new Date(date);
+      const currentDate = newDueDate.toISOString().split('T')[0];
+      newDueDate.setDate(newDueDate.getDate() + days);
+      newDueDate = newDueDate.toISOString().split('T')[0];
+
       if (deckId) {
-        await cardService.pushCardsInDeck(deckId, days, currentUser.id);
+        await cardService.pushCardsInDeck(currentDate, newDueDate, days, currentUser.id, deckId);
       } else {
-        await cardService.pushAllCards(days, currentUser.id);
+        await cardService.pushAllCards(currentDate, newDueDate, days, currentUser.id);
       }
-      
-      return { status: true };
+
+      return true;
     },
     editAccountCard: async (_, { cardId, story, hint }, { currentUser }) => {
-      if (!currentUser) notAuthError();
-      // If no story or hint provided return id back to the user
-      if (!story && !hint) defaultError(errors.provideStoryOrHintError);
-      await validateMember(currentUser.id);
+      if (!currentUser) return notAuthError();
+      if (!story && !hint) return defaultError(errors.provideStoryOrHintError);
       await validator.validateEditAccountCard(cardId, story, hint);
+      await validateMember(currentUser.id);
 
       // Check that card actually exists in the database
       const card = await cardService.findCardById(cardId);
-      if (!card) defaultError(errors.nonExistingIdError);
-      let accountCard = await cardService.findAccountCard(cardId, currentUser.id);
+      if (!card) return defaultError(errors.nonExistingIdError);
+
+      // Find account card custom data from db
+      let accountCardCustomData = await cardService.findAccountCardCustomData(cardId, currentUser.id);
 
       // Create new custom card for the user, if none found the current user id and kanji id
-      if (!accountCard) {
-        accountCard = await cardService.createAccountCard(cardId, currentUser.id, story, hint, null, null, null, false);
+      if (!accountCardCustomData) {
+        accountCardCustomData = await cardService.createAccountCardCustomData(cardId, currentUser.id, story, hint);
       } else {
-        // Update existing user card
+        // Update existing account card custom data
         try {
-          // Update and save changes, card is set to mature if the interval is higher than set maturing interval
-          accountCard.set({
-            accountStory: story ? story : accountCard.accountStory,
-            accountHint: hint ? hint : accountCard.accountHint,
+          accountCardCustomData.set({
+            accountStory: story ? story : accountCardCustomData.accountStory,
+            accountHint: hint ? hint : accountCardCustomData.accountHint,
           });
-          accountCard.save();
+          accountCardCustomData.save();
         } catch(error) {
-          internalServerError(error);
+          return internalServerError(error);
         }
       }
-
-      return {
-        id: accountCard.id,
-        reviewCount: accountCard.reviewCount,
-        easyFactor: accountCard.easyFactor,
-        accountStory: accountCard.accountStory,
-        accountHint: accountCard.accountHint,
-        dueAt: accountCard.dueAt,
-        mature: accountCard.mature,
-        createdAt: accountCard.createdAt,
-        updatedAt: accountCard.updatedAt
-      };
+      return accountCardCustomData;
     },
   }
 };

@@ -14,15 +14,9 @@ enum ReviewType {
   RECOGNISE
 }
 
-type Account {
-  id: ID!
-  email: String
-  username: String
-  password: String
-}
-
-type Success {
-  status: Boolean!
+enum ReviewResult {
+  AGAIN
+  GOOD
 }
 
 type AccountCard {
@@ -125,11 +119,22 @@ type Reviews {
   reviews: [Day]
 }
 
+type AccountCardCustomData {
+  id: Int
+  accountId: Int
+  cardId: Int
+  accountStory: String
+  accountHint: String
+  createdAt: Date
+  updatedAt: Date
+}
+
 type Query {
   cardsFromDeck(
     deckId: Int!
     languageId: Language! = EN
     newCards: Boolean
+    date: Date
   ): [Card!]!
 
   cardsByType(
@@ -143,33 +148,38 @@ type Query {
 
   dueCount(
     limitReviews: Int!
+    date: Date!
   ): [Day!]!
 
-  learningStatistics(
+  learningStatisticsByType(
     cardType: CardType!
+    reviewType: ReviewType!
   ): Statistics!
 }
 
 type Mutation {
   rescheduleCard(
     cardId: Int!
-    reviewResult: String!
+    reviewResult: ReviewResult!
     newInterval: Int!
     newEasyFactor: Float!
     extraReview: Boolean
     timing: Int
+    date: Date!
+    reviewType: ReviewType!
   ): AccountCard!
 
   pushCards(
     deckId: Int
-    days: Int
-  ): Success!
+    days: Int!
+    date: Date!
+  ): Boolean!
 
   editAccountCard(
     cardId: Int!
     story: String
     hint: String
-  ): AccountCard!
+  ): AccountCardCustomData!
 }`;
 
 module.exports = typeDefs;
