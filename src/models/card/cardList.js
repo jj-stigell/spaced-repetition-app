@@ -26,6 +26,11 @@ CardList.init({
       key: 'id'
     },
   },
+  active: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  },
   learningOrder: {
     type: DataTypes.INTEGER
   },

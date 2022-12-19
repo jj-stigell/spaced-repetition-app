@@ -285,29 +285,7 @@ AccountDeckSettings.belongsTo(Deck, {
   foreignKey: 'deckId'
 });
 
-
-
-
-
-
-
-
-
-/*
 // Account card custom data (story, hint, etc.)
-AccountCard.hasOne(AccountCardCustomData, {
-  onDelete: 'CASCADE',
-  onUpdate: 'CASCADE',
-  foreignKey: {
-    allowNull: false
-  }
-});
-AccountCardCustomData.belongsTo(AccountCard, {
-  targetKey: 'cardId',
-  foreignKey: 'cardId'
-});
-*/
-
 Account.hasMany(AccountCardCustomData, {
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
@@ -327,14 +305,6 @@ AccountCardCustomData.belongsTo(Card, {
   targetKey: 'id',
   foreignKey: 'cardId'
 });
-
-
-
-
-
-
-
-
 
 // Bug reports belongs to some card and account, id PK, account_id and card_id FK
 // On delete set null so bug history stays intact
