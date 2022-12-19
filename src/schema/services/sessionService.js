@@ -1,7 +1,7 @@
 const { internalServerError } = require('../../util/errors/graphQlErrors');
-const constants = require('../../util/constants');
 const { calculateDate } = require('../../util/helper');
-const { Session } = require('../../models');
+const constants = require('../../util/constants');
+const models = require('../../models');
 
 /**
  * Create a new session for the user, set expiry same as JWT expiry, placeholder for now.
@@ -11,7 +11,7 @@ const { Session } = require('../../models');
 const createNewSession = async (accountId, userAgent) => {
   try {
     const date = calculateDate(constants.login.sessionLifetime);
-    return await Session.create({
+    return await models.Session.create({
       accountId: accountId,
       expireAt: date,
       browser: userAgent.browser,
@@ -30,7 +30,7 @@ const createNewSession = async (accountId, userAgent) => {
  */
 const deleteSession = async (sessionId) => {
   try {
-    return await Session.destroy({
+    return await models.Session.destroy({
       where: {
         id: sessionId
       }
@@ -47,7 +47,7 @@ const deleteSession = async (sessionId) => {
  */
 const deactivateSession = async (sessionId) => {
   try {
-    const session = await Session.findByPk(sessionId);
+    const session = await models.Session.findByPk(sessionId);
     session.set({ active: false });
     await session.save();
     return session;
@@ -63,7 +63,7 @@ const deactivateSession = async (sessionId) => {
  */
 const findSessionById = async (sessionId) => {
   try {
-    return await Session.findByPk(sessionId);
+    return await models.Session.findByPk(sessionId);
   } catch (error) {
     return internalServerError(error);
   }
@@ -76,7 +76,7 @@ const findSessionById = async (sessionId) => {
  */
 const findAllSessionsByAccountId = async (accountId) => {
   try {
-    return await Session.findAll({
+    return await models.Session.findAll({
       where: {
         accountId: accountId,
         active: true

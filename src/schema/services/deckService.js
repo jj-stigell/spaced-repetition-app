@@ -1,6 +1,6 @@
 const { internalServerError } = require('../../util/errors/graphQlErrors');
-const models = require('../../models');
 const constants = require('../../util/constants');
+const models = require('../../models');
 
 /**
  * Find deck by its id (PK).
