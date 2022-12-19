@@ -5,13 +5,6 @@ const rawQueries = require('./rawQueries');
 const models = require('../../models');
 const { Op } = require('sequelize');
 
-
-
-
-
-
-//FIXED
-
 /**
  * Find card by its id (PK).
  * @param {integer} cardId - id of the card
@@ -24,11 +17,6 @@ const findCardById = async (cardId) => {
     return internalServerError(error);
   }
 };
-
-
-
-
-//FIXED
 
 /**
  * Creates a new account card, can be during review.
@@ -55,17 +43,6 @@ const createAccountCard = async (cardId, accountId, easyFactor, newDueDate, newI
     return internalServerError(error);
   }
 };
-
-
-
-
-
-
-
-
-
-
-// FIXED
 
 /**
  * Add new row to review history.
@@ -94,15 +71,6 @@ const createAccountReview = async (cardId, accountId, reviewResult, reviewType, 
   }
 };
 
-
-
-
-
-
-
-
-//FIXED
-
 /**
  * Fetch unreviewed cards from deck.
  * @param {integer} deckId - id of the deck
@@ -126,12 +94,12 @@ const fetchNewCards = async (deckId, accountId, limitReviews, languageId) => {
 
     if (cardIds.length === 0) return null;
 
-    const idInLearningOrder = cardIds.map(listItem => listItem.card_id);
+    const idInLearningOrder = cardIds.map(listItem => listItem.id);
 
     return await models.CardList.findAll({
       where: {
         deckId: deckId,
-        cardId: { [Op.in]: idInLearningOrder }
+        id: { [Op.in]: idInLearningOrder }
       },
       subQuery: false,
       nest: true,
@@ -197,25 +165,11 @@ const fetchNewCards = async (deckId, accountId, limitReviews, languageId) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
- * Fetch unreviewed cards from deck
+ * Fetch due cards cards from deck
  * @param {integer} deckId - id of the deck
  * @param {integer} accountId - accounts id number
- * @param {integer} limitReviews - how many cards are taken from the deck
+ * @param {integer} limitReviews - how many cards are selected from the deck
  * @param {string} languageId - what translations are used
  * @param {Date} currentDate - current date for the client, can differ from server date
  * @returns {object} cards found
@@ -236,12 +190,14 @@ const fetchDueCards = async (deckId, accountId, limitReviews, languageId, curren
 
     if (cardIds.length === 0) return null;
 
-    const idInLearningOrder = cardIds.map(listItem => listItem.card_id);
+    const idInLearningOrder = cardIds.map(listItem => listItem.id);
 
-    const cards = await models.CardList.findAll({
+    console.log(idInLearningOrder);
+
+    return await models.CardList.findAll({
       where: {
         deckId: deckId,
-        cardId: { [Op.in]: idInLearningOrder }
+        id: { [Op.in]: idInLearningOrder }
       },
       subQuery: false,
       nest: true,
@@ -253,18 +209,21 @@ const fetchDueCards = async (deckId, accountId, limitReviews, languageId, curren
         include: [
           {
             model: models.Kanji,
+            attributes: ['id', 'kanji', 'jlptLevel', 'onyomi', 'onyomiRomaji', 'kunyomi', 'kunyomiRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
             include: [
               {
                 model: models.KanjiTranslation,
+                attributes: ['keyword', 'story', 'hint', 'otherMeanings', 'description', 'createdAt', 'updatedAt'],
                 where: {
                   language_id: languageId
                 },
               },
               {
                 model: models.Radical,
-                attributes: ['id', 'radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
+                attributes: ['radical', 'reading', 'readingRomaji', 'strokeCount', 'createdAt', 'updatedAt'],
                 include: {
                   model: models.RadicalTranslation,
+                  attributes: ['translation', 'description', 'createdAt', 'updatedAt'],
                   where: {
                     language_id: languageId
                   }
@@ -274,18 +233,22 @@ const fetchDueCards = async (deckId, accountId, limitReviews, languageId, curren
           },
           {
             model: models.AccountCard,
+            attributes: ['id', 'reviewCount', 'easyFactor', 'dueAt', 'mature', 'createdAt', 'updatedAt'],
+            required: false,
             where: {
               accountId: accountId
             }
           },
           {
             model: models.AccountCardCustomData,
-            required: false,
+            attributes: ['accountStory', 'accountHint']
           },
           {
             model: models.Word,
+            attributes: ['id', 'word', 'jlptLevel', 'furigana', 'reading', 'readingRomaji', 'createdAt', 'updatedAt'],
             include: {
               model: models.WordTranslation,
+              attributes: ['translation', 'hint', 'description', 'createdAt', 'updatedAt'],
               where: {
                 language_id: languageId
               },
@@ -295,30 +258,10 @@ const fetchDueCards = async (deckId, accountId, limitReviews, languageId, curren
       },
       order: [['learningOrder', 'ASC']]
     });
-    return cards;
   } catch (error) {
     return internalServerError(error);
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// FIXED!!!!!
 
 /**
  * Fetch all cards based on their type. NOTE at the moment, when handling the
@@ -393,18 +336,6 @@ const fetchCardsByType = async (cardType, accountId, languageId) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-// FIXED!!!!!
-
 /**
  * Find how many reviews account has made in the past 'limitReviews' days.
  * Only days with reviews are returned, if zero reviews those are omitted.
@@ -427,25 +358,6 @@ const findReviewHistory = async (limitReviews, accountId) => {
     return internalServerError(error);
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// FIXED!!!!!
 
 /**
  * Find how many reviews account has due in the future for 'limitReviews' days.
@@ -473,17 +385,6 @@ const findDueReviewsCount = async (limitReviews, accountId, currentDate) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-// FIXED!!!!!
-
 /**
  * Find learning progress by card type.
  * Cards are divided into three categories {new, learning, mature}.
@@ -507,17 +408,6 @@ const findLearningProgressByType = async (cardType , reviewType, accountId) => {
     return internalServerError(error);
   }
 };
-
-
-
-
-
-
-
-
-
-
-// FIXED!!!!!
 
 /**
  * Push all cards in to the future for account with 'accountId'
@@ -543,15 +433,6 @@ const pushAllCards = async (currentDate, newDueDate, days, accountId) => {
     return internalServerError(error);
   }
 };
-
-
-
-
-
-
-
-
-// FIXED!!!!!
 
 /**
  * Push all cards in deck 'deckId' for account with 'accountId'.
@@ -580,14 +461,6 @@ const pushCardsInDeck = async (currentDate, newDueDate, days, accountId, deckId)
   }
 };
 
-
-
-
-
-
-
-// FIXED!!!!!
-
 /**
  * Find account card (with account specific data) by card and account id.
  * @param {integer} cardId - id of the card
@@ -609,14 +482,6 @@ const findAccountCard = async (cardId, accountId, reviewType) => {
   }
 };
 
-
-
-
-
-
-
-// FIXED!!!!!
-
 /**
  * Find account card (with account specific data) by card and account id.
  * @param {integer} cardId - id of the card
@@ -636,18 +501,6 @@ const findAccountCardCustomData = async (cardId, accountId) => {
     return internalServerError(error);
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-// FIXED!!!!!
 
 /**
  * Create new custom card for the account for the specific card.
