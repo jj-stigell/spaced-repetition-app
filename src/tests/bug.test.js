@@ -1,19 +1,17 @@
-/* eslint-disable no-unused-vars */
-const { expect, describe, beforeAll, afterAll, beforeEach, it } = require('@jest/globals');
-const request = require('supertest');
-const { PORT } = require('../util/config');
-const { connectToDatabase } = require('../database');
+const { it, expect, describe, beforeAll, afterAll, beforeEach } = require('@jest/globals');
 const { account, nonMemberAccount, adminReadRights, adminWriteRights, validBugReport, solveBugReport, stringData } = require('./utils/constants'); 
-const mutations = require('./utils/mutations');
-const errors = require('../util/errors/errors');
-const server = require('../util/server');
-const helpers = require('./utils/helper');
-const constants = require('../util/constants');
-const queries = require('./utils/queries');
-const sendRequest = require('./utils/request');
 const { bugReportEvaluator } = require('./utils/expectHelper');
+const { connectToDatabase } = require('../database');
+const errors = require('../util/errors/errors');
+const mutations = require('./utils/mutations');
+const constants = require('../util/constants');
+const sendRequest = require('./utils/request');
+const { PORT } = require('../util/config');
+const queries = require('./utils/queries');
+const helpers = require('./utils/helper');
+const server = require('../util/server');
 
-describe('Bugintegration tests', () => {
+describe('Bug report integration tests', () => {
   let testServer, testUrl, memberAuthToken, adminAuthReadToken,
     adminAuthWriteToken, nonMemberAuthToken, memberAcc, nonMemberAcc,
     adminReadAcc, adminWriteAcc, bugReportToSolve,
@@ -39,7 +37,7 @@ describe('Bugintegration tests', () => {
     [ adminAuthReadToken, adminReadAcc ] = await helpers.getToken(testUrl, adminReadRights);
     [ adminAuthWriteToken, adminWriteAcc ] = await helpers.getToken(testUrl, adminWriteRights);
     // Add bug report to the db, and set its id for the bug report that must be searched/deleted/edited, etc.
-    const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, validBugReport);
+    const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, validBugReport);
     bugReportToSolve = {
       ...response.body.data.sendBugReport,
       ...solveBugReport,
@@ -51,67 +49,73 @@ describe('Bugintegration tests', () => {
   describe('Send a bug report', () => {
 
     it('Authentication error when not logged in', async () => {
-      const response = await sendRequest(testUrl, null, mutations.sendBugReportMutation, validBugReport);
+      const response = await sendRequest(testUrl, null, mutations.sendBugReport, validBugReport);
       expect(response.body.data?.sendBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
     it('Error when bug type does not match any of the enum types', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, { ...validBugReport, type: 'NOTVALID' });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { ...validBugReport, type: 'NOTVALID' });
       expect(response.body.data?.sendBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when bug message too short', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, { ...validBugReport, bugMessage: 'x'.repeat(constants.bugs.solvedMessageMinLength - 1) });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport,{ ...validBugReport, bugMessage: 'x'.repeat(constants.bugs.solvedMessageMinLength - 1) });
       expect(response.body.data?.sendBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugMessageTooShortError);
     });
 
     it('Error when bug message too long', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, { ...validBugReport, bugMessage: 'x'.repeat(constants.bugs.bugMessageMaxLength + 1) });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { ...validBugReport, bugMessage: 'x'.repeat(constants.bugs.bugMessageMaxLength + 1) });
       expect(response.body.data?.sendBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugMessageTooLongError);
     });
 
     it('Error when bug message type not string', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, { ...validBugReport, bugMessage: 1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { ...validBugReport, bugMessage: 1 });
       expect(response.body.data?.sendBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when bug message not send', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, { ...validBugReport, bugMessage: null });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { ...validBugReport, bugMessage: null });
       expect(response.body.data?.sendBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when card id negative integer', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, { ...validBugReport, cardId: -1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { ...validBugReport, cardId: -1 });
       expect(response.body.data?.sendBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when card id zero', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, { ...validBugReport, cardId: 0 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { ...validBugReport, cardId: 0 });
       expect(response.body.data?.sendBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when card id type not integer', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, { ...validBugReport, cardId: 'x' });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { ...validBugReport, cardId: 'x' });
       expect(response.body.data?.sendBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
-    it('Sending bug report works after authentication, all arguments according to validation rules', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, validBugReport);
+    it('Sending bug report works after authentication (non-member), all arguments according to validation rules', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, validBugReport);
+      bugReportEvaluator(response.body.data.sendBugReport);
+      expect(response.body.errors).toBeUndefined();
+    });
+
+    it('Sending bug report works after authentication (member), all arguments according to validation rules', async () => {
+      const response = await sendRequest(testUrl, memberAuthToken, mutations.sendBugReport, validBugReport);
       bugReportEvaluator(response.body.data.sendBugReport);
       expect(response.body.errors).toBeUndefined();
     });
 
     it('Sending bug report succesfull without card id', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReportMutation, { type: validBugReport.type, bugMessage: validBugReport.bugMessage });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { type: validBugReport.type, bugMessage: validBugReport.bugMessage });
       bugReportEvaluator(response.body.data.sendBugReport);
       expect(response.body.errors).toBeUndefined();
     });
@@ -120,117 +124,85 @@ describe('Bugintegration tests', () => {
   describe('Solving bug reports', () => {
 
     it('Solving bug report leads to auth error when not logged in', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .send({ query: mutations.solveBugReportMutation, variables: bugReportToSolve });
+      const response = await sendRequest(testUrl, null, mutations.solveBugReport, bugReportToSolve);
       expect(response.body.data?.solveBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
-    it('Unauthorized error when logged in but not admin', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${nonMemberAuthToken}`)
-        .send({ query: mutations.solveBugReportMutation, variables: bugReportToSolve });
+    it('Unauthorized error when logged in as non-member but not admin', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.solveBugReport, bugReportToSolve);
+      expect(response.body.data?.solveBugReport).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+    });
 
+    it('Unauthorized error when logged in as member but not admin', async () => {
+      const response = await sendRequest(testUrl, memberAuthToken, mutations.solveBugReport, bugReportToSolve);
       expect(response.body.data?.solveBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
     });
 
     it('Unauthorized error when admin but no write permission', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthReadToken}`)
-        .send({ query: mutations.solveBugReportMutation, variables: bugReportToSolve });
-
+      const response = await sendRequest(testUrl, adminAuthReadToken, mutations.solveBugReport, bugReportToSolve);
       expect(response.body.data?.solveBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminWriteRights);
     });
 
     it('Error when write permission but bug id negative integer', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthWriteToken}`)
-        .send({ query: mutations.solveBugReportMutation, variables: {...bugReportToSolve, bugId: -1 } });
-
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, bugId: -1 });
       expect(response.body.data?.solveBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when write permission but bug id zero integer', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthWriteToken}`)
-        .send({ query: mutations.solveBugReportMutation, variables: {...bugReportToSolve, bugId: 0 } });
-
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, bugId: 0 });
       expect(response.body.data?.solveBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when write permission but bug id type not integer', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthWriteToken}`)
-        .send({ query: mutations.solveBugReportMutation, variables: {...bugReportToSolve, bugId: 'x' } });
-
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, bugId: 'x' });
       expect(response.body.data?.solveBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when bug solve message too short', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthWriteToken}`)
-        .send({ query: mutations.solveBugReportMutation, variables: {...bugReportToSolve, solvedMessage: 'x'.repeat(constants.bugs.solvedMessageMinLength - 1) } });
-
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, solvedMessage: 'x'.repeat(constants.bugs.solvedMessageMinLength - 1) });
       expect(response.body.data?.solveBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugSolveMessageTooShortError);
     });
 
     it('Error when bug solve message too short', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthWriteToken}`)
-        .send({ query: mutations.solveBugReportMutation, variables: {...bugReportToSolve, solvedMessage: 'x'.repeat(constants.bugs.solvedMessageMaxLength + 1) } });
-
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, solvedMessage: 'x'.repeat(constants.bugs.solvedMessageMaxLength + 1) });
       expect(response.body.data?.solveBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugSolveMessageTooLongError);
     });
 
     it('Error when bug solve message not type string', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthWriteToken}`)
-        .send({ query: mutations.solveBugReportMutation, variables: {...bugReportToSolve, solvedMessage: 1 } });
-
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, solvedMessage: 1 });
       expect(response.body.data?.solveBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when solved not type boolean', async () => {
-      let response = await request(testUrl)
-        .post('/')
-        .set('Authorization', `bearer ${adminAuthWriteToken}`)
-        .send({ query: mutations.solveBugReportMutation, variables: {...bugReportToSolve, solved: 1 } });
-
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, solved: 1 });
       expect(response.body.data?.solveBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Solve bug report succesful when admin with write permission, all arguments according to validation rules', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReportMutation, bugReportToSolve);
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, bugReportToSolve);
       bugReportEvaluator(response.body.data.solveBugReport);
       expect(response.body.errors).toBeUndefined();
     });
 
     it('Solve bug report possible with solved message omitted', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReportMutation, { bugId: bugReportToSolve.bugId, solved: bugReportToSolve.solved });
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, { bugId: bugReportToSolve.bugId, solved: bugReportToSolve.solved });
       bugReportEvaluator(response.body.data.solveBugReport);
       expect(response.body.errors).toBeUndefined();
     });
 
     it('Solve bug report possible with solved boolean omitted', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReportMutation, { bugId: bugReportToSolve.bugId, solvedMessage: bugReportToSolve.solvedMessage });
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, { bugId: bugReportToSolve.bugId, solvedMessage: bugReportToSolve.solvedMessage });
       bugReportEvaluator(response.body.data.solveBugReport);
       expect(response.body.errors).toBeUndefined();
     });
@@ -239,55 +211,61 @@ describe('Bugintegration tests', () => {
   describe('Deleting bug reports', () => {
 
     it('Authentication error when trying to delete but not not logged in', async () => {
-      const response = await sendRequest(testUrl, null, mutations.deleteBugReportMutation, { bugId: bugReportToSolve.bugId });
+      const response = await sendRequest(testUrl, null, mutations.deleteBugReport, { bugId: bugReportToSolve.bugId });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
-    it('Unauthorized error when logged in but not admin', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.deleteBugReportMutation, { bugId: bugReportToSolve.bugId });
+    it('Unauthorized error when logged in as non-member but not admin', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.deleteBugReport, { bugId: bugReportToSolve.bugId });
+      expect(response.body.data?.deleteBugReport).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+    });
+
+    it('Unauthorized error when logged in as member but not admin', async () => {
+      const response = await sendRequest(testUrl, memberAuthToken, mutations.deleteBugReport, { bugId: bugReportToSolve.bugId });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
     });
 
     it('Unauthorized error when admin but no write permission', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, mutations.deleteBugReportMutation, { bugId: bugReportToSolve.bugId });
+      const response = await sendRequest(testUrl, adminAuthReadToken, mutations.deleteBugReport, { bugId: bugReportToSolve.bugId });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminWriteRights);
     });
 
     it('Error when write permission but bug id negative integer', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReportMutation, { bugId: -1 });
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReport, { bugId: -1 });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when write permission but bug id zero integer', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReportMutation, { bugId: 0 });
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReport, { bugId: 0 });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when write permission but bug id type not integer', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReportMutation, { bugId: 'x' });
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReport, { bugId: 'x' });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when write permission but bug id not send', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReportMutation, null);
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReport, null);
       expect(response.body.data?.deleteBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when write permission but bug with id not found', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReportMutation, { bugId: 9999 });
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReport, { bugId: 9999 });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugByIdNotFound);
     });
 
     it('Delete bug report succesfully when admin with write permisson', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReportMutation, { bugId: bugReportToSolve.bugId });
+      const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReport, { bugId: bugReportToSolve.bugId });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.deleteBugReport).toBeDefined();
       expect(response.body.data.deleteBugReport).toBe(bugReportToSolve.bugId);
@@ -297,26 +275,32 @@ describe('Bugintegration tests', () => {
   describe('Fetching bug reports', () => {
 
     it('Authentication error when trying to fetch bug reports but not not logged in', async () => {
-      const response = await sendRequest(testUrl, null, queries.fetchAllBugReports, null);
-      expect(response.body.data?.fetchAllBugReports).toBeUndefined();
+      const response = await sendRequest(testUrl, null, queries.bugReports, null);
+      expect(response.body.data?.bugReports).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
-    it('Unauthorized error when logged in but not admin', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.fetchAllBugReports, null);
-      expect(response.body.data?.fetchAllBugReports).toBeUndefined();
+    it('Unauthorized error when logged in as non-member but not admin', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.bugReports, null);
+      expect(response.body.data?.bugReports).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+    });
+
+    it('Unauthorized error when logged in as member but not admin', async () => {
+      const response = await sendRequest(testUrl, memberAuthToken, queries.bugReports, null);
+      expect(response.body.data?.bugReports).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
     });
 
     it('Access possible when admin but no write permission', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchAllBugReports, null);
-      response.body.data.fetchAllBugReports.forEach(bugReport => bugReportEvaluator(bugReport));
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReports, null);
+      response.body.data.bugReports.forEach(bugReport => bugReportEvaluator(bugReport));
       expect(response.body.errors).toBeUndefined();
     });
 
     it('Access possible when admin with write permission', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, queries.fetchAllBugReports, null);
-      response.body.data.fetchAllBugReports.forEach(bugReport => bugReportEvaluator(bugReport));
+      const response = await sendRequest(testUrl, adminAuthWriteToken, queries.bugReports, null);
+      response.body.data.bugReports.forEach(bugReport => bugReportEvaluator(bugReport));
       expect(response.body.errors).toBeUndefined();
     });
   });
@@ -324,56 +308,62 @@ describe('Bugintegration tests', () => {
   describe('Fetching bug report by id', () => {
 
     it('Authentication error when trying to fetch bug report by id but not not logged in', async () => {
-      const response = await sendRequest(testUrl, null, queries.fetchBugReportById, { bugId: bugReportToSolve.bugId });
-      expect(response.body.data?.fetchBugReportById).toBeUndefined();
+      const response = await sendRequest(testUrl, null, queries.bugReportById, { bugId: bugReportToSolve.bugId });
+      expect(response.body.data?.bugReportById).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
-    it('Unauthorized error when logged in but not admin', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.fetchBugReportById, { bugId: bugReportToSolve.bugId });
-      expect(response.body.data?.fetchBugReportById).toBeUndefined();
+    it('Unauthorized error when logged in as non-member but not admin', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.bugReportById, { bugId: bugReportToSolve.bugId });
+      expect(response.body.data?.bugReportById).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+    });
+
+    it('Unauthorized error when logged in as member but not admin', async () => {
+      const response = await sendRequest(testUrl, memberAuthToken, queries.bugReportById, { bugId: bugReportToSolve.bugId });
+      expect(response.body.data?.bugReportById).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
     });
 
     it('Error when read permission but bug id negative integer', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportById, { bugId: -1 });
-      expect(response.body.data?.fetchBugReportById.id).toBeUndefined();
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportById, { bugId: -1 });
+      expect(response.body.data?.bugReportById.id).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when read permission but bug id zero integer', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportById, { bugId: 0 });
-      expect(response.body.data?.fetchBugReportById.id).toBeUndefined();
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportById, { bugId: 0 });
+      expect(response.body.data?.bugReportById.id).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
     });
 
     it('Error when read permission but bug id type not integer', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportById, { bugId: 'x' });
-      expect(response.body.data?.fetchBugReportById.id).toBeUndefined();
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportById, { bugId: 'x' });
+      expect(response.body.data?.bugReportById.id).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when read permission but bug with id not found', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportById, { bugId: 9999 });
-      expect(response.body.data?.fetchBugReportById.id).toBeUndefined();
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportById, { bugId: 9999 });
+      expect(response.body.data?.bugReportById.id).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugByIdNotFound);
     });
 
     it('Error when read permission but bug id not send', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportById, null);
-      expect(response.body.data?.fetchBugReportById.id).toBeUndefined();
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportById, null);
+      expect(response.body.data?.bugReportById.id).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Access possible when admin with read permission', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportById, { bugId: bugReportToSolve.id });
-      bugReportEvaluator(response.body.data.fetchBugReportById);
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportById, { bugId: bugReportToSolve.id });
+      bugReportEvaluator(response.body.data.bugReportById);
       expect(response.body.errors).toBeUndefined();
     });
 
     it('Access possible when admin with write permission', async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, queries.fetchBugReportById, { bugId: bugReportToSolve.id });
-      bugReportEvaluator(response.body.data.fetchBugReportById);
+      const response = await sendRequest(testUrl, adminAuthWriteToken, queries.bugReportById, { bugId: bugReportToSolve.id });
+      bugReportEvaluator(response.body.data.bugReportById);
       expect(response.body.errors).toBeUndefined();
     });
   });
@@ -381,61 +371,67 @@ describe('Bugintegration tests', () => {
   describe('Fetching bug reports by type', () => {
 
     it('Authentication error when trying to fetch bug report by id but not not logged in', async () => {
-      const response = await sendRequest(testUrl, null, queries.fetchBugReportsByType, { type: findTypeFirst });
-      expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
+      const response = await sendRequest(testUrl, null, queries.bugReportsByType, { type: findTypeFirst });
+      expect(response.body.data?.bugReportsByType).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.unauthenticated);
     });
 
-    it('Unauthorized error when logged in but not admin', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.fetchBugReportsByType, { type: findTypeFirst });
-      expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
+    it('Unauthorized error when logged in as non-member but not admin', async () => {
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.bugReportsByType, { type: findTypeFirst });
+      expect(response.body.data?.bugReportsByType).toBeUndefined();
+      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+    });
+
+    it('Unauthorized error when logged in as member but not admin', async () => {
+      const response = await sendRequest(testUrl, memberAuthToken, queries.bugReportsByType, { type: findTypeFirst });
+      expect(response.body.data?.bugReportsByType).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
     });
 
     it('Error when read permission but bug type enum invalid', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportsByType, { type: stringData.notValidEnum });
-      expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportsByType, { type: stringData.notValidEnum });
+      expect(response.body.data?.bugReportsByType).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when read permission but bug type wrong type', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportsByType, { type: 1 });
-      expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportsByType, { type: 1 });
+      expect(response.body.data?.bugReportsByType).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it('Error when read permission but bug type not send', async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportsByType, null);
-      expect(response.body.data?.fetchBugReportsByType).toBeUndefined();
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportsByType, null);
+      expect(response.body.data?.bugReportsByType).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.graphQlErrors.badUserInput);
     });
 
     it(`Access possible when admin with read permission, searching type '${findTypeFirst}'`, async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportsByType, { type: findTypeFirst });
-      response.body.data.fetchBugReportsByType.forEach(bugReport => bugReportEvaluator(bugReport));
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportsByType, { type: findTypeFirst });
+      response.body.data.bugReportsByType.forEach(bugReport => bugReportEvaluator(bugReport));
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.fetchBugReportsByType.every(bug => bug.type === findTypeFirst)).toBe(true);
+      expect(response.body.data.bugReportsByType.every(bug => bug.type === findTypeFirst)).toBe(true);
     });
 
     it(`Access possible when admin with write permission, searching type '${findTypeFirst}'`, async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, queries.fetchBugReportsByType, { type: findTypeFirst });
-      response.body.data.fetchBugReportsByType.forEach(bugReport => bugReportEvaluator(bugReport));
+      const response = await sendRequest(testUrl, adminAuthWriteToken, queries.bugReportsByType, { type: findTypeFirst });
+      response.body.data.bugReportsByType.forEach(bugReport => bugReportEvaluator(bugReport));
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.fetchBugReportsByType.every(bug => bug.type === findTypeFirst)).toBe(true);
+      expect(response.body.data.bugReportsByType.every(bug => bug.type === findTypeFirst)).toBe(true);
     });
 
     it(`Access possible when admin with read permission, searching type '${findTypeSecond}'`, async () => {
-      const response = await sendRequest(testUrl, adminAuthReadToken, queries.fetchBugReportsByType, { type: findTypeSecond });  
-      response.body.data.fetchBugReportsByType.forEach(bugReport => bugReportEvaluator(bugReport));
+      const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportsByType, { type: findTypeSecond });  
+      response.body.data.bugReportsByType.forEach(bugReport => bugReportEvaluator(bugReport));
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.fetchBugReportsByType.every(bug => bug.type === findTypeSecond)).toBe(true);
+      expect(response.body.data.bugReportsByType.every(bug => bug.type === findTypeSecond)).toBe(true);
     });
 
     it(`Access possible when admin with write permission, searching type '${findTypeSecond}'`, async () => {
-      const response = await sendRequest(testUrl, adminAuthWriteToken, queries.fetchBugReportsByType, { type: findTypeSecond });
-      response.body.data.fetchBugReportsByType.forEach(bugReport => bugReportEvaluator(bugReport));
+      const response = await sendRequest(testUrl, adminAuthWriteToken, queries.bugReportsByType, { type: findTypeSecond });
+      response.body.data.bugReportsByType.forEach(bugReport => bugReportEvaluator(bugReport));
       expect(response.body.errors).toBeUndefined();
-      expect(response.body.data.fetchBugReportsByType.every(bug => bug.type === findTypeSecond)).toBe(true);
+      expect(response.body.data.bugReportsByType.every(bug => bug.type === findTypeSecond)).toBe(true);
     });
   });
 });

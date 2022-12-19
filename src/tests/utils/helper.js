@@ -56,29 +56,6 @@ const resetDatabaseEntries = async () => {
     INSERT INTO admin (account_id, is_admin, read, write, created_at, updated_at) VALUES (${accountForAdminWriteRights[0][0].id}, true, false, true, NOW(), NOW());
     `);
 
-    /*
-    // Insert few bug reports
-    await queryInterface.sequelize.query(`
-    INSERT INTO bug_report (account_id, card_id, type, bug_message, solved_message, solved, created_at, updated_at) VALUES
-    (${accountForAdminWriteRights[0][0].id}, 12, 'TRANSLATION', 'just testing', 'translations fixed', true, NOW(), NOW());
-    `);
-
-    await queryInterface.sequelize.query(`
-    INSERT INTO bug_report (account_id, card_id, type, bug_message, solved_message, solved, created_at, updated_at) VALUES
-    (${accountForAdminWriteRights[0][0].id}, 12, 'FUNCTIONALITY', 'just testing', 'translations fixed', true, NOW(), NOW());
-    `);
-
-    await queryInterface.sequelize.query(`
-    INSERT INTO bug_report (account_id, card_id, type, bug_message, solved_message, solved, created_at, updated_at) VALUES
-    (${accountForAdminReadRights[0][0].id}, 12, 'FUNCTIONALITY', 'just testing', 'translations fixed', true, NOW(), NOW());
-    `);
-
-    await queryInterface.sequelize.query(`
-    INSERT INTO bug_report (account_id, card_id, type, bug_message, solved_message, solved, created_at, updated_at) VALUES
-    (${accountForAdminReadRights[0][0].id}, 12, 'OTHER', 'just testing', 'translations fixed', true, NOW(), NOW());
-    `);
-    */
-
   } catch (error) {
     console.log(error);
   }

@@ -4,7 +4,7 @@ All card related queries and murtations require user to be authenticated and jwt
 
 * [Queries](#queries)
   * [fetchCards](#fetchcards)
-  * [fetchAllBugReports](#fetchallbugreports)
+  * [bugReports](#bugReports)
 * [Mutations](#mutations)
   * [createAccount](#createaccount)
   * [login](#login)
@@ -110,7 +110,7 @@ query {
 
 
 
-## fetchAllBugReports
+## BugReports
 
 Fetch all submitted bug reports, only accessible to admins with read permission.
 Returns array or bug reports.
@@ -134,7 +134,7 @@ Returns array or bug reports.
 **Query:**
 ```
 query {
-  fetchAllBugReports {
+  BugReports {
     id
     accountId
     cardId
