@@ -1,7 +1,7 @@
 const yup = require('yup');
+const { calculateDateToString } = require('../helper');
 const errors = require('../errors/errors');
 const constants = require('../constants');
-const { calculateDateToString } = require('../helper');
 
 const deckId = yup
   .number(errors.inputValueTypeError)
@@ -36,7 +36,7 @@ const timing = yup
 
 const email = yup
   .string(errors.inputValueTypeError)
-  .email(errors.notEmailError)
+  .email(errors.validation.notValidEmailError)
   .max(255, errors.emailMaxLengthError)
   .required(errors.requiredEmailError);
 

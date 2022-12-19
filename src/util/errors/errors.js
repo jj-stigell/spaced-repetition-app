@@ -4,7 +4,6 @@ const errors = {
   passwordMismatchError: 'passwordMismatchError',
   passwordValidationError: 'passwordValidationError',
   requiredPasswordError: 'requiredPasswordError',
-  notEmailError: 'notEmailError',
   emailMaxLengthError: 'emailMaxLengthError',
   requiredEmailError: 'requiredEmailError',
   requiredResultTypeError: 'requiredResultTypeError', 
@@ -82,7 +81,8 @@ const errors = {
   },
   validation: {
     invalidDateError: 'invalidDateError',
-    requiredDateError: 'requiredDateError'
+    requiredDateError: 'requiredDateError',
+    notValidEmailError: 'notValidEmailError',
   },
   session: {
     sessionNotFoundError: 'sessionNotFoundError',
