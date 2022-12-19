@@ -6,7 +6,7 @@
  */
 const selectNewCardIds = `
 SELECT
-  card_id
+  card_list.id
 FROM
   card_list
 WHERE
@@ -34,7 +34,7 @@ ORDER BY
  */
 const selectDueCardIds = `
 SELECT
-  card_list.card_id
+  card_list.id
 FROM
   card_list
 INNER JOIN
