@@ -1,8 +1,8 @@
 const queries = {
-  emailAvailableQuery: `query emailAvailable($email: String!) {
+  emailAvailable: `query emailAvailable($email: String!) {
     emailAvailable(email: $email)
   }`,
-  usernameAvailableQuery: `query usernameAvailable($username: String!) {
+  usernameAvailable: `query usernameAvailable($username: String!) {
     usernameAvailable(username: $username)
   }`,
   sessions: `query Sessions {
@@ -48,8 +48,8 @@ const queries = {
       updatedAt
     }
   }`,
-  fetchAllBugReports: `query FetchAllBugReports {
-    fetchAllBugReports {
+  bugReports: `query BugReports {
+    bugReports {
       id
       accountId
       cardId
@@ -61,8 +61,8 @@ const queries = {
       updatedAt
     }
   }`,
-  fetchBugReportById: `query FetchAllBugReports($bugId: Int!) {
-    fetchBugReportById(bugId: $bugId) {
+  bugReportById: `query BugReportById($bugId: Int!) {
+    bugReportById(bugId: $bugId) {
       id
       accountId
       cardId
@@ -74,8 +74,8 @@ const queries = {
       updatedAt
     }
   }`,
-  fetchBugReportsByType: `query FetchBugReportsByType($type: BugType!) {
-    fetchBugReportsByType(type: $type) {
+  bugReportsByType: `query BugReportsByType($type: BugType!) {
+    bugReportsByType(type: $type) {
       id
       accountId
       cardId

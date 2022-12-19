@@ -1,5 +1,5 @@
 const mutations = {
-  register: `mutation createAccount($email: String!, $username: String!, $password: String!, $passwordConfirmation: String!, $languageId: Language!) {
+  createAccount: `mutation CreateAccount($email: String!, $username: String!, $password: String!, $passwordConfirmation: String!, $languageId: Language!) {
     createAccount(email: $email, username: $username, password: $password, passwordConfirmation: $passwordConfirmation, languageId: $languageId) {
       id
       email
@@ -11,7 +11,7 @@ const mutations = {
       updatedAt
     }
   }`,
-  login: `mutation login($email: String!, $password: String!) {
+  login: `mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
       session
@@ -30,7 +30,7 @@ const mutations = {
   logout: `mutation Mutation {
     logout
   }`,
-  changePasswordMutation: `mutation changePassword($currentPassword: String!, $newPassword: String!, $newPasswordConfirmation: String!) {
+  changePassword: `mutation ChangePassword($currentPassword: String!, $newPassword: String!, $newPasswordConfirmation: String!) {
     changePassword(currentPassword: $currentPassword, newPassword: $newPassword, newPasswordConfirmation: $newPasswordConfirmation) {
       id
       email
@@ -42,7 +42,7 @@ const mutations = {
       updatedAt
     }
   }`,
-  sendBugReportMutation: `mutation sendBugReport($bugMessage: String!, $type: BugType!, $cardId: Int) {
+  sendBugReport: `mutation SendBugReport($bugMessage: String!, $type: BugType!, $cardId: Int) {
     sendBugReport(bugMessage: $bugMessage, type: $type, cardId: $cardId) {
       id
       accountId
@@ -55,7 +55,7 @@ const mutations = {
       updatedAt
     }
   }`,
-  solveBugReportMutation: `mutation solveBugReport($bugId: Int!, $solved: Boolean, $solvedMessage: String) {
+  solveBugReport: `mutation SolveBugReport($bugId: Int!, $solved: Boolean, $solvedMessage: String) {
     solveBugReport(bugId: $bugId, solved: $solved, solvedMessage: $solvedMessage) {
       id
       accountId
@@ -68,7 +68,7 @@ const mutations = {
       updatedAt
     }
   }`,
-  deleteBugReportMutation: `mutation deleteBugReport($bugId: Int!) {
+  deleteBugReport: `mutation DeleteBugReport($bugId: Int!) {
     deleteBugReport(bugId: $bugId)
   }`,
   changeDeckSettings: `mutation ChangeDeckSettings($deckId: Int!, $newCardsPerDay: Int, $reviewsPerDay: Int, $reviewInterval: Int, $favorite: Boolean) {
