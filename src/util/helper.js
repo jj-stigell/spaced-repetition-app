@@ -48,6 +48,12 @@ const calculateDate = (days) => {
   return newDate.setDate(newDate.getDate() + days);
 };
 
+const calculateDateToString = (days) => {
+  const event = new Date();
+  event.setDate(event.getDate() + days);
+  return event.toISOString().split('T')[0];
+};
+
 /**
  * Compare user submitted plain-text password to hash
  * @param {string} password - user submitted password
@@ -79,6 +85,7 @@ module.exports = {
   parseUserAgent,
   signJWT,
   calculateDate,
+  calculateDateToString,
   hashCompare,
   hashPassword
 };

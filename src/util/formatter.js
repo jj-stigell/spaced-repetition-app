@@ -29,6 +29,25 @@ const formatRadicals = (radicals) => {
 };
 
 /**
+ * Restructure account card structure to match the model
+ * @param {object} accountCard - account card object from db
+ * @returns account card
+ */
+const accountCardFormatter = (accountCard) => {
+  return {
+    id: accountCard.id,
+    reviewCount: accountCard.reviewCount,
+    easyFactor: accountCard.easyFactor,
+    accountStory: accountCard?.accountStory ? accountCard.accountStory: null,
+    accountHint: accountCard?.accountHint ? accountCard.accountHint : null,
+    dueAt: accountCard.dueAt,
+    mature: accountCard.mature,
+    createdAt: accountCard.createdAt,
+    updatedAt: accountCard.updatedAt
+  };
+};
+
+/**
  * Reformat word card
  * @param {Object} word - word object
  * @returns {object} of reformatted word card
@@ -44,8 +63,8 @@ const formWordCard = (word, reviewType, includeCustomData) => {
       id: word.account_cards[0].id,
       reviewCount: word.account_cards[0].reviewCount,
       easyFactor: word.account_cards[0].easyFactor,
-      accountStory: includeCustomData ? word.account_cards[0].accountStory : null,
-      accountHint: includeCustomData ? word.account_cards[0].accountHint : null,
+      accountStory: includeCustomData && word?.account_card_custom_data[0] ? word.account_card_custom_data[0].accountStory : null,
+      accountHint: includeCustomData && word?.account_card_custom_data[0] ? word.account_card_custom_data[0].accountHint : null,
       dueAt: word.account_cards[0].dueAt,
       mature: word.account_cards[0].mature,
       createdAt: word.account_cards[0].createdAt,
@@ -87,14 +106,13 @@ const formKanjiCard = (kanji, reviewType, includeCustomData) => {
       id: kanji.account_cards[0].id,
       reviewCount: kanji.account_cards[0].reviewCount,
       easyFactor: kanji.account_cards[0].easyFactor,
-      accountStory: includeCustomData ? kanji.account_cards[0].accountStory : null,
-      accountHint: includeCustomData ? kanji.account_cards[0].accountHint : null,
+      accountStory: includeCustomData && kanji?.account_card_custom_data[0] ? kanji.account_card_custom_data[0].accountStory : null,
+      accountHint: includeCustomData && kanji?.account_card_custom_data[0] ? kanji.account_card_custom_data[0].accountHint : null,
       dueAt: kanji.account_cards[0].dueAt,
       mature: kanji.account_cards[0].mature,
       createdAt: kanji.account_cards[0].createdAt,
       updatedAt: kanji.account_cards[0].updatedAt
     } : null,
-    radicals: formatRadicals(kanji.kanji.radicals),
     kanji: {
       id: kanji.kanji.id,
       kanji: kanji.kanji.kanji,
@@ -106,6 +124,7 @@ const formKanjiCard = (kanji, reviewType, includeCustomData) => {
       strokeCount: kanji.kanji.strokeCount,
       createdAt: kanji.kanji.createdAt,
       updatedAt: kanji.kanji.updatedAt,
+      radicals: formatRadicals(kanji.kanji.radicals),
       translation: {
         keyword: kanji.kanji.kanji_translations[0].keyword,
         story: kanji.kanji.kanji_translations[0].story,
@@ -163,6 +182,68 @@ const cardFormatter = (cards, byType = false, includeCustomData = false) => {
 };
 
 /**
+ * Restructure deck structure to match the model
+ * @param {object} decks - set of decks
+ * @returns set of reformatted decks
+ */
+const deckFormatter = (decks) => {
+  const formedDecks = [];
+  let formattedDeck;
+
+  decks.forEach(deck => {
+    formattedDeck = {
+      id: deck.id,
+      deckName: deck.deckName,
+      subscriberOnly: deck.subscriberOnly,
+      languageId: deck.languageId,
+      active: deck.active,
+      createdAt: deck.createdAt,
+      updatedAt: deck.updatedAt,
+      deckTranslations: deck?.deck_translations ? deck.deck_translations : null
+    };
+    formedDecks.push(formattedDeck);
+  });
+  return formedDecks;
+};
+
+/**
+ * Restructure account deck settings structure to match the model
+ * @param {object} deckSettings - account deck settings object from db
+ * @returns account deck settings 
+ */
+const deckSettingsFormatter = (deckSettings) => {
+  return {
+    id: deckSettings.id,
+    accountId: deckSettings.accountId,
+    deckId: deckSettings.deckId,
+    favorite: deckSettings.favorite,
+    reviewInterval: deckSettings.reviewInterval,
+    reviewsPerDay: deckSettings.reviewsPerDay,
+    newCardsPerDay: deckSettings.newCardsPerDay,
+    createdAt: deckSettings.createdAt,
+    updatedAt: deckSettings.updatedAt
+  };
+};
+
+/**
+ * Restructure account structure to match the model
+ * @param {object} account - account object from db
+ * @returns account
+ */
+const accountFormatter = (account) => {
+  return {
+    id: account.id,
+    email: account.email,
+    emailVerified: account.emailVerified,
+    username: account.username,
+    languageId: account.languageId,
+    lastLogin: account.lastLogin,
+    createdAt: account.createdAt,
+    updatedAt: account.updatedAt
+  };
+};
+
+/**
  * Restructure statistics from database
  * @param {Object} stats - statistics from database
  * @returns {Object} set of reformatted statistics
@@ -193,5 +274,9 @@ const formStatistics = async (stats) => {
 
 module.exports = {
   cardFormatter,
+  deckFormatter,
+  accountCardFormatter,
+  deckSettingsFormatter,
+  accountFormatter,
   formStatistics
 };
