@@ -7,7 +7,7 @@ enum BugType {
 }
 
 type Bug {
-  id: ID
+  id: Int
   accountId: Int
   cardId: Int
   type: BugType
@@ -19,13 +19,13 @@ type Bug {
 }
 
 type Query {
-  fetchAllBugReports: [Bug!]!
+  bugReports: [Bug!]!
 
-  fetchBugReportById(
+  bugReportById(
     bugId: Int!
   ): Bug!
 
-  fetchBugReportsByType(
+  bugReportsByType(
     type: BugType! = OTHER
   ): [Bug!]!
 }

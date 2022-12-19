@@ -7,7 +7,7 @@ enum Language {
 }
 
 type Account {
-  id: ID
+  id: Int!
   email: String
   emailVerified: Boolean
   username: String
@@ -24,7 +24,7 @@ type AccountToken {
 }
 
 type Session {
-  id: ID
+  id: String!
   browser: String
   os: String
   device: String
