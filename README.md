@@ -103,7 +103,7 @@ Frontend time keeping is in the frontend GitHub repository
                 - [X] delete bug report (admin only)
 - [ ] PostgreSQL / Sequelize
     - [X] Generate mock data
-    - [ ] Optimize queries
+    - [X] Optimize queries
     - [X] Translate db to Sequelize
     - [X] Create models and associations
     - [X] Load initial sql file containing decks, cards and translations
