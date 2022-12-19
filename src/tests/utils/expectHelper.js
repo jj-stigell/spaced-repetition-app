@@ -94,8 +94,18 @@ const accountCardEvaluator = (accountCard, reviewCount = null, easyFactor = null
   expect(accountCard.updatedAt).toBeDefined();
 };
 
+const sessionEvaluator = (session) => {
+  expect(session.id).toBeDefined();
+  expect(session.browser).toBeDefined();
+  expect(session.os).toBeDefined();
+  expect(session.device).toBeDefined();
+  expect(session.createdAt).toBeDefined();
+  expect(session.expireAt).toBeDefined();
+};
+
 module.exports = {
   cardEvaluator,
   bugReportEvaluator,
-  accountCardEvaluator
+  accountCardEvaluator,
+  sessionEvaluator
 };

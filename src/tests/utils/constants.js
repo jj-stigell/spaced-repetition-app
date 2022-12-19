@@ -1,6 +1,6 @@
 const createAccount = {
   email: 'newaccount@test.com',
-  username: 'testNew',
+  username: 'testNewUser',
   password: 'TestPassword123',
   passwordConfirmation: 'TestPassword123',
   languageId: 'EN'

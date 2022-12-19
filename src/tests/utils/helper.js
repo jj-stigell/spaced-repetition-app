@@ -14,7 +14,7 @@ const resetDatabaseEntries = async () => {
     const queryInterface = sequelize.getQueryInterface();
 
     // Truncate all data that might have been affected by the tests
-    await queryInterface.sequelize.query('TRUNCATE account, admin, account_deck_settings, account_review, account_card, bug_report, session;');
+    await queryInterface.sequelize.query('TRUNCATE account_card_custom_data, account, admin, account_deck_settings, account_review, account_card, bug_report, session;');
 
     await queryInterface.sequelize.query(`
     INSERT INTO account (email, username, email_verified, password_hash, member, language_id, last_login, created_at, updated_at) VALUES
@@ -56,6 +56,7 @@ const resetDatabaseEntries = async () => {
     INSERT INTO admin (account_id, is_admin, read, write, created_at, updated_at) VALUES (${accountForAdminWriteRights[0][0].id}, true, false, true, NOW(), NOW());
     `);
 
+    /*
     // Insert few bug reports
     await queryInterface.sequelize.query(`
     INSERT INTO bug_report (account_id, card_id, type, bug_message, solved_message, solved, created_at, updated_at) VALUES
@@ -76,6 +77,7 @@ const resetDatabaseEntries = async () => {
     INSERT INTO bug_report (account_id, card_id, type, bug_message, solved_message, solved, created_at, updated_at) VALUES
     (${accountForAdminReadRights[0][0].id}, 12, 'OTHER', 'just testing', 'translations fixed', true, NOW(), NOW());
     `);
+    */
 
   } catch (error) {
     console.log(error);
@@ -112,6 +114,17 @@ const addReviews = async (accountId, amount) => {
   }
 };
 
+const verifyEmail = async (accountId) => {
+  try {
+    const queryInterface = sequelize.getQueryInterface();
+    await queryInterface.sequelize.query(
+      `UPDATE account SET email_verified = true WHERE id = ${accountId}`
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const healthCheck = async (testUrl) => {
   const response = await request(`${testUrl}.well-known/apollo/server-health`)
     .post('/')
@@ -124,7 +137,7 @@ const healthCheck = async (testUrl) => {
 const registerAccount = async (testUrl, registerData) => {
   const response = await request(testUrl)
     .post('/')
-    .send({ query: mutations.register, variables: registerData });
+    .send({ query: mutations.createAccount, variables: registerData });
   return response.body.data.createAccount;
 };
 
@@ -139,6 +152,7 @@ module.exports = {
   resetDatabaseEntries,
   addDueReviews,
   addReviews,
+  verifyEmail,
   healthCheck,
   registerAccount,
   getToken
