@@ -14,7 +14,7 @@ module.exports = {
         unique: true,
         transaction
       });
-      await queryInterface.addIndex('card_list', ['deck_id', 'card_id'], {
+      await queryInterface.addIndex('card_list', ['deck_id', 'card_id', 'review_type'], {
         unique: true,
         transaction
       });
@@ -70,7 +70,7 @@ module.exports = {
       await queryInterface.sequelize.query('DROP INDEX IF EXISTS deck_id_language_id', { transaction });
       await queryInterface.sequelize.query('DROP INDEX IF EXISTS deck_translation_deck_id_language_id', { transaction });
       await queryInterface.sequelize.query('DROP INDEX IF EXISTS card_id_language_id', { transaction });
-      await queryInterface.sequelize.query('DROP INDEX IF EXISTS card_list_deck_id_card_id', { transaction });
+      await queryInterface.sequelize.query('DROP INDEX IF EXISTS card_list_deck_id_card_id_review_type', { transaction });
       await queryInterface.sequelize.query('DROP INDEX IF EXISTS account_deck_settings_account_id_deck_id', { transaction });
       await queryInterface.sequelize.query('DROP INDEX IF EXISTS kanji_card_id_kanji', { transaction });
       await queryInterface.sequelize.query('DROP INDEX IF EXISTS radical_translation_radical_id_language_id', { transaction });
