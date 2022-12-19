@@ -82,16 +82,13 @@ const resetDatabaseEntries = async () => {
   }
 };
 
-const addDueReviewsForThisDay = async (accountId, amount, cardStartId) => {
+const addDueReviews = async (accountId, amount, cardStartId, date) => {
   try {
     const queryInterface = sequelize.getQueryInterface();
-    const date = new Date();
     for (let i = cardStartId; i < amount + cardStartId; i++) {
-      let newDate = date.setDate(date.getDate());
-      newDate = new Date(newDate);
       await queryInterface.sequelize.query(`INSERT INTO account_card (account_id, card_id, account_story, 
       account_hint, review_count, easy_factor, mature, due_at, created_at, updated_at)
-      VALUES ('${accountId}', '${i}', '${accountCard.story}', '${accountCard.hint}', 0, 2.5, false, '${newDate.toISOString().split('T')[0]}', NOW(), NOW());`);
+      VALUES ('${accountId}', '${i}', '${accountCard.story}', '${accountCard.hint}', 0, 2.5, false, '${date.toISOString().split('T')[0]}', NOW(), NOW());`);
     }
   } catch (error) {
     console.log(error);
@@ -140,7 +137,7 @@ const getToken = async (testUrl, loginData) => {
 
 module.exports = {
   resetDatabaseEntries,
-  addDueReviewsForThisDay,
+  addDueReviews,
   addReviews,
   healthCheck,
   registerAccount,

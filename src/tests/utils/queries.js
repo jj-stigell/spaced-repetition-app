@@ -19,13 +19,12 @@ const queries = {
     decks {
       id
       deckName
-      type
       subscriberOnly
       languageId
       active
       createdAt
       updatedAt
-      deck_translations {
+      deckTranslations {
         id
         languageId
         title
