@@ -26,6 +26,7 @@ type DeckSettings {
   accountId: Int
   deckId: Int
   favorite: Boolean
+  dueCards: Int
   reviewInterval: Int
   reviewsPerDay: Int
   newCardsPerDay: Int
@@ -34,7 +35,9 @@ type DeckSettings {
 }
 
 type Query {
-  decks: [Deck!]!
+  decks(
+    date: Date!
+  ): [Deck!]!
 
   deckSettings(
     deckId: Int!

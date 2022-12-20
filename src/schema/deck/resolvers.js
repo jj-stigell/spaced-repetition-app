@@ -1,16 +1,19 @@
-const { findAllDecks, findDeckById, findAccountDeckSettings, createAccountDeckSettings } = require('../services/deckService');
+const { findAllDecks, findDeckById, findAccountDeckSettings, createAccountDeckSettings, countDueCardsInDecks } = require('../services/deckService');
 const { notAuthError, defaultError, internalServerError } = require('../../util/errors/graphQlErrors');
 const { validateInteger, validateDeckSettings } = require('../../util/validation/validator');
 const { deckFormatter, deckSettingsFormatter } = require('../../util/formatter');
+const validator = require('../../util/validation//validator');
 const errors = require('../../util/errors/errors');
 
 const resolvers = {
   Query: {
-    decks: async (root, args, { currentUser }) => {
+    decks: async (_, { date }, { currentUser }) => {
       if (!currentUser) return notAuthError();
+      await validator.validateDate(date);
       const decks = await findAllDecks(false, currentUser.id);
       if (decks.length === 0) return defaultError(errors.deckErrors.noDecksFoundError);
-      return deckFormatter(decks);
+      const dueByDeck = await countDueCardsInDecks(currentUser.id, date);
+      return deckFormatter(decks, dueByDeck);
     },
     deckSettings: async (_, { deckId }, { currentUser }) => {
       if (!currentUser) return notAuthError();
