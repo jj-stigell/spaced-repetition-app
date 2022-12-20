@@ -203,6 +203,29 @@ GROUP BY
   status
 `;
 
+/**
+ * Fetch by accounts learning progress, grouped by "matured", "learning", and "new".
+ * more than one card in the account cards.
+ * @param {integer} accountId - accounts id number
+ * @param {integer} deckId - id of the deck
+ * @param {Date} currentDate - current date for the client, can differ from server date, don't use 'CURRENT_DATE'
+ */
+const countDueCardsInDeck = `
+SELECT
+  COUNT(*) AS due_today
+FROM
+  card_list
+INNER JOIN
+  account_card
+  ON card_list.card_id = account_card.card_id
+WHERE
+  due_at <= :currentDate
+  AND  account_id = :accountId
+  AND card_list.deck_id = :deckId
+  AND card_list.active = true
+  AND card_list.review_type::text = account_card.review_type::text
+`;
+
 module.exports = {
   selectNewCardIds,
   selectDueCardIds,
@@ -210,5 +233,6 @@ module.exports = {
   pushCardsInDeckNDays,
   fetchDailyReviewHistoryNDays,
   fetchDueReviewsNDays,
-  groupByTypeAndLearningStatus
+  groupByTypeAndLearningStatus,
+  countDueCardsInDeck
 };
