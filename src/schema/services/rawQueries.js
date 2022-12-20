@@ -204,14 +204,14 @@ GROUP BY
 `;
 
 /**
- * Count the due cards account has in particular deck.
+ * Count the due cards account has in all decks.
  * @param {integer} accountId - accounts id number
- * @param {integer} deckId - id of the deck
  * @param {Date} currentDate - current date for the client, can differ from server date, don't use 'CURRENT_DATE'
  */
-const countDueCardsInDeck = `
+const countDueCardsInDecks = `
 SELECT
-  COUNT(*) AS due_today
+  card_list.deck_id AS deck_id,
+  COUNT(*) AS due_Today
 FROM
   card_list
 INNER JOIN
@@ -220,9 +220,9 @@ INNER JOIN
 WHERE
   due_at <= :currentDate
   AND  account_id = :accountId
-  AND card_list.deck_id = :deckId
   AND card_list.active = true
   AND card_list.review_type::text = account_card.review_type::text
+GROUP BY card_list.deck_id
 `;
 
 module.exports = {
@@ -233,5 +233,5 @@ module.exports = {
   fetchDailyReviewHistoryNDays,
   fetchDueReviewsNDays,
   groupByTypeAndLearningStatus,
-  countDueCardsInDeck
+  countDueCardsInDecks
 };

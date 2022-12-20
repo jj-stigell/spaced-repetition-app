@@ -1,5 +1,7 @@
 const { internalServerError } = require('../../util/errors/graphQlErrors');
 const constants = require('../../util/constants');
+const { sequelize } = require('../../database');
+const rawQueries = require('./rawQueries');
 const models = require('../../models');
 
 /**
@@ -146,10 +148,32 @@ const findDeckTranslation = async (deckId, languageId) => {
   }
 };
 
+/**
+ * Count the due cards account has in all decks.
+ * @param {integer} accountId - accounts id number
+ * @param {Date} currentDate - current date for the client, can differ from server date
+ * @returns due card count on each deck
+ */
+const countDueCardsInDecks = async (accountId , currentDate) => {
+  try {
+    return await sequelize.query(rawQueries.countDueCardsInDecks, {
+      replacements: {
+        accountId: accountId,
+        currentDate: currentDate
+      },
+      type: sequelize.QueryTypes.SELECT,
+      raw: true
+    });
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
 module.exports = {
   findDeckById,
   findAllDecks,
   findAccountDeckSettings,
   createAccountDeckSettings,
-  findDeckTranslation
+  findDeckTranslation,
+  countDueCardsInDecks
 };
