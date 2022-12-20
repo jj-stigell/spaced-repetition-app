@@ -15,8 +15,8 @@ const queries = {
       expireAt
     }
   }`,
-  decks: `query Decks {
-    decks {
+  decks: `query Decks($date: Date!) {
+    decks(date: $date) {
       id
       deckName
       subscriberOnly
@@ -33,6 +33,18 @@ const queries = {
         createdAt
         updatedAt
       }
+      accountDeckSettings {
+        id
+        accountId
+        deckId
+        favorite
+        dueCards
+        reviewInterval
+        reviewsPerDay
+        newCardsPerDay
+        createdAt
+        updatedAt
+      }
     }
   }`,
   deckSettings: `query DeckSettings($deckId: Int!) {
@@ -41,6 +53,7 @@ const queries = {
       accountId
       deckId
       favorite
+      dueCards
       reviewInterval
       reviewsPerDay
       newCardsPerDay
