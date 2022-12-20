@@ -182,31 +182,6 @@ const cardFormatter = (cards, byType = false, includeCustomData = false, isNewRe
 };
 
 /**
- * Restructure deck structure to match the model.
- * @param {object} decks - set of decks
- * @returns {Array<object>} array of reformatted decks
- */
-const deckFormatter = (decks) => {
-  const formedDecks = [];
-  let formattedDeck;
-
-  decks.forEach(deck => {
-    formattedDeck = {
-      id: deck.id,
-      deckName: deck.deckName,
-      subscriberOnly: deck.subscriberOnly,
-      languageId: deck.languageId,
-      active: deck.active,
-      createdAt: deck.createdAt,
-      updatedAt: deck.updatedAt,
-      deckTranslations: deck?.deck_translations ? deck.deck_translations : null
-    };
-    formedDecks.push(formattedDeck);
-  });
-  return formedDecks;
-};
-
-/**
  * Restructure account deck settings structure to match the model.
  * @param {object} deckSettings - account deck settings object from db
  * @returns {object} account deck settings 
@@ -224,6 +199,34 @@ const deckSettingsFormatter = (deckSettings) => {
     updatedAt: deckSettings.updatedAt
   };
 };
+
+/**
+ * Restructure deck structure to match the model.
+ * @param {object} decks - set of decks
+ * @returns {Array<object>} array of reformatted decks
+ */
+const deckFormatter = (decks) => {
+  const formedDecks = [];
+  let formattedDeck;
+
+  decks.forEach(deck => {
+    formattedDeck = {
+      id: deck.id,
+      deckName: deck.deckName,
+      subscriberOnly: deck.subscriberOnly,
+      languageId: deck.languageId,
+      active: deck.active,
+      createdAt: deck.createdAt,
+      updatedAt: deck.updatedAt,
+      deckTranslations: deck?.deck_translations ? deck.deck_translations : null,
+      accountDeckSettings: deck?.account_deck_settings[0] ? deckSettingsFormatter(deck.account_deck_settings[0]) : null
+    };
+    formedDecks.push(formattedDeck);
+  });
+  return formedDecks;
+};
+
+
 
 /**
  * Restructure account structure to match the model.
