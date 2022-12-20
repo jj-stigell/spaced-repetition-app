@@ -219,6 +219,7 @@ const deckFormatter = (decks, dueByDeck = []) => {
       dueByDeckById[deck.id] = 0;
     }
   });
+
   return decks.map(deck => {
     const dueForThisDeck = dueByDeckById[deck.id];
     return {
@@ -230,7 +231,7 @@ const deckFormatter = (decks, dueByDeck = []) => {
       createdAt: deck.createdAt,
       updatedAt: deck.updatedAt,
       deckTranslations: deck.deck_translations,
-      accountDeckSettings: deck.account_deck_settings && deckSettingsFormatter(deck.account_deck_settings[0], dueForThisDeck),
+      accountDeckSettings: deck?.account_deck_settings[0] ? deckSettingsFormatter(deck.account_deck_settings[0], dueForThisDeck) : null
     };
   });
 };
@@ -280,6 +281,17 @@ const formStatistics = async (stats) => {
     }
   });
   return statistics;
+
+  /*
+
+  const statistics = { matured: 0, learning: 0, new: 0 };
+
+  for (const value of stats) {
+    statistics[value.status] = value.count;
+  }
+
+  return statistics;
+  */
 };
 
 module.exports = {

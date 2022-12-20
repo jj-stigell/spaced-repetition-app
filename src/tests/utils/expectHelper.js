@@ -103,9 +103,37 @@ const sessionEvaluator = (session) => {
   expect(session.expireAt).toBeDefined();
 };
 
+const deckSettingsEvaluator = (accountDeckSettings) => {
+  expect(accountDeckSettings.id).toBeDefined();
+  expect(accountDeckSettings.accountId).toBeDefined();
+  expect(accountDeckSettings.deckId).toBeDefined();
+  expect(accountDeckSettings.favorite).toBeDefined();
+  expect(accountDeckSettings.dueCards).toBeDefined();
+  expect(accountDeckSettings.reviewInterval).toBeDefined();
+  expect(accountDeckSettings.reviewsPerDay).toBeDefined();
+  expect(accountDeckSettings.newCardsPerDay).toBeDefined();
+  expect(accountDeckSettings.createdAt).toBeDefined();
+  expect(accountDeckSettings.updatedAt).toBeDefined();
+};
+
+
+const deckEvaluator = (deck) => {
+  expect(deck.id).toBeDefined();
+  expect(deck.deckName).toBeDefined();
+  expect(deck.subscriberOnly).toBeDefined();
+  expect(deck.languageId).toBeDefined();
+  expect(deck.active).toBeDefined();
+  expect(deck.createdAt).toBeDefined();
+  expect(deck.updatedAt).toBeDefined();
+  expect(deck.deckTranslations).toBeDefined();
+  if (deck?.accountDeckSettings?.id) deckSettingsEvaluator(deck.accountDeckSettings);
+};
+
 module.exports = {
   cardEvaluator,
   bugReportEvaluator,
   accountCardEvaluator,
-  sessionEvaluator
+  sessionEvaluator,
+  deckSettingsEvaluator,
+  deckEvaluator
 };
