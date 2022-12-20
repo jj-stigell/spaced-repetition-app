@@ -8,7 +8,7 @@ const resolvers = {
   Query: {
     decks: async (root, args, { currentUser }) => {
       if (!currentUser) return notAuthError();
-      const decks = await findAllDecks(false);
+      const decks = await findAllDecks(false, currentUser.id);
       if (decks.length === 0) return defaultError(errors.deckErrors.noDecksFoundError);
       return deckFormatter(decks);
     },

@@ -18,21 +18,31 @@ const findDeckById = async (deckId) => {
 /**
  * Find all decks.
  * @param {boolean} includeInactive - include decks that are not active at the moment
+ * @param {integer} accountId - account id
  * @returns {Array<Deck>} array of all decks
  */
-const findAllDecks = async (includeInactive) => {
+const findAllDecks = async (includeInactive, accountId) => {
   try {
     if (!includeInactive) {
       return await models.Deck.findAll({
         where: { active: true },
         subQuery: false,
         nest: true,
-        include: {
-          model: models.DeckTranslation,
-          where: {
-            active: true
+        include: [
+          {
+            model: models.DeckTranslation,
+            where: {
+              active: true
+            }
+          },
+          {
+            model: models.AccountDeckSettings,
+            required: false,
+            where: {
+              accountId: accountId
+            }
           }
-        }
+        ]
       });
     } else {
       return await models.Deck.findAll({

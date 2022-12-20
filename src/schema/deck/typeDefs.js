@@ -18,6 +18,7 @@ type Deck {
   createdAt: Date
   updatedAt: Date
   deckTranslations: [DeckTranslation]
+  accountDeckSettings: DeckSettings
 }
 
 type DeckSettings {
