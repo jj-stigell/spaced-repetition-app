@@ -204,8 +204,7 @@ GROUP BY
 `;
 
 /**
- * Fetch by accounts learning progress, grouped by "matured", "learning", and "new".
- * more than one card in the account cards.
+ * Count the due cards account has in particular deck.
  * @param {integer} accountId - accounts id number
  * @param {integer} deckId - id of the deck
  * @param {Date} currentDate - current date for the client, can differ from server date, don't use 'CURRENT_DATE'
