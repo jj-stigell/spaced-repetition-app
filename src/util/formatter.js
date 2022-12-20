@@ -184,14 +184,16 @@ const cardFormatter = (cards, byType = false, includeCustomData = false, isNewRe
 /**
  * Restructure account deck settings structure to match the model.
  * @param {object} deckSettings - account deck settings object from db
+ * @param {integer} dueCards - how many cards are due for the deck
  * @returns {object} account deck settings 
  */
-const deckSettingsFormatter = (deckSettings) => {
+const deckSettingsFormatter = (deckSettings, dueCards = 0) => {
   return {
     id: deckSettings.id,
     accountId: deckSettings.accountId,
     deckId: deckSettings.deckId,
     favorite: deckSettings.favorite,
+    dueCards: dueCards,
     reviewInterval: deckSettings.reviewInterval,
     reviewsPerDay: deckSettings.reviewsPerDay,
     newCardsPerDay: deckSettings.newCardsPerDay,
@@ -205,12 +207,21 @@ const deckSettingsFormatter = (deckSettings) => {
  * @param {object} decks - set of decks
  * @returns {Array<object>} array of reformatted decks
  */
-const deckFormatter = (decks) => {
-  const formedDecks = [];
-  let formattedDeck;
+const deckFormatter = (decks, dueByDeck = []) => {
+  const dueByDeckById = {};
+  dueByDeck.forEach(due => {
+    dueByDeckById[due.deck_id] = parseInt(due.due_today);
+  });
 
+  // Set default value for missing deck IDs
   decks.forEach(deck => {
-    formattedDeck = {
+    if (!(deck.id in dueByDeckById)) {
+      dueByDeckById[deck.id] = 0;
+    }
+  });
+  return decks.map(deck => {
+    const dueForThisDeck = dueByDeckById[deck.id];
+    return {
       id: deck.id,
       deckName: deck.deckName,
       subscriberOnly: deck.subscriberOnly,
@@ -218,15 +229,11 @@ const deckFormatter = (decks) => {
       active: deck.active,
       createdAt: deck.createdAt,
       updatedAt: deck.updatedAt,
-      deckTranslations: deck?.deck_translations ? deck.deck_translations : null,
-      accountDeckSettings: deck?.account_deck_settings[0] ? deckSettingsFormatter(deck.account_deck_settings[0]) : null
+      deckTranslations: deck.deck_translations,
+      accountDeckSettings: deck.account_deck_settings && deckSettingsFormatter(deck.account_deck_settings[0], dueForThisDeck),
     };
-    formedDecks.push(formattedDeck);
   });
-  return formedDecks;
 };
-
-
 
 /**
  * Restructure account structure to match the model.
