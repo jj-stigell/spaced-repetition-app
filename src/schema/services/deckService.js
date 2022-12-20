@@ -25,18 +25,22 @@ const findAllDecks = async (includeInactive, accountId) => {
   try {
     if (!includeInactive) {
       return await models.Deck.findAll({
-        where: { active: true },
+        where: {
+          active: true
+        },
         subQuery: false,
         nest: true,
         include: [
           {
             model: models.DeckTranslation,
+            required: false,
             where: {
               active: true
             }
           },
           {
             model: models.AccountDeckSettings,
+            attributes: ['id', 'accountId', 'deckId', 'favorite', 'reviewInterval', 'reviewsPerDay', 'newCardsPerDay', 'createdAt', 'updatedAt'],
             required: false,
             where: {
               accountId: accountId
@@ -48,12 +52,23 @@ const findAllDecks = async (includeInactive, accountId) => {
       return await models.Deck.findAll({
         subQuery: false,
         nest: true,
-        include: {
-          model: models.DeckTranslation,
-          where: {
-            active: true
+        include: [
+          {
+            model: models.DeckTranslation,
+            required: false,
+            where: {
+              active: true
+            }
+          },
+          {
+            model: models.AccountDeckSettings,
+            attributes: ['id', 'accountId', 'deckId', 'favorite', 'reviewInterval', 'reviewsPerDay', 'newCardsPerDay', 'createdAt', 'updatedAt'],
+            required: false,
+            where: {
+              accountId: accountId
+            }
           }
-        }
+        ]
       });
     }
   } catch (error) {
