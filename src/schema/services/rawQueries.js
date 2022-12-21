@@ -211,7 +211,7 @@ GROUP BY
 const countDueCardsInDecks = `
 SELECT
   card_list.deck_id AS deck_id,
-  COUNT(*) AS due_Today
+  COUNT(*) AS due_today
 FROM
   card_list
 INNER JOIN
