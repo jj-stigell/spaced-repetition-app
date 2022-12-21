@@ -92,6 +92,7 @@ const solveBugReport = {
 };
 
 const deckSettings = {
+  deckId: 1,
   newCardsPerDay: 15,
   reviewsPerDay: 16,
   reviewInterval: 17,

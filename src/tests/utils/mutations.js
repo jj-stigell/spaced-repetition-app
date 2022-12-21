@@ -77,6 +77,7 @@ const mutations = {
       accountId
       deckId
       favorite
+      dueCards
       reviewInterval
       reviewsPerDay
       newCardsPerDay

@@ -1,8 +1,9 @@
 const { expect } = require('@jest/globals');
 const request = require('supertest');
-const { account, accountUnconfirmedEmail, nonMemberAccount, adminReadRights, adminWriteRights, accountCard } = require('./constants');
+const { account, accountUnconfirmedEmail, nonMemberAccount, adminReadRights, adminWriteRights } = require('./constants');
 const { sequelize } = require('../../database');
 const mutations = require('./mutations');
+const constants = require('../../util/constants');
 
 /**
  * Reset database for the next tests.
@@ -65,9 +66,8 @@ const addDueReviews = async (accountId, amount, cardStartId, date) => {
   try {
     const queryInterface = sequelize.getQueryInterface();
     for (let i = cardStartId; i < amount + cardStartId; i++) {
-      await queryInterface.sequelize.query(`INSERT INTO account_card (account_id, card_id, account_story, 
-      account_hint, review_count, easy_factor, mature, due_at, created_at, updated_at)
-      VALUES ('${accountId}', '${i}', '${accountCard.story}', '${accountCard.hint}', 0, 2.5, false, '${date.toISOString().split('T')[0]}', NOW(), NOW());`);
+      await queryInterface.sequelize.query(`INSERT INTO account_card (account_id, card_id, review_type, review_count, easy_factor, mature, due_at, created_at, updated_at)
+      VALUES ('${accountId}', '${i}', 'RECALL', 1, ${constants.card.defaultEasyFactor}, false, '${date.toISOString().split('T')[0]}', NOW(), NOW());`);
     }
   } catch (error) {
     console.log(error);
