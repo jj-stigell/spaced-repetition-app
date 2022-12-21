@@ -134,7 +134,7 @@ type Query {
     deckId: Int!
     languageId: Language! = EN
     newCards: Boolean
-    date: Date
+    date: Date!
   ): [Card!]!
 
   cardsByType(

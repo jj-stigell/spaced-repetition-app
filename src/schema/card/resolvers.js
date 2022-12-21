@@ -1,4 +1,4 @@
-const { findDeckById, findDeckTranslation, findAccountDeckSettings, createAccountDeckSettings } = require('../services/deckService');
+const { findDeckById, findDeckTranslation, findAccountDeckSettings, createAccountDeckSettings, countNewReviewsTodayInDeck } = require('../services/deckService');
 const { notAuthError, defaultError, internalServerError, notAuthorizedError } = require('../../util/errors/graphQlErrors');
 const { formStatistics, cardFormatter, accountCardFormatter } = require('../../util/formatter');
 const { validateMember, checkAdminPermission } = require('../../util/authorization');
@@ -12,8 +12,8 @@ const resolvers = {
     cardsFromDeck: async (_, { deckId, languageId, newCards, date }, { currentUser }) => {
       if (!currentUser) return notAuthError();
       await validator.validateInteger(deckId);
-      if (date) await validator.validateDate(date);
-      let selectedLanguage = constants.general.defaultLanguage, cards = [], newDate;
+      await validator.validateDate(date);
+      let selectedLanguage = constants.general.defaultLanguage, cards = [], currentDate = new Date(date);
 
       // Check that deck exists
       const deck = await findDeckById(deckId);
@@ -43,10 +43,11 @@ const resolvers = {
       }
 
       if (newCards) {
-        cards = await cardService.fetchNewCards(deckId, currentUser.id, accountDeckSettings.newCardsPerDay, selectedLanguage);
+        const newReviesDoneToday = await countNewReviewsTodayInDeck(currentUser.id, date, deckId);
+        const fetchAmount = accountDeckSettings.newCardsPerDay - newReviesDoneToday;
+        cards = await cardService.fetchNewCards(deckId, currentUser.id, fetchAmount, selectedLanguage);
       } else {
-        newDate = date ? new Date(date) : new Date();
-        const currentDate = newDate.toISOString().split('T')[0];
+        currentDate = currentDate.toISOString().split('T')[0];
         cards = await cardService.fetchDueCards(deckId, currentUser.id, accountDeckSettings.reviewsPerDay, selectedLanguage, currentDate);
       }
       if (!cards) return defaultError(errors.noDueCardsError);
@@ -106,7 +107,7 @@ const resolvers = {
         // Check that card actually exists in the database
         const card = cardService.findCardById(cardId);
         if (!card) return defaultError(errors.nonExistingId);
-        accountCard = await cardService.createAccountCard(cardId, currentUser.id, newEasyFactor, newDueDate, newInterval, reviewType);
+        accountCard = await cardService.createAccountCard(cardId, currentUser.id, newEasyFactor, newDueDate, newInterval, reviewType, date);
       } else {
         // Update existing user card
         try {
