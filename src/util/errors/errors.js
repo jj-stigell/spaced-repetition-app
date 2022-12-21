@@ -76,7 +76,7 @@ const errors = {
     validationError: 'VALIDATION_ERROR',
     defaultError: 'DEFAULT_ERROR',
   },
-  card: {
+  cardErrors: {
 
   },
   validation: {
@@ -90,7 +90,7 @@ const errors = {
     notOwnerOfSessionError: 'notOwnerOfSessionError',
     jwtExpiredError: 'jwtExpiredError'
   },
-  login: {
+  loginErrors: {
     
   }
 };
