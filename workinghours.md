@@ -37,5 +37,8 @@
 | 15.12. | 4 | refactor the card resolver, add card translation, add card testing, fix small things |
 | 16.12. | 4 | due cards and new cards query tests, expire jwt test |
 | 19.12. | 6 | redesign test so after each the db is reset, redesign card resolvers to support multiple review type, separate story and hint from account card. refactor queries and services |
+| 20.12. | 2 | add raw queries, update functions, write tests |
+| 21.12. | 1 | fix tests, add queries for fetching cards based on previously fetched reviewed card amount |
+| 23.12. | 3 | Fix remaining broken tests, update mutation and queries for the tests, update database calls, add new query for counting reviewed due cards this day |
 |  |  |  |
-| total | 108 |  | 
+| total | 114 |  | 

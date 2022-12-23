@@ -336,7 +336,6 @@ describe('Cardintegration tests', () => {
         expect(response.body.errors).toBeUndefined();
       });
 
-
       it('Setting non-member account as member should include custom story and hint in the due cards', async () => {
         await addReviews(20);
         await testHelpers.setMembership(nonMemberAcc.id, true);
