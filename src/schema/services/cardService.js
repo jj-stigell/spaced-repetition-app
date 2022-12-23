@@ -5,6 +5,9 @@ const rawQueries = require('./rawQueries');
 const models = require('../../models');
 const { Op } = require('sequelize');
 
+const { Sequelize } = require('sequelize');
+
+
 /**
  * Find card by its id (PK).
  * @param {integer} cardId - id of the card
@@ -26,18 +29,20 @@ const findCardById = async (cardId) => {
  * @param {date} newDueDate - date when card is next due
  * @param {integer} newInterval - new interval in days, used to set card mature
  * @param {string} reviewType - ENUM string of the review, 'RECALL', 'RECOGNISE', etc.
+ * @param {date} createdAt - date when card was created, client-side date
  * @returns {AccountCard} newly created account card
  */
-const createAccountCard = async (cardId, accountId, easyFactor, newDueDate, newInterval, reviewType) => {
+const createAccountCard = async (cardId, accountId, easyFactor, newDueDate, newInterval, reviewType, createdAt) => {
   try {
     return await models.AccountCard.create({
       accountId: accountId,
       cardId: cardId,
       dueAt: newDueDate,
       reviewType: reviewType,
-      mature: newInterval > constants.matureInterval ? true : false,
+      mature: newInterval >= constants.card.matureInterval ? true : false,
       easyFactor: easyFactor ? easyFactor : constants.card.defaultEasyFactor,
-      reviewCount: 1
+      reviewCount: 1,
+      createdAt: createdAt
     });
   } catch (error) {
     return internalServerError(error);
@@ -192,8 +197,6 @@ const fetchDueCards = async (deckId, accountId, limitReviews, languageId, curren
 
     const idInLearningOrder = cardIds.map(listItem => listItem.id);
 
-    console.log(idInLearningOrder);
-
     return await models.CardList.findAll({
       where: {
         deckId: deckId,
@@ -235,9 +238,10 @@ const fetchDueCards = async (deckId, accountId, limitReviews, languageId, curren
             model: models.AccountCard,
             attributes: ['id', 'reviewCount', 'easyFactor', 'dueAt', 'mature', 'createdAt', 'updatedAt'],
             required: false,
-            where: {
-              accountId: accountId
-            }
+            where: Sequelize.and(
+              { accountId: accountId },
+              Sequelize.where(Sequelize.cast(Sequelize.col('card_list.review_type'),'text'), '=', Sequelize.cast(Sequelize.col('card.account_cards.review_type'), 'text'))
+            )
           },
           {
             model: models.AccountCardCustomData,
