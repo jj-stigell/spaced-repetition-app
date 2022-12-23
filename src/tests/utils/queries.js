@@ -112,8 +112,8 @@ const queries = {
       reviews
     }
   }`,
-  learningStatistics: `query LearningStatistics($cardType: CardType!) {
-    learningStatistics(cardType: $cardType) {
+  learningStatisticsByType: `query LearningStatisticsByType($cardType: CardType!, $reviewType: ReviewType!) {
+    learningStatisticsByType(cardType: $cardType, reviewType: $reviewType) {
       matured
       learning
       new
@@ -123,6 +123,7 @@ const queries = {
     cardsByType(cardType: $cardType, languageId: $languageId) {
       id
       cardType
+      reviewType
       createdAt
       updatedAt
       accountCard {
@@ -190,8 +191,8 @@ const queries = {
       }
     }
   }`,
-  cardsFromDeck: `query CardsFromDeck($deckId: Int!, $date: Date, $languageId: Language!, $newCards: Boolean) {
-    cardsFromDeck(deckId: $deckId, date: $date, languageId: $languageId, newCards: $newCards) {
+  cardsFromDeck: `query CardsFromDeck($deckId: Int!, $date: Date!, $newCards: Boolean, $languageId: Language!) {
+    cardsFromDeck(deckId: $deckId, date: $date, newCards: $newCards, languageId: $languageId) {
       id
       cardType
       reviewType

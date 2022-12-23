@@ -98,26 +98,26 @@ const mutations = {
       updatedAt
     }
   }`,
-  rescheduleCard: `mutation EditAccountCard(
+  rescheduleCard: `mutation RescheduleCard(
     $cardId: Int!,
-    $reviewResult: String!,
+    $reviewResult: ReviewResult!,
     $newInterval: Int!,
     $newEasyFactor: Float!,
-    $timing: Int,
-    $extraReview: Boolean,
     $date: Date!,
-    $reviewType: ReviewType!
+    $reviewType: ReviewType!,
+    $timing: Int,
+    $extraReview: Boolean
     ) {
     rescheduleCard(
       cardId: $cardId,
       reviewResult: $reviewResult,
       newInterval: $newInterval,
       newEasyFactor: $newEasyFactor,
-      timing: $timing,
-      extraReview: $extraReview,
       date: $date,
-      reviewType: $reviewType
-      ) {
+      reviewType: $reviewType,
+      timing: $timing,
+      extraReview: $extraReview
+    ) {
       id
       reviewCount
       easyFactor
