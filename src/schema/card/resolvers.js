@@ -1,4 +1,4 @@
-const { findDeckById, findDeckTranslation, findAccountDeckSettings, createAccountDeckSettings, countNewReviewsTodayInDeck } = require('../services/deckService');
+const { findDeckById, findDeckTranslation, findAccountDeckSettings, createAccountDeckSettings, countNewReviewsTodayInDeck, countDueReviewsTodayInDeck } = require('../services/deckService');
 const { notAuthError, defaultError, internalServerError, notAuthorizedError } = require('../../util/errors/graphQlErrors');
 const { formStatistics, cardFormatter, accountCardFormatter } = require('../../util/formatter');
 const { validateMember, checkAdminPermission } = require('../../util/authorization');
@@ -45,10 +45,13 @@ const resolvers = {
       if (newCards) {
         const newReviesDoneToday = await countNewReviewsTodayInDeck(currentUser.id, date, deckId);
         const fetchAmount = accountDeckSettings.newCardsPerDay - newReviesDoneToday;
+        if (fetchAmount <= 0) return defaultError(errors.noDueCardsError);
         cards = await cardService.fetchNewCards(deckId, currentUser.id, fetchAmount, selectedLanguage);
       } else {
+        const dueReviesDoneToday = await countDueReviewsTodayInDeck(currentUser.id, date, deckId);
+        const fetchAmount = accountDeckSettings.reviewsPerDay - dueReviesDoneToday;
         currentDate = currentDate.toISOString().split('T')[0];
-        cards = await cardService.fetchDueCards(deckId, currentUser.id, accountDeckSettings.reviewsPerDay, selectedLanguage, currentDate);
+        cards = await cardService.fetchDueCards(deckId, currentUser.id, fetchAmount, selectedLanguage, currentDate);
       }
       if (!cards) return defaultError(errors.noDueCardsError);
       return cardFormatter(cards, false, account.member, newCards);
@@ -116,7 +119,8 @@ const resolvers = {
             easyFactor: newEasyFactor,
             dueAt: newDueDate,
             mature: newInterval > constants.matureInterval ? true : false,
-            reviewCount: accountCard.reviewCount + 1
+            reviewCount: accountCard.reviewCount + 1,
+            updatedAt: date
           });
           await accountCard.save();
         } catch(error) {

@@ -139,7 +139,7 @@ type Query {
 
   cardsByType(
     cardType: CardType!
-    languageId: Language! = EN
+    languageId: Language = EN
   ): [Card!]!
 
   reviewHistory(
