@@ -110,9 +110,11 @@ const accountReview = {
   reviewResult: 'GOOD',
   newInterval: 1,
   newEasyFactor: 1.0,
+  date: new Date(),
+  reviewType: 'RECALL',
   timing: 5,
   extraReview: false,
-  newDueDate: new Date()
+
 };
 
 const cardsFromDeck = {

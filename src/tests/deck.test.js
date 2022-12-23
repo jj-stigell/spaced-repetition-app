@@ -232,7 +232,7 @@ describe('Deckintegration tests', () => {
     it('Error when authenticated but reviewInterval too high', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewInterval: constants.card.maxReviewInterval + 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.card.maxReviewIntervalError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.maxReviewIntervalError);
     });
 
     it('Error when authenticated but reviewInterval too low', async () => {
