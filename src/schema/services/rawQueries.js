@@ -248,6 +248,28 @@ WHERE
   AND card_list.review_type::text = account_card.review_type::text
 `;
 
+/**
+ * Count how many due cards have been reviewed for particular deck.
+ * @param {integer} accountId - accounts id number
+ * @param {Date} currentDate - current date for the client, can differ from server date, don't use 'CURRENT_DATE'
+ * @param {integer} deckId - id of the deck
+ */
+const countDueReviewsTodayInDeck = `
+SELECT
+  COUNT(*) AS due_cards_reviewed_today
+FROM
+  card_list
+INNER JOIN
+  account_card
+  ON card_list.card_id = account_card.card_id
+WHERE
+  account_card.account_id = :accountId
+  AND account_card.updated_at::date = :currentDate
+  AND card_list.active = true
+  AND card_list.deck_id = :deckId
+  AND card_list.review_type::text = account_card.review_type::text
+`;
+
 module.exports = {
   selectNewCardIds,
   selectDueCardIds,
@@ -257,5 +279,6 @@ module.exports = {
   fetchDueReviewsNDays,
   groupByTypeAndLearningStatus,
   countDueCardsInDecks,
-  countNewReviewsTodayInDeck
+  countNewReviewsTodayInDeck,
+  countDueReviewsTodayInDeck
 };

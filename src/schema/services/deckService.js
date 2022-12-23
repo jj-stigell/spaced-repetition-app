@@ -196,6 +196,33 @@ const countNewReviewsTodayInDeck = async (accountId, currentDate, deckId) => {
   }
 };
 
+/**
+ * Count how many due cards have been reviewed for particular deck.
+ * Used to prevent the cards from deck query to over fetch too many due cards,
+ * if the cards are reloaded between the reviews.
+ * @param {integer} accountId - accounts id number
+ * @param {Date} currentDate - current date for the client, can differ from server date, don't use 'CURRENT_DATE'
+ * @param {integer} deckId - id of the deck
+ * @returns {object} count how many due cards were reviewed from deck
+ */
+const countDueReviewsTodayInDeck = async (accountId, currentDate, deckId) => {
+  try {
+    const count =  await sequelize.query(rawQueries.countDueReviewsTodayInDeck, {
+      replacements: {
+        accountId: accountId,
+        currentDate: currentDate,
+        deckId: deckId
+      },
+      model: models.CardList,
+      type: sequelize.QueryTypes.SELECT,
+      raw: true
+    });
+    return parseInt(count[0]?.due_cards_reviewed_today) || 0;
+  } catch (error) {
+    return internalServerError(error);
+  }
+};
+
 module.exports = {
   findDeckById,
   findAllDecks,
@@ -203,5 +230,6 @@ module.exports = {
   createAccountDeckSettings,
   findDeckTranslation,
   countDueCardsInDecks,
-  countNewReviewsTodayInDeck
+  countNewReviewsTodayInDeck,
+  countDueReviewsTodayInDeck
 };
