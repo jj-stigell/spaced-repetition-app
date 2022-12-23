@@ -125,8 +125,8 @@ ORDER BY
 const fetchDueReviewsNDays = `
 SELECT
   CASE
-    WHEN DATE(due_at) <= :currentDate THEN :currentDate
-    ELSE DATE(due_at)
+    WHEN due_at <= :currentDate THEN :currentDate
+    ELSE due_at
   END AS date,
   COUNT(*) AS reviews
 FROM
@@ -136,8 +136,8 @@ WHERE
 GROUP BY
   due_at::date,
   CASE
-    WHEN DATE(due_at) <= :currentDate THEN :currentDate
-    ELSE DATE(due_at)
+    WHEN due_at <= :currentDate THEN :currentDate
+    ELSE due_at
   END
 ORDER BY
   DATE(due_at) ASC LIMIT :limitReviews

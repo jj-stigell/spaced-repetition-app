@@ -118,7 +118,7 @@ const resolvers = {
           accountCard.set({
             easyFactor: newEasyFactor,
             dueAt: newDueDate,
-            mature: newInterval > constants.matureInterval ? true : false,
+            mature: newInterval >= constants.card.matureInterval ? true : false,
             reviewCount: accountCard.reviewCount + 1,
             updatedAt: date
           });
