@@ -53,7 +53,7 @@ const languageId = yup
 const date = yup
   .date(errors.validation.invalidDateError)
   .min(calculateDateToString(-1), errors.validation.invalidDateError)
-  .max(calculateDateToString(constants.maxReviewInterval), errors.validation.invalidDateError);
+  .max(calculateDateToString(constants.card.maxReviewInterval), errors.validation.invalidDateError);
 
 const dateRequired = date
   .required(errors.validation.requiredDateError);
@@ -108,8 +108,8 @@ const UUID = yup
 
 const reviewInterval = yup
   .number(errors.inputValueTypeError)
-  .min(constants.minReviewInterval, errors.minReviewIntervalError)
-  .max(constants.maxReviewInterval, errors.maxReviewIntervalError)
+  .min(constants.card.minReviewInterval, errors.cardErrors.minReviewIntervalError)
+  .max(constants.card.maxReviewInterval, errors.cardErrors.maxReviewIntervalError)
   .integer(errors.inputValueTypeError);
 
 const reviewIntervalRequired = reviewInterval

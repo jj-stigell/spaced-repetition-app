@@ -29,8 +29,8 @@ const errors = {
   passwordLowercaseError: 'passwordLowercaseError',
   maxLimitReviewsError: 'maxLimitReviewsError',
   minLimitReviewsError: 'minLimitReviewsError',
-  maxReviewIntervalError: 'maxReviewIntervalError',
-  minReviewIntervalError: 'minReviewIntervalError',
+
+
   maxNewReviewsError: 'maxNewReviewsError',
   minNewReviewsError: 'minNewReviewsError',
   pushReviewsLimitError: 'pushReviewsLimitError',
@@ -77,7 +77,8 @@ const errors = {
     defaultError: 'DEFAULT_ERROR',
   },
   cardErrors: {
-
+    maxReviewIntervalError: 'maxReviewIntervalError',
+    minReviewIntervalError: 'minReviewIntervalError',
   },
   validation: {
     invalidDateError: 'invalidDateError',

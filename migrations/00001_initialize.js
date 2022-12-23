@@ -350,8 +350,8 @@ module.exports = {
         allowNull: false,
         defaultValue: constants.defaultInterval,
         validate: {
-          max: constants.maxReviewInterval,
-          min: constants.minReviewInterval
+          max: constants.card.maxReviewInterval,
+          min: constants.card.minReviewInterval
         }
       },
       reviews_per_day: {
