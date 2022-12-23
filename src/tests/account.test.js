@@ -1,4 +1,4 @@
-const { expect, describe, beforeAll, afterAll, beforeEach, it } = require('@jest/globals');
+const { it, expect, describe, beforeAll, afterAll, beforeEach } = require('@jest/globals');
 const { createAccount, passwordData, stringData, expiredToken, account } = require('./utils/constants'); 
 const { sessionEvaluator } = require('./utils/expectHelper');
 const { connectToDatabase } = require('../database');
@@ -7,7 +7,7 @@ const mutations = require('./utils/mutations');
 const sendRequest = require('./utils/request');
 const { PORT } = require('../util/config');
 const queries = require('./utils/queries');
-const helpers = require('./utils/helper');
+const testHelpers = require('./utils/helper');
 const server = require('../util/server');
 
 describe('Account integration tests', () => {
@@ -28,14 +28,14 @@ describe('Account integration tests', () => {
   });
 
   beforeEach(async () => {
-    await helpers.resetDatabaseEntries();
-    [ memberAuthToken, memberAcc ] = await helpers.getToken(testUrl, account);
+    await testHelpers.resetDatabaseEntries();
+    [ memberAuthToken, memberAcc ] = await testHelpers.getToken(testUrl, account);
   });
 
   describe('JWT test', () => {
 
     it('Server should respond 200 ok to health check', async () => {
-      helpers.healthCheck(testUrl);
+      testHelpers.healthCheck(testUrl);
     });
   
     it('Expired JWT should return error', async () => {
@@ -217,7 +217,7 @@ describe('Account integration tests', () => {
 
     it('Login succesfully to an existing account', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.login.token).toBeDefined();
@@ -299,7 +299,7 @@ describe('Account integration tests', () => {
     it('Change password and login with new password succesfully', async () => {
       // create a new account
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       // login and receive token
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       expect(response.body.errors).toBeUndefined();
@@ -347,7 +347,7 @@ describe('Account integration tests', () => {
     
     it('Error when empty value, current password', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -358,7 +358,7 @@ describe('Account integration tests', () => {
 
     it('Error when empty value, new password', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -369,7 +369,7 @@ describe('Account integration tests', () => {
 
     it('Error when empty value, new password confirmation', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -380,7 +380,7 @@ describe('Account integration tests', () => {
 
     it('Error when value with wrong type, current password (integer)', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -391,7 +391,7 @@ describe('Account integration tests', () => {
 
     it('Error when value with wrong type, new password (integer)', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -402,7 +402,7 @@ describe('Account integration tests', () => {
 
     it('Error when value with wrong type, new password confirmation (integer)', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -413,7 +413,7 @@ describe('Account integration tests', () => {
 
     it('Error when password and password confirmation do not match', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -424,7 +424,7 @@ describe('Account integration tests', () => {
 
     it('Error when new password is same as the old one', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -439,7 +439,7 @@ describe('Account integration tests', () => {
 
     it('Error when authorized but current password does not match with DB hash', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -450,7 +450,7 @@ describe('Account integration tests', () => {
 
     it('Error when new password not long enough', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -465,7 +465,7 @@ describe('Account integration tests', () => {
 
     it('Error when new password is too long', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -480,7 +480,7 @@ describe('Account integration tests', () => {
 
     it('Error when new password does not contain numbers', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -495,7 +495,7 @@ describe('Account integration tests', () => {
 
     it('Error when new password does not contain uppercase', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -510,7 +510,7 @@ describe('Account integration tests', () => {
 
     it('Error when new password does not contain lowercase', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -618,7 +618,7 @@ describe('Account integration tests', () => {
 
     it('Succesfully fetch sessions (3) logged in', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
@@ -632,7 +632,7 @@ describe('Account integration tests', () => {
 
     it('After logging out, session is removed from results', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
@@ -650,7 +650,7 @@ describe('Account integration tests', () => {
 
     it('Session expired error after accessing sessions with logged out token', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
 
@@ -670,7 +670,7 @@ describe('Account integration tests', () => {
 
     it('Succesfully logout when session exists', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
       let session = response.body.data.login.session;
@@ -682,7 +682,7 @@ describe('Account integration tests', () => {
 
     it('Session expired error after accessing with logged out token', async () => {
       let response = await sendRequest(testUrl, null, mutations.createAccount, createAccount);
-      await helpers.verifyEmail(response.body.data.createAccount.id);
+      await testHelpers.verifyEmail(response.body.data.createAccount.id);
       response = await sendRequest(testUrl, null, mutations.login, createAccount);
       token = response.body.data.login.token;
       await sendRequest(testUrl, token, mutations.logout, null);

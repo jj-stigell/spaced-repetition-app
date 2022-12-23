@@ -70,14 +70,14 @@ describe('Deckintegration tests', () => {
     });
 
     it('Error when authenticated but date too far in the future', async () => {
-      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.maxReviewInterval + 1);
+      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.card.maxReviewInterval + 1);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.decks, { date: dateTooLongInTheFuture });
       expect(response.body.data?.decks).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
     });
 
-    it('Fetch all available decks should be possible with max review inteerval set as the date', async () => {
-      const maxDatePossible = helpers.calculateDateToString(constants.maxReviewInterval);
+    it('Fetch all available decks should be possible with max review interval set as the date', async () => {
+      const maxDatePossible = helpers.calculateDateToString(constants.card.maxReviewInterval);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.decks, { date: maxDatePossible });
       response.body.data.decks.forEach(deck => deckEvaluator(deck));
       expect(response.body.errors).toBeUndefined();
@@ -230,15 +230,15 @@ describe('Deckintegration tests', () => {
     });
 
     it('Error when authenticated but reviewInterval too high', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewInterval: constants.maxReviewInterval + 1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewInterval: constants.card.maxReviewInterval + 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.maxReviewIntervalError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.card.maxReviewIntervalError);
     });
 
     it('Error when authenticated but reviewInterval too low', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewInterval: constants.minReviewInterval - 1  });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewInterval: constants.card.minReviewInterval - 1  });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.minReviewIntervalError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.minReviewIntervalError);
     });
 
     it('Error when authenticated but reviewsPerDay wrong type (string)', async () => {
