@@ -1,9 +1,12 @@
 const { expect } = require('@jest/globals');
 const request = require('supertest');
 const { account, accountUnconfirmedEmail, nonMemberAccount, adminReadRights, adminWriteRights } = require('./constants');
-const { sequelize } = require('../../database');
-const mutations = require('./mutations');
 const constants = require('../../util/constants');
+const { sequelize } = require('../../database');
+const testConstants = require('./constants');
+const mutations = require('./mutations');
+
+const queryInterface = sequelize.getQueryInterface();
 
 /**
  * Reset database for the next tests.
@@ -12,8 +15,6 @@ const constants = require('../../util/constants');
  */
 const resetDatabaseEntries = async () => {
   try {
-    const queryInterface = sequelize.getQueryInterface();
-
     // Truncate all data that might have been affected by the tests
     await queryInterface.sequelize.query('TRUNCATE account_card_custom_data, account, admin, account_deck_settings, account_review, account_card, bug_report, session;');
 
@@ -64,10 +65,14 @@ const resetDatabaseEntries = async () => {
 
 const addDueReviews = async (accountId, amount, cardStartId, date) => {
   try {
-    const queryInterface = sequelize.getQueryInterface();
     for (let i = cardStartId; i < amount + cardStartId; i++) {
+      // create account card
       await queryInterface.sequelize.query(`INSERT INTO account_card (account_id, card_id, review_type, review_count, easy_factor, mature, due_at, created_at, updated_at)
-      VALUES ('${accountId}', '${i}', 'RECALL', 1, ${constants.card.defaultEasyFactor}, false, '${date.toISOString().split('T')[0]}', NOW(), NOW());`);
+      VALUES ('${accountId}', '${i}', 'RECALL', 1, ${constants.card.defaultEasyFactor}, false, '${date.toISOString().split('T')[0]}', '2022-10-10', '2022-10-10');`);
+
+      // custom card story and hit
+      await queryInterface.sequelize.query(`INSERT INTO account_card_custom_data (account_id, card_id, account_story, account_hint, created_at, updated_at)
+      VALUES ('${accountId}', '${i}', '${testConstants.accountCard.story}', '${testConstants.accountCard.hint}', '2022-10-10', '2022-10-10');`);
     }
   } catch (error) {
     console.log(error);
@@ -76,14 +81,13 @@ const addDueReviews = async (accountId, amount, cardStartId, date) => {
 
 const addReviews = async (accountId, amount) => {
   try {
-    const queryInterface = sequelize.getQueryInterface();
     const date = new Date();
     for (let i = 10; i < amount + 10; i++) {
       let newDate = date.setDate(date.getDate() - i);
       newDate = new Date(newDate);
       await queryInterface.sequelize.query(`
-      INSERT INTO account_review (account_id, card_id, extra_review, timing, result, created_at) VALUES
-      ('${accountId}', '${i}', true, 13.5, 'AGAIN', '${newDate.toISOString().split('T')[0]}');
+      INSERT INTO account_review (account_id, card_id, extra_review, timing, type, result, created_at) VALUES
+      ('${accountId}', '${i}', true, 13.5, 'RECALL', 'AGAIN', '${newDate.toISOString().split('T')[0]}');
       `);
     }
   } catch (error) {
@@ -93,10 +97,15 @@ const addReviews = async (accountId, amount) => {
 
 const verifyEmail = async (accountId) => {
   try {
-    const queryInterface = sequelize.getQueryInterface();
-    await queryInterface.sequelize.query(
-      `UPDATE account SET email_verified = true WHERE id = ${accountId}`
-    );
+    await queryInterface.sequelize.query(`UPDATE account SET email_verified = true WHERE id = ${accountId}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const setMembership = async (accountId, member) => {
+  try {
+    await queryInterface.sequelize.query(`UPDATE account SET member = ${member} WHERE id = ${accountId}`);
   } catch (error) {
     console.log(error);
   }
@@ -130,6 +139,7 @@ module.exports = {
   addDueReviews,
   addReviews,
   verifyEmail,
+  setMembership,
   healthCheck,
   registerAccount,
   getToken

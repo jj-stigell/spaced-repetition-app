@@ -118,7 +118,8 @@ const accountReview = {
 const cardsFromDeck = {
   deckId: 1,
   languageId: 'EN',
-  newCards: true
+  newCards: true,
+  date: new Date()
 };
 
 const userAgents = [

@@ -116,7 +116,6 @@ const deckSettingsEvaluator = (accountDeckSettings) => {
   expect(accountDeckSettings.updatedAt).toBeDefined();
 };
 
-
 const deckEvaluator = (deck) => {
   expect(deck.id).toBeDefined();
   expect(deck.deckName).toBeDefined();

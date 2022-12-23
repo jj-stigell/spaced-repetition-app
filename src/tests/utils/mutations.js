@@ -85,15 +85,13 @@ const mutations = {
       updatedAt
     }
   }`,
-  editAccountCard: `mutation EditAccountCard($cardId: Int!, $story: String, $hint: String) {
-    editAccountCard(cardId: $cardId, story: $story, hint: $hint) {
+  editAccountCard: `mutation EditAccountCard($cardId: Int!, $hint: String, $story: String) {
+    editAccountCard(cardId: $cardId, hint: $hint, story: $story) {
       id
-      reviewCount
-      easyFactor
+      accountId
+      cardId
       accountStory
       accountHint
-      dueAt
-      mature
       createdAt
       updatedAt
     }
