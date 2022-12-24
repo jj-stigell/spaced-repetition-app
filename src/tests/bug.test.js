@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { it, expect, describe, beforeAll, afterAll, beforeEach } = require('@jest/globals');
 const { account, nonMemberAccount, adminReadRights, adminWriteRights, validBugReport, solveBugReport, stringData } = require('./utils/constants'); 
 const { bugReportEvaluator } = require('./utils/expectHelper');
