@@ -72,13 +72,13 @@ describe('Cardintegration tests', () => {
     it('Error when deck id negative integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, deckId: -1 });
       expect(response.body.data?.cardsFromDeck).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when deck id zero integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, deckId: 0 });
       expect(response.body.data?.cardsFromDeck).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when language id non existing ENUM', async () => {
@@ -116,14 +116,14 @@ describe('Cardintegration tests', () => {
       const tooEarlyDate = helpers.calculateDateToString(-2);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, date: tooEarlyDate });
       expect(response.body.data?.cardsFromDeck).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.invalidDateError);
     });
 
     it('Error when date too far in the future', async () => {
-      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.card.maxReviewInterval + 1);
+      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.review.maxReviewInterval + 1);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, date: dateTooLongInTheFuture });
       expect(response.body.data?.cardsFromDeck).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.invalidDateError);
     });
 
     describe('Fetch new cards from kanji deck (id = 1)', () => {
@@ -180,13 +180,13 @@ describe('Cardintegration tests', () => {
     it('Error when deck id negative integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false, deckId: -1 });
       expect(response.body.data?.cardsFromDeck).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when deck id zero integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false, deckId: 0 });
       expect(response.body.data?.cardsFromDeck).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when language id non existing ENUM', async () => {
@@ -224,20 +224,20 @@ describe('Cardintegration tests', () => {
       const tooEarlyDate = helpers.calculateDateToString(-2);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false, date: tooEarlyDate });
       expect(response.body.data?.cardsFromDeck).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.invalidDateError);
     });
 
     it('Error when date too far in the future', async () => {
-      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.card.maxReviewInterval + 1);
+      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.review.maxReviewInterval + 1);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false, date: dateTooLongInTheFuture });
       expect(response.body.data?.cardsFromDeck).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.invalidDateError);
     });
 
     it('Error when no due cards', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false });
       expect(response.body.data?.cardsFromDeck).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.noDueCardsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.noDueCardsError);
     });
 
     describe('Fetch due cards from kanji deck (id = 1)', () => {
@@ -271,7 +271,7 @@ describe('Cardintegration tests', () => {
           await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, {
             cardId: i,
             reviewResult: 'AGAIN',
-            newInterval: constants.card.matureInterval,
+            newInterval: constants.review.matureInterval,
             newEasyFactor: 2.5,
             date: dateToday,
             reviewType: 'RECALL'
@@ -280,7 +280,7 @@ describe('Cardintegration tests', () => {
 
         response = await sendRequest(testUrl, nonMemberAuthToken, queries.cardsFromDeck, { ...cardsFromDeck, newCards: false });
         expect(response.body.data?.cardsFromDeck).toBeUndefined();
-        expect(response.body.errors[0].extensions.code).toContain(errors.noDueCardsError);
+        expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.noDueCardsError);
       });
 
       it('Succesfully fetch due cards as member account', async () => {
@@ -371,13 +371,13 @@ describe('Cardintegration tests', () => {
     it('Error when limit reviews negative integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: -1, date: dateToday });
       expect(response.body.data?.dueCount).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when limit reviews zero integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 0, date: dateToday });
       expect(response.body.data?.dueCount).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when date wrong type (string)', async () => {
@@ -397,14 +397,14 @@ describe('Cardintegration tests', () => {
       const tooEarlyDate = helpers.calculateDateToString(-2);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 10, date: tooEarlyDate });
       expect(response.body.data?.dueCount).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.invalidDateError);
     });
 
     it('Error when date too far in the future', async () => {
-      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.card.maxReviewInterval + 1);
+      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.review.maxReviewInterval + 1);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.dueCount,  { limitReviews: 10, date: dateTooLongInTheFuture });
       expect(response.body.data?.dueCount).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.invalidDateError);
     });
 
     it('Should return empty array if no cards due', async () => {
@@ -460,13 +460,13 @@ describe('Cardintegration tests', () => {
     it('Error when limit reviews negative integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.reviewHistory,  { limitReviews: -1 });
       expect(response.body.data?.reviewHistory).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when limit reviews zero integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.reviewHistory,  { limitReviews: 0 });
       expect(response.body.data?.reviewHistory).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Should return empty array (length 0) if no cards due', async () => {
@@ -557,7 +557,7 @@ describe('Cardintegration tests', () => {
       let response = await sendRequest(testUrl, nonMemberAuthToken, queries.learningStatisticsByType,  { cardType: 'KANJI', reviewType: 'RECALL' });
       matureCount = response.body.data.learningStatisticsByType.matured;
       newCount = response.body.data.learningStatisticsByType.new;
-      await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, { ...accountReview, newInterval: constants.card.matureInterval });
+      await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, { ...accountReview, newInterval: constants.review.matureInterval });
       response = await sendRequest(testUrl, nonMemberAuthToken, queries.learningStatisticsByType,  { cardType: 'KANJI', reviewType: 'RECALL' });
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.learningStatisticsByType).toBeDefined();
@@ -578,7 +578,7 @@ describe('Cardintegration tests', () => {
     it('Unauthorized error when logged in but not admin', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, queries.cardsByType, { cardType: 'KANJI', languageId: 'EN' });
       expect(response.body.data?.cardsByType).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Error when admin but card type not send', async () => {
@@ -660,7 +660,7 @@ describe('Cardintegration tests', () => {
     it('Error when card does not exist', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.editAccountCard, { ...accountCard, cardId: 99999 });
       expect(response.body.data?.editAccountCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.nonExistingIdError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.nonExistingCardIdError);
     });
 
     it('Error when card id wrong type (string)', async () => {
@@ -684,37 +684,37 @@ describe('Cardintegration tests', () => {
     it('Error when story too long', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.editAccountCard, { ...accountCard, story: 'x'.repeat(constants.card.storyMaxLength + 1) });
       expect(response.body.data?.editAccountCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.storyTooLongError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.storyTooLongError);
     });
 
     it('Error when story too short', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.editAccountCard, { ...accountCard, story: 'x'.repeat(constants.card.storyMinLength - 1) });
       expect(response.body.data?.editAccountCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.storyTooShortError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.storyTooShortError);
     });
 
     it('Error when hint too long', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.editAccountCard, { ...accountCard, hint: 'x'.repeat(constants.card.hintMaxLength + 1) });
       expect(response.body.data?.editAccountCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.hintTooLongError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.hintTooLongError);
     });
 
     it('Error when hint too short', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.editAccountCard, { ...accountCard, hint: 'x'.repeat(constants.card.storyMinLength - 1)});
       expect(response.body.data?.editAccountCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.hintTooShortError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.hintTooShortError);
     });
 
     it('Error when both story ands hint not provided', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.editAccountCard, { cardId: accountCard.cardId });
       expect(response.body.data?.editAccountCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.provideStoryOrHintError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.provideStoryOrHintError);
     });
 
     it('Error when non-member submitting the custom card information', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.editAccountCard, accountCard);
       expect(response.body.data?.editAccountCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.account.memberFeatureError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.accountErrors.memberFeatureError);
     });
 
     it('Succesfully set story and hint after logged in and active member', async () => {
@@ -852,13 +852,13 @@ describe('Cardintegration tests', () => {
     it('Error when card id negative integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, { ...accountReview, cardId: -1 });
       expect(response.body.data?.rescheduleCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when card id zero integer)', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, { ...accountReview, cardId: 0 });
       expect(response.body.data?.rescheduleCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when review result wrong type (integer)', async () => {
@@ -894,7 +894,7 @@ describe('Cardintegration tests', () => {
     it('Error when new interval too long', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, {
         ...accountReview,
-        newInterval: constants.card.maxReviewInterval + 1
+        newInterval: constants.review.maxReviewInterval + 1
       });
       expect(response.body.data?.rescheduleCard).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.maxReviewIntervalError);
@@ -903,7 +903,7 @@ describe('Cardintegration tests', () => {
     it('Error when new interval too long', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, {
         ...accountReview,
-        newInterval: constants.card.minReviewInterval - 1
+        newInterval: constants.review.minReviewInterval - 1
       });
       expect(response.body.data?.rescheduleCard).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.minReviewIntervalError);
@@ -944,14 +944,14 @@ describe('Cardintegration tests', () => {
       const tooEarlyDate = helpers.calculateDateToString(-2);
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, { ...accountReview, date: tooEarlyDate });
       expect(response.body.data?.rescheduleCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.invalidDateError);
     });
 
     it('Error when date too far in the future', async () => {
-      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.card.maxReviewInterval + 1);
+      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.review.maxReviewInterval + 1);
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.rescheduleCard, { ...accountReview, date: dateTooLongInTheFuture });
       expect(response.body.data?.rescheduleCard).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.invalidDateError);
     });
 
     it('Succesfull when all validations pass and logged in (non-member)', async () => {
@@ -974,7 +974,7 @@ describe('Cardintegration tests', () => {
     });
 
     it('Rescheduling card with high enough interval should make card mature', async () => {
-      const response = await sendRequest(testUrl, memberAuthToken, mutations.rescheduleCard, { ...accountReview, newInterval: constants.card.matureInterval });
+      const response = await sendRequest(testUrl, memberAuthToken, mutations.rescheduleCard, { ...accountReview, newInterval: constants.review.matureInterval });
       accountCardEvaluator(response.body.data.rescheduleCard, 1, accountReview.newEasyFactor, null, null, true);
       expect(response.body.errors).toBeUndefined();
     });

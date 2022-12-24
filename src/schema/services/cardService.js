@@ -39,7 +39,7 @@ const createAccountCard = async (cardId, accountId, easyFactor, newDueDate, newI
       cardId: cardId,
       dueAt: newDueDate,
       reviewType: reviewType,
-      mature: newInterval >= constants.card.matureInterval ? true : false,
+      mature: newInterval >= constants.review.matureInterval ? true : false,
       easyFactor: easyFactor ? easyFactor : constants.card.defaultEasyFactor,
       reviewCount: 1,
       createdAt: createdAt

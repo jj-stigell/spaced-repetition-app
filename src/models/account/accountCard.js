@@ -27,7 +27,7 @@ AccountCard.init({
     }
   },
   reviewType: {
-    type: DataTypes.ENUM(constants.reviewTypes),
+    type: DataTypes.ENUM(constants.review.reviewTypes),
     allowNull: false
   },
   reviewCount: {

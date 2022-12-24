@@ -11,7 +11,7 @@ Card.init({
     autoIncrement: true
   },
   type: {
-    type: DataTypes.ENUM(constants.cardTypes),
+    type: DataTypes.ENUM(constants.card.cardTypes),
     allowNull: false
   },
   languageId: {

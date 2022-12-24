@@ -16,7 +16,7 @@ const resolvers = {
       await validator.validateInteger(bugId);
       await checkAdminPermission(currentUser.id, 'READ');
       const bug = await services.bugService.findBugReportById(bugId);
-      if (bug === null) return defaultError(errors.bug.bugByIdNotFound);
+      if (bug === null) return defaultError(errors.bugErrors.bugByIdNotFoundError);
       return bug;
     },
     bugReportsByType: async (root, { type }, { currentUser }) => {
@@ -42,7 +42,7 @@ const resolvers = {
       await validator.validateInteger(bugId);
       await checkAdminPermission(currentUser.id, 'WRITE');
       const deletedBug = await services.bugService.deleteBugReport(bugId);
-      if (!deletedBug) return defaultError(errors.bug.bugByIdNotFound);
+      if (!deletedBug) return defaultError(errors.bugErrors.bugByIdNotFoundError);
       return bugId;
     },
   }

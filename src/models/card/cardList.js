@@ -35,7 +35,7 @@ CardList.init({
     type: DataTypes.INTEGER
   },
   reviewType: {
-    type: DataTypes.ENUM(constants.reviewTypes),
+    type: DataTypes.ENUM(constants.review.reviewTypes),
     allowNull: false
   },
   createdAt: {

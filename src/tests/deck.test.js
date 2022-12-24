@@ -66,18 +66,18 @@ describe('Deckintegration tests', () => {
       const tooEarlyDate = helpers.calculateDateToString(-2);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.decks, { date: tooEarlyDate });
       expect(response.body.data?.decks).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.invalidDateError);
     });
 
     it('Error when authenticated but date too far in the future', async () => {
-      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.card.maxReviewInterval + 1);
+      const dateTooLongInTheFuture = helpers.calculateDateToString(constants.review.maxReviewInterval + 1);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.decks, { date: dateTooLongInTheFuture });
       expect(response.body.data?.decks).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.validation.invalidDateError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.invalidDateError);
     });
 
     it('Fetch all available decks should be possible with max review interval set as the date', async () => {
-      const maxDatePossible = helpers.calculateDateToString(constants.card.maxReviewInterval);
+      const maxDatePossible = helpers.calculateDateToString(constants.review.maxReviewInterval);
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.decks, { date: maxDatePossible });
       response.body.data.decks.forEach(deck => deckEvaluator(deck));
       expect(response.body.errors).toBeUndefined();
@@ -124,13 +124,13 @@ describe('Deckintegration tests', () => {
     it('Error when authenticated but deck id negative integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: -1 });
       expect(response.body.data?.deckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when authenticated but deck id zero integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: 0 });
       expect(response.body.data?.deckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
     
     it('Error when authenticated but deck id wrong type (string)', async () => {
@@ -152,9 +152,9 @@ describe('Deckintegration tests', () => {
     });
 
     it('Error when authenticated but non-existing deck id', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: constants.maxAmountOfDecks + 1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, queries.deckSettings, { deckId: constants.deck.maxAmountOfDecks + 1 });
       expect(response.body.data?.deckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.nonExistingDeckError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.deckErrors.nonExistingDeckIdError);
     });
 
     it('Fetch deck setting for deck id 1, settings should be default for initial fetch, defined in constants', async () => {
@@ -165,9 +165,9 @@ describe('Deckintegration tests', () => {
       expect(response.body.data.deckSettings.deckId).toBe(1);
       expect(response.body.data.deckSettings.favorite).toBe(false);
       expect(response.body.data.deckSettings.dueCards).toBe(0);
-      expect(response.body.data.deckSettings.reviewInterval).toBe(constants.defaultInterval);
-      expect(response.body.data.deckSettings.reviewsPerDay).toBe(constants.defaultReviewPerDay);
-      expect(response.body.data.deckSettings.newCardsPerDay).toBe(constants.defaultNewPerDay);
+      expect(response.body.data.deckSettings.reviewInterval).toBe(constants.review.defaultInterval);
+      expect(response.body.data.deckSettings.reviewsPerDay).toBe(constants.review.defaultReviewPerDay);
+      expect(response.body.data.deckSettings.newCardsPerDay).toBe(constants.review.defaultNewPerDay);
       expect(response.body.data.deckSettings.createdAt).toBeDefined();
       expect(response.body.data.deckSettings.updatedAt).toBeDefined();
     });
@@ -184,7 +184,7 @@ describe('Deckintegration tests', () => {
     it('Error when authenticated but deck with id non existing', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, deckId: 9999 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.nonExistingDeckError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.deckErrors.nonExistingDeckIdError);
     });
 
     it('Error when authenticated but deck id not send', async () => {
@@ -196,13 +196,13 @@ describe('Deckintegration tests', () => {
     it('Error when authenticated but deck id negative integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, deckId: -1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when authenticated but deck id zero integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, deckId: 0 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when authenticated but deck id wrong type (string)', async () => {
@@ -230,13 +230,13 @@ describe('Deckintegration tests', () => {
     });
 
     it('Error when authenticated but reviewInterval too high', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewInterval: constants.card.maxReviewInterval + 1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewInterval: constants.review.maxReviewInterval + 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.maxReviewIntervalError);
     });
 
     it('Error when authenticated but reviewInterval too low', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewInterval: constants.card.minReviewInterval - 1  });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewInterval: constants.review.minReviewInterval - 1  });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
       expect(response.body.errors[0].extensions.code).toContain(errors.cardErrors.minReviewIntervalError);
     });
@@ -248,15 +248,15 @@ describe('Deckintegration tests', () => {
     });
 
     it('Error when authenticated but reviewsPerDay too high', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewsPerDay: constants.maxLimitReviews + 1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewsPerDay: constants.review.maxLimitReviews + 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.maxLimitReviewsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.reviewErrors.maxLimitReviewsError);
     });
 
     it('Error when authenticated but reviewsPerDay too low', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewsPerDay: constants.minLimitReviews - 1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, reviewsPerDay: constants.review.minLimitReviews - 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.minLimitReviewsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.reviewErrors.minLimitReviewsError);
     });
 
     it('Error when authenticated but newCardsPerDay wrong type (string)', async () => {
@@ -266,15 +266,15 @@ describe('Deckintegration tests', () => {
     });
 
     it('Error when authenticated but newCardsPerDay too high', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, newCardsPerDay: constants.maxNewReviews + 1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, newCardsPerDay: constants.review.maxNewReviews + 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.maxNewReviewsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.reviewErrors.maxNewReviewsError);
     });
 
     it('Error when authenticated but newCardsPerDay too low', async () => {
-      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, newCardsPerDay: constants.minNewReviews - 1 });
+      const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.changeDeckSettings, { ...deckSettings, newCardsPerDay: constants.review.minNewReviews - 1 });
       expect(response.body.data?.changeDeckSettings).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.minNewReviewsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.reviewErrors.minNewReviewsError);
     });
 
     it('Succesfully change settings after authentication', async () => {

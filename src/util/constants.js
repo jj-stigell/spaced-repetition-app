@@ -2,44 +2,45 @@ const constants = {
   general: {
     defaultLanguage: 'EN',
     availableLanguages: ['EN', 'FI', 'VN', 'JP'],
+    yupAbortEarly: false,                         // Abort validation early (true), or validate everything and return all erros (false)
+    jltpLevels: [1, 2, 3, 4, 5]                   // Available JLPT levels, officially
   },
-  resultTypes: ['AGAIN', 'GOOD'],
-  reviewTypes: ['RECALL', 'RECOGNISE'],
-  cardTypes: ['KANJI', 'HIRAGANA', 'KATAKANA', 'WORD', 'SENTENCE'],
-  jltpLevels: [1, 2, 3, 4, 5],                                          // Available JLPT levels, officially
-  maxLimitReviews: 999,
-  minLimitReviews: 0,
-  maxNewReviews: 100,
-  minNewReviews: 0,
-  defaultInterval: 999,
-  defaultReviewPerDay: 999,
-  defaultNewPerDay: 15,
-  maxPushReviewsDays: 7,                                                // How many days can user at maximum push reviews ahead
-  defaultReviewCount: 1,
-  maxAmountOfDecks: 50,
-  passwordMaxLength: 50,
-  passwordMinLength: 8,
   account: {
     usernameMaxLength: 14,
-    usernameMinLength: 4
+    usernameMinLength: 4,
+    passwordMaxLength: 50,
+    passwordMinLength: 8
   },
   login: {
     jwtExpiryTime: 2419200,
-    sessionLifetime: 28,                                                // How long a new session will last in days, same as jwt expiry time
-    saltRounds: 10,
+    sessionLifetime: 28,                           // How long a new session will last in days, same as jwt expiry time
+    saltRounds: 10
   },
   deck: {
-
+    maxAmountOfDecks: 50
+  },
+  review: {
+    resultTypes: ['AGAIN', 'GOOD'],
+    reviewTypes: ['RECALL', 'RECOGNISE'],
+    maxLimitReviews: 999,
+    minLimitReviews: 0,
+    maxNewReviews: 100,
+    minNewReviews: 0,
+    maxPushReviewsDays: 7,                         // How many days can user at maximum push reviews ahead
+    defaultInterval: 999,
+    defaultReviewPerDay: 999,
+    defaultNewPerDay: 15,
+    matureInterval: 21,
+    maxReviewInterval: 999,
+    minReviewInterval: 1
   },
   card: {
+    cardTypes: ['KANJI', 'HIRAGANA', 'KATAKANA', 'WORD', 'SENTENCE'],
     storyMinLength: 1,
     storyMaxLength: 160,
     hintMinLength: 1,
     hintMaxLength: 25,
     defaultEasyFactor: 2.5,
-    matureInterval: 21,
-    maxReviewInterval: 999,
-    minReviewInterval: 1,
   },
   bugs: {
     bugMessageMinLength: 5,
@@ -53,8 +54,7 @@ const constants = {
     uppercaseRegex: /^(?=.*[A-Z])/,
     numberRegex: /^(?=.*[0-9])/,
     dateRegex:  /^(?:(?:1[6-9]|[2-9]\d)?\d{2})(?:(?:(\/|-|\.)(?:0?[13578]|1[02])\1(?:31))|(?:(\/|-|\.)(?:0?[13-9]|1[0-2])\2(?:29|30)))$|^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)0?2\3(?:29)$|^(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:0?[1-9]|1\d|2[0-8])$/
-  },
-  yupAbortEarly: false                      // Abort validation early (true), or validate everything and return all erros (false)
+  }
 };
 
 module.exports = constants;

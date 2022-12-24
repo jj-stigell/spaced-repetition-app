@@ -19,15 +19,15 @@ const resolvers = {
       const deck = await findDeckById(deckId);
 
       // No deck found with an id
-      if (!deck) return defaultError(errors.nonExistingDeckError);
+      if (!deck) return defaultError(errors.deckErrors.nonExistingDeckIdError);
 
       // Deck not active
-      if (!deck.active) return defaultError(errors.nonActiveDeckError);
+      if (!deck.active) return defaultError(errors.deckErrors.nonActiveDeckError);
 
       const account = await accountService.findAccountById(currentUser.id);
 
       // check that user is member, if the deck is member deck
-      if (deck.subscriberOnly && !account.member) notAuthorizedError(errors.account.memberFeatureError);
+      if (deck.subscriberOnly && !account.member) notAuthorizedError(errors.accountErrors.memberFeatureError);
 
       const deckTranslation = await findDeckTranslation(deckId, languageId);
       if (deckTranslation.length !== 0 && deckTranslation[0]?.active) {
@@ -45,7 +45,7 @@ const resolvers = {
       if (newCards) {
         const newReviesDoneToday = await countNewReviewsTodayInDeck(currentUser.id, date, deckId);
         const fetchAmount = accountDeckSettings.newCardsPerDay - newReviesDoneToday;
-        if (fetchAmount <= 0) return defaultError(errors.noDueCardsError);
+        if (fetchAmount <= 0) return defaultError(errors.cardErrors.noDueCardsError);
         cards = await cardService.fetchNewCards(deckId, currentUser.id, fetchAmount, selectedLanguage);
       } else {
         const dueReviesDoneToday = await countDueReviewsTodayInDeck(currentUser.id, date, deckId);
@@ -53,7 +53,7 @@ const resolvers = {
         currentDate = currentDate.toISOString().split('T')[0];
         cards = await cardService.fetchDueCards(deckId, currentUser.id, fetchAmount, selectedLanguage, currentDate);
       }
-      if (!cards) return defaultError(errors.noDueCardsError);
+      if (!cards) return defaultError(errors.cardErrors.noDueCardsError);
       return cardFormatter(cards, false, account.member, newCards);
     },
     cardsByType: async (_, { cardType, languageId }, { currentUser }) => {
@@ -118,7 +118,7 @@ const resolvers = {
           accountCard.set({
             easyFactor: newEasyFactor,
             dueAt: newDueDate,
-            mature: newInterval >= constants.card.matureInterval ? true : false,
+            mature: newInterval >= constants.review.matureInterval ? true : false,
             reviewCount: accountCard.reviewCount + 1,
             updatedAt: date
           });
@@ -151,13 +151,13 @@ const resolvers = {
     },
     editAccountCard: async (_, { cardId, story, hint }, { currentUser }) => {
       if (!currentUser) return notAuthError();
-      if (!story && !hint) return defaultError(errors.provideStoryOrHintError);
+      if (!story && !hint) return defaultError(errors.cardErrors.provideStoryOrHintError);
       await validator.validateEditAccountCard(cardId, story, hint);
       await validateMember(currentUser.id);
 
       // Check that card actually exists in the database
       const card = await cardService.findCardById(cardId);
-      if (!card) return defaultError(errors.nonExistingIdError);
+      if (!card) return defaultError(errors.cardErrors.nonExistingCardIdError);
 
       // Find account card custom data from db
       let accountCardCustomData = await cardService.findAccountCardCustomData(cardId, currentUser.id);

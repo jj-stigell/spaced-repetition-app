@@ -4,155 +4,155 @@ const errors = require('../errors/errors');
 const constants = require('../constants');
 
 const deckId = yup
-  .number(errors.inputValueTypeError)
-  .min(1, errors.negativeNumberTypeError)
-  .max(constants.maxAmountOfDecks, errors.nonExistingDeckError)
-  .integer(errors.inputValueTypeError);
+  .number(errors.validationErrors.inputValueTypeError)
+  .min(1, errors.validationErrors.negativeNumberTypeError)
+  .max(constants.deck.maxAmountOfDecks, errors.deckErrors.nonExistingDeckIdError)
+  .integer(errors.validationErrors.inputValueTypeError);
 
 const deckIdRequired = deckId
-  .required(errors.inputValueMissingError);
+  .required(errors.validationErrors.inputValueMissingError);
 
 const cardId = yup
-  .number(errors.inputValueTypeError)
-  .min(1, errors.negativeNumberTypeError)
-  .integer(errors.inputValueTypeError);
+  .number(errors.validationErrors.inputValueTypeError)
+  .min(1, errors.validationErrors.negativeNumberTypeError)
+  .integer(errors.validationErrors.inputValueTypeError);
 
 const cardIdRequired = cardId
-  .required(errors.inputValueMissingError);
+  .required(errors.validationErrors.inputValueMissingError);
 
 const resultType = yup
-  .string(errors.inputValueTypeError)
-  .oneOf(constants.resultTypes, errors.invalidResultTypeError)
-  .required(errors.requiredResultTypeError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .oneOf(constants.review.resultTypes, errors.reviewErrors.invalidResultTypeError)
+  .required(errors.validationErrors.requiredResultTypeError);
 
 const easyFactor = yup
-  .number(errors.inputValueTypeError)
-  .min(0.01, errors.negativeNumberTypeError)
-  .required(errors.requiredResultTypeError);
+  .number(errors.validationErrors.inputValueTypeError)
+  .min(0.01, errors.validationErrors.negativeNumberTypeError)
+  .required(errors.validationErrors.requiredResultTypeError);
 
 const timing = yup
-  .number(errors.inputValueTypeError)
-  .min(0.01, errors.negativeNumberTypeError);
+  .number(errors.validationErrors.inputValueTypeError)
+  .min(0.01, errors.validationErrors.negativeNumberTypeError);
 
 const email = yup
-  .string(errors.inputValueTypeError)
-  .email(errors.validation.notValidEmailError)
-  .max(255, errors.emailMaxLengthError)
-  .required(errors.requiredEmailError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .email(errors.validationErrors.notValidEmailError)
+  .max(255, errors.validationErrors.emailMaxLengthError)
+  .required(errors.validationErrors.requiredEmailError);
 
 const username = yup
-  .string(errors.inputValueTypeError)
-  .max(constants.account.usernameMaxLength, errors.account.usernameMaxLengthError)
-  .min(constants.account.usernameMinLength, errors.account.usernameMinLengthError)
-  .required(errors.account.requiredUsernameError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .max(constants.account.usernameMaxLength, errors.accountErrors.usernameMaxLengthError)
+  .min(constants.account.usernameMinLength, errors.accountErrors.usernameMinLengthError)
+  .required(errors.accountErrors.requiredUsernameError);
 
 const languageId = yup
-  .string(errors.inputValueTypeError)
-  .oneOf(constants.general.availableLanguages, errors.invalidLanguageIdError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .oneOf(constants.general.availableLanguages, errors.generalErrors.invalidLanguageIdError);
 
 const date = yup
-  .date(errors.validation.invalidDateError)
-  .min(calculateDateToString(-1), errors.validation.invalidDateError)
-  .max(calculateDateToString(constants.card.maxReviewInterval), errors.validation.invalidDateError);
+  .date(errors.validationErrors.invalidDateError)
+  .min(calculateDateToString(-1), errors.validationErrors.invalidDateError)
+  .max(calculateDateToString(constants.review.maxReviewInterval), errors.validationErrors.invalidDateError);
 
 const dateRequired = date
-  .required(errors.validation.requiredDateError);
+  .required(errors.validationErrors.requiredDateError);
 
 const password = yup
-  .string(errors.inputValueTypeError)
-  .max(constants.passwordMaxLength, errors.passwordMaxLengthError)
-  .min(constants.passwordMinLength, errors.passwordMinLengthError)
-  .matches(constants.regex.lowercaseRegex, errors.passwordLowercaseError)
-  .matches(constants.regex.uppercaseRegex, errors.passwordUppercaseError)
-  .matches(constants.regex.numberRegex, errors.passwordNumberError)
-  .required(errors.requiredPasswordError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .max(constants.account.passwordMaxLength, errors.validationErrors.passwordMaxLengthError)
+  .min(constants.account.passwordMinLength, errors.validationErrors.passwordMinLengthError)
+  .matches(constants.regex.lowercaseRegex, errors.validationErrors.passwordLowercaseError)
+  .matches(constants.regex.uppercaseRegex, errors.validationErrors.passwordUppercaseError)
+  .matches(constants.regex.numberRegex, errors.validationErrors.passwordNumberError)
+  .required(errors.validationErrors.requiredPasswordError);
 
 const currentPassword = yup
-  .string(errors.inputValueTypeError)
-  .max(constants.passwordMaxLength, errors.passwordMaxLengthError)
-  .min(constants.passwordMinLength, errors.passwordMinLengthError)
-  .required(errors.requiredPasswordError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .max(constants.account.passwordMaxLength, errors.validationErrors.passwordMaxLengthError)
+  .min(constants.account.passwordMinLength, errors.validationErrors.passwordMinLengthError)
+  .required(errors.validationErrors.requiredPasswordError);
 
 const newPassword = yup
-  .string(errors.inputValueTypeError)
-  .notOneOf([yup.ref('currentPassword'), null], errors.currAndNewPassEqualError)
-  .max(constants.passwordMaxLength, errors.passwordMaxLengthError)
-  .min(constants.passwordMinLength, errors.passwordMinLengthError)
-  .matches(constants.regex.lowercaseRegex, errors.passwordLowercaseError)
-  .matches(constants.regex.uppercaseRegex, errors.passwordUppercaseError)
-  .matches(constants.regex.numberRegex, errors.passwordNumberError)
-  .required(errors.requiredPasswordError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .notOneOf([yup.ref('currentPassword'), null], errors.validationErrors.currAndNewPassEqualError)
+  .max(constants.account.passwordMaxLength, errors.validationErrors.passwordMaxLengthError)
+  .min(constants.account.passwordMinLength, errors.validationErrors.passwordMinLengthError)
+  .matches(constants.regex.lowercaseRegex, errors.validationErrors.passwordLowercaseError)
+  .matches(constants.regex.uppercaseRegex, errors.validationErrors.passwordUppercaseError)
+  .matches(constants.regex.numberRegex, errors.validationErrors.passwordNumberError)
+  .required(errors.validationErrors.requiredPasswordError);
 
 const passwordConfirmation = yup
-  .string(errors.inputValueTypeError)
-  .oneOf([yup.ref('password'), null], errors.passwordMismatchError)
-  .required(errors.requiredPasswordConfirmError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .oneOf([yup.ref('password'), null], errors.validationErrors.passwordMismatchError)
+  .required(errors.validationErrors.requiredPasswordConfirmError);
 
 const isBoolean = yup
-  .boolean(errors.inputValueTypeError);
+  .boolean(errors.validationErrors.inputValueTypeError);
 
 const cardType = yup
-  .string(errors.inputValueTypeError)
-  .oneOf(constants.cardTypes, errors.invalidCardType)
-  .required(errors.inputValueMissingError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .oneOf(constants.card.cardTypes, errors.cardErrors.invalidCardTypeError)
+  .required(errors.validationErrors.inputValueMissingError);
 
 const integer = yup
-  .number(errors.inputValueTypeError)
-  .min(1, errors.negativeNumberTypeError)
-  .integer(errors.inputValueTypeError);
+  .number(errors.validationErrors.inputValueTypeError)
+  .min(1, errors.validationErrors.negativeNumberTypeError)
+  .integer(errors.validationErrors.inputValueTypeError);
 
 const UUID = yup
-  .string(errors.inputValueTypeError)
-  .uuid(errors.inputValueTypeError)
-  .required(errors.inputValueMissingError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .uuid(errors.validationErrors.inputValueTypeError)
+  .required(errors.validationErrors.inputValueMissingError);
 
 const reviewInterval = yup
-  .number(errors.inputValueTypeError)
-  .min(constants.card.minReviewInterval, errors.cardErrors.minReviewIntervalError)
-  .max(constants.card.maxReviewInterval, errors.cardErrors.maxReviewIntervalError)
-  .integer(errors.inputValueTypeError);
+  .number(errors.validationErrors.inputValueTypeError)
+  .min(constants.review.minReviewInterval, errors.cardErrors.minReviewIntervalError)
+  .max(constants.review.maxReviewInterval, errors.cardErrors.maxReviewIntervalError)
+  .integer(errors.validationErrors.inputValueTypeError);
 
 const reviewIntervalRequired = reviewInterval
-  .required(errors.inputValueMissingError);
+  .required(errors.validationErrors.inputValueMissingError);
 
 const reviewsPerDay = yup
-  .number(errors.inputValueTypeError)
-  .min(constants.minLimitReviews, errors.minLimitReviewsError)
-  .max(constants.maxLimitReviews, errors.maxLimitReviewsError)
-  .integer(errors.inputValueTypeError);
+  .number(errors.validationErrors.inputValueTypeError)
+  .min(constants.review.minLimitReviews, errors.reviewErrors.minLimitReviewsError)
+  .max(constants.review.maxLimitReviews, errors.reviewErrors.maxLimitReviewsError)
+  .integer(errors.validationErrors.inputValueTypeError);
 
 const newCardsPerDay = yup
-  .number(errors.inputValueTypeError)
-  .min(constants.minNewReviews, errors.minNewReviewsError)
-  .max(constants.maxNewReviews, errors.maxNewReviewsError)
-  .integer(errors.inputValueTypeError);
+  .number(errors.validationErrors.inputValueTypeError)
+  .min(constants.review.minNewReviews, errors.reviewErrors.minNewReviewsError)
+  .max(constants.review.maxNewReviews, errors.reviewErrors.maxNewReviewsError)
+  .integer(errors.validationErrors.inputValueTypeError);
 
 const days = yup
-  .number(errors.inputValueTypeError)
-  .required(errors.inputValueMissingError)
-  .min(1, errors.negativeNumberTypeError)
-  .max(constants.maxPushReviewsDays, errors.pushReviewsLimitError)
-  .integer(errors.inputValueTypeError);
+  .number(errors.validationErrors.inputValueTypeError)
+  .required(errors.validationErrors.inputValueMissingError)
+  .min(1, errors.validationErrors.negativeNumberTypeError)
+  .max(constants.review.maxPushReviewsDays, errors.reviewErrors.pushReviewsLimitError)
+  .integer(errors.validationErrors.inputValueTypeError);
 
 const story = yup
-  .string(errors.inputValueTypeError)
-  .min(constants.card.storyMinLength, errors.storyTooShortError)
-  .max(constants.card.storyMaxLength, errors.storyTooLongError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .min(constants.card.storyMinLength, errors.cardErrors.storyTooShortError)
+  .max(constants.card.storyMaxLength, errors.cardErrors.storyTooLongError);
 
 const hint = yup
-  .string(errors.inputValueTypeError)
-  .min(constants.card.hintMinLength, errors.hintTooShortError)
-  .max(constants.card.hintMaxLength, errors.hintTooLongError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .min(constants.card.hintMinLength, errors.cardErrors.hintTooShortError)
+  .max(constants.card.hintMaxLength, errors.cardErrors.hintTooLongError);
 
 const bugMessage = yup
-  .string(errors.inputValueTypeError)
-  .min(constants.bugs.bugMessageMinLength, errors.bug.bugMessageTooShortError)
-  .max(constants.bugs.bugMessageMaxLength, errors.bug.bugMessageTooLongError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .min(constants.bugs.bugMessageMinLength, errors.bugErrors.bugMessageTooShortError)
+  .max(constants.bugs.bugMessageMaxLength, errors.bugErrors.bugMessageTooLongError);
 
 const bugSolveMessage = yup
-  .string(errors.inputValueTypeError)
-  .min(constants.bugs.solvedMessageMinLength, errors.bug.bugSolveMessageTooShortError)
-  .max(constants.bugs.solvedMessageMaxLength, errors.bug.bugSolveMessageTooLongError);
+  .string(errors.validationErrors.inputValueTypeError)
+  .min(constants.bugs.solvedMessageMinLength, errors.bugErrors.bugSolveMessageTooShortError)
+  .max(constants.bugs.solvedMessageMaxLength, errors.bugErrors.bugSolveMessageTooLongError);
 
 module.exports = {
   deckId,

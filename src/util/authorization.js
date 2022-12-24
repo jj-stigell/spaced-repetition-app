@@ -13,14 +13,14 @@ const errors = require('./errors/errors');
  */
 const checkAdminPermission = async (accountId, permission) => {
   const admin = await findAdminByAccountId(accountId);
-  if (admin === null) return notAuthorizedError(errors.admin.noAdminRightsError);
+  if (admin === null) return notAuthorizedError(errors.adminErrors.noAdminRightsError);
 
   switch (permission) {
   case 'READ':
-    if (!admin.read && !admin.write) return notAuthorizedError(errors.admin.noAdminReadRights);
+    if (!admin.read && !admin.write) return notAuthorizedError(errors.adminErrors.noAdminReadRightsError);
     break;
   case 'WRITE':
-    if (!admin.write) return notAuthorizedError(errors.admin.noAdminWriteRights);
+    if (!admin.write) return notAuthorizedError(errors.adminErrors.noAdminWriteRightsError);
     break;
   default:
     return internalServerError(errors.internalServerError);
@@ -36,8 +36,8 @@ const checkAdminPermission = async (accountId, permission) => {
  */
 const validateSession = async (sessionId) => {
   const session = await findSessionById(sessionId);
-  if (!session) return defaultError(errors.session.sessionNotFoundError);
-  if (!session.active) return defaultError(errors.session.sessionExpiredError);
+  if (!session) return defaultError(errors.sessionErrors.sessionNotFoundError);
+  if (!session.active) return defaultError(errors.sessionErrors.sessionExpiredError);
   return 1;
 };
 
@@ -48,7 +48,7 @@ const validateSession = async (sessionId) => {
  */
 const validateMember = async (accountId) => {
   const account = await findAccountById(accountId);
-  if (!account.member) return notAuthorizedError(errors.account.memberFeatureError);
+  if (!account.member) return notAuthorizedError(errors.accountErrors.memberFeatureError);
   return true;
 };
 

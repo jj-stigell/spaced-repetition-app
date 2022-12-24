@@ -21,7 +21,7 @@ const resolvers = {
     sessions: async (root, args, { currentUser }) => {
       if (!currentUser) return notAuthError();
       const sessions = await sessionService.findAllSessionsByAccountId(currentUser.id);
-      if (sessions.length === 0) return defaultError(errors.session.sessionNotFoundError);
+      if (sessions.length === 0) return defaultError(errors.sessionErrors.sessionNotFoundError);
       return sessions;
     },
   },
@@ -29,9 +29,9 @@ const resolvers = {
     createAccount: async (_, { email, username, password, passwordConfirmation, languageId }) => {
       await validator.validateNewAccount(email, username, password, passwordConfirmation, languageId);
       const emailInUse = await accountService.findAccountByEmail(email);
-      if (emailInUse) return defaultError(errors.account.emailInUseError);
+      if (emailInUse) return defaultError(errors.accountErrors.emailInUseError);
       const usernameInUse = await accountService.findAccountByUsernameCaseInsensitive(username);
-      if (usernameInUse) return defaultError(errors.account.usernameInUseError);
+      if (usernameInUse) return defaultError(errors.accountErrors.usernameInUseError);
       const passwordHash = await hashPassword(password);
       const account = await accountService.createNewAccount(email, username, languageId, passwordHash);
       return accountFormatter(account);
@@ -39,10 +39,10 @@ const resolvers = {
     login: async (_, { email, password }, { userAgent }) => {
       await validator.validateLogin(email, password);
       const account = await accountService.findAccountByEmail(email);
-      if (!account?.passwordHash) return defaultError(errors.userOrPassIncorrectError);
+      if (!account?.passwordHash) return defaultError(errors.validationErrors.userOrPassIncorrectError);
       const passwordCorrect = await hashCompare(password, account.passwordHash);
-      if (!passwordCorrect) return defaultError(errors.userOrPassIncorrectError);
-      if (!account.emailVerified) return defaultError(errors.account.emailNotVerifiedError);
+      if (!passwordCorrect) return defaultError(errors.validationErrors.userOrPassIncorrectError);
+      if (!account.emailVerified) return defaultError(errors.accountErrors.emailNotVerifiedError);
       const parsedUserAgent = parseUserAgent(userAgent);
       const session = await sessionService.createNewSession(account.id, parsedUserAgent);
       const token = signJWT(account.id, session.id);
@@ -61,8 +61,8 @@ const resolvers = {
       if (!currentUser) return notAuthError();
       await validator.validateUUID(sessionId);
       const session = await sessionService.findSessionById(sessionId);
-      if (session === null) return defaultError(errors.session.sessionNotFoundError);
-      if (session.accountId !== currentUser.id) return defaultError(errors.session.notOwnerOfSession);
+      if (session === null) return defaultError(errors.sessionErrors.sessionNotFoundError);
+      if (session.accountId !== currentUser.id) return defaultError(errors.sessionErrors.notOwnerOfSession);
       await sessionService.deleteSession(sessionId);
       return sessionId;
     },
@@ -70,9 +70,9 @@ const resolvers = {
       if (!currentUser) return notAuthError();
       await validator.validateChangePassword(currentPassword, newPassword, newPasswordConfirmation);
       const account = await accountService.findAccountById(currentUser.id);
-      if (!account?.passwordHash) return defaultError(errors.userOrPassIncorrectError);
+      if (!account?.passwordHash) return defaultError(errors.validationErrors.userOrPassIncorrectError);
       const passwordCorrect = await hashCompare(currentPassword, account.passwordHash);
-      if (!passwordCorrect) return defaultError(errors.currentPasswordIncorrect);
+      if (!passwordCorrect) return defaultError(errors.validationErrors.currentPasswordIncorrectError);
       const passwordHash = await hashPassword(newPassword);
       account.passwordHash = passwordHash;
       try {

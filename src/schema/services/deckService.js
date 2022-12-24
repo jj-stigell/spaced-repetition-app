@@ -110,9 +110,9 @@ const findAccountDeckSettings = async (deckId, accountId) => {
  */
 const createAccountDeckSettings = async (
   deckId, accountId, favorite,
-  reviewInterval = constants.defaultInterval,
-  reviewsPerDay = constants.defaultReviewPerDay,
-  newCardsPerDay = constants.defaultNewPerDay
+  reviewInterval = constants.review.defaultInterval,
+  reviewsPerDay = constants.review.defaultReviewPerDay,
+  newCardsPerDay = constants.review.defaultNewPerDay
 ) => {
   try {
     return await models.AccountDeckSettings.create({

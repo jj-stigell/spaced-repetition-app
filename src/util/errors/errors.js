@@ -1,54 +1,14 @@
 const errors = {
-  inputValueMissingError: 'inputValueMissingError',
-  inputValueTypeError: 'inputValueTypeError',
-  passwordMismatchError: 'passwordMismatchError',
-  passwordValidationError: 'passwordValidationError',
-  requiredPasswordError: 'requiredPasswordError',
-  emailMaxLengthError: 'emailMaxLengthError',
-  requiredEmailError: 'requiredEmailError',
-  requiredResultTypeError: 'requiredResultTypeError', 
-  userOrPassIncorrectError: 'userOrPassIncorrectError',
-  notAuthError: 'notAuthError',
-  changePasswordValueMissingError: 'changePasswordValueMissingError',
-  currAndNewPassEqualError: 'currAndNewPassEqualError',
-  currentPasswordIncorrect: 'currentPasswordIncorrect',
-  invalidJlptLevelError: 'invalidJlptLevelError',
-  invalidLanguageIdError: 'invalidLanguageIdError',
-  invalidResultTypeError: 'invalidResultTypeError',
-  limitReviewsRangeError: 'limitReviewsRangeError',
-  noDueCardsError: 'noDueCardsError',
-  noNewCardsError: 'noNewCardsError',
-  negativeNumberTypeError: 'negativeNumberTypeError',
-  nonExistingIdError: 'nonExistingId',
-  nonExistingDeckError: 'nonExistingDeck',
-  passwordMaxLengthError: 'passwordMaxLengthError',
-  passwordMinLengthError: 'passwordMinLengthError',
-  requiredPasswordConfirmError: 'requiredPasswordConfirmError',
-  passwordNumberError: 'passwordNumberError',
-  passwordUppercaseError: 'passwordUppercaseError',
-  passwordLowercaseError: 'passwordLowercaseError',
-  maxLimitReviewsError: 'maxLimitReviewsError',
-  minLimitReviewsError: 'minLimitReviewsError',
-
-
-  maxNewReviewsError: 'maxNewReviewsError',
-  minNewReviewsError: 'minNewReviewsError',
-  pushReviewsLimitError: 'pushReviewsLimitError',
-  storyTooLongError: 'storyTooLongError',
-  storyTooShortError: 'storyTooShortError',
-  hintTooLongError: 'hintTooLongError',
-  hintTooShortError: 'hintTooShortError',
-  invalidCardType: 'invalidCardType',
-  noCardsFound: 'noCardsFound',
-  noRecordsFoundError: 'noRecordsFoundError',
-  nonActiveDeckError: 'nonActiveDeckError',
-  provideStoryOrHintError: 'provideStoryOrHintError',
-  admin: {
-    noAdminRightsError: 'noAdminRightsError',
-    noAdminReadRights: 'noAdminReadRights',
-    noAdminWriteRights: 'noAdminWriteRights'
+  generalErrors: {
+    invalidJlptLevelError: 'invalidJlptLevelError',
+    invalidLanguageIdError: 'invalidLanguageIdError'
   },
-  account: {
+  adminErrors: {
+    noAdminRightsError: 'noAdminRightsError',
+    noAdminReadRightsError: 'noAdminReadRightsError',
+    noAdminWriteRightsError: 'noAdminWriteRightsError'
+  },
+  accountErrors: {
     usernameValidationError: 'usernameValidationError',
     usernameInUseError: 'usernameInUseError',
     usernameMaxLengthError: 'usernameMaxLengthError',
@@ -58,15 +18,25 @@ const errors = {
     memberFeatureError: 'memberFeatureError',
     emailNotVerifiedError: 'emailNotVerifiedError'
   },
-  bug: {
-    bugByIdNotFound: 'bugByIdNotFound',
+  bugErrors: {
+    bugByIdNotFoundError: 'bugByIdNotFoundError',
     bugMessageTooShortError: 'bugMessageTooShortError',
     bugMessageTooLongError: 'bugMessageTooLongError',
     bugSolveMessageTooShortError: 'bugSolveMessageTooShortError',
     bugSolveMessageTooLongError: 'bugSolveMessageTooLongError'
   },
   deckErrors: {
-    noDecksFoundError: 'noDecksFoundError'
+    noDecksFoundError: 'noDecksFoundError',
+    nonActiveDeckError: 'nonActiveDeckError',
+    nonExistingDeckIdError: 'nonExistingDeckIdError'
+  },
+  reviewErrors: {
+    maxLimitReviewsError: 'maxLimitReviewsError',
+    minLimitReviewsError: 'minLimitReviewsError',
+    maxNewReviewsError: 'maxNewReviewsError',
+    minNewReviewsError: 'minNewReviewsError',
+    pushReviewsLimitError: 'pushReviewsLimitError',
+    invalidResultTypeError: 'invalidResultTypeError'
   },
   graphQlErrors: {
     badUserInput: 'BAD_USER_INPUT',
@@ -74,25 +44,47 @@ const errors = {
     unauthorized: 'UNAUTHORIZED',
     internalServerError: 'INTERNAL_SERVER_ERROR',
     validationError: 'VALIDATION_ERROR',
-    defaultError: 'DEFAULT_ERROR',
+    defaultError: 'DEFAULT_ERROR'
   },
   cardErrors: {
     maxReviewIntervalError: 'maxReviewIntervalError',
     minReviewIntervalError: 'minReviewIntervalError',
+    noDueCardsError: 'noDueCardsError',
+    storyTooLongError: 'storyTooLongError',
+    storyTooShortError: 'storyTooShortError',
+    hintTooLongError: 'hintTooLongError',
+    hintTooShortError: 'hintTooShortError',
+    provideStoryOrHintError: 'provideStoryOrHintError',
+    nonExistingCardIdError: 'nonExistingCardIdError',
+    invalidCardTypeError: 'invalidCardTypeError'
   },
-  validation: {
+  validationErrors: {
+    inputValueMissingError: 'inputValueMissingError',
     invalidDateError: 'invalidDateError',
     requiredDateError: 'requiredDateError',
     notValidEmailError: 'notValidEmailError',
+    requiredPasswordError: 'requiredPasswordError',
+    emailMaxLengthError: 'emailMaxLengthError',
+    passwordMismatchError: 'passwordMismatchError',
+    inputValueTypeError: 'inputValueTypeError',
+    requiredEmailError: 'requiredEmailError',
+    requiredResultTypeError: 'requiredResultTypeError', 
+    userOrPassIncorrectError: 'userOrPassIncorrectError',
+    passwordNumberError: 'passwordNumberError',
+    passwordUppercaseError: 'passwordUppercaseError',
+    passwordLowercaseError: 'passwordLowercaseError',
+    passwordMaxLengthError: 'passwordMaxLengthError',
+    passwordMinLengthError: 'passwordMinLengthError',
+    negativeNumberTypeError: 'negativeNumberTypeError',
+    requiredPasswordConfirmError: 'requiredPasswordConfirmError',
+    currAndNewPassEqualError: 'currAndNewPassEqualError',
+    currentPasswordIncorrectError: 'currentPasswordIncorrectError'
   },
-  session: {
+  sessionErrors: {
     sessionNotFoundError: 'sessionNotFoundError',
     sessionExpiredError: 'sessionExpiredError',
     notOwnerOfSessionError: 'notOwnerOfSessionError',
     jwtExpiredError: 'jwtExpiredError'
-  },
-  loginErrors: {
-    
   }
 };
 

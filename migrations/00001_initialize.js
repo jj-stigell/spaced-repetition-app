@@ -236,7 +236,7 @@ module.exports = {
         autoIncrement: true
       },
       type: {
-        type: DataTypes.ENUM(constants.cardTypes),
+        type: DataTypes.ENUM(constants.card.cardTypes),
         allowNull: false
       },
       language_id: {
@@ -300,7 +300,7 @@ module.exports = {
         type: DataTypes.INTEGER
       },
       review_type: {
-        type: DataTypes.ENUM(constants.reviewTypes),
+        type: DataTypes.ENUM(constants.review.reviewTypes),
         allowNull: false
       },
       created_at: {
@@ -348,28 +348,28 @@ module.exports = {
       review_interval: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: constants.defaultInterval,
+        defaultValue: constants.review.defaultInterval,
         validate: {
-          max: constants.card.maxReviewInterval,
-          min: constants.card.minReviewInterval
+          max: constants.review.maxReviewInterval,
+          min: constants.review.minReviewInterval
         }
       },
       reviews_per_day: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: constants.defaultReviewPerDay,
+        defaultValue: constants.review.defaultReviewPerDay,
         validate: {
-          max: constants.maxLimitReviews,
-          min: constants.minLimitReviews
+          max: constants.review.maxLimitReviews,
+          min: constants.review.minLimitReviews
         }
       },
       new_cards_per_day: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: constants.defaultNewPerDay,
+        defaultValue: constants.review.defaultNewPerDay,
         validate: {
-          max: constants.maxNewReviews,
-          min: constants.minNewReviews
+          max: constants.review.maxNewReviews,
+          min: constants.review.minNewReviews
         }
       },
       created_at: {
@@ -722,11 +722,11 @@ module.exports = {
         type: DataTypes.INTEGER
       },
       type: {
-        type: DataTypes.ENUM(constants.reviewTypes),
+        type: DataTypes.ENUM(constants.review.reviewTypes),
         allowNull: false
       },
       result: {
-        type: DataTypes.ENUM(constants.resultTypes),
+        type: DataTypes.ENUM(constants.review.resultTypes),
         allowNull: false
       },
       created_at: {
@@ -762,7 +762,7 @@ module.exports = {
         onUpdate: 'CASCADE'
       },
       review_type: {
-        type: DataTypes.ENUM(constants.reviewTypes),
+        type: DataTypes.ENUM(constants.review.reviewTypes),
         allowNull: false
       },
       review_count: {

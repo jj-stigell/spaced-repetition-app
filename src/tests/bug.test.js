@@ -63,13 +63,13 @@ describe('Bug report integration tests', () => {
     it('Error when bug message too short', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport,{ ...validBugReport, bugMessage: 'x'.repeat(constants.bugs.solvedMessageMinLength - 1) });
       expect(response.body.data?.sendBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugMessageTooShortError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.bugErrors.bugMessageTooShortError);
     });
 
     it('Error when bug message too long', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { ...validBugReport, bugMessage: 'x'.repeat(constants.bugs.bugMessageMaxLength + 1) });
       expect(response.body.data?.sendBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugMessageTooLongError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.bugErrors.bugMessageTooLongError);
     });
 
     it('Error when bug message type not string', async () => {
@@ -87,13 +87,13 @@ describe('Bug report integration tests', () => {
     it('Error when card id negative integer', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { ...validBugReport, cardId: -1 });
       expect(response.body.data?.sendBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when card id zero', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.sendBugReport, { ...validBugReport, cardId: 0 });
       expect(response.body.data?.sendBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when card id type not integer', async () => {
@@ -132,31 +132,31 @@ describe('Bug report integration tests', () => {
     it('Unauthorized error when logged in as non-member but not admin', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.solveBugReport, bugReportToSolve);
       expect(response.body.data?.solveBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Unauthorized error when logged in as member but not admin', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.solveBugReport, bugReportToSolve);
       expect(response.body.data?.solveBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Unauthorized error when admin but no write permission', async () => {
       const response = await sendRequest(testUrl, adminAuthReadToken, mutations.solveBugReport, bugReportToSolve);
       expect(response.body.data?.solveBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminWriteRights);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminWriteRightsError);
     });
 
     it('Error when write permission but bug id negative integer', async () => {
       const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, bugId: -1 });
       expect(response.body.data?.solveBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when write permission but bug id zero integer', async () => {
       const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, bugId: 0 });
       expect(response.body.data?.solveBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when write permission but bug id type not integer', async () => {
@@ -168,13 +168,13 @@ describe('Bug report integration tests', () => {
     it('Error when bug solve message too short', async () => {
       const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, solvedMessage: 'x'.repeat(constants.bugs.solvedMessageMinLength - 1) });
       expect(response.body.data?.solveBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugSolveMessageTooShortError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.bugErrors.bugSolveMessageTooShortError);
     });
 
     it('Error when bug solve message too short', async () => {
       const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.solveBugReport, {...bugReportToSolve, solvedMessage: 'x'.repeat(constants.bugs.solvedMessageMaxLength + 1) });
       expect(response.body.data?.solveBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugSolveMessageTooLongError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.bugErrors.bugSolveMessageTooLongError);
     });
 
     it('Error when bug solve message not type string', async () => {
@@ -219,31 +219,31 @@ describe('Bug report integration tests', () => {
     it('Unauthorized error when logged in as non-member but not admin', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, mutations.deleteBugReport, { bugId: bugReportToSolve.bugId });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Unauthorized error when logged in as member but not admin', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, mutations.deleteBugReport, { bugId: bugReportToSolve.bugId });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Unauthorized error when admin but no write permission', async () => {
       const response = await sendRequest(testUrl, adminAuthReadToken, mutations.deleteBugReport, { bugId: bugReportToSolve.bugId });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminWriteRights);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminWriteRightsError);
     });
 
     it('Error when write permission but bug id negative integer', async () => {
       const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReport, { bugId: -1 });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when write permission but bug id zero integer', async () => {
       const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReport, { bugId: 0 });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when write permission but bug id type not integer', async () => {
@@ -261,7 +261,7 @@ describe('Bug report integration tests', () => {
     it('Error when write permission but bug with id not found', async () => {
       const response = await sendRequest(testUrl, adminAuthWriteToken, mutations.deleteBugReport, { bugId: 9999 });
       expect(response.body.data?.deleteBugReport).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugByIdNotFound);
+      expect(response.body.errors[0].extensions.code).toContain(errors.bugErrors.bugByIdNotFoundError);
     });
 
     it('Delete bug report succesfully when admin with write permisson', async () => {
@@ -283,13 +283,13 @@ describe('Bug report integration tests', () => {
     it('Unauthorized error when logged in as non-member but not admin', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.bugReports, null);
       expect(response.body.data?.bugReports).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Unauthorized error when logged in as member but not admin', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, queries.bugReports, null);
       expect(response.body.data?.bugReports).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Access possible when admin but no write permission', async () => {
@@ -316,25 +316,25 @@ describe('Bug report integration tests', () => {
     it('Unauthorized error when logged in as non-member but not admin', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.bugReportById, { bugId: bugReportToSolve.bugId });
       expect(response.body.data?.bugReportById).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Unauthorized error when logged in as member but not admin', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, queries.bugReportById, { bugId: bugReportToSolve.bugId });
       expect(response.body.data?.bugReportById).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Error when read permission but bug id negative integer', async () => {
       const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportById, { bugId: -1 });
       expect(response.body.data?.bugReportById.id).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when read permission but bug id zero integer', async () => {
       const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportById, { bugId: 0 });
       expect(response.body.data?.bugReportById.id).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.negativeNumberTypeError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.negativeNumberTypeError);
     });
 
     it('Error when read permission but bug id type not integer', async () => {
@@ -346,7 +346,7 @@ describe('Bug report integration tests', () => {
     it('Error when read permission but bug with id not found', async () => {
       const response = await sendRequest(testUrl, adminAuthReadToken, queries.bugReportById, { bugId: 9999 });
       expect(response.body.data?.bugReportById.id).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.bug.bugByIdNotFound);
+      expect(response.body.errors[0].extensions.code).toContain(errors.bugErrors.bugByIdNotFoundError);
     });
 
     it('Error when read permission but bug id not send', async () => {
@@ -379,13 +379,13 @@ describe('Bug report integration tests', () => {
     it('Unauthorized error when logged in as non-member but not admin', async () => {
       const response = await sendRequest(testUrl, nonMemberAuthToken, queries.bugReportsByType, { type: findTypeFirst });
       expect(response.body.data?.bugReportsByType).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Unauthorized error when logged in as member but not admin', async () => {
       const response = await sendRequest(testUrl, memberAuthToken, queries.bugReportsByType, { type: findTypeFirst });
       expect(response.body.data?.bugReportsByType).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.admin.noAdminRightsError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.adminErrors.noAdminRightsError);
     });
 
     it('Error when read permission but bug type enum invalid', async () => {

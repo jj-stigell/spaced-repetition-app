@@ -20,7 +20,7 @@ const server = new ApolloServer({
           auth.substring(7), JWT_SECRET
         );
       } catch(error) {
-        return defaultError(errors.session.jwtExpiredError);
+        return defaultError(errors.sessionErrors.jwtExpiredError);
       }
       await validateSession(currentUser.session);
       const userAgent = req?.headers['user-agent'] ?? null;

@@ -33,11 +33,11 @@ AccountReview.init({
     type: DataTypes.INTEGER,
   },
   type: {
-    type: DataTypes.ENUM(constants.reviewTypes),
+    type: DataTypes.ENUM(constants.review.reviewTypes),
     allowNull: false
   },
   result: {
-    type: DataTypes.ENUM(constants.resultTypes),
+    type: DataTypes.ENUM(constants.review.resultTypes),
     allowNull: false
   },
   createdAt: {

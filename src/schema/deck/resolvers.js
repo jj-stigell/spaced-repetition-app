@@ -19,7 +19,7 @@ const resolvers = {
       if (!currentUser) return notAuthError();
       await validateInteger(deckId);
       const deck = await findDeckById(deckId);
-      if (!deck) return defaultError(errors.nonExistingDeckError);
+      if (!deck) return defaultError(errors.deckErrors.nonExistingDeckIdError);
       let deckSettings = await findAccountDeckSettings(deckId, currentUser.id);
 
       //create new accoung deck settings if no existing one
@@ -38,7 +38,7 @@ const resolvers = {
       const deck = await findDeckById(deckId);
 
       // No deck found with an id
-      if (!deck) return defaultError(errors.nonExistingDeckError);
+      if (!deck) return defaultError(errors.deckErrors.nonExistingDeckIdError);
 
       // Check if deck has an account specific settings
       let deckSettings = await findAccountDeckSettings(deckId, currentUser.id);
