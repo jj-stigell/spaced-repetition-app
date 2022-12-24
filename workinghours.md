@@ -40,5 +40,6 @@
 | 20.12. | 2 | add raw queries, update functions, write tests |
 | 21.12. | 1 | fix tests, add queries for fetching cards based on previously fetched reviewed card amount |
 | 23.12. | 3 | Fix remaining broken tests, update mutation and queries for the tests, update database calls, add new query for counting reviewed due cards this day |
+| 24.12. | 1 | Rearrange and categorize the constants and errors |
 |  |  |  |
-| total | 114 |  | 
+| total | 115 |  | 
