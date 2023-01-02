@@ -9,7 +9,8 @@ const constants = {
     usernameMaxLength: 14,
     usernameMinLength: 4,
     passwordMaxLength: 50,
-    passwordMinLength: 8
+    passwordMinLength: 8,
+    emailMaxLength: 255
   },
   login: {
     jwtExpiryTime: 2419200,

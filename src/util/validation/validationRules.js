@@ -37,14 +37,14 @@ const timing = yup
 const email = yup
   .string(errors.validationErrors.inputValueTypeError)
   .email(errors.validationErrors.notValidEmailError)
-  .max(255, errors.validationErrors.emailMaxLengthError)
+  .max(constants.account.emailMaxLength, errors.validationErrors.emailMaxLengthError)
   .required(errors.validationErrors.requiredEmailError);
 
 const username = yup
   .string(errors.validationErrors.inputValueTypeError)
-  .max(constants.account.usernameMaxLength, errors.accountErrors.usernameMaxLengthError)
-  .min(constants.account.usernameMinLength, errors.accountErrors.usernameMinLengthError)
-  .required(errors.accountErrors.requiredUsernameError);
+  .max(constants.account.usernameMaxLength, errors.validationErrors.usernameMaxLengthError)
+  .min(constants.account.usernameMinLength, errors.validationErrors.usernameMinLengthError)
+  .required(errors.validationErrors.requiredUsernameError);
 
 const languageId = yup
   .string(errors.validationErrors.inputValueTypeError)

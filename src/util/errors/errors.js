@@ -9,11 +9,7 @@ const errors = {
     noAdminWriteRightsError: 'noAdminWriteRightsError'
   },
   accountErrors: {
-    usernameValidationError: 'usernameValidationError',
     usernameInUseError: 'usernameInUseError',
-    usernameMaxLengthError: 'usernameMaxLengthError',
-    usernameMinLengthError: 'usernameMinLengthError',
-    requiredUsernameError: 'requiredUsernameError',
     emailInUseError: 'emailInUseError',
     memberFeatureError: 'memberFeatureError',
     emailNotVerifiedError: 'emailNotVerifiedError'
@@ -78,7 +74,10 @@ const errors = {
     negativeNumberTypeError: 'negativeNumberTypeError',
     requiredPasswordConfirmError: 'requiredPasswordConfirmError',
     currAndNewPassEqualError: 'currAndNewPassEqualError',
-    currentPasswordIncorrectError: 'currentPasswordIncorrectError'
+    currentPasswordIncorrectError: 'currentPasswordIncorrectError',
+    usernameMaxLengthError: 'usernameMaxLengthError',
+    usernameMinLengthError: 'usernameMinLengthError',
+    requiredUsernameError: 'requiredUsernameError'
   },
   sessionErrors: {
     sessionNotFoundError: 'sessionNotFoundError',

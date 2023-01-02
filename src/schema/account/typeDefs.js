@@ -50,7 +50,7 @@ type Mutation {
     username: String!
     password: String!
     passwordConfirmation: String!
-    languageId: Language! = EN
+    languageId: Language = EN
   ): Account!
 
   login(

@@ -128,8 +128,8 @@ describe('Account integration tests', () => {
     it('Error when empty value, username', async () => {
       const response = await sendRequest(testUrl, null, mutations.createAccount, { ...createAccount, username: '' });
       expect(response.body.data?.createAccount.email).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.accountErrors.usernameMinLengthError);
-      expect(response.body.errors[0].extensions.code).toContain(errors.accountErrors.requiredUsernameError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.usernameMinLengthError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.requiredUsernameError);
     });
 
     it('Error when empty value, password', async () => {
@@ -580,20 +580,20 @@ describe('Account integration tests', () => {
     it('Error when username too short', async () => {
       const response = await sendRequest(testUrl, null, queries.usernameAvailable, { username: stringData.tooShortUsername });
       expect(response.body.data?.usernameAvailable).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.accountErrors.usernameMinLengthError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.usernameMinLengthError);
     });
 
     it('Error when username too long', async () => {
       const response = await sendRequest(testUrl, null, queries.usernameAvailable, { username: stringData.tooLongUsername });
       expect(response.body.data?.usernameAvailable).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.accountErrors.usernameMaxLengthError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.usernameMaxLengthError);
     });
 
     it('Error when username is empty value', async () => {
       const response = await sendRequest(testUrl, null, queries.usernameAvailable, { username: '' });
       expect(response.body.data?.usernameAvailable).toBeUndefined();
-      expect(response.body.errors[0].extensions.code).toContain(errors.accountErrors.usernameMinLengthError);
-      expect(response.body.errors[0].extensions.code).toContain(errors.accountErrors.requiredUsernameError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.usernameMinLengthError);
+      expect(response.body.errors[0].extensions.code).toContain(errors.validationErrors.requiredUsernameError);
     });
 
     it('Error when username value is wrong type', async () => {
