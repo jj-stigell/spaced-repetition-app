@@ -45,10 +45,11 @@ const validateChangePassword = async (currentPassword, newPassword, newPasswordC
   }
 };
 
-const validateRescheduleCard = async (cardId, newInterval, newEasyFactor, extraReview, timing, newDueDate, reviewType) => {
+//await validator.validateRescheduleCard(cardId, newInterval, newEasyFactor, extraReview, timing, date);
+const validateRescheduleCard = async (cardId, newInterval, newEasyFactor, extraReview, timing, date) => {
   try {
     await schema.rescheduleCard.validate({
-      cardId, newInterval, newEasyFactor, extraReview, timing, newDueDate, reviewType
+      cardId, newInterval, newEasyFactor, extraReview, timing, date
     }, { abortEarly: constants.general.yupAbortEarly  });
   } catch (errors) {
     return validationError(formatYupError(errors));

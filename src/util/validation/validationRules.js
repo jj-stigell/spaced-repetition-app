@@ -55,9 +55,6 @@ const date = yup
   .min(calculateDateToString(-1), errors.validationErrors.invalidDateError)
   .max(calculateDateToString(constants.review.maxReviewInterval), errors.validationErrors.invalidDateError);
 
-const dateRequired = date
-  .required(errors.validationErrors.requiredDateError);
-
 const password = yup
   .string(errors.validationErrors.inputValueTypeError)
   .max(constants.account.passwordMaxLength, errors.validationErrors.passwordMaxLengthError)
@@ -166,7 +163,6 @@ module.exports = {
   username,
   languageId,
   date,
-  dateRequired,
   password,
   currentPassword,
   newPassword,

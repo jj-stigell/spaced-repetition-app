@@ -13,7 +13,7 @@ const rescheduleCard = yup.object().shape({
   newEasyFactor: validationRules.easyFactor,
   extraReview: validationRules.isBoolean,
   timing: validationRules.timing,
-  newDueDate: validationRules.dateRequired
+  date: validationRules.date
 });
 
 const id = yup.object().shape({
@@ -60,7 +60,7 @@ const deckSettings = yup.object().shape({
 const pushCards = yup.object().shape({
   deckId: validationRules.deckId,
   days: validationRules.days,
-  date: validationRules.dateRequired
+  date: validationRules.date
 });
 
 const date = yup.object().shape({
