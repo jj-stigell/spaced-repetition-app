@@ -41,5 +41,6 @@
 | 21.12. | 1 | fix tests, add queries for fetching cards based on previously fetched reviewed card amount |
 | 23.12. | 3 | Fix remaining broken tests, update mutation and queries for the tests, update database calls, add new query for counting reviewed due cards this day |
 | 24.12. | 1 | Rearrange and categorize the constants and errors |
+| 6.1.2023 | 1 | changes to validation and typedefs |
 |  |  |  |
-| total | 115 |  | 
+| total | 116 |  | 
