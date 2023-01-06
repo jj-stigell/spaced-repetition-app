@@ -30,6 +30,9 @@ const mutations = {
   logout: `mutation Mutation {
     logout
   }`,
+  deleteSession: `mutation DeleteSession($sessionId: String!) {
+    deleteSession(sessionId: $sessionId)
+  }`,
   changePassword: `mutation ChangePassword($currentPassword: String!, $newPassword: String!, $newPasswordConfirmation: String!) {
     changePassword(currentPassword: $currentPassword, newPassword: $newPassword, newPasswordConfirmation: $newPasswordConfirmation) {
       id

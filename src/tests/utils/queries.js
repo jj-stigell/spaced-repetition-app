@@ -103,13 +103,13 @@ const queries = {
   dueCount: `query DueCount($limitReviews: Int!, $date: Date!) {
     dueCount(limitReviews: $limitReviews, date: $date) {
       date
-      reviews
+      count
     }
   }`,
   reviewHistory: `query ReviewHistory($limitReviews: Int!) {
     reviewHistory(limitReviews: $limitReviews) {
       date
-      reviews
+      count
     }
   }`,
   learningStatisticsByType: `query LearningStatisticsByType($cardType: CardType!, $reviewType: ReviewType!) {
