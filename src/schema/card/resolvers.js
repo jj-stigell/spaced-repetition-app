@@ -79,9 +79,9 @@ const resolvers = {
 
       dueReviews = dueReviews.reduce((acc, curr) => {
         if (!acc[curr.date]) {
-          acc[curr.date] = { date: curr.date, reviews: 0 };
+          acc[curr.date] = { date: curr.date, count: 0 };
         }
-        acc[curr.date].reviews += parseInt(curr.reviews);
+        acc[curr.date].count += parseInt(curr.count);
         return acc;
       }, {});
       return Object.values(dueReviews);
@@ -98,7 +98,7 @@ const resolvers = {
       await validator.validateRescheduleCard(cardId, newInterval, newEasyFactor, extraReview, timing, date);
 
       let newDueDate = new Date(date);
-      const currentDate = newDueDate.toISOString().split('T')[0];
+      //const currentDate = newDueDate.toISOString().split('T')[0];
       newDueDate.setDate(newDueDate.getDate() + newInterval);
       newDueDate = newDueDate.toISOString().split('T')[0];
 
@@ -128,7 +128,7 @@ const resolvers = {
         }
       }
       // Add new row to review history
-      await cardService.createAccountReview(cardId, currentUser.id, reviewResult, reviewType, extraReview, timing, currentDate);
+      await cardService.createAccountReview(cardId, currentUser.id, reviewResult, reviewType, extraReview, timing, date);
       return accountCardFormatter(accountCard);
     },
     pushCards: async (_, { deckId, days, date }, { currentUser }) => {

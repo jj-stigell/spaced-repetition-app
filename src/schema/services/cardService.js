@@ -29,10 +29,10 @@ const findCardById = async (cardId) => {
  * @param {date} newDueDate - date when card is next due
  * @param {integer} newInterval - new interval in days, used to set card mature
  * @param {string} reviewType - ENUM string of the review, 'RECALL', 'RECOGNISE', etc.
- * @param {date} createdAt - date when card was created, client-side date
+ * @param {date} currentDate - date when card was created, client-side date
  * @returns {AccountCard} newly created account card
  */
-const createAccountCard = async (cardId, accountId, easyFactor, newDueDate, newInterval, reviewType, createdAt) => {
+const createAccountCard = async (cardId, accountId, easyFactor, newDueDate, newInterval, reviewType, currentDate) => {
   try {
     return await models.AccountCard.create({
       accountId: accountId,
@@ -42,7 +42,7 @@ const createAccountCard = async (cardId, accountId, easyFactor, newDueDate, newI
       mature: newInterval >= constants.review.matureInterval ? true : false,
       easyFactor: easyFactor ? easyFactor : constants.card.defaultEasyFactor,
       reviewCount: 1,
-      createdAt: createdAt
+      createdAt: currentDate
     });
   } catch (error) {
     return internalServerError(error);

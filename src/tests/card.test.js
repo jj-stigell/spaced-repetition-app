@@ -421,7 +421,7 @@ describe('Cardintegration tests', () => {
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.dueCount).toBeDefined();
       expect(response.body.data.dueCount[0].date).toBe(dateToday.toISOString().split('T')[0]);
-      expect(response.body.data.dueCount[0].reviews).toBe(40);
+      expect(response.body.data.dueCount[0].count).toBe(40);
       expect(response.body.data.dueCount.length).toBe(1);
     });
 
@@ -431,7 +431,7 @@ describe('Cardintegration tests', () => {
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.dueCount).toBeDefined();
       expect(response.body.data.dueCount[0].date).toBe(dateToday.toISOString().split('T')[0]);
-      expect(response.body.data.dueCount[0].reviews).toBe(40);
+      expect(response.body.data.dueCount[0].count).toBe(40);
       expect(response.body.data.dueCount.length).toBe(20);
     });
     */
@@ -483,7 +483,7 @@ describe('Cardintegration tests', () => {
       expect(response.body.errors).toBeUndefined();
       expect(response.body.data.reviewHistory).toBeDefined();
       expect(response.body.data.reviewHistory[0].date).toBeDefined();
-      expect(response.body.data.reviewHistory[0].reviews).toBeDefined();
+      expect(response.body.data.reviewHistory[0].count).toBeDefined();
       expect(response.body.data.reviewHistory.length).toBe(10);
       // all dates in the result must be this date or earlier
       const result = response.body.data.reviewHistory.every(review => new Date(review.date) <= dateToday);

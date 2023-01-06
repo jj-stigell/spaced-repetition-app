@@ -105,7 +105,7 @@ WHERE
 const fetchDailyReviewHistoryNDays = `
 SELECT
   created_at::date AS date,
-  COUNT(*) AS reviews  
+  COUNT(*) AS count  
 FROM
   account_review 
 WHERE
@@ -128,7 +128,7 @@ SELECT
     WHEN due_at <= :currentDate THEN :currentDate
     ELSE due_at
   END AS date,
-  COUNT(*) AS reviews
+  COUNT(*) AS count
 FROM
   account_card 
 WHERE

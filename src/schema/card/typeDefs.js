@@ -112,7 +112,7 @@ type Statistics {
 
 type Day {
   date: Date
-  reviews: Int
+  count: Int
 }
 
 type Reviews {
