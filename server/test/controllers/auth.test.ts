@@ -7,7 +7,7 @@ import models from '../../src/database/models';
 import Account from '../../src/database/models/account';
 import Session from '../../src/database/models/session';
 import { accountErrors } from '../../src/configs/errorCodes';
-import { HttpCode } from '../../src/types/httpCode';
+import { HttpCode } from '../../src/type/httpCode';
 import {
   newAccount, LOGIN_URI, LOGOUT_URI, REGISTER_URI, user
 } from '../utils/constants';

@@ -6,7 +6,7 @@ import models from '../../src/database/models';
 import Account from '../../src/database/models/account';
 import AccountAction from '../../src/database/models/accountAction';
 import { accountErrors, validationErrors } from '../../src/configs/errorCodes';
-import { HttpCode } from '../../src/types/httpCode';
+import { HttpCode } from '../../src/type/httpCode';
 import {
   EMAIL_CONFIRMATION_URI, RESEND_EMAIL_CONFIRMATION_URI, REGISTER_URI, user,
   REQUEST_RESET_PASSWORD_URI, RESET_PASSWORD_URI

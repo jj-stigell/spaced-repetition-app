@@ -8,7 +8,7 @@ import logger from '../../src/configs/winston';
 import { sequelize } from '../../src/database';
 import models from '../../src/database/models';
 import Account from '../../src/database/models/account';
-import { Role } from '../../src/types/general';
+import { Role } from '../../src/type/general';
 import { adminRead, adminWrite, LOGIN_URI, REGISTER_URI, superuser, user } from './constants';
 
 const account: string = fs.readFileSync(

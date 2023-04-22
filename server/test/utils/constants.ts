@@ -1,4 +1,4 @@
-import { Register } from '../../src/types/request';
+import { Register } from '../../src/type/request';
 
 export const REGISTER_URI: string = '/api/v1/auth/register';
 export const LOGIN_URI: string = '/api/v1/auth/login';

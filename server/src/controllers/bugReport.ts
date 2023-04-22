@@ -3,12 +3,12 @@ import * as yup from 'yup';
 
 import { bugs } from '../configs/constants';
 import { bugErrors, validationErrors } from '../configs/errorCodes';
-import { HttpCode } from '../types/httpCode';
+import { HttpCode } from '../type/httpCode';
 import BugReport from '../database/models/bugReport';
 import models from '../database/models';
 import {
   BugReportData, BugReportOptions, BugReportQueryParams, JwtPayload, SolvedBugReportData
-} from '../types/general';
+} from '../type/general';
 import { findBugReportById } from './utils/bugReport';
 import { findCardById } from './utils/card';
 

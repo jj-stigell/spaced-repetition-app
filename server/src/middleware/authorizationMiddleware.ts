@@ -4,9 +4,9 @@ import { generalErrors } from '../configs/errorCodes';
 import logger from '../configs/winston';
 import { findAccountById } from '../controllers/utils/account';
 import Account from '../database/models/account';
-import { ApiError } from '../types/error';
-import { JwtPayload, Role } from '../types/general';
-import { HttpCode } from '../types/httpCode';
+import { ApiError } from '../type/error';
+import { JwtPayload, Role } from '../type/general';
+import { HttpCode } from '../type/httpCode';
 
 /**
  * Middleware function that checks if the user making the request has the required

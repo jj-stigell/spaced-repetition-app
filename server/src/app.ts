@@ -1,5 +1,5 @@
 // Modules
-import express, { Application } from 'express';
+import express, { Application, Request, Response } from 'express';
 
 // Project imports
 import errorMiddleware from './middleware/errorMiddleware';
@@ -12,3 +12,13 @@ app.use(express.json());
 app.use(loggerMiddleware);
 app.use('/api/v1/', router);
 app.use(errorMiddleware);
+
+// Health check endpoint.
+app.get('/health', (_req: Request, res: Response): void => {
+  res.status(200).send();
+});
+
+// 404
+app.get('*', (_req: Request, res: Response): void => {
+  res.status(404).send();
+});

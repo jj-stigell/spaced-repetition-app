@@ -1,7 +1,7 @@
 import { cardErrors } from '../../configs/errorCodes';
 import Card from '../../database/models/card';
-import { ApiError } from '../../types/error';
-import { HttpCode } from '../../types/httpCode';
+import { ApiError } from '../../type/error';
+import { HttpCode } from '../../type/httpCode';
 
 /**
  * Finds a card by its ID.

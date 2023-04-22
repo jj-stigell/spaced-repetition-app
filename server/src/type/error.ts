@@ -1,5 +1,5 @@
 // Project imports
-import { HttpCode } from '../types/httpCode';
+import { HttpCode } from './httpCode';
 
 export class ApiError extends Error {
   public readonly statusCode: number;

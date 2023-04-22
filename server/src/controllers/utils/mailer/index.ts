@@ -4,7 +4,7 @@ import path from 'path';
 // Project imports
 import { general } from '../../../configs/constants';
 import { NODE_ENV } from '../../../configs/environment';
-import { ConfirmEmailPayload } from '../../../types/email';
+import { ConfirmEmailPayload } from '../../../type/email';
 import { sendMail } from './emailClient';
 import confirmAccountTranslations from './locales/confirmAccount.json';
 import resetPasswordTranslations from './locales/resetPassword.json';

@@ -3,8 +3,8 @@ import { ValidationError } from 'yup';
 
 import { generalErrors } from '../configs/errorCodes';
 import logger from '../configs/winston';
-import { ApiError } from '../types/error';
-import { HttpCode } from '../types/httpCode';
+import { ApiError } from '../type/error';
+import { HttpCode } from '../type/httpCode';
 
 /**
  * Middleware function that handles errors.
