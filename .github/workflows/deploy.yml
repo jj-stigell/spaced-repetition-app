@@ -1,36 +1,63 @@
-name: Deployment pipeline
+name: Deploy workflow
 
+run-name: ${{ github.actor }} commit and deploy
 on:
   push:
     branches:
       - main
 
 jobs:
-  deployment_pipeline:
-    runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ','), '#test') }}
+  test_and_lint_server:
+    name: Test and lint server
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_PASSWORD: postgres
+      SERVER_SKIP_CI: 1
+    defaults:
+      run:
+        working-directory: ./server
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v2
-      - uses: actions/checkout@master
+      - uses: actions/setup-node@v3
         with:
-          node-version: '16'
-      - name: npm install
-        run: npm install
-      - name: run integration tests
-        id: test
-        run: npm test
-        env:
-          TEST_POSTGRE_URL: ${{ secrets.TEST_POSTGRE_URL }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      - name: run lint
-        id: lint
+          node-version: '18'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: docker-compose --file ../docker-tests/docker-compose.yaml up --abort-on-container-exit --exit-code-from back-end-test
+      - name: Run linter
         run: npm run lint
-      - name: push to production branch         # if tests pass and #deploy used
-        if: ${{ steps.test.outcome == 'success' && steps.lint.outcome == 'success' && contains(join(github.event.commits.*.message, ','), '#deploy') }}
-        uses: devmasx/merge-branch@master
+      - name: Deploy backend to production branch
+        if: success()
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: server-production
+          FOLDER: server
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test_and_lint_client:
+    name: Test and lint client
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          type: now
-          from_branch: main
-          target_branch: production
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          node-version: '18'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test
+      - name: Run linter
+        run: npm run lint
+      - name: Deploy frontend to production branch
+        if: success()
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: frontend-production
+          FOLDER: client
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
