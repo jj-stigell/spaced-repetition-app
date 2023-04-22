@@ -1,8 +1,8 @@
 {
-  "name": "nodejs-ts-template",
-  "version": "0.0.0",
+  "name": "yomiko-backend",
+  "version": "0.1.0",
   "author": "-",
-  "license": "MIT",
+  "license": "-",
   "description": "",
   "main": "",
   "scripts": {
@@ -42,6 +42,7 @@
     "sequelize": "^6.25.8",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.2",
+    "typescript": "^4.9.5",
     "ua-parser-js": "^1.0.34",
     "winston": "^3.8.2",
     "yup": "^1.0.2"
@@ -67,7 +68,6 @@
     "sequelize-cli": "^6.5.2",
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.3",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^4.8.4"
+    "ts-node-dev": "^2.0.0"
   }
 }
