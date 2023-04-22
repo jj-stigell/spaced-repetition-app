@@ -1,0 +1,41 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { CardStore } from '../../types/cards'
+
+const initialState: CardStore = {
+  cards: [],
+  activeCard: null,
+  test: 3
+}
+
+/*
+type State = number
+const increment: CaseReducer<CardStore, PayloadAction<number>> = (state, action) => state.test + action.payload
+*/
+
+const cardSlice = createSlice({
+  name: 'cards',
+  initialState,
+  reducers: {
+    setCards (state: CardStore, action: PayloadAction<CardStore>) {
+      let cards = []; let activeCard = null;
+      [activeCard, ...cards] = action.payload
+
+      return {
+        cards,
+        activeCard
+      }
+    },
+    resetCards (state, action) {
+      return initialState
+    },
+    setActiveCard (state, action) {
+      return action.payload
+    }
+  }
+})
+
+export const { setCards, resetCards, setActiveCard } = cardSlice.actions
+
+export default cardSlice.reducer
+
+//     increment: (state, action: PayloadAction<number>) => state + action.payload,

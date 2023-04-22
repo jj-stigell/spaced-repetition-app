@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  back-end:
+    build:
+      context: ./server
+      args:
+        SERVER_SKIP_CI: ${SERVER_SKIP_CI}
+    restart: always
+    ports:
+    - "3000:3000"
+    container_name: backend-server
+    environment:
+      POSTGRES_HOST: "database"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DATABASE: "postgres"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    networks:
+      - local
+
+  database:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    networks:
+      - local
+
+networks:
+  local:
+    driver: bridge

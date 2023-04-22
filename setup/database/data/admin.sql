@@ -1,1 +1,0 @@
-INSERT INTO admin (account_id, is_admin, read, write, created_at, updated_at) VALUES (230792, true, true, true, NOW(), NOW());

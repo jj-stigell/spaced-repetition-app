@@ -1,5 +1,7 @@
-.env
+# misc
 .DS_Store
-/node_modules
-/ignore
-/coverage
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env

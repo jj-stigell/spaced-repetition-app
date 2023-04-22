@@ -1,0 +1,303 @@
+{
+  "title": "SRS-app for learning Japanese",
+  "navbar": {
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "signout": "Sign Out",
+    "signin": "Sign In",
+    "register": "Register"
+  },
+  "dashboard": {
+    "title": "this is the dashboard page"
+  },
+  "stats": {
+    "kanji": {
+      "title": "Kanji learning progress:",
+      "infoNew": "How many new kanji (not seen before) are left to learn.",
+      "infoLearning": "Kanji that have been reviewed at least once but are not yet fully learned",
+      "infoMatured": "Kanji that are well learned with and review interval of {{matureInterval}}"
+    },
+    "word": {
+      "title": "Word learning progress:",
+      "infoNew": "How many new words (not seen before) are left to learn.",
+      "infoLearning": "Words that have been reviewed at least once but are not yet fully learned",
+      "infoMatured": "Words that are well learned with and review interval of {{matureInterval}}"
+    },
+    "labels": {
+      "new": "New",
+      "learning": "Learning",
+      "matured": "Matured",
+      "recall": "Recall",
+      "recognise": "Recognise"
+    },
+    "heatmap": {
+      "title": "Reviews heatmap:",
+      "hoverData": "{{date}}, reviews: {{count}}",
+      "hoverDataNoReviews": "No reviews"
+    },
+    "dueCount": {
+      "title": "Due cards count:",
+      "noDues": "No reviews due",
+      "ShowOnlyDues": "List only days with due cards",
+      "date": "Date:",
+      "due": "Due:"
+    }
+  },
+  "deck": {
+    "settings": {
+      "title": "Settings for deck:",
+      "dayoff": "Day off",
+      "settings": "Settings",
+      "optimize": "Optimize",
+      "favorite": "Favorite deck:",
+      "newCardsPerDay": "New cards every day:",
+      "reviewInterval": "Maximimum review interval:",
+      "reviewsPerDay": "Maximum reviews per day:",
+      "favoriteInfo": "If you set deck as your favorite, it will be shown on the front page, making access to it faster.",
+      "newCardsPerDayInfo": "How many new cards do you want to review from this deck every day? Can be set between {{minNewReviews}} - {{maxNewReviews}}",
+      "reviewIntervalInfo": "Review interval is the maximum time between reviews. Can be set between {{minReviewInterval}} - {{maxReviewInterval}}",
+      "reviewsPerDayInfo": "How many reviews you want to do every day from this deck? Can be set between {{minLimitReviews}} - {{maxLimitReviews}}",
+      "settingsChangeSuccess": "Settings updated succesfully!",
+      "settingsChangeError": "Error occured while updating settings!"
+    },
+    "dueAndNewCards": "Cards due: {{old}} old, {{new}} new",
+    "onlyNewCards": "Cards due: {{new}} new"
+  },
+  "card": {
+    "accountCard": {
+      "accountStory": "Account custom story",
+      "accountHint": "Account custom hint",
+      "storyPlaceholder": "Enter your story here",
+      "hintPlaceholder": "Enter your hint here",
+      "editTitle": "Edit customized card data"
+    }
+  },
+  "review": {
+    "loadingMessage": "Loading Cards",
+    "reviewFinished": "All reviewed, good work! Redirecting to dashboard",
+    "buttons": {
+      "result": {
+        "again": "Again",
+        "hard": "Hard",
+        "easy": "Easy"
+      }
+    },
+    "help": {
+      "showHint": "Show hint"
+    },
+    "tabs": {
+      "grammar": {
+        "title": "Grammar"
+      },
+      "examples": {
+        "title": "Examples"
+      },
+      "edit": {
+        "title": "Edit"
+      },
+      "bugReport": {
+        "title": "Bug report"
+      }
+    }
+  },
+  "buttonGeneral": {
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "logout": "Logout",
+    "close": "Close",
+    "update": "Update"
+  },
+  "notification": {
+    "success": "Success",
+    "error": "Error"
+  },
+  "accountPage": {
+    "title": "Account information",
+    "sessionsTitle": "Active sessions",
+    "fetchSessionsButton": "Fetch active sessions",
+    "changePasswordTitle": "Change password",
+    "changePasswordButton": "Change password",
+    "passwordChangeSuccess": "Password changed succesfully",
+    "accountCreatedAt": "Account created at"
+  },
+  "sidemenu": {
+    "dashboard": "Dashboard",
+    "study": "Study",
+    "achievements": "Achievements",
+    "statistics": "Statistics",
+    "reviews": "Reviews",
+    "kanji": "Kanji",
+    "news": "News",
+    "settings": "Settings",
+    "account": "Account",
+    "decks": "Decks",
+    "logout": "Logout"
+  },
+  "session": {
+    "id": "Id",
+    "browser": "Browser",
+    "os": "Operating system",
+    "device": "Device",
+    "createdAt": "Created at",
+    "expireAt": "Expires at",
+    "delete": "Delete session",
+    "current": "current session",
+    "sessionWarning": "This is the current session on this device. If you delete this one, you will be logged out from this device."
+  },
+  "settings": {
+    "title": "this is the settings page"
+  },
+  "login": {
+    "title": "Sign in to your account",
+    "lastLogin": "Latest login at",
+    "logInButton": "Sign in",
+    "welcomeBack": "Welcome back!",
+    "enterCredentials": "Enter your credentials to continue",
+    "rememberMe": "Remember me",
+    "resendVerificationLink": "Resend verification",
+    "linkToLogin": "Go back to login page, click here.",
+    "emailNotVerifiedMessage": "Email address is not verified. Please check your email for the verification link. if you have not received the link, you can resend the verification link from here:"
+  },
+  "register": {
+    "title": "Create a new account and start learning",
+    "successTitle": "New account created!",
+    "success": "New user created successfully with email address {{email}}. We sent you a confirm link by email, please confirm your email and start learning. Redirecting to login page in {{redirectTimeout}} seconds.",
+    "registerButton": "Register",
+    "noAccount": "Don't have an account? Sign Up",
+    "haveAccount": "Have an account?",
+    "enterCreds": "Enter your credentials to continue",
+    "agreeWith": "I have read and agree to the",
+    "TOS": "Terms of Service",
+    "cancelSuccessDisplay": "If you want to return to the register form, click here"
+  },
+  "confirm": {
+    "title": "Confirming email address",
+    "successTitle": "Email address confirmed!",
+    "failureTitle": "Email address confirmation failed",
+    "success": "Your email address confirmation was successful. Redirecting to login page in {{redirectTimeout}} seconds.",
+    "resend": {
+      "resendConfirmButton": "Resend confirmation code",
+      "resendConfirmDescription": "Confirmation failed, please resend the confirmation by entering your email address below."
+    }
+  },
+  "password": {
+    "forgotPassword": {
+      "title": "Reset account password",
+      "resetDescription": "To reset account password, enter the email address you use for the account in the field below.",
+      "successTitle": "Password reset link sent succesfully. Please check your email inbox.",
+      "failureTitle": "Email address verification failed",
+      "resetButton": "Send reset link"
+    },
+    "resetPassword": {
+      "title": "Set new password",
+      "resetDescription": "Input the new password and password confirmation below and submit to change the password",
+      "successTitle": "Password changed succesfully, redirecting to login page.",
+      "failureTitle": "Password update failed, please try again.",
+      "resetButton": "Save new password"
+    }
+  },
+  "passwordStrength": {
+    "poor": "Poor",
+    "weak": "Weak",
+    "normal": "Normal",
+    "good": "Good",
+    "strong": "Strong"
+  },
+  "misc": {
+    "username": "Username",
+    "email": "Email address",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "passwordForgot": "Forgot Password?",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "warning": "Warning!",
+    "clickHere": "click here",
+    "redirectMessage": "If page does not redirect automatically, "
+  },
+  "placeholder": {
+    "username": "e.g. User23494",
+    "email": "Your email",
+    "password": "Your password",
+    "passwordConfirm": "Password confirmation"
+  },
+  "construction": {
+    "title": "Site Under Construction",
+    "body1": "Thank you for visiting our website. We are currently in the process of building and designing our new website, and apologize for any inconvenience this may cause.",
+    "body2": "We are working hard to bring you a fully functional and user-friendly website as soon as possible. In the meantime, please bear with us as we complete this process.",
+    "body3": "Please check back soon to see the finished product."
+  },
+  "errors": {
+    "invalidJlptLevelError": "Not valid JLPT level.",
+    "invalidLanguageIdError": "Language id selected does not exists.",
+    "connectionError": "Something went wrong, check your connection and try again.",
+    "noAdminRightsError": "Action requires admin rights.",
+    "noAdminReadRightsError": "Action requires admin read rights.",
+    "noAdminWriteRightsError": "Action requires admin write rights.",
+    "usernameInUseError": "Username is already in use, select another one.",
+    "emailInUseError": "Email is already in use, select another one.",
+    "memberFeatureError": "This feature is available only to members.",
+    "emailNotVerifiedError": "Your email address is not verified.",
+    "notAuthError": "Not authenticated",
+    "bugByIdNotFoundError": "Bug by id {{id}} not found.",
+    "bugMessageTooShortError": "Bug message must be at least {{length}} characters long.",
+    "bugMessageTooLongError": "Bug message maximum length is {{length}} characters.",
+    "bugSolveMessageTooShortError": "Bug solve message must be at least {{length}} characters long.",
+    "bugSolveMessageTooLongError": "Bug solve message maximum length is {{length}} characters.",
+    "noDecksFoundError": "No decks found.",
+    "nonActiveDeckError": "Deck is not active.",
+    "nonExistingDeckIdError": "Deck with id {{id}} does not exist.",
+    "maxLimitReviewsError": "Reviews per day value too high!",
+    "minLimitReviewsError": "Reviews per day value too low!",
+    "maxNewReviewsError": "New cards value too high!",
+    "minNewReviewsError": "New cards value too low!",
+    "maxReviewIntervalError": "Review interval value too high!",
+    "minReviewIntervalError": "Review interval value too low!",
+    "pushReviewsLimitError": "pushReviewsLimitError",
+    "invalidResultTypeError": "invalidResultTypeError",
+    "badUserInput": "BAD_USER_INPUT",
+    "unauthenticated": "UNAUTHENTICATED",
+    "unauthorized": "UNAUTHORIZED",
+    "internalServerError": "INTERNAL_SERVER_ERROR",
+    "validationError": "Problem with validation, please try again.",
+    "defaultError": "DEFAULT_ERROR",
+    "noDueCardsError": "No cards due.",
+    "storyTooLongError": "Custom story maximum length is {{length}} characters.",
+    "storyTooShortError": "Custom story must be at least {{length}} characters long.",
+    "hintTooLongError": "Custom hint maximum length is {{length}} characters.",
+    "hintTooShortError": "Custom hint must be at least {{length}} characters long.",
+    "provideStoryOrHintError": "provideStoryOrHintError",
+    "nonExistingCardIdError": "Card with an id {{id}} does not exist.",
+    "invalidCardTypeError": "invalidCardTypeError",
+    "inputValueMissingError": "Missing required input(s).",
+    "invalidDateError": "invalidDateError",
+    "requiredDateError": "Date is required.",
+    "notValidEmailError": "Email not valid email address",
+    "requiredPasswordError": "Password required",
+    "emailMaxLengthError": "Email max length is {{length}} characters.",
+    "passwordMismatchError": "Password and confirmation do not match",
+    "inputValueTypeError": "inputValueTypeError",
+    "requiredEmailError": "Email is required.",
+    "requiredResultTypeError": "requiredResultTypeError", 
+    "userOrPassIncorrectError": "Email or password invalid.",
+    "passwordNumberError": "Password must contain at least one number.",
+    "passwordUppercaseError": "Password must contain at least one upper case letter.",
+    "passwordLowercaseError": "Password must contain at least one lower case letter.",
+    "passwordMaxLengthError": "Password maximum length is {{length}} characters.",
+    "passwordMinLengthError": "Password must be at least {{length}} characters long.",
+    "negativeNumberTypeError": "negativeNumberTypeError",
+    "requiredPasswordConfirmError": "Password confirmation required",
+    "currAndNewPassEqualError": "Old and new passwords cannot be equal.",
+    "currentPasswordIncorrectError": "Current password invalid",
+    "usernameMaxLengthError": "Username can be maximum {{length}} characters long",
+    "usernameMinLengthError": "Username must be at least {{length}} character long",
+    "requiredUsernameError": "Username required",
+    "sessionNotFoundError": "Session not found, you can try to fix it with loggin in again.",
+    "sessionExpiredError": "Session is expired, please login again.",
+    "notOwnerOfSessionError": "You are not the owner of the session.",
+    "jwtExpiredError": "Token has expired, please login again to renew the token.",
+    "tosNotChecked": "Please agree with the terms of service.",
+    "emailNotFound": "Email address not found"
+  }
+}
