@@ -1,256 +1,257 @@
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (1,'⼀','いち',1,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (2,'⼁','たてぼう',1,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (3,'⼂','てん',1,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (4,'⼃','の',1,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (5,'⼄','おつ',1,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (6,'⺃','おつ',1,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (7,'⼆','に',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (8,'⼇','なべぶた',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (9,'⼈','ひと',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (10,'𠆢','ひとやね',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (11,'⼉','ひとあし',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (12,'⼊','いる',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (13,'⼋','はち',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (14,'⼌','けいがまえ',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (15,'⼍','わかんむり',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (16,'⼎','にすい',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (17,'⼏','きにょう',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (18,'⺇','かぜかんむり',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (19,'⼐','かんにょう',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (20,'⼑','かたな',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (21,'⺉','りっとう',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (22,'⼒','ちから',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (23,'⼓','つつみがまえ',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (24,'⼔','さじ',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (25,'⼕','はこがまえ',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (26,'⼖','かくしがまえ',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (27,'⼗','じゅう',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (28,'⼘','ぼく',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (29,'⼙','ふしづくり',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (30,'⼚','がんだれ',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (31,'⼛','む',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (32,'⼜','また',2,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (33,'⼝','くち',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (34,'⼞','くにがまえ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (35,'⼟','つち',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (36,'⼠','さむらい',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (37,'⼡','のまた',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (38,'⼢','なつあし',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (39,'⼣','ゆうべ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (40,'⼤','だい',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (41,'⼥','おんな',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (42,'⼦','こ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (43,'⼧','うかんむり',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (44,'⼨','すん',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (45,'⼩','しょう',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (46,'⺌','しょうかんむり',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (47,'⺐','だいのまげあし',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (48,'⼫','しかばね',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (49,'⼬','くさのめ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (50,'⼭','やま',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (51,'⼮','まがりがわ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (52,'川','さんぼんがわ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (53,'⼯','たくみ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (54,'⼰','おのれ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (55,'⼱','はば',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (56,'⼲','かん',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (57,'⺓','いとがしら',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (58,'⼴','まだれ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (59,'⼵','えんにょう',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (60,'⼶','にじゅうあし',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (61,'⼷','いぐるみ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (62,'⼸','ゆみ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (63,'⼹','けいがしら',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (64,'⺕','けいがしら',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (65,'⺔','けいがしら',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (66,'⼺','さんづくり',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (67,'⼻','ぎょうにんべん',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (68,'⺾','くさかんむり',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (69,'⻌','しんにょう',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (70,'⻏','おおざと',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (71,'⻖','こざとへん',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (72,'⺍','つ',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (73,'⺖','りっしんべん',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (74,'⺘','てへん',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (75,'⺡','さんずい',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (76,'⺨','けものへん',3,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (77,'⼼','こころ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (78,'⺗','したごころ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (79,'⼽','ほこ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (80,'⼾','と',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (81,'⼿','て',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (82,'⽀','しにょう',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (83,'⽁','ぼくづくり',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (84,'⺙','ぼくづくり',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (85,'⽂','ぶん',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (86,'⽃','ますづくり',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (87,'⽄','おのづくり',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (88,'⽅','ほう',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (89,'⽆','むにょう',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (90,'⽇','ひ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (91,'⽈','ひらび',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (92,'⽉','つき',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (93,'⺝','つきへん',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (94,'⽊','き',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (95,'⽋','あくび',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (96,'⽌','とめる',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (97,'⽍','がつ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (98,'⽎','るまた',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (99,'⽏','なかれ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (100,'⽐','くらべる',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (101,'⽑','け',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (102,'⽒','うじ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (103,'⽓','きがまえ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (104,'⽔','みず',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (105,'⽕','ひ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (106,'⺣','れっか',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (107,'⽖','つめ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (108,'⺤','つめかんむり',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (109,'爫','つめかんむり',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (110,'⽗','ちち',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (111,'⽘','こう',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (112,'⽙','しょうへん',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (113,'⽚','かた',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (114,'⽜','うし',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (115,'⽝','いぬ',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (116,'⺭','しめすへん',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (117,'㓁','あみがしら',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (118,'⺹','おいかんむり',4,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (119,'⽞','げん',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (120,'⽟','たま',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (121,'⽡','かわら',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (122,'⽢','あまい',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (123,'⽣','うまれる',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (124,'⽤','もちいる',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (125,'⽥','た',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (126,'⽦','ひき',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (127,'⺪','ひきへん',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (128,'⽧','やまいだれ',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (129,'⽨','はつがしら',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (130,'⽩','しろ',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (131,'⽪','けがわ',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (132,'⽫','さら',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (133,'⽬','め',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (134,'⽭','ほこ',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (135,'⽮','や',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (136,'⽯','いし',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (137,'⽰','しめす',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (138,'⽱','じゅうのあし',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (139,'⽲','のぎへん',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (140,'⽳','あな',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (141,'⽴','たつ',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (142,'氺','したみず',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (143,'⺫','あみがしら',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (144,'𦉰','あみがしら',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (145,'⻂','ころもへん',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (146,'⺛','むにょう',5,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (147,'⽵','たけ',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (148,'⺮','たけかんむり',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (149,'⽶','こめ',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (150,'⽷','いと',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (151,'⽸','みずがめ',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (152,'⽹','あみめ',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (153,'⽺','ひつじ',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (154,'⺷','ひつじ',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (155,'羽','はね',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (156,'⽻','はね',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (157,'⽼','おいかんむり',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (158,'⽽','しこうして',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (159,'⽾','らいすき',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (160,'⽿','みみ',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (161,'⾀','ふでづくり',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (162,'⾁','にく',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (163,'⾂','しん',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (164,'⾃','みずから',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (165,'⾄','いたる',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (166,'⾆','した',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (167,'⾇','まいあし',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (168,'⾈','ふね',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (169,'⾉','こん',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (170,'⾊','いろ',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (171,'⾋','くさ',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (172,'⾌','とらがしら',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (173,'⾍','むし',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (174,'⾎','ち',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (175,'⾏','ぎょうがまえ',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (176,'⾐','ころも',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (177,'⾑','にし',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (178,'⻃','にし',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (179,'⽠','うり',6,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (180,'⾒','みる',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (181,'⾓','つの',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (182,'⾔','げん',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (183,'⾕','たに',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (184,'⾖','まめ',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (185,'⾗','いのこ',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (186,'⾘','むじなへん',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (187,'⾙','かい',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (188,'⾚','あか',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (189,'⾛','はしる',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (190,'⾜','あし',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (191,'⻊','あしへん',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (192,'⾝','み',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (193,'⾞','くるま',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (194,'⾟','からい',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (195,'⾠','しんのたつ',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (196,'⾡','しんにょう',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (197,'⾢','むら',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (198,'⾣','ひよみのとり',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (199,'⾤','のごめ',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (200,'⾥','さと',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (201,'⻨','むぎ',7,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (202,'⾦','かね',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (203,'⻑','ながい',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (204,'⾨','もんがまえ',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (205,'⾩','こざと',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (206,'⾪','れいづくり',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (207,'⾫','ふるとり',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (208,'⾬','あめ',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (209,'⻗','あめかんむり',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (210,'⾭','あお',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (211,'⻘','あお',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (212,'⾮','あらず',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (213,'⻟','しょくへん',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (214,'⻫','せい',8,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (215,'⾯','めん',9,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (216,'⾰','つくりがわ',9,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (217,'⾲','にら',9,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (218,'⾳','おと',9,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (219,'⾴','おおがい',9,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (220,'⾵','かぜ',9,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (221,'⾶','とぶ',9,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (222,'⾷','しょく',9,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (223,'⾸','くび',9,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (224,'⾹','かおり',9,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (225,'⾺','うま',10,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (226,'⾻','ほね',10,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (227,'⾼','たかい',10,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (228,'⾽','かみかんむり',10,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (229,'⾾','たたかいがまえ',10,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (230,'⾿','においざけ',10,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (231,'⿀','れき',10,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (232,'⿁','おに',10,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (233,'⾱','なめしがわ',10,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (234,'⿂','うお',11,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (235,'⿃','とり',11,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (236,'⿄','しお',11,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (237,'⿆','むぎ',11,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (238,'⿇','あさ',11,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (239,'⻩','き',11,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (240,'黒','くろ',11,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (241,'⻲','かめ',11,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (242,'⿈','き',12,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (243,'⿉','きび',12,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (244,'⿊','くろ',12,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (245,'⿋','ぬいとり',12,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (246,'⻭','は',12,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (247,'⿌','かえる',13,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (248,'⿍','かなえ',13,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (249,'⿎','つづみ',13,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (250,'⿏','ねずみ',13,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (251,'⿐','はな',14,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (252,'⿑','せい',14,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (253,'⿒','は',15,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (254,'⿓','りょう',16,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (255,'⿔','かめ',16,NOW(),NOW());
-INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES (256,'⿕','やく',17,NOW(),NOW());
+INSERT INTO radical(id,radical,reading,stroke_count,created_at,updated_at) VALUES
+(1,'⼀','いち',1,NOW(),NOW()),
+(2,'⼁','たてぼう',1,NOW(),NOW()),
+(3,'⼂','てん',1,NOW(),NOW()),
+(4,'⼃','の',1,NOW(),NOW()),
+(5,'⼄','おつ',1,NOW(),NOW()),
+(6,'⺃','おつ',1,NOW(),NOW()),
+(7,'⼆','に',2,NOW(),NOW()),
+(8,'⼇','なべぶた',2,NOW(),NOW()),
+(9,'⼈','ひと',2,NOW(),NOW()),
+(10,'𠆢','ひとやね',2,NOW(),NOW()),
+(11,'⼉','ひとあし',2,NOW(),NOW()),
+(12,'⼊','いる',2,NOW(),NOW()),
+(13,'⼋','はち',2,NOW(),NOW()),
+(14,'⼌','けいがまえ',2,NOW(),NOW()),
+(15,'⼍','わかんむり',2,NOW(),NOW()),
+(16,'⼎','にすい',2,NOW(),NOW()),
+(17,'⼏','きにょう',2,NOW(),NOW()),
+(18,'⺇','かぜかんむり',2,NOW(),NOW()),
+(19,'⼐','かんにょう',2,NOW(),NOW()),
+(20,'⼑','かたな',2,NOW(),NOW()),
+(21,'⺉','りっとう',2,NOW(),NOW()),
+(22,'⼒','ちから',2,NOW(),NOW()),
+(23,'⼓','つつみがまえ',2,NOW(),NOW()),
+(24,'⼔','さじ',2,NOW(),NOW()),
+(25,'⼕','はこがまえ',2,NOW(),NOW()),
+(26,'⼖','かくしがまえ',2,NOW(),NOW()),
+(27,'⼗','じゅう',2,NOW(),NOW()),
+(28,'⼘','ぼく',2,NOW(),NOW()),
+(29,'⼙','ふしづくり',2,NOW(),NOW()),
+(30,'⼚','がんだれ',2,NOW(),NOW()),
+(31,'⼛','む',2,NOW(),NOW()),
+(32,'⼜','また',2,NOW(),NOW()),
+(33,'⼝','くち',3,NOW(),NOW()),
+(34,'⼞','くにがまえ',3,NOW(),NOW()),
+(35,'⼟','つち',3,NOW(),NOW()),
+(36,'⼠','さむらい',3,NOW(),NOW()),
+(37,'⼡','のまた',3,NOW(),NOW()),
+(38,'⼢','なつあし',3,NOW(),NOW()),
+(39,'⼣','ゆうべ',3,NOW(),NOW()),
+(40,'⼤','だい',3,NOW(),NOW()),
+(41,'⼥','おんな',3,NOW(),NOW()),
+(42,'⼦','こ',3,NOW(),NOW()),
+(43,'⼧','うかんむり',3,NOW(),NOW()),
+(44,'⼨','すん',3,NOW(),NOW()),
+(45,'⼩','しょう',3,NOW(),NOW()),
+(46,'⺌','しょうかんむり',3,NOW(),NOW()),
+(47,'⺐','だいのまげあし',3,NOW(),NOW()),
+(48,'⼫','しかばね',3,NOW(),NOW()),
+(49,'⼬','くさのめ',3,NOW(),NOW()),
+(50,'⼭','やま',3,NOW(),NOW()),
+(51,'⼮','まがりがわ',3,NOW(),NOW()),
+(52,'川','さんぼんがわ',3,NOW(),NOW()),
+(53,'⼯','たくみ',3,NOW(),NOW()),
+(54,'⼰','おのれ',3,NOW(),NOW()),
+(55,'⼱','はば',3,NOW(),NOW()),
+(56,'⼲','かん',3,NOW(),NOW()),
+(57,'⺓','いとがしら',3,NOW(),NOW()),
+(58,'⼴','まだれ',3,NOW(),NOW()),
+(59,'⼵','えんにょう',3,NOW(),NOW()),
+(60,'⼶','にじゅうあし',3,NOW(),NOW()),
+(61,'⼷','いぐるみ',3,NOW(),NOW()),
+(62,'⼸','ゆみ',3,NOW(),NOW()),
+(63,'⼹','けいがしら',3,NOW(),NOW()),
+(64,'⺕','けいがしら',3,NOW(),NOW()),
+(65,'⺔','けいがしら',3,NOW(),NOW()),
+(66,'⼺','さんづくり',3,NOW(),NOW()),
+(67,'⼻','ぎょうにんべん',3,NOW(),NOW()),
+(68,'⺾','くさかんむり',3,NOW(),NOW()),
+(69,'⻌','しんにょう',3,NOW(),NOW()),
+(70,'⻏','おおざと',3,NOW(),NOW()),
+(71,'⻖','こざとへん',3,NOW(),NOW()),
+(72,'⺍','つ',3,NOW(),NOW()),
+(73,'⺖','りっしんべん',3,NOW(),NOW()),
+(74,'⺘','てへん',3,NOW(),NOW()),
+(75,'⺡','さんずい',3,NOW(),NOW()),
+(76,'⺨','けものへん',3,NOW(),NOW()),
+(77,'⼼','こころ',4,NOW(),NOW()),
+(78,'⺗','したごころ',4,NOW(),NOW()),
+(79,'⼽','ほこ',4,NOW(),NOW()),
+(80,'⼾','と',4,NOW(),NOW()),
+(81,'⼿','て',4,NOW(),NOW()),
+(82,'⽀','しにょう',4,NOW(),NOW()),
+(83,'⽁','ぼくづくり',4,NOW(),NOW()),
+(84,'⺙','ぼくづくり',4,NOW(),NOW()),
+(85,'⽂','ぶん',4,NOW(),NOW()),
+(86,'⽃','ますづくり',4,NOW(),NOW()),
+(87,'⽄','おのづくり',4,NOW(),NOW()),
+(88,'⽅','ほう',4,NOW(),NOW()),
+(89,'⽆','むにょう',4,NOW(),NOW()),
+(90,'⽇','ひ',4,NOW(),NOW()),
+(91,'⽈','ひらび',4,NOW(),NOW()),
+(92,'⽉','つき',4,NOW(),NOW()),
+(93,'⺝','つきへん',4,NOW(),NOW()),
+(94,'⽊','き',4,NOW(),NOW()),
+(95,'⽋','あくび',4,NOW(),NOW()),
+(96,'⽌','とめる',4,NOW(),NOW()),
+(97,'⽍','がつ',4,NOW(),NOW()),
+(98,'⽎','るまた',4,NOW(),NOW()),
+(99,'⽏','なかれ',4,NOW(),NOW()),
+(100,'⽐','くらべる',4,NOW(),NOW()),
+(101,'⽑','け',4,NOW(),NOW()),
+(102,'⽒','うじ',4,NOW(),NOW()),
+(103,'⽓','きがまえ',4,NOW(),NOW()),
+(104,'⽔','みず',4,NOW(),NOW()),
+(105,'⽕','ひ',4,NOW(),NOW()),
+(106,'⺣','れっか',4,NOW(),NOW()),
+(107,'⽖','つめ',4,NOW(),NOW()),
+(108,'⺤','つめかんむり',4,NOW(),NOW()),
+(109,'爫','つめかんむり',4,NOW(),NOW()),
+(110,'⽗','ちち',4,NOW(),NOW()),
+(111,'⽘','こう',4,NOW(),NOW()),
+(112,'⽙','しょうへん',4,NOW(),NOW()),
+(113,'⽚','かた',4,NOW(),NOW()),
+(114,'⽜','うし',4,NOW(),NOW()),
+(115,'⽝','いぬ',4,NOW(),NOW()),
+(116,'⺭','しめすへん',4,NOW(),NOW()),
+(117,'㓁','あみがしら',4,NOW(),NOW()),
+(118,'⺹','おいかんむり',4,NOW(),NOW()),
+(119,'⽞','げん',5,NOW(),NOW()),
+(120,'⽟','たま',5,NOW(),NOW()),
+(121,'⽡','かわら',5,NOW(),NOW()),
+(122,'⽢','あまい',5,NOW(),NOW()),
+(123,'⽣','うまれる',5,NOW(),NOW()),
+(124,'⽤','もちいる',5,NOW(),NOW()),
+(125,'⽥','た',5,NOW(),NOW()),
+(126,'⽦','ひき',5,NOW(),NOW()),
+(127,'⺪','ひきへん',5,NOW(),NOW()),
+(128,'⽧','やまいだれ',5,NOW(),NOW()),
+(129,'⽨','はつがしら',5,NOW(),NOW()),
+(130,'⽩','しろ',5,NOW(),NOW()),
+(131,'⽪','けがわ',5,NOW(),NOW()),
+(132,'⽫','さら',5,NOW(),NOW()),
+(133,'⽬','め',5,NOW(),NOW()),
+(134,'⽭','ほこ',5,NOW(),NOW()),
+(135,'⽮','や',5,NOW(),NOW()),
+(136,'⽯','いし',5,NOW(),NOW()),
+(137,'⽰','しめす',5,NOW(),NOW()),
+(138,'⽱','じゅうのあし',5,NOW(),NOW()),
+(139,'⽲','のぎへん',5,NOW(),NOW()),
+(140,'⽳','あな',5,NOW(),NOW()),
+(141,'⽴','たつ',5,NOW(),NOW()),
+(142,'氺','したみず',5,NOW(),NOW()),
+(143,'⺫','あみがしら',5,NOW(),NOW()),
+(144,'𦉰','あみがしら',5,NOW(),NOW()),
+(145,'⻂','ころもへん',5,NOW(),NOW()),
+(146,'⺛','むにょう',5,NOW(),NOW()),
+(147,'⽵','たけ',6,NOW(),NOW()),
+(148,'⺮','たけかんむり',6,NOW(),NOW()),
+(149,'⽶','こめ',6,NOW(),NOW()),
+(150,'⽷','いと',6,NOW(),NOW()),
+(151,'⽸','みずがめ',6,NOW(),NOW()),
+(152,'⽹','あみめ',6,NOW(),NOW()),
+(153,'⽺','ひつじ',6,NOW(),NOW()),
+(154,'⺷','ひつじ',6,NOW(),NOW()),
+(155,'羽','はね',6,NOW(),NOW()),
+(156,'⽻','はね',6,NOW(),NOW()),
+(157,'⽼','おいかんむり',6,NOW(),NOW()),
+(158,'⽽','しこうして',6,NOW(),NOW()),
+(159,'⽾','らいすき',6,NOW(),NOW()),
+(160,'⽿','みみ',6,NOW(),NOW()),
+(161,'⾀','ふでづくり',6,NOW(),NOW()),
+(162,'⾁','にく',6,NOW(),NOW()),
+(163,'⾂','しん',6,NOW(),NOW()),
+(164,'⾃','みずから',6,NOW(),NOW()),
+(165,'⾄','いたる',6,NOW(),NOW()),
+(166,'⾆','した',6,NOW(),NOW()),
+(167,'⾇','まいあし',6,NOW(),NOW()),
+(168,'⾈','ふね',6,NOW(),NOW()),
+(169,'⾉','こん',6,NOW(),NOW()),
+(170,'⾊','いろ',6,NOW(),NOW()),
+(171,'⾋','くさ',6,NOW(),NOW()),
+(172,'⾌','とらがしら',6,NOW(),NOW()),
+(173,'⾍','むし',6,NOW(),NOW()),
+(174,'⾎','ち',6,NOW(),NOW()),
+(175,'⾏','ぎょうがまえ',6,NOW(),NOW()),
+(176,'⾐','ころも',6,NOW(),NOW()),
+(177,'⾑','にし',6,NOW(),NOW()),
+(178,'⻃','にし',6,NOW(),NOW()),
+(179,'⽠','うり',6,NOW(),NOW()),
+(180,'⾒','みる',7,NOW(),NOW()),
+(181,'⾓','つの',7,NOW(),NOW()),
+(182,'⾔','げん',7,NOW(),NOW()),
+(183,'⾕','たに',7,NOW(),NOW()),
+(184,'⾖','まめ',7,NOW(),NOW()),
+(185,'⾗','いのこ',7,NOW(),NOW()),
+(186,'⾘','むじなへん',7,NOW(),NOW()),
+(187,'⾙','かい',7,NOW(),NOW()),
+(188,'⾚','あか',7,NOW(),NOW()),
+(189,'⾛','はしる',7,NOW(),NOW()),
+(190,'⾜','あし',7,NOW(),NOW()),
+(191,'⻊','あしへん',7,NOW(),NOW()),
+(192,'⾝','み',7,NOW(),NOW()),
+(193,'⾞','くるま',7,NOW(),NOW()),
+(194,'⾟','からい',7,NOW(),NOW()),
+(195,'⾠','しんのたつ',7,NOW(),NOW()),
+(196,'⾡','しんにょう',7,NOW(),NOW()),
+(197,'⾢','むら',7,NOW(),NOW()),
+(198,'⾣','ひよみのとり',7,NOW(),NOW()),
+(199,'⾤','のごめ',7,NOW(),NOW()),
+(200,'⾥','さと',7,NOW(),NOW()),
+(201,'⻨','むぎ',7,NOW(),NOW()),
+(202,'⾦','かね',8,NOW(),NOW()),
+(203,'⻑','ながい',8,NOW(),NOW()),
+(204,'⾨','もんがまえ',8,NOW(),NOW()),
+(205,'⾩','こざと',8,NOW(),NOW()),
+(206,'⾪','れいづくり',8,NOW(),NOW()),
+(207,'⾫','ふるとり',8,NOW(),NOW()),
+(208,'⾬','あめ',8,NOW(),NOW()),
+(209,'⻗','あめかんむり',8,NOW(),NOW()),
+(210,'⾭','あお',8,NOW(),NOW()),
+(211,'⻘','あお',8,NOW(),NOW()),
+(212,'⾮','あらず',8,NOW(),NOW()),
+(213,'⻟','しょくへん',8,NOW(),NOW()),
+(214,'⻫','せい',8,NOW(),NOW()),
+(215,'⾯','めん',9,NOW(),NOW()),
+(216,'⾰','つくりがわ',9,NOW(),NOW()),
+(217,'⾲','にら',9,NOW(),NOW()),
+(218,'⾳','おと',9,NOW(),NOW()),
+(219,'⾴','おおがい',9,NOW(),NOW()),
+(220,'⾵','かぜ',9,NOW(),NOW()),
+(221,'⾶','とぶ',9,NOW(),NOW()),
+(222,'⾷','しょく',9,NOW(),NOW()),
+(223,'⾸','くび',9,NOW(),NOW()),
+(224,'⾹','かおり',9,NOW(),NOW()),
+(225,'⾺','うま',10,NOW(),NOW()),
+(226,'⾻','ほね',10,NOW(),NOW()),
+(227,'⾼','たかい',10,NOW(),NOW()),
+(228,'⾽','かみかんむり',10,NOW(),NOW()),
+(229,'⾾','たたかいがまえ',10,NOW(),NOW()),
+(230,'⾿','においざけ',10,NOW(),NOW()),
+(231,'⿀','れき',10,NOW(),NOW()),
+(232,'⿁','おに',10,NOW(),NOW()),
+(233,'⾱','なめしがわ',10,NOW(),NOW()),
+(234,'⿂','うお',11,NOW(),NOW()),
+(235,'⿃','とり',11,NOW(),NOW()),
+(236,'⿄','しお',11,NOW(),NOW()),
+(237,'⿆','むぎ',11,NOW(),NOW()),
+(238,'⿇','あさ',11,NOW(),NOW()),
+(239,'⻩','き',11,NOW(),NOW()),
+(240,'黒','くろ',11,NOW(),NOW()),
+(241,'⻲','かめ',11,NOW(),NOW()),
+(242,'⿈','き',12,NOW(),NOW()),
+(243,'⿉','きび',12,NOW(),NOW()),
+(244,'⿊','くろ',12,NOW(),NOW()),
+(245,'⿋','ぬいとり',12,NOW(),NOW()),
+(246,'⻭','は',12,NOW(),NOW()),
+(247,'⿌','かえる',13,NOW(),NOW()),
+(248,'⿍','かなえ',13,NOW(),NOW()),
+(249,'⿎','つづみ',13,NOW(),NOW()),
+(250,'⿏','ねずみ',13,NOW(),NOW()),
+(251,'⿐','はな',14,NOW(),NOW()),
+(252,'⿑','せい',14,NOW(),NOW()),
+(253,'⿒','は',15,NOW(),NOW()),
+(254,'⿓','りょう',16,NOW(),NOW()),
+(255,'⿔','かめ',16,NOW(),NOW()),
+(256,'⿕','やく',17,NOW(),NOW());

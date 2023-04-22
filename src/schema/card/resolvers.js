@@ -50,6 +50,7 @@ const resolvers = {
       } else {
         const dueReviesDoneToday = await countDueReviewsTodayInDeck(currentUser.id, date, deckId);
         const fetchAmount = accountDeckSettings.reviewsPerDay - dueReviesDoneToday;
+        if (fetchAmount <= 0) return defaultError(errors.cardErrors.noDueCardsError);
         currentDate = currentDate.toISOString().split('T')[0];
         cards = await cardService.fetchDueCards(deckId, currentUser.id, fetchAmount, selectedLanguage, currentDate);
       }

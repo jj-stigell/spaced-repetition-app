@@ -46,17 +46,17 @@ const resolvers = {
       //create new accoung deck settings if no existing one
       if (!deckSettings) {
         deckSettings = await createAccountDeckSettings(deckId, currentUser.id, favorite, reviewInterval, reviewsPerDay, newCardsPerDay);
-      }
-
-      // Update deck settings
-      try {
-        deckSettings.favorite = favorite === undefined ? deckSettings.favorite : favorite,
-        deckSettings.reviewInterval = reviewInterval ? reviewInterval : deckSettings.reviewInterval,
-        deckSettings.reviewsPerDay = reviewsPerDay ? reviewsPerDay : deckSettings.reviewsPerDay,
-        deckSettings.newCardsPerDay = newCardsPerDay ? newCardsPerDay : deckSettings.newCardsPerDay,
-        await deckSettings.save();
-      } catch(error) {
-        return internalServerError(error);
+      } else {
+        // Update existing deck settings
+        try {
+          deckSettings.favorite = favorite === undefined ? deckSettings.favorite : favorite,
+          deckSettings.reviewInterval = reviewInterval ? reviewInterval : deckSettings.reviewInterval,
+          deckSettings.reviewsPerDay = reviewsPerDay ? reviewsPerDay : deckSettings.reviewsPerDay,
+          deckSettings.newCardsPerDay = newCardsPerDay ? newCardsPerDay : deckSettings.newCardsPerDay,
+          await deckSettings.save();
+        } catch(error) {
+          return internalServerError(error);
+        }
       }
       return deckSettingsFormatter(deckSettings);
     },
