@@ -2,6 +2,16 @@
 
 | date | time | worked on  |
 | :----:|:-----| :-----|
+| 22.4.2023 | 2 | Combine back- and frontend repositories |
+| 23.4.2023 | 2 | Update frontend views |
+|  |  |  |
+|  |  |  |
+| total | 4 |  | 
+
+# Record of working hours for backend before combining repositories with frontend.
+
+| date | time | worked on  |
+| :----:|:-----| :-----|
 | 1.9. | 5 | Setting up the project for the backend, creating SQL database schemas |
 | 5.9. | 1 | SQL tables for kanji and translations |
 | 7.9. | 4 | Working express app with health check, creating utils and graphQL base |
@@ -42,11 +52,9 @@
 | 23.12. | 3 | Fix remaining broken tests, update mutation and queries for the tests, update database calls, add new query for counting reviewed due cards this day |
 | 24.12. | 1 | Rearrange and categorize the constants and errors |
 | 6.1.2023 | 1 | changes to validation and typedefs |
-|  |  |  |
 | total | 116 |  | 
 
-
-# Record of working hours for backend until combining repositories with backend.
+# Record of working hours for frontend before combining repositories with backend.
 
 | date | time | worked on  |
 | :----:|:-----| :-----|
@@ -64,5 +72,4 @@
 | 6.1.2023 | 3 | add graphs to the dashboard (donut, heatmap, list) |
 | 7.1.2023 | 2 | frame for study view, tabs for funtionalities, edit account card view with form |
 | 8.1.2023 | 6 | study view, load cards based on id, set to store, review one by one |
-|  |  |  |
 | total | 46 |  | 
