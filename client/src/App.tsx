@@ -40,7 +40,7 @@ function App (): JSX.Element {
                 <Route element={<Statistics />} errorElement={<ErrorPage />} path="/statistics"/>
                 <Route element={<Settings />} errorElement={<ErrorPage />} path="/settings"/>
               </Route>
-              {/* Do not render top menu when in review mode */}
+              {/* Do not render top menu when in study mode */}
               <Route element={<Study />} errorElement={<ErrorPage />} path="/study/deck/:id"/>
             </Route>
             {/* Guest routes */}

@@ -3,10 +3,10 @@ import * as React from 'react'
 // Third party imports
 import { Box, CircularProgress } from '@mui/material'
 
-function CircularLoader (props: any): JSX.Element {
+function CircularLoader (): JSX.Element {
   return (
-    <Box sx={{ display: 'flex', ...props }}>
-      <CircularProgress />
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+      <CircularProgress color='inherit' />
     </Box>
   )
 }
