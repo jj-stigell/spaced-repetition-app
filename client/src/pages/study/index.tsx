@@ -2,18 +2,11 @@
 /* eslint-disable no-multiple-empty-lines */
 import React from 'react'
 import { experimentalStyled as styled } from '@mui/material/styles'
-import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
-import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
-import { categories, Category, JLPT, jlptLevels } from '../../mockData'
-import Button from '@mui/material/Button'
-import LevelSelector from '../category/LevelSelector'
 import { useNavigate, useParams } from 'react-router-dom'
 import CircularLoader from '../../components/CircularLoader'
-import CircularProgress from '@mui/material/CircularProgress'
-import SubmitButton from '../../components/SubmitButton'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -78,7 +71,7 @@ export interface Card {
 }
 
 
-const cards: Card[] = [
+const mockCards: Card[] = [
   {
     id: 1,
     cardType: CardType.KANJI,
@@ -146,9 +139,9 @@ const cards: Card[] = [
     }
   },
   {
-    id: 2,
+    id: 3,
     cardType: CardType.HIRAGANA,
-    reviewType: ReviewType.RECALL,
+    reviewType: ReviewType.RECOGNISE,
     card: {
       kana: 'か',
       keyword: 'ka',
@@ -175,9 +168,9 @@ const cards: Card[] = [
     }
   },
   {
-    id: 2,
+    id: 4,
     cardType: CardType.KATAKANA,
-    reviewType: ReviewType.RECALL,
+    reviewType: ReviewType.RECOGNISE,
     card: {
       kana: 'ホ',
       keyword: 'ho',
@@ -202,18 +195,66 @@ const cards: Card[] = [
         }
       ]
     }
+  },
+  {
+    id: 5,
+    cardType: CardType.VOCABULARY,
+    reviewType: ReviewType.RECALL,
+    card: {
+      word: '自転車',
+      keyword: 'bicycle',
+      reading: 'じてんしゃ',
+      readingRomaji: 'jitensha',
+      answerOptions: [
+        {
+          option: '自転車',
+          correct: true
+        },
+        {
+          option: '自動車',
+          correct: false
+        },
+        {
+          option: '自動販売機',
+          correct: false
+        },
+        {
+          option: '自分',
+          correct: false
+        }
+      ]
+    }
+  },
+  {
+    id: 6,
+    cardType: CardType.VOCABULARY,
+    reviewType: ReviewType.RECOGNISE,
+    card: {
+      word: '建物',
+      keyword: 'building',
+      reading: 'たてもの',
+      readingRomaji: 'tatemono',
+      answerOptions: [
+        {
+          option: 'building',
+          correct: true
+        },
+        {
+          option: 'school',
+          correct: false
+        },
+        {
+          option: 'stadium',
+          correct: false
+        },
+        {
+          option: 'church',
+          correct: false
+        }
+      ]
+    }
   }
 ]
-
-/*
-export interface KanaCard {
-  kana: string
-  story: string
-  hint: string
-  answerOptions: answerOption[]
-}
-*/
-
 
 /*
 fecth cards based on deck id and feed one by one to the review
@@ -223,7 +264,8 @@ function Study (): JSX.Element {
   const navigate = useNavigate()
   const { id } = useParams()
 
-  const [cards, setCards] = React.useState<Card[] | null>(null)
+  const [cards, setCards] = React.useState<Card[]>()
+  const [currentCard, setCurrentCard] = React.useState<Card | null>(null)
 
   /*
   1. get deck cards by id from api
@@ -235,8 +277,6 @@ function Study (): JSX.Element {
   7. cards empty display message and redirect to deck list
   */
 
-
-
   const handleClick = (id: number): void => {
     console.log('deck selected', id)
     navigate(`/study/deck/${id}`)
@@ -244,11 +284,17 @@ function Study (): JSX.Element {
 
   React.useEffect(() => {
     setTimeout(() => {
-      setCards([])
+      // TODO fetch from api
+      setCurrentCard(mockCards.pop() as Card)
+      setCards(mockCards)
+
+      console.log(mockCards)
+      console.log(currentCard)
+      console.log(cards)
     }, 1000)
   }, [])
 
-  if (cards == null) {
+  if (currentCard == null) {
     return (<CircularLoader />)
   }
 
