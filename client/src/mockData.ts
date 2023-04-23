@@ -19,6 +19,11 @@ export interface JLPT {
   name: string
 }
 
+export interface Category {
+  id: string
+  name: string
+}
+
 export const jlptLevels: JLPT[] = [
   {
     id: 'N1',
@@ -39,5 +44,24 @@ export const jlptLevels: JLPT[] = [
   {
     id: 'N5',
     name: 'JLPT N5'
+  }
+]
+
+export const categories: Category[] = [
+  {
+    id: 'KANJI',
+    name: 'Learn japanese kanji'
+  },
+  {
+    id: 'VOCAB',
+    name: 'Learn japanese vocabulary'
+  },
+  {
+    id: 'GRAMMAR',
+    name: 'Learn japanese grammar'
+  },
+  {
+    id: 'LISTENING',
+    name: 'Learn japanese listening'
   }
 ]
