@@ -131,7 +131,8 @@
     "settings": "Settings",
     "account": "Account",
     "decks": "Decks",
-    "logout": "Logout"
+    "logout": "Logout",
+    "jlptLevel": "JLPT Level"
   },
   "session": {
     "id": "Id",
