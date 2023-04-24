@@ -11,7 +11,7 @@ import {
   EMAIL_CONFIRMATION_URI, RESEND_EMAIL_CONFIRMATION_URI, REGISTER_URI, user,
   REQUEST_RESET_PASSWORD_URI, RESET_PASSWORD_URI
 } from '../utils/constants';
-import { resetDatabase } from '../utils/helpers';
+import { checkErrors, resetDatabase } from '../utils/helpers';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let account: Account;
@@ -45,7 +45,6 @@ describe(`Test POST ${EMAIL_CONFIRMATION_URI}`, () => {
       .send({ confirmationId: confirmationCode.id })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Ok);
   });
@@ -56,7 +55,6 @@ describe(`Test POST ${EMAIL_CONFIRMATION_URI}`, () => {
       .send({ confirmationId: confirmationCode.id })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Ok);
 
@@ -65,9 +63,9 @@ describe(`Test POST ${EMAIL_CONFIRMATION_URI}`, () => {
       .send({ confirmationId: confirmationCode.id })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_ALREADY_CONFIRMED);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_ALREADY_CONFIRMED);
     expect(res.statusCode).toBe(HttpCode.Conflict);
   });
 
@@ -82,9 +80,9 @@ describe(`Test POST ${EMAIL_CONFIRMATION_URI}`, () => {
       .send({ confirmationId: confirmationCode.id })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_CONFIRMATION_CODE_EXPIRED);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_CONFIRMATION_CODE_EXPIRED);
     expect(res.statusCode).toBe(HttpCode.NotFound);
   });
 
@@ -111,9 +109,9 @@ describe(`Test POST ${EMAIL_CONFIRMATION_URI}`, () => {
       .send({ confirmationId: accountAction.id })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_INCORRECT_ACTION_TYPE);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_INCORRECT_ACTION_TYPE);
     expect(res.statusCode).toBe(HttpCode.Conflict);
   });
 
@@ -123,9 +121,9 @@ describe(`Test POST ${EMAIL_CONFIRMATION_URI}`, () => {
       .send({ confirmationId: nonValidUuid })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_INPUT_TYPE);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_TYPE);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -135,9 +133,9 @@ describe(`Test POST ${EMAIL_CONFIRMATION_URI}`, () => {
       .send()
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_CONFIRMATION_CODE_REQUIRED);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_CONFIRMATION_CODE_REQUIRED);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 });
@@ -155,8 +153,8 @@ describe(`Test POST ${RESEND_EMAIL_CONFIRMATION_URI}`, () => {
 
     rows = await models.AccountAction.count();
     expect(rows).toBe(2);
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
+    expect(res.body.data).not.toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Ok);
   });
 
@@ -177,9 +175,9 @@ describe(`Test POST ${RESEND_EMAIL_CONFIRMATION_URI}`, () => {
 
     rows = await models.AccountAction.count();
     expect(rows).toBe(1);
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_ALREADY_CONFIRMED);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_ALREADY_CONFIRMED);
     expect(res.statusCode).toBe(HttpCode.Conflict);
   });
 
@@ -189,9 +187,9 @@ describe(`Test POST ${RESEND_EMAIL_CONFIRMATION_URI}`, () => {
       .send({ email: 'nonExisting@test.com' })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_EMAIL_NOT_FOUND);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_NOT_FOUND);
     expect(res.statusCode).toBe(HttpCode.NotFound);
   });
 
@@ -201,9 +199,9 @@ describe(`Test POST ${RESEND_EMAIL_CONFIRMATION_URI}`, () => {
       .send()
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_EMAIL_REQUIRED);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_EMAIL_REQUIRED);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -213,9 +211,9 @@ describe(`Test POST ${RESEND_EMAIL_CONFIRMATION_URI}`, () => {
       .send({ email: 'notvalid' })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_NOT_VALID_EMAIL);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_NOT_VALID_EMAIL);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -229,9 +227,9 @@ describe(`Test POST ${RESEND_EMAIL_CONFIRMATION_URI}`, () => {
       })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_EMAIL_TOO_LONG);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_EMAIL_TOO_LONG);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 });
@@ -249,8 +247,8 @@ describe(`Test POST ${REQUEST_RESET_PASSWORD_URI}`, () => {
       .send({ email: account.email })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
+    expect(res.body.data).not.toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Ok);
   });
 
@@ -260,9 +258,9 @@ describe(`Test POST ${REQUEST_RESET_PASSWORD_URI}`, () => {
       .send({ email: account.email })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_EMAIL_NOT_CONFIRMED);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_NOT_CONFIRMED);
     expect(res.statusCode).toBe(HttpCode.Forbidden);
   });
 
@@ -272,9 +270,9 @@ describe(`Test POST ${REQUEST_RESET_PASSWORD_URI}`, () => {
       .send({ email: 'nonExisting@test.com' })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_EMAIL_NOT_FOUND);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_NOT_FOUND);
     expect(res.statusCode).toBe(HttpCode.NotFound);
   });
 
@@ -284,9 +282,9 @@ describe(`Test POST ${REQUEST_RESET_PASSWORD_URI}`, () => {
       .send({ email: 'notvalid' })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_NOT_VALID_EMAIL);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_NOT_VALID_EMAIL);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -300,9 +298,9 @@ describe(`Test POST ${REQUEST_RESET_PASSWORD_URI}`, () => {
       })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_EMAIL_TOO_LONG);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_EMAIL_TOO_LONG);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 });
@@ -332,7 +330,6 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       .send({ confirmationId: accountAction.id, password: validPassword })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Ok);
   });
@@ -343,9 +340,9 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       .send({ confirmationId: validUuid, password: validPassword })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_CONFIRMATION_CODE_NOT_FOUND);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_CONFIRMATION_CODE_NOT_FOUND);
     expect(res.statusCode).toBe(HttpCode.NotFound);
   });
 
@@ -355,9 +352,9 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       .send({ confirmationId: confirmationCode.id, password: validPassword })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_INCORRECT_ACTION_TYPE);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_INCORRECT_ACTION_TYPE);
     expect(res.statusCode).toBe(HttpCode.Conflict);
   });
 
@@ -367,9 +364,9 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       .send({ confirmationId: nonValidUuid, password: validPassword })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_INPUT_TYPE);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_TYPE);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -379,9 +376,9 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       .send({ password: validPassword })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_CONFIRMATION_CODE_REQUIRED);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_CONFIRMATION_CODE_REQUIRED);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -392,9 +389,9 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       .send({ confirmationId: validUuid, password: 'NOLOWERCASE12345LETTERS' })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_PASSWORD_LOWERCASE);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_LOWERCASE);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
 
     // No uppercase letters.
@@ -403,9 +400,9 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       .send({ confirmationId: validUuid, password: 'nouppercase12345letters' })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_PASSWORD_UPPERCASE);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_UPPERCASE);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
 
     // No numbers.
@@ -414,9 +411,9 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       .send({ confirmationId: validUuid, password: 'JUSTlettersINthisEXAMPLE' })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_PASSWORD_NUMBER);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_NUMBER);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
 
     // Not long enough password.
@@ -428,9 +425,9 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_PASSWORD_TOO_SHORT);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_TOO_SHORT);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
 
     // Too long password.
@@ -442,9 +439,9 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_PASSWORD_TOO_LONG);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_TOO_LONG);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -454,9 +451,9 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
       .send({ confirmationId: validUuid })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_PASSWORD_REQUIRED);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_REQUIRED);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 });

@@ -120,10 +120,7 @@ export async function register(req: Request, res: Response): Promise<void> {
     }
   });
 
-  res.status(HttpCode.Ok).json({
-    success: true,
-    data: {}
-  });
+  res.status(HttpCode.Ok).json();
 }
 
 /**
@@ -141,9 +138,12 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
         return next(err);
       }
       if (typeof loginResult === 'boolean') {
-        return res.status(HttpCode.Unauthorized).send({
-          success: false,
-          errors: [accountErrors.ERR_EMAIL_OR_PASSWORD_INCORRECT]
+        return res.status(HttpCode.Unauthorized).json({
+          errors: [
+            {
+              code: accountErrors.ERR_EMAIL_OR_PASSWORD_INCORRECT
+            }
+          ]
         });
       }
 
@@ -168,12 +168,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
             sameSite: 'none',
             maxAge: accountConstants.JWT_EXPIRY_TIME,
           });
-          return res.status(HttpCode.Ok).json({
-            success: true,
-            data: {
-              sessionId: loginResult.sessionId,
-            }
-          });
+          return res.status(HttpCode.Ok).json();
         }
       );
     }
@@ -196,10 +191,7 @@ export async function logout(_req: Request, res: Response, next: NextFunction): 
     res.clearCookie('jwt', {
       httpOnly: true,
     });
-    res.status(HttpCode.Ok).json({
-      success: true,
-      data: {}
-    });
+    res.status(HttpCode.Ok).json();
 
   }).catch(function (error: unknown) {
     next(error);

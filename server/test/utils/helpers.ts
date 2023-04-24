@@ -8,6 +8,7 @@ import logger from '../../src/configs/winston';
 import { sequelize } from '../../src/database';
 import models from '../../src/database/models';
 import Account from '../../src/database/models/account';
+import { ApiErrorContent } from '../../src/type/error';
 import { Role } from '../../src/type/general';
 import { adminRead, adminWrite, LOGIN_URI, REGISTER_URI, superuser, user } from './constants';
 
@@ -118,4 +119,8 @@ Promise<[Array<string>, Array<string>, Array<string>, Array<string>]> {
   const superuserCookies: Array<string> = res.headers['set-cookie'];
 
   return [userCookies, adminReadCookies, adminWriteCookies, superuserCookies];
+}
+
+export function checkErrors(errors: Array<ApiErrorContent>, code: string): void {
+  expect(errors.map((e: ApiErrorContent) => e.code)).toContain(code);
 }

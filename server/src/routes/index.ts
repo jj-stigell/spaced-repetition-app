@@ -72,21 +72,18 @@ if (NODE_ENV !== 'production') {
  *     type: object
  *     description: A reason for the failure, with a error code.
  *     properties:
- *       success:
- *         type: boolean
- *         description: '`false` to indicate failure.'
- *         example: false
  *       errors:
  *         type: array
- *         description: Array of error codes explaining error reason.
+ *         description: Array of errors explaining error reason and other metadata.
  *         items:
- *           type: string
+ *           type: object
+ *           properties:
+ *             code:
+ *               type: string
+ *               description: Short code descriping the error.
  *   GenericResponse:
  *     type: object
  *     properties:
- *       success:
- *         type: boolean
- *         description: Success of the request.
  *       data:
  *         type: object
  */

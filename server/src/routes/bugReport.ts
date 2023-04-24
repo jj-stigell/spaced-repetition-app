@@ -136,16 +136,10 @@ export const router: Router = Router();
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   description: Success of the request.
  *                 data:
- *                   type: object
- *                   properties:
- *                     bugReports:
- *                       type: array
- *                       items:
- *                         $ref: '#/definitions/BugReport'
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/definitions/BugReport'
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:
@@ -184,14 +178,8 @@ router.get(
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   description: Success of the request.
  *                 data:
- *                   type: object
- *                   properties:
- *                     bugReport:
- *                       $ref: '#/definitions/BugReport'
+ *                   $ref: '#/definitions/BugReport'
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:
@@ -232,18 +220,12 @@ router.get(
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   description: Success of the request.
  *                 data:
  *                   type: object
  *                   properties:
- *                     bugReport:
- *                       type: object
- *                       properties:
- *                         id:
- *                           type: integer
- *                           description: Newly created bug report database id.
+ *                     id:
+ *                       type: integer
+ *                       description: Newly created bug report database id.
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:
@@ -277,16 +259,6 @@ router.post(
  *     responses:
  *       200:
  *         description: The bug report with an id has been deleted successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   description: Success of the request.
- *                 data:
- *                   type: object
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:
@@ -320,16 +292,6 @@ router.delete(
  *     responses:
  *       200:
  *         description: The bug report with an id has been updated succesfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   description: Success of the request.
- *                 data:
- *                   type: object
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:

@@ -20,18 +20,6 @@ export const router: Router = Router();
  *         type: string
  *         description: Account plaintext password.
  *         required: true
- *   LoginResponse:
- *     type: object
- *     properties:
- *       success:
- *         type: boolean
- *         description: Success of the request.
- *       data:
- *         type: object
- *         properties:
- *           sessionId:
- *             type: string
- *             description: Id of the session the jwt is connected to.
  *   RegisterRequest:
  *     type: object
  *     properties:
@@ -79,16 +67,6 @@ export const router: Router = Router();
  *         description: >
  *           The account has been created succesfully and confirmation
  *           email is sent to the provided email address.
- *         content:
- *           application/json:
- *             schema:
- *               $req: '#/definitions/GenericResponse'
- *         headers:
- *           Set-Cookie:
- *             description: JWT token, storing an access token to allow using the API.
- *             schema:
- *               type: string
- *               example: jwt=wliuerhlwieurh; Secure; HttpOnly; SameSite=None
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       409:
@@ -118,10 +96,6 @@ router.post(
  *     responses:
  *       200:
  *         description: The login has succeeded. An access token is return in a cookie.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/definitions/LoginResponse'
  *         headers:
  *            Set-Cookie:
  *              description: JWT token, allowing access to the API.
@@ -154,10 +128,6 @@ router.post(
  *     responses:
  *       200:
  *         description: The user has successfully logged out.
- *         content:
- *           application/json:
- *             schema:
- *               $req: '#/definitions/GenericResponse'
  *       401:
  *         description: The user is not logged in, or the JWT token is invalid/expired.
  *         content:

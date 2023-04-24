@@ -8,7 +8,7 @@ import {
 } from '../../src/configs/errorCodes';
 import { HttpCode } from '../../src/type/httpCode';
 import { BUGREPORT_URI } from '../utils/constants';
-import { getCookies, resetDatabase } from '../utils/helpers';
+import { checkErrors, getCookies, resetDatabase } from '../utils/helpers';
 import { BugReportData, SolvedBugReportData } from '../../src/type/general';
 import BugReport from '../../src/database/models/bugReport';
 
@@ -37,7 +37,7 @@ async function postBug(): Promise<number> {
     .set('Cookie', userCookies)
     .set('Accept', 'application/json')
     .send(validBugReport);
-  return res.body.data.bugReport.id;
+  return res.body.data.id;
 }
 
 beforeEach(async () => {
@@ -54,8 +54,7 @@ describe(`Test POST ${BUGREPORT_URI} - create a new bug report`, () => {
         .set('Accept', 'application/json')
         .send(validBugReport);
 
-      expect(res.body.success).toBeTruthy();
-      expect(res.body.data.bugReport.id).toBeDefined();
+      expect(res.body.data.id).toBeDefined();
       expect(res.body.errors).not.toBeDefined();
       expect(res.statusCode).toBe(HttpCode.Ok);
     });
@@ -66,8 +65,7 @@ describe(`Test POST ${BUGREPORT_URI} - create a new bug report`, () => {
       .set('Accept', 'application/json')
       .send({ bugMessage: validBugReport.bugMessage, type: validBugReport.type });
 
-    expect(res.body.success).toBeTruthy();
-    expect(res.body.data.bugReport.id).toBeDefined();
+    expect(res.body.data.id).toBeDefined();
     expect(res.body.errors).not.toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Ok);
   });
@@ -84,9 +82,8 @@ describe(`Test POST ${BUGREPORT_URI} - create a new bug report`, () => {
       .set('Accept', 'application/json')
       .send({ ...validBugReport, type: nonValidId });
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(bugErrors.ERR_INVALID_BUG_TYPE);
+    checkErrors(res.body.errors, bugErrors.ERR_INVALID_BUG_TYPE);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -96,9 +93,8 @@ describe(`Test POST ${BUGREPORT_URI} - create a new bug report`, () => {
       .set('Accept', 'application/json')
       .send({ ...validBugReport, bugMessage: nonValidId.repeat(bugs.BUG_MESSAGE_MIN_LENGTH - 1) });
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(bugErrors.ERR_BUG_MESSAGE_TOO_SHORT);
+    checkErrors(res.body.errors, bugErrors.ERR_BUG_MESSAGE_TOO_SHORT);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -108,9 +104,8 @@ describe(`Test POST ${BUGREPORT_URI} - create a new bug report`, () => {
       .set('Accept', 'application/json')
       .send({ ...validBugReport, bugMessage: nonValidId.repeat(bugs.BUG_MESSAGE_MAX_LENGTH + 1) });
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(bugErrors.ERR_BUG_MESSAGE_TOO_LONG);
+    checkErrors(res.body.errors, bugErrors.ERR_BUG_MESSAGE_TOO_LONG);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -120,9 +115,8 @@ describe(`Test POST ${BUGREPORT_URI} - create a new bug report`, () => {
       .set('Accept', 'application/json')
       .send({ ...validBugReport, bugMessage: null });
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_INPUT_VALUE_MISSING);
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_VALUE_MISSING);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -132,9 +126,8 @@ describe(`Test POST ${BUGREPORT_URI} - create a new bug report`, () => {
       .set('Accept', 'application/json')
       .send({ ...validBugReport, cardId: -1 });
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+    checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
 
     res = await request.post(BUGREPORT_URI)
@@ -142,9 +135,8 @@ describe(`Test POST ${BUGREPORT_URI} - create a new bug report`, () => {
       .set('Accept', 'application/json')
       .send({ ...validBugReport, cardId: 0 });
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+    checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -154,9 +146,8 @@ describe(`Test POST ${BUGREPORT_URI} - create a new bug report`, () => {
       .set('Accept', 'application/json')
       .send({ ...validBugReport, cardId: nonValidId });
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_INPUT_TYPE);
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_TYPE);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -166,9 +157,8 @@ describe(`Test POST ${BUGREPORT_URI} - create a new bug report`, () => {
       .set('Accept', 'application/json')
       .send({ ...validBugReport, cardId: nonExistingId });
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(cardErrors.ERR_CARD_NOT_FOUND);
+    checkErrors(res.body.errors, cardErrors.ERR_CARD_NOT_FOUND);
     expect(res.statusCode).toBe(HttpCode.NotFound);
   });
 });
@@ -192,9 +182,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
       .send(solveBugReport);
 
     expect(res.statusCode).toBe(HttpCode.Ok);
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
-    expect(res.body.data).toBeDefined();
 
     bugFromDb = await models.BugReport.findByPk(bugId) as BugReport;
     expect(bugFromDb.id).toBe(bugId);
@@ -220,9 +208,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
       .send(solveBugReport);
 
     expect(res.statusCode).toBe(HttpCode.Ok);
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
-    expect(res.body.data).toBeDefined();
 
     bugFromDb = await models.BugReport.findByPk(bugId) as BugReport;
     expect(bugFromDb.id).toBe(bugId);
@@ -240,8 +226,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.NotFound);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(bugErrors.ERR_BUG_BY_ID_NOT_FOUND);
+    checkErrors(res.body.errors, bugErrors.ERR_BUG_BY_ID_NOT_FOUND);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -254,8 +239,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
         .set('Accept', 'application/json');
 
       expect(res.statusCode).toBe(HttpCode.Forbidden);
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toContain(generalErrors.FORBIDDEN);
+      checkErrors(res.body.errors, generalErrors.FORBIDDEN);
       expect(res.body.data).not.toBeDefined();
 
       res = await request.patch(`${BUGREPORT_URI}/${bugId}`)
@@ -264,8 +248,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
         .set('Accept', 'application/json');
 
       expect(res.statusCode).toBe(HttpCode.Forbidden);
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toContain(generalErrors.FORBIDDEN);
+      checkErrors(res.body.errors, generalErrors.FORBIDDEN);
       expect(res.body.data).not.toBeDefined();
     });
 
@@ -284,8 +267,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
         .set('Accept', 'application/json');
 
       expect(res.statusCode).toBe(HttpCode.BadRequest);
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+      checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
       expect(res.body.data).not.toBeDefined();
 
       res = await request.patch(`${BUGREPORT_URI}/-1`)
@@ -294,8 +276,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
         .set('Accept', 'application/json');
 
       expect(res.statusCode).toBe(HttpCode.BadRequest);
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+      checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
       expect(res.body.data).not.toBeDefined();
     });
 
@@ -306,8 +287,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_INPUT_TYPE);
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_TYPE);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -319,8 +299,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(bugErrors.ERR_BUG_SOLVE_MESSAGE_TOO_SHORT);
+    checkErrors(res.body.errors, bugErrors.ERR_BUG_SOLVE_MESSAGE_TOO_SHORT);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -332,8 +311,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(bugErrors.ERR_BUG_SOLVE_MESSAGE_TOO_LONG);
+    checkErrors(res.body.errors, bugErrors.ERR_BUG_SOLVE_MESSAGE_TOO_LONG);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -345,8 +323,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_INPUT_TYPE);
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_TYPE);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -358,8 +335,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.NotFound);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(cardErrors.ERR_CARD_NOT_FOUND);
+    checkErrors(res.body.errors, cardErrors.ERR_CARD_NOT_FOUND);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -370,8 +346,7 @@ describe(`Test PATCH ${BUGREPORT_URI}/:bugId - update existing bug report`, () =
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.NotFound);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(bugErrors.ERR_BUG_BY_ID_NOT_FOUND);
+    checkErrors(res.body.errors, bugErrors.ERR_BUG_BY_ID_NOT_FOUND);
     expect(res.body.data).not.toBeDefined();
   });
 });
@@ -389,9 +364,7 @@ describe(`Test DELETE ${BUGREPORT_URI}/:bugId - delete existing bug report`, () 
 
     bugFromDb = await models.BugReport.findByPk(bugId);
     expect(bugFromDb).toBeNull();
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
-    expect(res.body.data).toBeDefined();
 
     bugId = await postBug();
     bugFromDb = await models.BugReport.findByPk(bugId);
@@ -403,9 +376,8 @@ describe(`Test DELETE ${BUGREPORT_URI}/:bugId - delete existing bug report`, () 
 
     bugFromDb = await models.BugReport.findByPk(bugId);
     expect(bugFromDb).toBeNull();
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
-    expect(res.body.data).toBeDefined();
+    expect(res.statusCode).toBe(HttpCode.Ok);
   });
 
   it('Should return error when trying to delete but not not logged in', async () => {
@@ -424,8 +396,7 @@ describe(`Test DELETE ${BUGREPORT_URI}/:bugId - delete existing bug report`, () 
         .set('Cookie', adminReadCookies)
         .set('Accept', 'application/json');
 
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toContain(generalErrors.FORBIDDEN);
+      checkErrors(res.body.errors, generalErrors.FORBIDDEN);
       expect(res.body.data).not.toBeDefined();
       expect(res.statusCode).toBe(HttpCode.Forbidden);
 
@@ -433,8 +404,7 @@ describe(`Test DELETE ${BUGREPORT_URI}/:bugId - delete existing bug report`, () 
         .set('Cookie', userCookies)
         .set('Accept', 'application/json');
 
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toContain(generalErrors.FORBIDDEN);
+      checkErrors(res.body.errors, generalErrors.FORBIDDEN);
       expect(res.body.data).not.toBeDefined();
       expect(res.statusCode).toBe(HttpCode.Forbidden);
     });
@@ -444,18 +414,16 @@ describe(`Test DELETE ${BUGREPORT_URI}/:bugId - delete existing bug report`, () 
       .set('Cookie', adminWriteCookies)
       .set('Accept', 'application/json');
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+    checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
 
     res = await request.delete(`${BUGREPORT_URI}/${-1}`)
       .set('Cookie', adminWriteCookies)
       .set('Accept', 'application/json');
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+    checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -464,9 +432,8 @@ describe(`Test DELETE ${BUGREPORT_URI}/:bugId - delete existing bug report`, () 
       .set('Cookie', adminWriteCookies)
       .set('Accept', 'application/json');
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(validationErrors.ERR_INPUT_TYPE);
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_TYPE);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 
@@ -483,9 +450,8 @@ describe(`Test DELETE ${BUGREPORT_URI}/:bugId - delete existing bug report`, () 
       .set('Cookie', adminWriteCookies)
       .set('Accept', 'application/json');
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(bugErrors.ERR_BUG_BY_ID_NOT_FOUND);
+    checkErrors(res.body.errors, bugErrors.ERR_BUG_BY_ID_NOT_FOUND);
     expect(res.statusCode).toBe(HttpCode.NotFound);
   });
 });
@@ -499,17 +465,16 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
         .set('Accept', 'application/json');
 
       expect(res.statusCode).toBe(HttpCode.Ok);
-      expect(res.body.success).toBeTruthy();
       expect(res.body.errors).not.toBeDefined();
-      expect(res.body.data.bugReports).toBeDefined();
-      expect(res.body.data.bugReports[0].id).toBeDefined();
-      expect(res.body.data.bugReports[0].accountId).toBeDefined();
-      expect(res.body.data.bugReports[0].cardId).toBeDefined();
-      expect(res.body.data.bugReports[0].type).toBeDefined();
-      expect(res.body.data.bugReports[0].bugMessage).toBeDefined();
-      expect(res.body.data.bugReports[0].solvedMessage).toBeDefined();
-      expect(res.body.data.bugReports[0].createdAt).toBeDefined();
-      expect(res.body.data.bugReports[0].updatedAt).toBeDefined();
+      expect(res.body.data).toBeDefined();
+      expect(res.body.data[0].id).toBeDefined();
+      expect(res.body.data[0].accountId).toBeDefined();
+      expect(res.body.data[0].cardId).toBeDefined();
+      expect(res.body.data[0].type).toBeDefined();
+      expect(res.body.data[0].bugMessage).toBeDefined();
+      expect(res.body.data[0].solvedMessage).toBeDefined();
+      expect(res.body.data[0].createdAt).toBeDefined();
+      expect(res.body.data[0].updatedAt).toBeDefined();
     });
 
   it('Returns bug reports filtered by optional query param type "TRANSLATION"', async () => {
@@ -518,10 +483,9 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.Ok);
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
-    expect(res.body.data.bugReports).toBeDefined();
-    res.body.data.bugReports.forEach((rep: BugReport) => expect(rep.type).toBe('TRANSLATION'));
+    expect(res.body.data).toBeDefined();
+    res.body.data.forEach((rep: BugReport) => expect(rep.type).toBe('TRANSLATION'));
   });
 
   it('Returns pagination of bug reports when optional query params page and limit included',
@@ -532,9 +496,8 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
         .set('Accept', 'application/json');
 
       expect(res.statusCode).toBe(HttpCode.Ok);
-      expect(res.body.success).toBeTruthy();
       expect(res.body.errors).not.toBeDefined();
-      expect(res.body.data.bugReports.length).toBe(4);
+      expect(res.body.data.length).toBe(4);
 
       // Pages size correct.
       res = await request.get(BUGREPORT_URI + '?page=1&limit=2')
@@ -542,9 +505,8 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
         .set('Accept', 'application/json');
 
       expect(res.statusCode).toBe(HttpCode.Ok);
-      expect(res.body.success).toBeTruthy();
       expect(res.body.errors).not.toBeDefined();
-      expect(res.body.data.bugReports.length).toBe(2);
+      expect(res.body.data.length).toBe(2);
     });
 
   it('Should return error when page query param is zero or negative integer', async () => {
@@ -553,8 +515,7 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+    checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
     expect(res.body.data).not.toBeDefined();
 
     res = await request.get(BUGREPORT_URI + '?page=-1&limit=2')
@@ -562,8 +523,7 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+    checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -573,8 +533,7 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_INPUT_TYPE);
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_TYPE);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -584,8 +543,7 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+    checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
     expect(res.body.data).not.toBeDefined();
 
     res = await request.get(BUGREPORT_URI + '?page=1&limit=-1')
@@ -593,8 +551,7 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+    checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -604,8 +561,7 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_INPUT_TYPE);
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_TYPE);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -615,8 +571,7 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(bugErrors.ERR_BUG_PAGELIMIT_EXCEEDED);
+    checkErrors(res.body.errors, bugErrors.ERR_BUG_PAGELIMIT_EXCEEDED);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -626,8 +581,7 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(bugErrors.ERR_INVALID_BUG_TYPE);
+    checkErrors(res.body.errors, bugErrors.ERR_INVALID_BUG_TYPE);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -643,8 +597,7 @@ describe(`Test GET ${BUGREPORT_URI} - get all bug reports`, () => {
         .set('Accept', 'application/json');
 
       expect(res.statusCode).toBe(HttpCode.Forbidden);
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toContain(generalErrors.FORBIDDEN);
+      checkErrors(res.body.errors, generalErrors.FORBIDDEN);
       expect(res.body.data).not.toBeDefined();
     });
 });
@@ -659,17 +612,16 @@ describe(`Test GET ${BUGREPORT_URI}:bugId - get bug report by id`, () => {
         .set('Accept', 'application/json');
 
       expect(res.statusCode).toBe(HttpCode.Ok);
-      expect(res.body.success).toBeTruthy();
       expect(res.body.errors).not.toBeDefined();
-      expect(res.body.data.bugReport).toBeDefined();
-      expect(res.body.data.bugReport.id).toBe(bugId);
-      expect(res.body.data.bugReport.accountId).toBeDefined();
-      expect(res.body.data.bugReport.cardId).toBeDefined();
-      expect(res.body.data.bugReport.type).toBeDefined();
-      expect(res.body.data.bugReport.bugMessage).toBeDefined();
-      expect(res.body.data.bugReport.solvedMessage).toBeDefined();
-      expect(res.body.data.bugReport.createdAt).toBeDefined();
-      expect(res.body.data.bugReport.updatedAt).toBeDefined();
+      expect(res.body.data).toBeDefined();
+      expect(res.body.data.id).toBe(bugId);
+      expect(res.body.data.accountId).toBeDefined();
+      expect(res.body.data.cardId).toBeDefined();
+      expect(res.body.data.type).toBeDefined();
+      expect(res.body.data.bugMessage).toBeDefined();
+      expect(res.body.data.solvedMessage).toBeDefined();
+      expect(res.body.data.createdAt).toBeDefined();
+      expect(res.body.data.updatedAt).toBeDefined();
 
       res = await request.get(`${BUGREPORT_URI}/${bugId}`)
         .set('Cookie', adminWriteCookies)
@@ -692,8 +644,7 @@ describe(`Test GET ${BUGREPORT_URI}:bugId - get bug report by id`, () => {
         .set('Accept', 'application/json');
 
       expect(res.statusCode).toBe(HttpCode.Forbidden);
-      expect(res.body.success).toBeFalsy();
-      expect(res.body.errors).toContain(generalErrors.FORBIDDEN);
+      checkErrors(res.body.errors, generalErrors.FORBIDDEN);
       expect(res.body.data).not.toBeDefined();
     });
 
@@ -709,8 +660,7 @@ describe(`Test GET ${BUGREPORT_URI}:bugId - get bug report by id`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+    checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
     expect(res.body.data).not.toBeDefined();
 
     res = await request.get(`${BUGREPORT_URI}/0`)
@@ -718,8 +668,7 @@ describe(`Test GET ${BUGREPORT_URI}:bugId - get bug report by id`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
+    checkErrors(res.body.errors, validationErrors.ERR_ZERO_OR_NEGATIVE_NUMBER);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -729,8 +678,7 @@ describe(`Test GET ${BUGREPORT_URI}:bugId - get bug report by id`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.BadRequest);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(validationErrors.ERR_INPUT_TYPE);
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_TYPE);
     expect(res.body.data).not.toBeDefined();
   });
 
@@ -740,8 +688,7 @@ describe(`Test GET ${BUGREPORT_URI}:bugId - get bug report by id`, () => {
       .set('Accept', 'application/json');
 
     expect(res.statusCode).toBe(HttpCode.NotFound);
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toContain(bugErrors.ERR_BUG_BY_ID_NOT_FOUND);
+    checkErrors(res.body.errors, bugErrors.ERR_BUG_BY_ID_NOT_FOUND);
     expect(res.body.data).not.toBeDefined();
   });
 });

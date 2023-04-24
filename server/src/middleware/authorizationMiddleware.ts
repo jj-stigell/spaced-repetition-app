@@ -29,8 +29,11 @@ export function authorizationMiddleware(
 
     if (!allowedRoles.includes(userFromDb.role as Role)) {
       res.status(HttpCode.Forbidden).send({
-        success: false,
-        errors: [generalErrors.FORBIDDEN]
+        errors: [
+          {
+            code: generalErrors.FORBIDDEN
+          }
+        ]
       });
       logger.warn(
         `unauthorized access attempt ${req.path}, user: ${user.id}, session: ${user.sessionId}`

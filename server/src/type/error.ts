@@ -17,6 +17,10 @@ export class InvalidCredentials extends Error {
   }
 }
 
+export type ApiErrorContent = {
+  code: string
+}
+
 // Error Types.
 export type AccountErrors = {
   readonly ERR_ACCOUNT_NOT_FOUND: string;

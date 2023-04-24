@@ -69,10 +69,7 @@ export async function getBugReports(req: Request, res: Response): Promise<void> 
   const bugReports: Array<BugReport> = await BugReport.findAll(options);
 
   res.status(HttpCode.Ok).json({
-    success: true,
-    data: {
-      bugReports
-    }
+    data: bugReports
   });
 }
 
@@ -89,10 +86,7 @@ export async function getBugReportById(req: Request, res: Response): Promise<voi
   const bugReport: BugReport = await findBugReportById(bugId);
 
   res.status(HttpCode.Ok).json({
-    success: true,
-    data: {
-      bugReport
-    }
+    data: bugReport
   });
 }
 
@@ -135,11 +129,8 @@ export async function createBugReport(req: Request, res: Response): Promise<void
   });
 
   res.status(HttpCode.Ok).json({
-    success: true,
     data: {
-      bugReport: {
-        id: newBugReport.id
-      }
+      id: newBugReport.id
     }
   });
 }
@@ -157,10 +148,7 @@ export async function deleteBugReport(req: Request, res: Response): Promise<void
   const bugReport: BugReport = await findBugReportById(bugId);
   await bugReport.destroy();
 
-  res.status(HttpCode.Ok).json({
-    success: true,
-    data: {}
-  });
+  res.status(HttpCode.Ok).json();
 }
 
 /**
@@ -214,8 +202,5 @@ export async function updateBugReport(req: Request, res: Response): Promise<void
   });
   await bugReport.save();
 
-  res.status(HttpCode.Ok).json({
-    success: true,
-    data: {}
-  });
+  res.status(HttpCode.Ok).json();
 }

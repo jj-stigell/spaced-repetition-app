@@ -23,8 +23,11 @@ export default function errorMiddleware(
     res.status(err.statusCode);
 
     res.send({
-      success: false,
-      errors: [err.message],
+      errors: [
+        {
+          code: err.message
+        }
+      ],
     });
     logger.error(err);
     return;
@@ -34,8 +37,11 @@ export default function errorMiddleware(
     res.status(HttpCode.BadRequest);
 
     res.send({
-      success: false,
-      errors: ['syntaxError'],
+      errors: [
+        {
+          code: 'syntaxError'
+        }
+      ]
     });
     logger.error(err);
     return;
@@ -43,8 +49,11 @@ export default function errorMiddleware(
 
   if (err instanceof ValidationError) {
     res.status(HttpCode.BadRequest).send({
-      success: false,
-      errors: err.errors
+      errors: err.errors.map((error: string) => {
+        return {
+          code: error
+        };
+      })
     });
     logger.error(err);
     return;
@@ -52,8 +61,11 @@ export default function errorMiddleware(
 
   // Fallback if no other error matches
   res.status(HttpCode.InternalServerError).send({
-    success: false,
-    errors: [generalErrors.INTERNAL_SERVER_ERROR]
+    errors: [
+      {
+        code: generalErrors.INTERNAL_SERVER_ERROR
+      }
+    ]
   });
   logger.error(err);
   return;

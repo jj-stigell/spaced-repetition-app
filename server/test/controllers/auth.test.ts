@@ -5,13 +5,12 @@ import supertest, { SuperAgentTest } from 'supertest';
 import { app } from '../../src/app';
 import models from '../../src/database/models';
 import Account from '../../src/database/models/account';
-import Session from '../../src/database/models/session';
 import { accountErrors } from '../../src/configs/errorCodes';
 import { HttpCode } from '../../src/type/httpCode';
 import {
   newAccount, LOGIN_URI, LOGOUT_URI, REGISTER_URI, user
 } from '../utils/constants';
-import { resetDatabase } from '../utils/helpers';
+import { checkErrors, resetDatabase } from '../utils/helpers';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let account: Account;
@@ -36,8 +35,6 @@ describe(`Test POST ${REGISTER_URI} - create a new account`, () => {
       .send(newAccount)
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeTruthy();
-    expect(res.body.data).toBeDefined();
     expect(res.body.errors).not.toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Ok);
   });
@@ -48,10 +45,9 @@ describe(`Test POST ${REGISTER_URI} - create a new account`, () => {
       .send({ ...user, username: 'notTaken' })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
     expect(res.body.data).not.toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_EMAIL_IN_USE);
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_IN_USE);
     expect(res.statusCode).toBe(HttpCode.Conflict);
   });
 
@@ -61,9 +57,9 @@ describe(`Test POST ${REGISTER_URI} - create a new account`, () => {
       .send({ ...user, email: 'test@testing.com' })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_USERNAME_IN_USE);
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_USERNAME_IN_USE);
     expect(res.statusCode).toBe(HttpCode.Conflict);
   });
 });
@@ -77,9 +73,7 @@ describe(`Test POST ${LOGIN_URI} - login to account`, () => {
 
     const cookies: Array<string> = res.headers['set-cookie'];
     expect(cookies[0]).toMatch(/^jwt/);
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
-    expect(res.body.data.sessionId).toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Ok);
   });
 
@@ -88,10 +82,9 @@ describe(`Test POST ${LOGIN_URI} - login to account`, () => {
       .send({ email: 'abc@abc.com', password: user.password })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_EMAIL_NOT_FOUND);
     expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_NOT_FOUND);
     expect(res.statusCode).toBe(HttpCode.NotFound);
   });
 
@@ -103,10 +96,9 @@ describe(`Test POST ${LOGIN_URI} - login to account`, () => {
       .send(user)
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_EMAIL_NOT_CONFIRMED);
     expect(res.body.data).not.toBeDefined();
+    expect(res.body.errors).toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_NOT_CONFIRMED);
     expect(res.statusCode).toBe(HttpCode.Forbidden);
   });
 
@@ -115,10 +107,9 @@ describe(`Test POST ${LOGIN_URI} - login to account`, () => {
       .send({ email: user.email, password: '1234567' })
       .expect('Content-Type', /json/);
 
-    expect(res.body.success).toBeFalsy();
-    expect(res.body.errors).toBeDefined();
-    expect(res.body.errors).toContain(accountErrors.ERR_EMAIL_OR_PASSWORD_INCORRECT);
     expect(res.body.data).not.toBeDefined();
+    expect(res.body.errors).toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_OR_PASSWORD_INCORRECT);
     expect(res.statusCode).toBe(HttpCode.Unauthorized);
   });
 });
@@ -126,19 +117,11 @@ describe(`Test POST ${LOGIN_URI} - login to account`, () => {
 describe(`Test POST ${LOGOUT_URI} - logout account`, () => {
 
   it('should logout (clear cookie) successfully when valid cookie supplied', async () => {
-    // No sessions should exists in the database.
-    const rows: number = await models.Session.count();
-    expect(rows).toBe(0);
-
     let res: supertest.Response = await request.post(LOGIN_URI)
       .send({ email: user.email, password: user.password })
       .expect('Content-Type', /json/);
 
-    const sessionId: string = res.body.data.sessionId;
-    let session: Session = await models.Session.findByPk(sessionId) as Session;
     let cookies: Array<string> = res.headers['set-cookie'];
-
-    expect(session.active).toBeTruthy();
     expect(cookies[0]).toMatch(/^jwt/);
 
     res = await request.post(LOGOUT_URI)
@@ -146,13 +129,9 @@ describe(`Test POST ${LOGOUT_URI} - logout account`, () => {
       .set('Cookie', cookies)
       .expect('Content-Type', /json/);
 
-    // Session should be inactive.
-    session = await models.Session.findByPk(sessionId) as Session;
     cookies = res.headers['set-cookie'];
 
-    expect(session.active).toBeFalsy();
     expect(cookies[0]).toMatch(/^jwt=;/);
-    expect(res.body.success).toBeTruthy();
     expect(res.body.errors).not.toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Ok);
   });
@@ -160,7 +139,6 @@ describe(`Test POST ${LOGOUT_URI} - logout account`, () => {
   it('should give error no cookie supplied', async () => {
     const res: supertest.Response = await request.post(LOGOUT_URI).send();
 
-    expect(res.body.success).toBeFalsy();
     expect(res.body.errors).not.toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Unauthorized);
   });

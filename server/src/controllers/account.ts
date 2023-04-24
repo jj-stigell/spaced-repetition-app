@@ -58,9 +58,7 @@ export async function confirmEmail(req: Request, res: Response): Promise<void> {
 
   await account.save();
 
-  res.status(HttpCode.Ok).json({
-    success: true
-  });
+  res.status(HttpCode.Ok).json();
 }
 
 /**
@@ -100,9 +98,7 @@ export async function resendConfirmEmail(req: Request, res: Response): Promise<v
     );
   }
 
-  res.status(HttpCode.Ok).json({
-    success: true
-  });
+  res.status(HttpCode.Ok).json();
 }
 
 /**
@@ -142,9 +138,7 @@ export async function requestResetPassword(req: Request, res: Response): Promise
     );
   }
 
-  res.status(HttpCode.Ok).json({
-    success: true
-  });
+  res.status(HttpCode.Ok).json();
 }
 
 /**
@@ -192,7 +186,5 @@ export async function resetPassword(req: Request, res: Response): Promise<void> 
   await account.save();
   await confirmation.destroy();
 
-  res.status(HttpCode.Ok).json({
-    success: true
-  });
+  res.status(HttpCode.Ok).json();
 }
