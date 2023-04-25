@@ -4,7 +4,7 @@ import handlebars from 'handlebars';
 import Mail from 'nodemailer/lib/mailer';
 
 import {
-  ORIGIN_EMAIL, STMP_HOST, STMP_PORT, STMP_USER, STMP_PASSWORD
+  EMAIL_ORIGIN, STMP_HOST, STMP_PORT, STMP_USER, STMP_PASSWORD
 } from '../../../configs/environment';
 import { EmailClientArgs } from '../../../type/email';
 
@@ -28,7 +28,7 @@ export async function sendMail<TemplateData>(
     const updatedData: Mail.Options = {
       to: data.to,
       html,
-      from: `Yomiko App <${ORIGIN_EMAIL}>`,
+      from: `Yomiko App <${EMAIL_ORIGIN}>`,
       subject: data.subject,
     };
 
