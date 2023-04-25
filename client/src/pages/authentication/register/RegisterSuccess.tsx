@@ -1,12 +1,13 @@
 import * as React from 'react'
 
 // Third party imports
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import { Box, Link } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 // Project imports
 import { constants } from '../../../config/constants'
+import { login } from '../../../config/path'
 
 function RegisterSuccess ({ email }: { email: string }): JSX.Element {
   const { t } = useTranslation()
@@ -14,7 +15,7 @@ function RegisterSuccess ({ email }: { email: string }): JSX.Element {
 
   React.useEffect(() => {
     setTimeout(() => {
-      navigate('/auth/login')
+      navigate(login)
     }, constants.redirectTimeout * 1000)
   }, [])
 
@@ -25,7 +26,7 @@ function RegisterSuccess ({ email }: { email: string }): JSX.Element {
       </Box>
       <Box sx={{ mt: 4 }}>
         {t('misc.redirectMessage')}
-        <Link href="/auth/login" variant="body2">
+        <Link href={login} variant="body2">
           {t('misc.clickHere')}
         </Link>
       </Box>

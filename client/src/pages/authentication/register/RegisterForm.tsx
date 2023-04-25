@@ -13,8 +13,11 @@ import CircularLoader from '../../../components/CircularLoader'
 import SubmitButton from '../../../components/SubmitButton'
 import { constants } from '../../../config/constants'
 import { useAppDispatch } from '../../../app/hooks'
-import { LoginData } from '../../../types'
+import { RegisterData } from '../../../types'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import axios from '../../../lib/axios'
+import { register } from '../../../config/api'
+import { AxiosError } from 'axios'
 
 interface FormProps {
   setRegisteredEmail: React.Dispatch<React.SetStateAction<string | null>>
@@ -34,60 +37,74 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
 
   const validationSchema: yup.AnySchema = yup.object({
     email: yup.string()
-      .email(t('errors.notValidEmailError') as string)
-      .max(constants.account.emailMaxLength, t('errors.emailMaxLengthError', { length: constants.account.emailMaxLength }) as string)
-      .required(t('errors.requiredEmailError') as string),
+      .email(t('errors.ERR_NOT_VALID_EMAIL') as string)
+      .max(constants.account.emailMaxLength, t('errors.ERR_EMAIL_TOO_LONG', { length: constants.account.emailMaxLength }) as string)
+      .required(t('errors.ERR_EMAIL_REQUIRED') as string),
     username: yup.string()
-      .max(constants.account.usernameMaxLength, t('errors.usernameMaxLengthError', { length: constants.account.usernameMaxLength }) as string)
-      .min(constants.account.usernameMinLength, t('errors.usernameMinLengthError', { length: constants.account.usernameMinLength }) as string)
-      .required(t('errors.requiredUsernameError') as string),
+      .max(constants.account.usernameMaxLength, t('errors.ERR_USERNAME_TOO_LONG', { length: constants.account.usernameMaxLength }) as string)
+      .min(constants.account.usernameMinLength, t('errors.ERR_USERNAME_TOO_SHORT', { length: constants.account.usernameMinLength }) as string)
+      .required(t('errors.ERR_USERNAME_REQUIRED') as string),
     password: yup.string()
-      .max(constants.account.passwordMaxLength, t('errors.passwordMaxLengthError', { length: constants.account.passwordMaxLength }) as string)
-      .min(constants.account.passwordMinLength, t('errors.passwordMinLengthError', { length: constants.account.passwordMinLength }) as string)
-      .matches(constants.regex.lowercaseRegex, t('errors.passwordLowercaseError') as string)
-      .matches(constants.regex.uppercaseRegex, t('errors.passwordUppercaseError') as string)
-      .matches(constants.regex.numberRegex, t('errors.passwordNumberError') as string)
-      .required(t('errors.requiredPasswordError') as string),
+      .max(constants.account.passwordMaxLength, t('errors.ERR_PASSWORD_TOO_LONG', { length: constants.account.passwordMaxLength }) as string)
+      .min(constants.account.passwordMinLength, t('errors.ERR_PASSWORD_TOO_SHORT', { length: constants.account.passwordMinLength }) as string)
+      .matches(constants.regex.lowercaseRegex, t('errors.ERR_PASSWORD_LOWERCASE') as string)
+      .matches(constants.regex.uppercaseRegex, t('errors.ERR_PASSWORD_UPPERCASE') as string)
+      .matches(constants.regex.numberRegex, t('errors.ERR_PASSWORD_NUMBER') as string)
+      .required(t('errors.ERR_PASSWORD_REQUIRED') as string),
     passwordConfirmation: yup.string()
-      .max(constants.account.passwordMaxLength, t('errors.passwordMaxLengthError', { length: constants.account.passwordMaxLength }) as string)
-      .min(constants.account.passwordMinLength, t('errors.passwordMinLengthError', { length: constants.account.passwordMinLength }) as string)
-      .matches(constants.regex.lowercaseRegex, t('errors.passwordLowercaseError') as string)
-      .matches(constants.regex.uppercaseRegex, t('errors.passwordUppercaseError') as string)
-      .matches(constants.regex.numberRegex, t('errors.passwordNumberError') as string)
-      .oneOf([yup.ref('password'), null], t('errors.passwordMismatchError') as string)
-      .required(t('errors.requiredPasswordConfirmError') as string)
+      .max(constants.account.passwordMaxLength, t('errors.ERR_PASSWORD_TOO_LONG', { length: constants.account.passwordMaxLength }) as string)
+      .min(constants.account.passwordMinLength, t('errors.ERR_PASSWORD_TOO_SHORT', { length: constants.account.passwordMinLength }) as string)
+      .matches(constants.regex.lowercaseRegex, t('errors.ERR_PASSWORD_LOWERCASE') as string)
+      .matches(constants.regex.uppercaseRegex, t('errors.ERR_PASSWORD_UPPERCASE') as string)
+      .matches(constants.regex.numberRegex, t('errors.ERR_PASSWORD_NUMBER') as string)
+      .oneOf([yup.ref('password'), null], t('errors.ERR_PASSWORD_MISMATCH') as string)
+      .required(t('errors.ERR_PASSWORD_CONFIRMATION_REQUIRED') as string)
   })
 
   const formik = useFormik({
     initialValues: {
-      email: 'test@test.com',
-      username: 'testingMan',
-      password: 'Testing12345',
-      passwordConfirmation: 'Testing12345'
+      email: '',
+      username: '',
+      password: '',
+      passwordConfirmation: '',
+      language: 'EN'
     },
     validationSchema,
-    onSubmit: (values: LoginData): void => {
-      console.log(values)
+    onSubmit: (values: RegisterData): void => {
+      // console.log(values)
       if (tosAccepted) {
         setRegistering(true)
-        console.log('TOS ACCEPT! REGISTERING NEW ACCOUNT')
-        // send to server
-        // if success redirect to succes page and then login
-        // if error display errors and wait for fixes
 
-        // SUCCESS
-        setTimeout(() => {
-          setRegisteredEmail(values.email)
-          setRegistering(false)
-        }, 3000)
-
-        // ERROR
-        setTimeout(() => {
-          setRegistering(false)
-        }, 3000)
+        axios.post(register, {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+          acceptTos: tosAccepted,
+          allowNewsLetter: values.allowNewsLetter,
+          language: values.language
+        })
+          .then(function () {
+            // console.log('ok tuli', response.status)
+            setRegisteredEmail(values.email)
+            setRegistering(false)
+          })
+          .catch(function (error) {
+            console.log('error encountered', error)
+            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+            if (error?.response?.data?.errors[0].code) {
+              // TODO: what if there are multiple errors.
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+              dispatch(setNotification({ message: t(`errors.${error.response.data.errors[0].code}`), severity: 'error' }))
+            } else if (error instanceof AxiosError) {
+              dispatch(setNotification({ message: error.message, severity: 'error' }))
+            } else {
+              dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+            }
+            setRegistering(false)
+          })
       } else {
         setTosError(true)
-        dispatch(setNotification({ message: t('errors.tosNotChecked'), severity: 'error' }))
+        dispatch(setNotification({ message: t('errors.ERR_ACCEPT_TOS_REQUIRED'), severity: 'error' }))
       }
     }
   })

@@ -3,6 +3,7 @@
 import * as React from 'react'
 
 // Third party imports
+import { AxiosError } from 'axios'
 import { useFormik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
@@ -10,17 +11,17 @@ import { Box, Grid, Link, Checkbox, TextField, FormControlLabel, FormControl, In
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 // Project imports
+import axios from '../../../lib/axios'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { RootState } from '../../../app/store'
-import { setAccount } from '../../../features/account/accountSlice'
+import { setLogin } from '../../../features/account/accountSlice'
 import { RememberMe, setRememberMe as SetRememberMe, resetRememberMe } from '../../../features/account/rememberMeSlice'
 import { setNotification } from '../../../features/notification/notificationSlice'
 import { LoginData } from '../../../types'
 import SubmitButton from '../../../components/SubmitButton'
 import { constants } from '../../../config/constants'
-
-// DEV STUFF
-import { loggedInAccount, logInErrorResponse } from '../../../mockData'
+import { register, requestResetPassword } from '../../../config/path'
+import { login } from '../../../config/api'
 
 function LoginForm (): JSX.Element {
   const dispatch = useAppDispatch()
@@ -35,13 +36,13 @@ function LoginForm (): JSX.Element {
   const validationSchema: yup.AnySchema = yup.object({
     email: yup
       .string()
-      .email(t('errors.notValidEmailError') as string)
-      .max(constants.account.emailMaxLength, t('errors.emailMaxLengthError', { length: constants.account.emailMaxLength }) as string)
-      .required(t('errors.requiredEmailError') as string),
+      .email(t('errors.ERR_NOT_VALID_EMAIL') as string)
+      .max(constants.account.emailMaxLength, t('errors.ERR_EMAIL_TOO_LONG', { length: constants.account.emailMaxLength }) as string)
+      .required(t('errors.ERR_EMAIL_REQUIRED') as string),
     password: yup
       .string()
-      .max(constants.account.passwordMaxLength, t('errors.passwordMaxLengthError', { length: constants.account.passwordMaxLength }) as string)
-      .required(t('errors.requiredPasswordError') as string)
+      .max(constants.account.passwordMaxLength, t('errors.ERR_PASSWORD_TOO_LONG', { length: constants.account.passwordMaxLength }) as string)
+      .required(t('errors.ERR_PASSWORD_REQUIRED') as string)
   })
 
   const formik = useFormik({
@@ -52,23 +53,38 @@ function LoginForm (): JSX.Element {
     validationSchema,
     onSubmit: (values: LoginData): void => {
       setLoggingIn(true)
-      console.log(values, 'Remember me:', rememberMe)
-      setTimeout(() => {
-        // If Login success
-        if (values.password === 'Testing12345' && values.email === 'test@test.com') {
-          console.log('correct')
-          dispatch(setAccount(loggedInAccount))
+
+      console.log(values, 'Remember me set to:', rememberMe)
+
+      axios.post(login, {
+        email: values.email,
+        password: values.password
+      })
+        .then(function () {
+          dispatch(setLogin(true))
+
+          // Store remember me if selected.
           if (rememberMe) {
             dispatch(SetRememberMe({ email: values.email, password: values.password }))
           } else {
             dispatch(resetRememberMe({}))
           }
-        } else {
-          // If login failed
-          dispatch(setNotification({ message: t(`errors.${logInErrorResponse[0]}`), severity: 'error' }))
+        })
+        .catch(function (error) {
+          console.log('error encountered', error)
+          const errorCode: string | null = error?.response?.data?.errors[0].code
           setLoggingIn(false)
-        }
-      }, 3000)
+
+          if (errorCode != null) {
+            // TODO: what if there are multiple errors.
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+          } else if (error instanceof AxiosError) {
+            dispatch(setNotification({ message: error.message, severity: 'error' }))
+          } else {
+            dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+          }
+        })
     }
   })
 
@@ -136,12 +152,12 @@ function LoginForm (): JSX.Element {
       <SubmitButton buttonText={t('login.logInButton')} disabled={loggingIn} />
       <Grid container>
         <Grid item xs>
-          <Link href="/auth/forgot-password" variant="body2">
+          <Link href={requestResetPassword} variant="body2">
             {t('misc.passwordForgot')}
           </Link>
         </Grid>
         <Grid item>
-          <Link href="/auth/register" variant="body2">
+          <Link href={register} variant="body2">
           {t('register.noAccount')}
           </Link>
         </Grid>
