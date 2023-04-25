@@ -24,9 +24,9 @@ import ForgotPassword from './pages/authentication/forgotPassword'
 import Decks from './pages/decks'
 import Study from './pages/study'
 import {
-  category, decks, emailConfirm,
+  category, dashboard, decks, emailConfirm,
   login, register, requestResetPassword, resetPassword,
-  root, settings, statistics, studyDeck
+  settings, statistics, studyDeck
 } from './config/path'
 
 function App (): JSX.Element {
@@ -39,7 +39,7 @@ function App (): JSX.Element {
             {/* Protected routes */}
             <Route element={<AuthGuard />}>
               <Route element={<MainLayout />}>
-                <Route element={<Dashboard />} errorElement={<ErrorPage />} path={root} />
+                <Route element={<Dashboard />} errorElement={<ErrorPage />} path={dashboard} />
                 <Route element={<Decks />} errorElement={<ErrorPage />} path={decks} />
                 <Route element={<Category />} errorElement={<ErrorPage />} path={category} />
                 <Route element={<Statistics />} errorElement={<ErrorPage />} path={statistics} />
