@@ -7,6 +7,7 @@ import { Box, Link } from '@mui/material'
 
 // Project imports
 import { constants } from '../../../config/constants'
+import { login } from '../../../config/path'
 
 function ConfirmSuccess (): JSX.Element {
   const { t } = useTranslation()
@@ -14,7 +15,7 @@ function ConfirmSuccess (): JSX.Element {
 
   React.useEffect(() => {
     setTimeout(() => {
-      navigate('/auth/login')
+      navigate(login)
     }, constants.redirectTimeout * 1000)
   }, [])
 
@@ -25,7 +26,7 @@ function ConfirmSuccess (): JSX.Element {
       </Box>
       <Box sx={{ mt: 4 }}>
         {t('misc.redirectMessage')}
-        <Link href="/auth/login" variant="body2">
+        <Link href={login} variant="body2">
           {t('misc.clickHere')}
         </Link>
       </Box>

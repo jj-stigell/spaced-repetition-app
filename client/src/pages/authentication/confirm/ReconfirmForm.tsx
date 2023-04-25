@@ -2,22 +2,32 @@
 import * as React from 'react'
 
 // Third party imports
-import { Button, Box, TextField } from '@mui/material'
-import { useTranslation } from 'react-i18next'
+import { AxiosError } from 'axios'
 import { useFormik } from 'formik'
+import { Button, Box, TextField, CircularProgress } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
 // Project imports
 import { constants } from '../../../config/constants'
+import { resendConfirmation } from '../../../config/api'
+import axios from '../../../lib/axios'
+import { useAppDispatch } from '../../../app/hooks'
+import { setNotification } from '../../../features/notification/notificationSlice'
+import { login } from '../../../config/path'
 
 function ReconfirmForm (): JSX.Element {
+  const [disableButton, setDisableButton] = React.useState<boolean>(false)
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const validationSchema: yup.AnySchema = yup.object({
     email: yup.string()
-      .email(t('errors.notValidEmailError') as string)
-      .max(constants.account.emailMaxLength, t('errors.emailMaxLengthError', { length: constants.account.emailMaxLength }) as string)
-      .required(t('errors.requiredEmailError') as string)
+      .email(t('errors.ERR_NOT_VALID_EMAIL') as string)
+      .max(constants.account.emailMaxLength, t('errors.ERR_EMAIL_TOO_LONG', { length: constants.account.emailMaxLength }) as string)
+      .required(t('errors.ERR_EMAIL_REQUIRED') as string)
   })
 
   const formik = useFormik({
@@ -26,7 +36,32 @@ function ReconfirmForm (): JSX.Element {
     },
     validationSchema,
     onSubmit: (values): void => {
-      console.log('Send reconfirmation link for email address:', values)
+      setDisableButton(true)
+      axios.post(resendConfirmation, {
+        email: values.email
+      })
+        .then(function () {
+          setDisableButton(false)
+          dispatch(setNotification({ message: t('confirm.resend.resendSuccess', { email: values.email, redirectTimeout: constants.redirectTimeout }), severity: 'success' }))
+
+          setTimeout(() => {
+            navigate(login)
+          }, constants.redirectTimeout * 1000)
+        })
+        .catch(function (error) {
+          console.log('error encountered', error)
+          const errorCode: string | null = error?.response?.data?.errors[0].code
+
+          if (errorCode != null) {
+            // TODO: what if there are multiple errors.
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+          } else if (error instanceof AxiosError) {
+            dispatch(setNotification({ message: error.message, severity: 'error' }))
+          } else {
+            dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+          }
+        })
     }
   })
 
@@ -51,14 +86,20 @@ function ReconfirmForm (): JSX.Element {
           error={(formik.touched.email === true) && Boolean(formik.errors.email)}
           helperText={(formik.touched.email === true) && formik.errors.email}
         />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          {t('confirm.resend.resendConfirmButton')}
-        </Button>
+        { disableButton
+          ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <CircularProgress color='inherit' />
+            </Box>
+          : <Button
+              type="submit"
+              fullWidth
+              disabled={disableButton}
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              {t('confirm.resend.resendConfirmButton')}
+            </Button>
+        }
       </Box>
     </>
   )
