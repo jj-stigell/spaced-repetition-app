@@ -23,6 +23,12 @@ const accountSlice = createSlice({
     setAccount (state, action) {
       return action.payload
     },
+    setLogin (state, action) {
+      return {
+        ...state,
+        isLoggedIn: action.payload
+      }
+    },
     setVerified (state, action) {
       return {
         ...state,
@@ -50,7 +56,7 @@ const accountSlice = createSlice({
   }
 })
 
-export const { setAccount, resetAccount, setVerified, setSessions, removeSession } = accountSlice.actions
+export const { setAccount, setLogin, resetAccount, setVerified, setSessions, removeSession } = accountSlice.actions
 
 /*
 export const logOutAccount = () => {
