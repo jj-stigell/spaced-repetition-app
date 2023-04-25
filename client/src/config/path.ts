@@ -1,5 +1,4 @@
-export const root: string = '/'
-export const dashboard: string = '/dashboard'
+export const dashboard: string = '/'
 export const category: string = '/study'
 export const statistics: string = '/statistics'
 export const settings: string = '/settings'
