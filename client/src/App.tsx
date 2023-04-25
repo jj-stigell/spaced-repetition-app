@@ -23,6 +23,11 @@ import Authentication from './pages/authentication'
 import ForgotPassword from './pages/authentication/forgotPassword'
 import Decks from './pages/decks'
 import Study from './pages/study'
+import {
+  category, decks, emailConfirm,
+  login, register, requestResetPassword, resetPassword,
+  root, settings, statistics, studyDeck
+} from './config/path'
 
 function App (): JSX.Element {
   const theme = useTheme()
@@ -34,27 +39,27 @@ function App (): JSX.Element {
             {/* Protected routes */}
             <Route element={<AuthGuard />}>
               <Route element={<MainLayout />}>
-                <Route element={<Dashboard />} errorElement={<ErrorPage />} path="/"/>
-                <Route element={<Decks />} errorElement={<ErrorPage />} path="/study/decks/:category"/>
-                <Route element={<Category />} errorElement={<ErrorPage />} path="/study"/>
-                <Route element={<Statistics />} errorElement={<ErrorPage />} path="/statistics"/>
-                <Route element={<Settings />} errorElement={<ErrorPage />} path="/settings"/>
+                <Route element={<Dashboard />} errorElement={<ErrorPage />} path={root} />
+                <Route element={<Decks />} errorElement={<ErrorPage />} path={decks} />
+                <Route element={<Category />} errorElement={<ErrorPage />} path={category} />
+                <Route element={<Statistics />} errorElement={<ErrorPage />} path={statistics} />
+                <Route element={<Settings />} errorElement={<ErrorPage />} path={settings} />
               </Route>
               {/* Do not render top menu when in study mode */}
-              <Route element={<Study />} errorElement={<ErrorPage />} path="/study/deck/:id"/>
+              <Route element={<Study />} errorElement={<ErrorPage />} path={studyDeck} />
             </Route>
             {/* Guest routes */}
             <Route element={<GuestGuard />}>
               <Route element={<Authentication />}>
-                <Route element={<Login />} errorElement={<ErrorPage />} path="/auth/login"/>
-                <Route element={<Register />} errorElement={<ErrorPage />} path="/auth/register"/>
-                <Route element={<Confirm />} errorElement={<ErrorPage />} path="/auth/confirm-email/:confirmId"/>
-                <Route element={<ForgotPassword />} errorElement={<ErrorPage />} path="/auth/forgot-password/reset/:resetId"/>
-                <Route element={<ForgotPassword />} errorElement={<ErrorPage />} path="/auth/forgot-password"/>
+                <Route element={<Login />} errorElement={<ErrorPage />} path={login} />
+                <Route element={<Register />} errorElement={<ErrorPage />} path={register} />
+                <Route element={<Confirm />} errorElement={<ErrorPage />} path={emailConfirm} />
+                <Route element={<ForgotPassword />} errorElement={<ErrorPage />} path={resetPassword} />
+                <Route element={<ForgotPassword />} errorElement={<ErrorPage />} path={requestResetPassword} />
               </Route>
             </Route>
             {/* Not found route */}
-            <Route element={<SandBox />} errorElement={<ErrorPage />} path="/sandbox"/>
+            <Route element={<SandBox />} errorElement={<ErrorPage />} path="/sandbox" />
             <Route path="*" element={<NotFound />} errorElement={<ErrorPage />}/>
           </Routes>
       </Router>

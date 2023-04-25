@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { persistReducer, persistStore } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import thunk from 'redux-thunk'
+import { NODE_ENV } from '../config/environment'
 
 // reducer imports
 import accountReducer from '../features/account/accountSlice'
@@ -15,7 +16,7 @@ import notificationReducer from '../features/notification/notificationSlice'
 export const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['register', 'notification']
+  blacklist: ['register', 'notification', 'account'] // remove account from here
 }
 
 const appReducer = combineReducers({
@@ -32,7 +33,7 @@ const persistedReducer = persistReducer(persistConfig, appReducer)
 
 export const store = configureStore({
   reducer: persistedReducer,
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: NODE_ENV !== 'production',
   middleware: [thunk]
 })
 

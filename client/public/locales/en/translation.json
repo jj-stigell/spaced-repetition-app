@@ -256,7 +256,7 @@
     "ERR_PASSWORD_REQUIRED": "Password required.",
     "ERR_EMAIL_TOO_LONG": "Email address too long.",
     "ERR_PASSWORD_MISMATCH": "Password and confirmation do not match.",
-    "ERR_INPUT_TYPE": "ERR_INPUT_TYPE",
+    "ERR_INPUT_TYPE": "Input type incorrect.",
     "ERR_EMAIL_REQUIRED": "Email address required.",
     "ERR_RESULT_TYPE_REQUIRED": "ERR_RESULT_TYPE_REQUIRED",
     "ERR_PASSWORD_NUMBER": "Password must include number(s)",

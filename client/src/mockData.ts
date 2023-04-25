@@ -2,7 +2,7 @@ import { AccountState } from './features/account/accountSlice'
 
 export const loggedInAccount: AccountState = {
   token: 'oiueireuwrpopwefiopewif043948roeiweor',
-  isLoggedIn: true,
+  isLoggedIn: false,
   account: {
     role: 'USER-MEMBER',
     username: 'testingMan',
