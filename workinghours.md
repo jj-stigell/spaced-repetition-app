@@ -4,9 +4,9 @@
 | :----:|:-----| :-----|
 | 22.4.2023 | 2 | Combine back- and frontend repositories |
 | 23.4.2023 | 2 | Update frontend views |
+| 25.4.2023 | 4 | Connect login, register, confirm email, resend confirm email to backend. add axios |
 |  |  |  |
-|  |  |  |
-| total | 4 |  | 
+| total | 8 |  | 
 
 # Record of working hours for backend before combining repositories with frontend.
 
