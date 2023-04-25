@@ -164,7 +164,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
           });
           res.cookie('jwt', token, {
             httpOnly: true,
-            secure: NODE_ENV === 'production',
+            secure: NODE_ENV !== 'test',
             sameSite: 'none',
             maxAge: accountConstants.JWT_EXPIRY_TIME,
           });

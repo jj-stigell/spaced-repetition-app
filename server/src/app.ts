@@ -14,8 +14,8 @@ app.use(express.json());
 app.use(loggerMiddleware);
 
 app.use(cors({
-  origin: FRONTEND_ORIGIN,
   credentials: true,
+  origin: FRONTEND_ORIGIN
 }));
 
 app.use('/api/v1/', router);
