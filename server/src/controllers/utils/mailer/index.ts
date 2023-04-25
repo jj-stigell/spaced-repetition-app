@@ -40,7 +40,7 @@ export async function sendEmailConfirmation(
     subject,
     templateData,
     templatePath: path.join(__dirname, './templates/confirmAccount.html'),
-    to: email
+    to: NODE_ENV === 'production' ? email : DEV_EMAIL
   });
 }
 
@@ -72,6 +72,6 @@ export async function sendPasswordResetLink(
     subject,
     templateData,
     templatePath: path.join(__dirname, './templates/resetPassword.html'),
-    to: email
+    to: NODE_ENV === 'production' ? email : DEV_EMAIL
   });
 }
