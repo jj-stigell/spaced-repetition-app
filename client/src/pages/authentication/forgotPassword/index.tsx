@@ -1,12 +1,12 @@
 import * as React from 'react'
 
 // Third party imports
+import { Box } from '@mui/system'
 import DoneOutlineOutlinedIcon from '@mui/icons-material/DoneOutlineOutlined'
 import { Grid, Link, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 // Project imports
-import { Box } from '@mui/system'
 import ResetForm from './Form'
 import { login } from '../../../config/path'
 
