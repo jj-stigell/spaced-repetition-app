@@ -71,6 +71,11 @@ export async function register(req: Request, res: Response): Promise<void> {
       .required()
   });
 
+  // DELETE WHEN MVP READY
+  if (NODE_ENV === 'production') {
+    throw new ApiError('reg not allowed for now', HttpCode.Forbidden);
+  }
+
   await requestSchema.validate(req.body, { abortEarly: false });
   const { email, username, password, acceptTos, allowNewsLetter, language }: Register = req.body;
 

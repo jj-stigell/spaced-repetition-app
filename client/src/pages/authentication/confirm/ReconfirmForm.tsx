@@ -49,6 +49,7 @@ function ReconfirmForm (): JSX.Element {
           }, constants.redirectTimeout * 1000)
         })
         .catch(function (error) {
+          setDisableButton(false)
           console.log('error encountered', error)
           const errorCode: string | null = error?.response?.data?.errors[0].code
 

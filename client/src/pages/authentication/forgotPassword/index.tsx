@@ -6,9 +6,9 @@ import { Grid, Link, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 // Project imports
-import CircularLoader from '../../../components/CircularLoader'
 import { Box } from '@mui/system'
 import ResetForm from './Form'
+import { login } from '../../../config/path'
 
 function ForgotPassword (): JSX.Element {
   const [resetInProcess, setResetInProcess] = React.useState<boolean>(false)
@@ -28,13 +28,12 @@ function ForgotPassword (): JSX.Element {
           </Typography>
         </Box>
     }
-      { resetInProcess && <CircularLoader /> }
       { !success &&
         <Box sx={{ opacity: resetInProcess ? 0.2 : 1.0 }}>
           <ResetForm setResetInProcess={setResetInProcess} setSuccess={setSuccess}/>
           <Grid container>
             <Grid item>
-              <Link href="/auth/login" variant="body2">
+              <Link href={login} variant="body2">
                 {t('login.linkToLogin')}
               </Link>
             </Grid>
