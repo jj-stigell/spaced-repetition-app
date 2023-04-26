@@ -2,7 +2,8 @@
 import * as React from 'react'
 
 // Third party imports
-import { Box, TextField } from '@mui/material'
+import { AxiosError } from 'axios'
+import { Box, CircularProgress, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
@@ -10,6 +11,10 @@ import * as yup from 'yup'
 // Project imports
 import SubmitButton from '../../../components/SubmitButton'
 import { constants } from '../../../config/constants'
+import { passwordResetLink } from '../../../config/api'
+import axios from '../../../lib/axios'
+import { setNotification } from '../../../features/notification/notificationSlice'
+import { useAppDispatch } from '../../../app/hooks'
 
 interface FormProps {
   setResetInProcess: React.Dispatch<React.SetStateAction<boolean>>
@@ -18,14 +23,15 @@ interface FormProps {
 
 function Form ({ setResetInProcess, setSuccess }: FormProps): JSX.Element {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
   const [apiError, setApiError] = React.useState<null | string>(null)
 
   const validationSchema: yup.AnySchema = yup.object({
     email: yup.string()
-      .email(t('errors.notValidEmailError') as string)
-      .max(constants.account.emailMaxLength, t('errors.emailMaxLengthError', { length: constants.account.emailMaxLength }) as string)
-      .required(t('errors.requiredEmailError') as string)
+      .email(t('errors.ERR_NOT_VALID_EMAIL') as string)
+      .max(constants.account.emailMaxLength, t('errors.ERR_EMAIL_TOO_LONG', { length: constants.account.emailMaxLength }) as string)
+      .required(t('errors.ERR_EMAIL_REQUIRED') as string)
   })
 
   const formik = useFormik({
@@ -38,23 +44,35 @@ function Form ({ setResetInProcess, setSuccess }: FormProps): JSX.Element {
       setIsSubmitted(true)
       setResetInProcess(true)
 
-      // SUCCESSS
-      setTimeout(() => {
-        // dispatch(setNotification({ message: 'change password link send to email address', severity: 'success' }))
-        setIsSubmitted(false)
-        setResetInProcess(false)
-        setSuccess(true)
-      }, 2000)
+      axios.post(passwordResetLink, {
+        email: values.email
+      })
+        .then(function () {
+          setIsSubmitted(false)
+          setResetInProcess(false)
+          setSuccess(true)
+        })
+        .catch(function (error) {
+          setIsSubmitted(false)
+          setResetInProcess(false)
+          setSuccess(false)
+          console.log('error encountered', error)
+          const errorCode: string | null = error?.response?.data?.errors[0].code
 
-      // FAILURE
-      /*
-      setTimeout(() => {
-        setIsSubmitted(false)
-        setResetInProcess(false)
-        setSuccess(false)
-        setApiError(t('errors.emailNotFound'))
-      }, 2000)
-      */
+          if (errorCode != null) {
+            if (errorCode.startsWith('ERR_EMAIL')) {
+              setApiError(t(`errors.${errorCode}`))
+            } else {
+              // TODO: what if there are multiple errors.
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+              dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+            }
+          } else if (error instanceof AxiosError) {
+            dispatch(setNotification({ message: error.message, severity: 'error' }))
+          } else {
+            dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+          }
+        })
     }
   })
 
@@ -83,6 +101,11 @@ function Form ({ setResetInProcess, setSuccess }: FormProps): JSX.Element {
           error={(formik.touched.email === true) && (Boolean(formik.errors.email) || Boolean(apiError))}
           helperText={(formik.touched.email === true) && (formik.errors.email ?? apiError)}
         />
+        { isSubmitted &&
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <CircularProgress color='inherit' />
+          </Box>
+          }
         <SubmitButton buttonText={t('password.forgotPassword.resetButton')} disabled={isSubmitted} />
       </Box>
     </>
