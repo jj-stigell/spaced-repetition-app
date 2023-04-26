@@ -14,8 +14,7 @@ import AdbIcon from '@mui/icons-material/Adb'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { constants } from '../config/constants'
-
-const pages = ['dashboard', 'study', 'statistics', 'settings']
+import { category, dashboard, settings, statistics } from '../config/path'
 
 function TopAppBar (): JSX.Element {
   const { t } = useTranslation()
@@ -83,35 +82,35 @@ function TopAppBar (): JSX.Element {
             >
               <MenuItem key='dashboard' onClick={() => {
                 handleCloseNavMenu()
-                navigate('/')
+                navigate(dashboard)
               }}>
                 <Typography textAlign="center" color="inherit">
-                  {t('sidemenu.dashboard')}
+                  {t('navbar.dashboard')}
                 </Typography>
               </MenuItem>
 
               <MenuItem key='study' onClick={() => {
                 handleCloseNavMenu()
-                navigate('/study')
+                navigate(category)
               }}>
                 <Typography textAlign="center" color="inherit">
-                  {t('sidemenu.study')}
+                  {t('navbar.study')}
                 </Typography>
               </MenuItem>
               <MenuItem key='statistics' onClick={() => {
                 handleCloseNavMenu()
-                navigate('/statistics')
+                navigate(statistics)
               }}>
                 <Typography textAlign="center" color="inherit">
-                  {t('sidemenu.statistics')}
+                  {t('navbar.statistics')}
                 </Typography>
               </MenuItem>
               <MenuItem key='settings' onClick={() => {
                 handleCloseNavMenu()
-                navigate('/settings')
+                navigate(settings)
               }}>
                 <Typography textAlign="center" color="inherit">
-                  {t('sidemenu.settings')}
+                  {t('navbar.settings')}
                 </Typography>
               </MenuItem>
             </Menu>
@@ -139,41 +138,41 @@ function TopAppBar (): JSX.Element {
               key='dashboard'
               onClick={() => {
                 handleCloseNavMenu()
-                navigate('/')
+                navigate(dashboard)
               }}
               sx={{ my: 2, color: 'inherit', display: 'block' }}
             >
-              {t('sidemenu.dashboard')}
+              {t('navbar.dashboard')}
             </Button>
             <Button
               key='study'
               onClick={() => {
                 handleCloseNavMenu()
-                navigate('/study')
+                navigate(category)
               }}
               sx={{ my: 2, color: 'inherit', display: 'block' }}
             >
-              {t('sidemenu.study')}
+              {t('navbar.study')}
             </Button>
             <Button
               key='statistics'
               onClick={() => {
                 handleCloseNavMenu()
-                navigate('/statistics')
+                navigate(statistics)
               }}
               sx={{ my: 2, color: 'inherit', display: 'block' }}
             >
-              {t('sidemenu.statistics')}
+              {t('navbar.statistics')}
             </Button>
             <Button
               key='settings'
               onClick={() => {
                 handleCloseNavMenu()
-                navigate('/settings')
+                navigate(settings)
               }}
               sx={{ my: 2, color: 'inherit', display: 'block' }}
             >
-              {t('sidemenu.settings')}
+              {t('navbar.settings')}
             </Button>
           </Box>
         </Toolbar>

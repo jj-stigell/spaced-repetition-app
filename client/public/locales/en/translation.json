@@ -2,10 +2,17 @@
   "title": "SRS-app for learning Japanese",
   "navbar": {
     "dashboard": "Dashboard",
+    "study": "Study",
+    "achievements": "Achievements",
+    "statistics": "Statistics",
+    "reviews": "Reviews",
+    "kanji": "Kanji",
+    "news": "News",
     "settings": "Settings",
-    "signout": "Sign Out",
-    "signin": "Sign In",
-    "register": "Register"
+    "account": "Account",
+    "decks": "Decks",
+    "logout": "Logout",
+    "jlptLevel": "JLPT Level"
   },
   "dashboard": {
     "title": "this is the dashboard page"
@@ -119,20 +126,6 @@
     "changePasswordButton": "Change password",
     "passwordChangeSuccess": "Password changed succesfully",
     "accountCreatedAt": "Account created at"
-  },
-  "sidemenu": {
-    "dashboard": "Dashboard",
-    "study": "Study",
-    "achievements": "Achievements",
-    "statistics": "Statistics",
-    "reviews": "Reviews",
-    "kanji": "Kanji",
-    "news": "News",
-    "settings": "Settings",
-    "account": "Account",
-    "decks": "Decks",
-    "logout": "Logout",
-    "jlptLevel": "JLPT Level"
   },
   "session": {
     "id": "Id",
