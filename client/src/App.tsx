@@ -21,6 +21,7 @@ import SandBox from './pages/sandbox'
 import Notification from './components/Notification'
 import Authentication from './pages/authentication'
 import ForgotPassword from './pages/authentication/forgotPassword'
+import ResetPassword from './pages/authentication/resetPassword'
 import Decks from './pages/decks'
 import Study from './pages/study'
 import {
@@ -54,7 +55,7 @@ function App (): JSX.Element {
                 <Route element={<Login />} errorElement={<ErrorPage />} path={login} />
                 <Route element={<Register />} errorElement={<ErrorPage />} path={register} />
                 <Route element={<Confirm />} errorElement={<ErrorPage />} path={emailConfirm} />
-                <Route element={<ForgotPassword />} errorElement={<ErrorPage />} path={resetPassword} />
+                <Route element={<ResetPassword />} errorElement={<ErrorPage />} path={resetPassword} />
                 <Route element={<ForgotPassword />} errorElement={<ErrorPage />} path={requestResetPassword} />
               </Route>
             </Route>

@@ -4,7 +4,7 @@ import * as React from 'react'
 // Third party imports
 import { AxiosError } from 'axios'
 import { useFormik } from 'formik'
-import { Button, Box, TextField, CircularProgress } from '@mui/material'
+import { Box, TextField, CircularProgress } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
@@ -16,9 +16,10 @@ import axios from '../../../lib/axios'
 import { useAppDispatch } from '../../../app/hooks'
 import { setNotification } from '../../../features/notification/notificationSlice'
 import { login } from '../../../config/path'
+import SubmitButton from '../../../components/SubmitButton'
 
 function ReconfirmForm (): JSX.Element {
-  const [disableButton, setDisableButton] = React.useState<boolean>(false)
+  const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
@@ -36,20 +37,22 @@ function ReconfirmForm (): JSX.Element {
     },
     validationSchema,
     onSubmit: (values): void => {
-      setDisableButton(true)
+      setIsSubmitted(true)
       axios.post(resendConfirmation, {
         email: values.email
       })
         .then(function () {
-          setDisableButton(false)
-          dispatch(setNotification({ message: t('confirm.resend.resendSuccess', { email: values.email, redirectTimeout: constants.redirectTimeout }), severity: 'success' }))
+          setIsSubmitted(false)
+          dispatch(setNotification(
+            { message: t('confirm.resend.resendSuccess', { email: values.email, redirectTimeout: constants.redirectTimeout }), severity: 'success' }
+          ))
 
           setTimeout(() => {
             navigate(login)
           }, constants.redirectTimeout * 1000)
         })
         .catch(function (error) {
-          setDisableButton(false)
+          setIsSubmitted(false)
           console.log('error encountered', error)
           const errorCode: string | null = error?.response?.data?.errors[0].code
 
@@ -74,6 +77,7 @@ function ReconfirmForm (): JSX.Element {
       <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
         <TextField
           sx={{ p: 1 }}
+          disabled={isSubmitted}
           margin="normal"
           fullWidth
           id="email"
@@ -87,20 +91,12 @@ function ReconfirmForm (): JSX.Element {
           error={(formik.touched.email === true) && Boolean(formik.errors.email)}
           helperText={(formik.touched.email === true) && formik.errors.email}
         />
-        { disableButton
-          ? <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <CircularProgress color='inherit' />
-            </Box>
-          : <Button
-              type="submit"
-              fullWidth
-              disabled={disableButton}
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              {t('confirm.resend.resendConfirmButton')}
-            </Button>
+        { isSubmitted &&
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <CircularProgress color='inherit' />
+          </Box>
         }
+        <SubmitButton buttonText={t('confirm.resend.resendConfirmButton')} disabled={isSubmitted} />
       </Box>
     </>
   )

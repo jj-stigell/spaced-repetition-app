@@ -49,7 +49,7 @@ export async function confirmEmail(req: Request, res: Response): Promise<void> {
   const account: Account = await findAccountById(confirmation.accountId);
 
   if (account.emailVerified) {
-    throw new ApiError(accountErrors.ERR_ALREADY_CONFIRMED, HttpCode.Conflict);
+    throw new ApiError(accountErrors.ERR_EMAIL_ALREADY_CONFIRMED, HttpCode.Conflict);
   }
 
   account.set({
@@ -83,7 +83,7 @@ export async function resendConfirmEmail(req: Request, res: Response): Promise<v
   const account: Account = await findAccountByEmail(email);
 
   if (account.emailVerified) {
-    throw new ApiError(accountErrors.ERR_ALREADY_CONFIRMED, HttpCode.Conflict);
+    throw new ApiError(accountErrors.ERR_EMAIL_ALREADY_CONFIRMED, HttpCode.Conflict);
   }
 
   const confirmation: AccountAction = await models.AccountAction.create({

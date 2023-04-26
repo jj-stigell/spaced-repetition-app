@@ -20,16 +20,17 @@ function ForgotPassword (): JSX.Element {
       <Typography component="h1" variant="h5" sx={{ marginTop: 2, marginBottom: 5, textAlign: 'center' }}>
         {t('password.forgotPassword.title')}
       </Typography>
-      { success &&
-        <Box sx={{ textAlign: 'center' }}>
+      { success
+        ? <Box sx={{ textAlign: 'center' }}>
           <DoneOutlineOutlinedIcon sx={{ color: 'green', fontSize: 50 }}/>
           <Typography component="h4" variant="h5" sx={{ marginTop: 2, marginBottom: 5 }}>
             {t('password.forgotPassword.successTitle')}
           </Typography>
+          <Link href={login} variant="body2">
+            {t('login.linkToLogin')}
+          </Link>
         </Box>
-    }
-      { !success &&
-        <Box sx={{ opacity: resetInProcess ? 0.2 : 1.0 }}>
+        : <Box sx={{ opacity: resetInProcess ? 0.2 : 1.0 }}>
           <ResetForm setResetInProcess={setResetInProcess} setSuccess={setSuccess}/>
           <Grid container>
             <Grid item>

@@ -2,22 +2,27 @@
 import * as React from 'react'
 
 // Third party imports
-import { Box, Grid, Link, Checkbox, TextField, FormControlLabel, FormControl, OutlinedInput, InputLabel, InputAdornment, IconButton, FormHelperText } from '@mui/material'
+import { AxiosError } from 'axios'
+import {
+  Box, Grid, Link, Checkbox, TextField,
+  FormControlLabel, FormControl, OutlinedInput,
+  InputLabel, InputAdornment, IconButton,
+  FormHelperText, CircularProgress
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
 // Project imports
+import axios from '../../../lib/axios'
 import { setNotification } from '../../../features/notification/notificationSlice'
-import CircularLoader from '../../../components/CircularLoader'
 import SubmitButton from '../../../components/SubmitButton'
 import { constants } from '../../../config/constants'
 import { useAppDispatch } from '../../../app/hooks'
 import { RegisterData } from '../../../types'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import axios from '../../../lib/axios'
 import { register } from '../../../config/api'
-import { AxiosError } from 'axios'
+import { login } from '../../../config/path'
 
 interface FormProps {
   setRegisteredEmail: React.Dispatch<React.SetStateAction<string | null>>
@@ -28,7 +33,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
   const { t } = useTranslation()
   const [tosAccepted, setTosAccepted] = React.useState<boolean>(false)
   const [tosError, setTosError] = React.useState<boolean>(false)
-  const [registering, setRegistering] = React.useState<boolean>(false)
+  const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const [showPasswordConfirm, setShowPasswordConfirm] = React.useState<boolean>(false)
 
@@ -70,11 +75,8 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
       language: 'EN'
     },
     validationSchema,
-    onSubmit: (values: RegisterData): void => {
-      // console.log(values)
+    onSubmit: (values: RegisterData, { resetForm }): void => {
       if (tosAccepted) {
-        setRegistering(true)
-
         axios.post(register, {
           username: values.username,
           email: values.email,
@@ -84,9 +86,10 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           language: values.language
         })
           .then(function () {
-            // console.log('ok tuli', response.status)
+            setIsSubmitted(true)
+            resetForm()
             setRegisteredEmail(values.email)
-            setRegistering(false)
+            setIsSubmitted(false)
           })
           .catch(function (error) {
             console.log('error encountered', error)
@@ -100,7 +103,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
             } else {
               dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
             }
-            setRegistering(false)
+            setIsSubmitted(false)
           })
       } else {
         setTosError(true)
@@ -112,7 +115,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
   return (
     <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
       <TextField
-        disabled={registering}
+        disabled={isSubmitted}
         margin="normal"
         fullWidth
         id="email"
@@ -127,7 +130,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
         helperText={(formik.touched.email === true) && formik.errors.email}
       />
       <TextField
-        disabled={registering}
+        disabled={isSubmitted}
         margin="normal"
         fullWidth
         id="username"
@@ -148,7 +151,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           label={t('misc.password')}
           name="password"
           autoFocus
-          disabled={registering}
+          disabled={isSubmitted}
           type={showPassword ? 'text' : 'password'}
           value={formik.values.password}
           onChange={formik.handleChange}
@@ -179,7 +182,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           label={t('misc.passwordConfirm')}
           name="passwordConfirmation"
           autoFocus
-          disabled={registering}
+          disabled={isSubmitted}
           type={showPasswordConfirm ? 'text' : 'password'}
           value={formik.values.passwordConfirmation}
           onChange={formik.handleChange}
@@ -212,7 +215,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
         <FormControlLabel
           control={
           <Checkbox
-            disabled={registering}
+            disabled={isSubmitted}
             checked={tosAccepted}
             onChange={() => {
               setTosAccepted(!tosAccepted)
@@ -228,13 +231,15 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           {t('register.TOS')}
         </Link>
       </div>
-      {!registering
-        ? <SubmitButton buttonText={t('register.registerButton')} disabled={registering} />
-        : <CircularLoader />
+      { isSubmitted &&
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <CircularProgress color='inherit' />
+        </Box>
       }
+      <SubmitButton buttonText={t('register.registerButton')} disabled={isSubmitted} />
       <Grid container>
         <Grid item>
-          <Link href="/auth/login" variant="body2">
+          <Link href={login} variant="body2">
             {t('register.haveAccount')}
           </Link>
         </Grid>

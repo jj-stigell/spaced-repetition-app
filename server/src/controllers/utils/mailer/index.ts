@@ -33,7 +33,7 @@ export async function sendEmailConfirmation(
     translation,
     email: NODE_ENV === 'production' ? email : DEV_EMAIL,
     username: username,
-    url: `${general.FRONTEND_URL}/account/confirmation/${confirmationId}`,
+    url: `${general.FRONTEND_URL}/auth/confirm-email/${confirmationId}`,
   };
 
   await sendMail<ConfirmEmailPayload>({
@@ -65,7 +65,7 @@ export async function sendPasswordResetLink(
     translation,
     email: NODE_ENV === 'production' ? email : DEV_EMAIL,
     username: username,
-    url: `${general.FRONTEND_URL}/account/reset-password/${confirmationId}`,
+    url: `${general.FRONTEND_URL}/auth/forgot-password/reset/${confirmationId}`,
   };
 
   await sendMail<ConfirmEmailPayload>({

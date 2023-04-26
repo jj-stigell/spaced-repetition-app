@@ -11,7 +11,7 @@ import * as yup from 'yup'
 // Project imports
 import SubmitButton from '../../../components/SubmitButton'
 import { constants } from '../../../config/constants'
-import { passwordResetLink } from '../../../config/api'
+import { resetPassword } from '../../../config/api'
 import axios from '../../../lib/axios'
 import { setNotification } from '../../../features/notification/notificationSlice'
 import { useAppDispatch } from '../../../app/hooks'
@@ -44,7 +44,7 @@ function Form ({ setResetInProcess, setSuccess }: FormProps): JSX.Element {
       setIsSubmitted(true)
       setResetInProcess(true)
 
-      axios.post(passwordResetLink, {
+      axios.post(resetPassword, {
         email: values.email
       })
         .then(function () {
@@ -105,7 +105,7 @@ function Form ({ setResetInProcess, setSuccess }: FormProps): JSX.Element {
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <CircularProgress color='inherit' />
           </Box>
-          }
+        }
         <SubmitButton buttonText={t('password.forgotPassword.resetButton')} disabled={isSubmitted} />
       </Box>
     </>

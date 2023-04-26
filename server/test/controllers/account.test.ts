@@ -65,7 +65,7 @@ describe(`Test POST ${EMAIL_CONFIRMATION_URI}`, () => {
 
     expect(res.body.errors).toBeDefined();
     expect(res.body.data).not.toBeDefined();
-    checkErrors(res.body.errors, accountErrors.ERR_ALREADY_CONFIRMED);
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_ALREADY_CONFIRMED);
     expect(res.statusCode).toBe(HttpCode.Conflict);
   });
 
@@ -177,7 +177,7 @@ describe(`Test POST ${RESEND_EMAIL_CONFIRMATION_URI}`, () => {
     expect(rows).toBe(1);
     expect(res.body.errors).toBeDefined();
     expect(res.body.data).not.toBeDefined();
-    checkErrors(res.body.errors, accountErrors.ERR_ALREADY_CONFIRMED);
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_ALREADY_CONFIRMED);
     expect(res.statusCode).toBe(HttpCode.Conflict);
   });
 

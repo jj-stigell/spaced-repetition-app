@@ -31,11 +31,11 @@ export type AccountErrors = {
   readonly ERR_EMAIL_NOT_CONFIRMED: string;
   readonly ERR_CONFIRMATION_CODE_NOT_FOUND: string;
   readonly ERR_CONFIRMATION_CODE_EXPIRED: string;
-  readonly ERR_ALREADY_CONFIRMED: string;
+  readonly ERR_EMAIL_ALREADY_CONFIRMED: string;
   readonly ERR_INCORRECT_ACTION_TYPE: string;
   readonly ERR_EMAIL_OR_PASSWORD_INCORRECT: string;
-  readonly ERR_CURRENT_AND_NEW_PASSWORD_EQUAL: string;
-  readonly ERR_CURRENT_PASSWORD_INCORRECT: string;
+  readonly ERR_PASSWORD_CURRENT_AND_NEW_EQUAL: string;
+  readonly ERR_PASSWORD_CURRENT_INCORRECT: string;
 };
 
 export type AdminErrors = {

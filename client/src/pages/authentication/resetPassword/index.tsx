@@ -13,7 +13,7 @@ function ForgotPassword (): JSX.Element {
   return (
     <>
       <Typography component="h1" variant="h5" sx={{ marginTop: 2, marginBottom: 5, textAlign: 'center' }}>
-        {t('confirm.title')}
+        {t('password.resetPassword.title')}
       </Typography>
       <ResetForm />
     </>

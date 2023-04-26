@@ -19,14 +19,14 @@ import { login } from '../../../config/path'
 function Confirm (): JSX.Element {
   const [confirmInProsess, setConfirmInProsess] = React.useState<boolean>(true)
   const [confirmSuccess, setConfirmSuccess] = React.useState<boolean>(false)
-  const { confirmId } = useParams()
+  const { confirmationId } = useParams()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   React.useEffect(() => {
     axios.post(confirmEmail, {
-      confirmationId: confirmId
+      confirmationId
     })
       .then(function () {
         // Set success based on API response
@@ -42,7 +42,7 @@ function Confirm (): JSX.Element {
           // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
 
-          if (errorCode === 'ERR_ALREADY_CONFIRMED') {
+          if (errorCode === 'ERR_EMAIL_ALREADY_CONFIRMED') {
             navigate(login)
           }
         } else if (error instanceof AxiosError) {
