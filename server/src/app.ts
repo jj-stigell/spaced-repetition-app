@@ -10,6 +10,9 @@ import { router } from './routes/index';
 
 export const app: Application = express();
 
+// Hide powered by information.
+app.disable('x-powered-by');
+
 app.use(express.json());
 app.use(loggerMiddleware);
 
