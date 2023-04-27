@@ -6,6 +6,7 @@
 | 23.4.2023 | 2 | Update frontend views |
 | 25.4.2023 | 4 | Connect login, register, confirm email, resend confirm email to backend. add axios |
 | 26.4.2023 | 2 | Connect reset password to backend, base for settings page |
+| 27.4.2023 | xx | Implement remember me, save selected level to state, fix routing issues |
 |  |  |  |
 | total | 8 |  | 
 

@@ -1,0 +1,76 @@
+import {
+  CreationOptional, DataTypes, Model, InferAttributes, InferCreationAttributes, ForeignKey
+} from 'sequelize';
+
+import { sequelize } from '..';
+import { DeckCategory } from '../../type/constants';
+import Language from './language';
+
+export default class Deck extends Model<
+  InferAttributes<Deck>,
+  InferCreationAttributes<Deck>
+> {
+  declare id: CreationOptional<number>;
+  declare jlptLevel: number;
+  declare deckName: string;
+  declare category: string;
+  declare memberOnly: boolean;
+  declare languageId: ForeignKey<Language['id']>;
+  declare active: boolean;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+}
+
+Deck.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    jlptLevel: {
+      type: DataTypes.INTEGER,
+      validate: {
+        isIn: [[1, 2, 3, 4, 5]],
+      }
+    },
+    deckName: {
+      type: DataTypes.STRING(60),
+      allowNull: false,
+      unique: true,
+    },
+    category: {
+      type: DataTypes.ENUM(
+        DeckCategory.GRAMMAR,
+        DeckCategory.KANA,
+        DeckCategory.KANJI,
+        DeckCategory.VOCABULARY
+      ),
+      allowNull: false
+    },
+    memberOnly: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    languageId: {
+      type: DataTypes.CHAR(2),
+      allowNull: false,
+      references: {
+        model: 'language',
+        key: 'id'
+      }
+    },
+    active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
+  },
+  {
+    sequelize,
+    tableName: 'deck'
+  }
+);

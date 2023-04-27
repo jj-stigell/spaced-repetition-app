@@ -19,6 +19,14 @@ const card: string = fs.readFileSync(
   path.resolve(__dirname, '../../../../mockData/card.sql'), 'utf8'
 );
 
+const deck: string = fs.readFileSync(
+  path.resolve(__dirname, '../../../../mockData/deck.sql'), 'utf8'
+);
+
+const deckTranslation: string = fs.readFileSync(
+  path.resolve(__dirname, '../../../../mockData/deck_translation.sql'), 'utf8'
+);
+
 export default {
   up: async (queryInterface: QueryInterface): Promise<void> => {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
@@ -27,6 +35,8 @@ export default {
       await queryInterface.sequelize.query(account, { transaction });
       await queryInterface.sequelize.query(card, { transaction });
       await queryInterface.sequelize.query(bugReport, { transaction });
+      await queryInterface.sequelize.query(deck, { transaction });
+      await queryInterface.sequelize.query(deckTranslation, { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
@@ -36,6 +46,8 @@ export default {
   down: async (queryInterface: QueryInterface): Promise<void> => {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
     try {
+      await queryInterface.bulkDelete('deck_translation', {}, { transaction });
+      await queryInterface.bulkDelete('deck', {}, { transaction });
       await queryInterface.bulkDelete('bug_report', {}, { transaction });
       await queryInterface.bulkDelete('card', {}, { transaction });
       await queryInterface.bulkDelete('account', {}, { transaction });
@@ -55,6 +67,14 @@ export default {
 
       await queryInterface.sequelize.query(
         'ALTER SEQUENCE card_id_seq RESTART;', { transaction }
+      );
+
+      await queryInterface.sequelize.query(
+        'ALTER SEQUENCE deck_id_seq RESTART;', { transaction }
+      );
+
+      await queryInterface.sequelize.query(
+        'ALTER SEQUENCE deck_translation_id_seq RESTART;', { transaction }
       );
 
       await transaction.commit();

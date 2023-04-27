@@ -1,6 +1,7 @@
 import { DataTypes, QueryInterface, Transaction } from 'sequelize';
 import { bugs, card } from '../../configs/constants';
 import logger from '../../configs/winston';
+import { DeckCategory } from '../../type/constants';
 
 export default {
   up: async (queryInterface: QueryInterface): Promise<void> => {
@@ -87,6 +88,105 @@ export default {
         },
         created_at: DataTypes.DATE,
         updated_at: DataTypes.DATE
+      }, { transaction });
+      await queryInterface.createTable('deck', {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        jlpt_level: {
+          type: DataTypes.INTEGER,
+          validate: {
+            isIn: [[1, 2, 3, 4, 5]],
+          }
+        },
+        deck_name: {
+          type: DataTypes.STRING(60),
+          allowNull: false,
+          unique: true,
+        },
+        category: {
+          type: DataTypes.ENUM(
+            DeckCategory.GRAMMAR,
+            DeckCategory.KANA,
+            DeckCategory.KANJI,
+            DeckCategory.VOCABULARY
+          ),
+          allowNull: false
+        },
+        member_only: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+          defaultValue: false
+        },
+        language_id: {
+          type: DataTypes.CHAR(2),
+          allowNull: false,
+          references: {
+            model: 'language',
+            key: 'id'
+          }
+        },
+        active: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+          defaultValue: false
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false
+        }
+      }, { transaction });
+      await queryInterface.createTable('deck_translation', {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        deck_id: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'deck',
+            key: 'id'
+          }
+        },
+        language_id: {
+          type: DataTypes.CHAR(2),
+          allowNull: false,
+          references: {
+            model: 'language',
+            key: 'id'
+          }
+        },
+        title: {
+          type: DataTypes.STRING(60),
+          allowNull: false,
+        },
+        description: {
+          type: DataTypes.STRING(60),
+          allowNull: false,
+        },
+        active: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+          defaultValue: false
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false
+        }
       }, { transaction });
       await queryInterface.createTable('session', {
         id: {
@@ -275,6 +375,8 @@ export default {
       await queryInterface.dropTable('card', { transaction });
       await queryInterface.dropTable('account_action', { transaction });
       await queryInterface.dropTable('session', { transaction });
+      await queryInterface.dropTable('deck_translation', { transaction });
+      await queryInterface.dropTable('deck', { transaction });
       await queryInterface.dropTable('account', { transaction });
       await queryInterface.dropTable('language', { transaction });
       await queryInterface.dropTable('migrations', { transaction });
@@ -294,6 +396,10 @@ export default {
 
       await queryInterface.sequelize.query(
         'DROP TYPE IF EXISTS enum_bug_report_type;', { transaction }
+      );
+
+      await queryInterface.sequelize.query(
+        'DROP TYPE IF EXISTS enum_deck_category;', { transaction }
       );
 
       await transaction.commit();

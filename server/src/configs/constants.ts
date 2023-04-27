@@ -24,7 +24,7 @@ export const bugs: BugConstants = {
 };
 
 export const card: CardConstants = {
-  CARD_TYPES: ['KANJI', 'HIRAGANA', 'KATAKANA', 'WORD', 'SENTENCE'],
+  CARD_TYPES: ['KANJI', 'HIRAGANA', 'KATAKANA', 'VOCABULARY', 'SENTENCE'],
   STORY_MIN_LENGTH: 1,
   STORY_MAX_LENGTH: 160,
   HINT_MIN_LENGTH: 1,

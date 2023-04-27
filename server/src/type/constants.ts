@@ -32,6 +32,21 @@ export type DeckConstants = {
   readonly MAX_AMOUNT_OF_DECKS: number;
 };
 
+export enum DeckCategory {
+  KANJI = 'KANJI',
+  KANA = 'KANA',
+  VOCABULARY = 'VOCABULARY',
+  GRAMMAR = 'GRAMMAR'
+}
+
+export enum JlptLevel {
+  N1 = 1,
+  N2,
+  N3,
+  N4,
+  N5
+}
+
 export type GeneralConstants = {
   readonly FRONTEND_URL: string;
   readonly DEFAULT_LANGUAGE: string;
