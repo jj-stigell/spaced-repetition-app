@@ -1,9 +1,9 @@
 import * as React from 'react'
 
 // Third party imports
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Box, Link } from '@mui/material'
+import { Box } from '@mui/material'
 
 // Project imports
 import { constants } from '../../../config/constants'
@@ -26,7 +26,7 @@ function ConfirmSuccess (): JSX.Element {
       </Box>
       <Box sx={{ mt: 4 }}>
         {t('misc.redirectMessage')}
-        <Link href={login} variant="body2">
+        <Link to={login}>
           {t('misc.clickHere')}
         </Link>
       </Box>

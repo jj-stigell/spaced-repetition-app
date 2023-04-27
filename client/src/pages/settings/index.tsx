@@ -84,4 +84,39 @@ function Settings (): JSX.Element {
 
 export default Settings
 
+/*
 
+  "settings": {
+    "title": "Account information"
+    "email": "Email address"
+    "username": "Username"
+    "changePasswordTitle": "Change password"
+
+    // cancel news email
+
+      "misc": {
+    "username": "Username",
+    "email": "Email address",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "passwordForgot": "Forgot Password?",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password
+
+
+    <div id="error-page">
+      <h1>Settings</h1>
+      <p>This is settings page</p>
+      <SubmitButton
+        type="submit"
+        fullWidth
+        variant="contained"
+        onClick={handleLogout}
+        sx={{ mt: 3, mb: 2 }}
+      >
+        {t('buttonGeneral.logout')}
+      </Button>
+    </div>
+
+*/

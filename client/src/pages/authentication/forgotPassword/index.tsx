@@ -3,8 +3,9 @@ import * as React from 'react'
 // Third party imports
 import { Box } from '@mui/system'
 import DoneOutlineOutlinedIcon from '@mui/icons-material/DoneOutlineOutlined'
-import { Grid, Link, Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 // Project imports
 import ResetForm from './Form'
@@ -26,7 +27,7 @@ function ForgotPassword (): JSX.Element {
           <Typography component="h4" variant="h5" sx={{ marginTop: 2, marginBottom: 5 }}>
             {t('password.forgotPassword.successTitle')}
           </Typography>
-          <Link href={login} variant="body2">
+          <Link to={login}>
             {t('login.linkToLogin')}
           </Link>
         </Box>
@@ -34,7 +35,7 @@ function ForgotPassword (): JSX.Element {
           <ResetForm setResetInProcess={setResetInProcess} setSuccess={setSuccess}/>
           <Grid container>
             <Grid item>
-              <Link href={login} variant="body2">
+              <Link to={login}>
                 {t('login.linkToLogin')}
               </Link>
             </Grid>

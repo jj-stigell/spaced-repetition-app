@@ -4,7 +4,7 @@ import * as React from 'react'
 // Third party imports
 import { AxiosError } from 'axios'
 import {
-  Box, Grid, Link, Checkbox, TextField,
+  Box, Grid, Link as MuiLink, Checkbox, TextField,
   FormControlLabel, FormControl, OutlinedInput,
   InputLabel, InputAdornment, IconButton,
   FormHelperText, CircularProgress
@@ -12,6 +12,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { Link } from 'react-router-dom'
 
 // Project imports
 import axios from '../../../lib/axios'
@@ -227,9 +228,9 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
             label=''
         />
         {t('register.agreeWith')} {' '}
-        <Link href={constants.tosLink} target='_blank'>
+        <MuiLink href={constants.tosLink} target='_blank'>
           {t('register.TOS')}
-        </Link>
+        </MuiLink>
       </div>
       { isSubmitted &&
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -239,7 +240,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
       <SubmitButton buttonText={t('register.registerButton')} disabled={isSubmitted} />
       <Grid container>
         <Grid item>
-          <Link href={login} variant="body2">
+          <Link to={login}>
             {t('register.haveAccount')}
           </Link>
         </Grid>

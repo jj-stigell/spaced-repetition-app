@@ -7,8 +7,14 @@ import { AxiosError } from 'axios'
 import { useFormik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
-import { Box, Grid, Link, Checkbox, TextField, FormControlLabel, FormControl, InputLabel, OutlinedInput, FormHelperText, InputAdornment, IconButton } from '@mui/material'
+import {
+  Box, Grid, Checkbox, TextField,
+  FormControlLabel, FormControl, InputLabel,
+  OutlinedInput, FormHelperText, InputAdornment,
+  IconButton
+} from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { Link } from 'react-router-dom'
 
 // Project imports
 import axios from '../../../lib/axios'
@@ -152,12 +158,12 @@ function LoginForm (): JSX.Element {
       <SubmitButton buttonText={t('login.logInButton')} disabled={loggingIn} />
       <Grid container>
         <Grid item xs>
-          <Link href={requestResetPassword} variant="body2">
+          <Link to={requestResetPassword}>
             {t('misc.passwordForgot')}
           </Link>
         </Grid>
         <Grid item>
-          <Link href={register} variant="body2">
+          <Link to={register}>
           {t('register.noAccount')}
           </Link>
         </Grid>
@@ -167,3 +173,5 @@ function LoginForm (): JSX.Element {
 }
 
 export default LoginForm
+
+// variant="body2"
