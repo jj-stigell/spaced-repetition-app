@@ -1,18 +1,15 @@
 import { AccountState } from './features/account/accountSlice'
+import { JlptLevel, Role } from './types'
 
 export const loggedInAccount: AccountState = {
-  token: 'oiueireuwrpopwefiopewif043948roeiweor',
-  isLoggedIn: false,
+  isLoggedIn: true,
   account: {
-    role: 'USER-MEMBER',
+    role: Role.Member,
+    jlptLevel: JlptLevel.N5,
     username: 'testingMan',
-    email: 'test@test.com',
-    sessionId: '23423432-9534759-58943fokf',
-    sessions: null
+    email: 'test@test.com'
   }
 }
-
-export const logInErrorResponse: string[] = ['userOrPassIncorrectError', 'noDueCardsError']
 
 export interface JLPT {
   id: string

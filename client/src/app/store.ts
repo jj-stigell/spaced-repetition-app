@@ -16,7 +16,7 @@ import notificationReducer from '../features/notification/notificationSlice'
 export const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['register', 'notification', 'account'] // remove account from here
+  blacklist: ['register', 'notification', 'account'] // TODO remove account from here in production later on
 }
 
 const appReducer = combineReducers({

@@ -1,19 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { JlptLevel, Role } from '../../types'
 
 export interface AccountState {
-  token?: string | null
   isLoggedIn: boolean
-  account?: {
-    role: string
+  account: {
+    role: Role
+    jlptLevel: JlptLevel
     username: string
     email: string
-    sessionId: string
-    sessions: string[] | null
   }
 }
 
 const initialState: AccountState = {
-  isLoggedIn: false
+  isLoggedIn: false,
+  account: {
+    role: Role.NonMember,
+    jlptLevel: JlptLevel.N5,
+    username: '',
+    email: ''
+  }
 }
 
 const accountSlice = createSlice({
@@ -29,34 +34,19 @@ const accountSlice = createSlice({
         isLoggedIn: action.payload
       }
     },
-    setVerified (state, action) {
+    setJlptLevel (state, action: PayloadAction<JlptLevel>) {
       return {
         ...state,
-        verified: action.payload
+        account: {
+          ...state.account,
+          jlptLevel: action.payload
+        }
       }
-    },
-    setSessions (state, action) {
-      return {
-        ...state,
-        sessions: action.payload
-      }
-    },
-    removeSession (state, action) {
-      return state
-      /*
-      return {
-        ...state,
-        sessions: state.sessions.filter(session => session.id !== action.payload)
-      }
-      */
-    },
-    resetAccount (state, action) {
-      return initialState
     }
   }
 })
 
-export const { setAccount, setLogin, resetAccount, setVerified, setSessions, removeSession } = accountSlice.actions
+export const { setAccount, setJlptLevel, setLogin } = accountSlice.actions
 
 /*
 export const logOutAccount = () => {

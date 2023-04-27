@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fontFamily, borderRadius } from '../config/config'
+import { fontFamily, borderRadius } from '../../config/config'
 
 const initialState = {
   isOpen: [], // for active default menu

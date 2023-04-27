@@ -37,30 +37,24 @@ function LoginForm (): JSX.Element {
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const [loggingIn, setLoggingIn] = React.useState<boolean>(false)
 
-  const handleClickShowPassword = (): void => { setShowPassword(!showPassword) }
-
   const validationSchema: yup.AnySchema = yup.object({
-    email: yup
-      .string()
+    email: yup.string()
       .email(t('errors.ERR_NOT_VALID_EMAIL') as string)
       .max(constants.account.emailMaxLength, t('errors.ERR_EMAIL_TOO_LONG', { length: constants.account.emailMaxLength }) as string)
       .required(t('errors.ERR_EMAIL_REQUIRED') as string),
-    password: yup
-      .string()
+    password: yup.string()
       .max(constants.account.passwordMaxLength, t('errors.ERR_PASSWORD_TOO_LONG', { length: constants.account.passwordMaxLength }) as string)
       .required(t('errors.ERR_PASSWORD_REQUIRED') as string)
   })
 
   const formik = useFormik({
     initialValues: {
-      email: (rememberMeEmail != null) ? rememberMeEmail : '',
-      password: (rememberMePassword != null) ? rememberMePassword : ''
+      email: rememberMeEmail ?? '',
+      password: rememberMePassword ?? ''
     },
     validationSchema,
     onSubmit: (values: LoginData): void => {
       setLoggingIn(true)
-
-      console.log(values, 'Remember me set to:', rememberMe)
 
       axios.post(login, {
         email: values.email,
@@ -69,9 +63,9 @@ function LoginForm (): JSX.Element {
         .then(function () {
           dispatch(setLogin(true))
 
-          // Store remember me if selected.
+          // Store remember me if selected, otherwise clear.
           if (rememberMe) {
-            dispatch(SetRememberMe({ email: values.email, password: values.password }))
+            dispatch(SetRememberMe({ rememberMeEmail: values.email, rememberMePassword: values.password }))
           } else {
             dispatch(resetRememberMe({}))
           }
@@ -129,7 +123,7 @@ function LoginForm (): JSX.Element {
               <IconButton
                 disabled={loggingIn}
                 aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
+                onClick={() => { setShowPassword(!showPassword) }}
                 edge="end"
               >
                 {showPassword ? <VisibilityOff /> : <Visibility />}

@@ -1,18 +1,3 @@
-/* Type for delivery information. */
-export interface Delivery {
-  cartValue: number
-  deliveryDistance: number
-  itemCount: number
-  orderDate: Date
-  orderTime: string
-}
-
-/* Type for fee, limit indicates when the fee becomes applicable. */
-export interface Fee {
-  limit: number
-  fee: number
-}
-
 /* Type for weekly occurring event. */
 export interface WeeklyEvent {
   weekday: number
@@ -32,4 +17,20 @@ export interface RegisterData extends LoginData {
   passwordConfirmation: string
   allowNewsLetter?: boolean
   language: string
+}
+
+export enum JlptLevel {
+  N1 = 'N1',
+  N2 = 'N2',
+  N3 = 'N3',
+  N4 = 'N4',
+  N5 = 'N5',
+}
+
+export enum Role {
+  NonMember = 'NonMember',
+  Member = 'Member',
+  AdminRead = 'AdminRead',
+  AdminWrite = 'AdminWrite',
+  SuperUser = 'SuperUser'
 }

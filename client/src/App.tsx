@@ -6,10 +6,10 @@ import { useTheme } from '@mui/material'
 
 // Project imports
 import Login from './pages/authentication/login'
-import AuthGuard from './utils/route-guard/AuthGuard'
+import AuthGuard from './utils/routeGuard/AuthGuard'
 import ErrorPage from './pages/error'
 import NotFound from './pages/notFound'
-import GuestGuard from './utils/route-guard/GuestGuard'
+import GuestGuard from './utils/routeGuard/GuestGuard'
 import Settings from './pages/settings'
 import MainLayout from './layout/MainLayout'
 import Dashboard from './pages/dashboard'

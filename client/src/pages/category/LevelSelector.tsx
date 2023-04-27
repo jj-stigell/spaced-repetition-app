@@ -1,8 +1,15 @@
 import React from 'react'
+
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
+import { useTranslation } from 'react-i18next'
+
+import { JlptLevel } from '../../types'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { setJlptLevel } from '../../features/account/accountSlice'
+import { RootState } from '../../app/store'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -28,15 +35,17 @@ const buttonStyle = {
 }
 
 function LevelSelector (): JSX.Element {
+  const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const [open, setOpen] = React.useState<boolean>(false)
-  const [jlptLevel, setJlptLevel] = React.useState<string>('N5')
+  const jlptLevel: JlptLevel = useAppSelector((state: RootState) => state.account.account.jlptLevel)
 
   const handleModalClick = (): void => {
     setOpen(!open)
   }
 
-  const handleLevelSelection = (selectedLevel: string): void => {
-    setJlptLevel(selectedLevel)
+  const handleLevelSelection = (selectedLevel: JlptLevel): void => {
+    dispatch(setJlptLevel(selectedLevel))
     handleModalClick()
   }
 
@@ -57,7 +66,7 @@ function LevelSelector (): JSX.Element {
         }}
         onClick={handleModalClick}
       >
-        JLPT {jlptLevel} - Click to change
+        {t('modals.jlptSelector.button', { level: jlptLevel })}
       </Button>
       <Modal
         open={open}
@@ -67,14 +76,14 @@ function LevelSelector (): JSX.Element {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ textAlign: 'center', marginBottom: 3 }}>
-            Select JLPT Level
+            {t('modals.jlptSelector.title')}
           </Typography>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <Button sx={buttonStyle} onClick={() => { handleLevelSelection('N1') }}>JLPT N1</Button>
-            <Button sx={buttonStyle} onClick={() => { handleLevelSelection('N2') }}>JLPT N2</Button>
-            <Button sx={buttonStyle} onClick={() => { handleLevelSelection('N3') }}>JLPT N3</Button>
-            <Button sx={buttonStyle} onClick={() => { handleLevelSelection('N4') }}>JLPT N4</Button>
-            <Button sx={buttonStyle} onClick={() => { handleLevelSelection('N5') }}>JLPT N5</Button>
+            <Button sx={buttonStyle} onClick={() => { handleLevelSelection(JlptLevel.N5) }}>JLPT N5</Button>
+            <Button sx={buttonStyle} onClick={() => { handleLevelSelection(JlptLevel.N4) }}>JLPT N4</Button>
+            <Button sx={buttonStyle} onClick={() => { handleLevelSelection(JlptLevel.N3) }}>JLPT N3</Button>
+            <Button sx={buttonStyle} onClick={() => { handleLevelSelection(JlptLevel.N2) }}>JLPT N2</Button>
+            <Button sx={buttonStyle} onClick={() => { handleLevelSelection(JlptLevel.N1) }}>JLPT N1</Button>
           </div>
         </Box>
       </Modal>
