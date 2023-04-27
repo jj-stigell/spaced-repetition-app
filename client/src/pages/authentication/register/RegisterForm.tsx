@@ -138,7 +138,6 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
         label={t('misc.username')}
         name="username"
         type="text"
-        autoFocus
         value={formik.values.username}
         onChange={formik.handleChange}
         error={(formik.touched.username === true) && Boolean(formik.errors.username)}
@@ -151,7 +150,6 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           id="password"
           label={t('misc.password')}
           name="password"
-          autoFocus
           disabled={isSubmitted}
           type={showPassword ? 'text' : 'password'}
           value={formik.values.password}
@@ -182,7 +180,6 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           id="passwordConfirmation"
           label={t('misc.passwordConfirm')}
           name="passwordConfirmation"
-          autoFocus
           disabled={isSubmitted}
           type={showPasswordConfirm ? 'text' : 'password'}
           value={formik.values.passwordConfirmation}

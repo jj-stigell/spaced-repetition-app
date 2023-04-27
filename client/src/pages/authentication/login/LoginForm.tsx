@@ -120,7 +120,6 @@ function LoginForm (): JSX.Element {
           id="password"
           label={t('misc.password')}
           name="password"
-          autoFocus
           type={showPassword ? 'text' : 'password'}
           value={formik.values.password}
           onChange={formik.handleChange}
