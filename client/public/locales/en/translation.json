@@ -17,6 +17,11 @@
   "dashboard": {
     "title": "this is the dashboard page"
   },
+  "notFound": {
+    "title":"Oops!",
+    "description":"Sorry, page you tried to access not found.",
+    "link": "Click to return to the main page"
+  },
   "stats": {
     "kanji": {
       "title": "Kanji learning progress:",
