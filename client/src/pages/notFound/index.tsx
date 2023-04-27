@@ -1,11 +1,24 @@
 import React from 'react'
 
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
+import Box from '@mui/material/Box'
+
+import Logo from '../../components/Logo'
+import { dashboard } from '../../config/path'
+
 function NotFound (): JSX.Element {
+  const { t } = useTranslation()
   return (
-    <div id="error-page">
-      <h1>Oops!</h1>
-      <p>Sorry, Page not found.</p>
-      <a href='/'>Back to main page</a>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: '50px' }}>
+      <Box sx={{ mb: 3 }}>
+        <Logo fontSize={50}/>
+      </Box>
+      <h1>{t('notFound.title')}</h1>
+      <p>{t('notFound.description')}</p>
+      <Link to={dashboard}>
+        {t('notFound.link')}
+      </Link>
     </div>
   )
 }
