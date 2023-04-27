@@ -5,6 +5,7 @@
 | 22.4.2023 | 2 | Combine back- and frontend repositories |
 | 23.4.2023 | 2 | Update frontend views |
 | 25.4.2023 | 4 | Connect login, register, confirm email, resend confirm email to backend. add axios |
+| 26.4.2023 | 2 | Connect reset password to backend, base for settings page |
 |  |  |  |
 | total | 8 |  | 
 

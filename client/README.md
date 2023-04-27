@@ -1,28 +1,27 @@
-# Yomiko client
+# Yomiko frontend
+Frontend for a [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetition) app for studying Japanese.
 
 ## Table of Contents
-
-- [Introduction](#introduction)
-- [Built with](#built-with)
-- [Running the app](#running-the-app)
-- [Running with Docker](#running-with-docker)
-- [TODOs](#todos)
+* [Introduction](#introduction)
+* [Built with](#built-with)
+* [Running the app](#running-the-app)
+    * [Environment variables](#environment-variables)
+* [Running with Docker](#running-with-docker)
+* [TODOs](#todos)
+* [Deployment](#deployment)
 
 ## Introduction
-
 --
 
 ## Built with
-
-- [React](https://reactjs.org/) with [typescript](https://www.typescriptlang.org/) and [Node.js](https://nodejs.org/en/)
-- Forms with [Formik](https://github.com/jaredpalmer/formik) and [Yup](https://github.com/jquense/yup) validation
+- [React](https://reactjs.org/) with [typescript](https://www.typescriptlang.org/)
+- Forms with [Formik](https://github.com/jaredpalmer/formik) and [Yup](https://github.com/jquense/yup) for validation
 - Stylized components with [MUI](https://github.com/mui/material-ui)
-- [React Redux](https://react-redux.js.org/)
-- [i18next](https://www.i18next.com/) i18next is an internationalization-framework written in and for JavaScript. [MIT License](https://github.com/i18next/i18next/blob/master/LICENSE)
+- State management with [React Redux](https://react-redux.js.org/)
+- Localization with [i18next](https://www.i18next.com/). [MIT License](https://github.com/i18next/i18next/blob/master/LICENSE)
 
 ## Running the app
-
-Install the necessary Node.js modules at the project root:
+Install the necessary modules at the project root:
 ```
 $ npm install
 ```
@@ -42,8 +41,28 @@ Tests can be run with the command:
 $ npm run test
 ```
 
-## Running with Docker
+### Environment variables
+Running frontend requires the following environment variables to be set:
 
+* `API_SERVER`: API server url.
+* `NODE_ENV`: The environment in which the application is running (e.g. "development", "production", "testing").
+
+To set environment variables, you can either export them in your terminal or set them in a .env file.
+
+**Exporting environment variables**
+
+To export environment variables in your terminal, use the following format:
+```
+$ export API_SERVER=value1
+$ export NODE_ENV=value2
+```
+
+**Using a .env file**
+
+To set environment variables using a `.env` file, use the example file `.env.example`
+in the root directory of your project and add the environment variables.
+
+## Running with Docker
 You can also run the application with Docker.
 
 To build the Docker image run command in the project root:
@@ -58,65 +77,14 @@ $ docker run -p 3000:3000 -d srs-app-client
 
 App will run in the localhost port [3000](http://localhost:3000/)
 
-
 ## TODOs
-- [X] Project base
-    - [X] Install react and required dependencies
-    - [X] Set clear project structure
-    - [X] Set styling rules on lint etc.
-    - [X] Environment variables
-- [ ] Frontend Components (with functionality)
-    - [ ] Navbar
-    - [X] Login page
-    - [X] Logout
-    - [ ] Dashboard
-    - [ ] Settings
-    - [X] Sign up page
-    - [ ] Language selector
-- [ ] Styling
-    - [ ] Navbar
-    - [X] Login page
-    - [ ] Logout
-    - [ ] Dashboard
-    - [ ] Settings
-    - [X] Sign up page
-    - [ ] Language selector
-    - [ ] Animations
-- [ ] Backend communications
-    - [ ] User related
-        - [ ] User registration
-            - [X] Validate input, with React-hook-form, if bypassed notification component used backend error messages.
-            - [ ] Captcha to prevent bots ([reCAPTCHA](https://www.google.com/recaptcha/about/))
-            - [X] Check that username, email etc not taken
-            - [X] Register user
-            - [ ] Email verification ([node mailer](https://nodemailer.com/about/) & [Amazon SES](https://aws.amazon.com/ses/))
-        - [X] User login, JWT on succesful login, otherwise error
-            - [X] Validate input
-            - [X] Error on missing, incorrect input, mismatch with password
-            - [X] Succesfully login, token and user saved to redux store
-        - [X] User logout
-            - [X] Send session termination request to backend
-            - [X] Empty token and user data from redux store
-        - [X] User change password
-            - [X] Validate new data, confirmation must match, cannot be same as old one
-        - [ ] Recover account (e.g. password forgotten)
-        - [X] Validation of user input, including error messages
-    - [ ] Card related
-        - [ ] Get cards based on user ID
-        - [ ] Reschedule card based on user input
-- [ ] Redux
-    - [ ] Reducers
-        - [ ] User
-            - [X] User data
-            - [X] Token
-            - [X] Session
-            - [X] Update information
-        - [X] Theme/customization UI
-        - [ ] Cards
-    - [ ] Storage
-        - [X] [Persist](https://blog.logrocket.com/persist-state-redux-persist-redux-toolkit-react/)
-        - [ ] Merging
-- [ ] Testing
-    - [ ] Unit testing for functions
-    - [ ] Integration tests
-    - [ ] e2e testing
+* Fix inconsistencies in the form behavior (register, reset, confirm)
+* Captcha to prevent bots ([reCAPTCHA](https://www.google.com/recaptcha/about/))
+* [Persist](https://blog.logrocket.com/persist-state-redux-persist-redux-toolkit-react/)
+* Testing, unit, integration, E2E
+* Add client to the docker setup
+
+## Deployment
+Deployment is automated from branch `frontend-production`. If tests pass succesfully server code is pushed to the branch.
+[Render](https://render.com/) fetches automatically changes made to the branch and releases the newest version of the
+production version.
