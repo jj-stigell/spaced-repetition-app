@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react'
+
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+
 import { constants } from '../config/constants'
 import { category, dashboard, settings, statistics } from '../config/path'
 

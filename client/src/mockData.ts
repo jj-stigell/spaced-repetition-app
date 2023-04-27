@@ -1,4 +1,4 @@
-import { AccountState } from './features/account/accountSlice'
+import { AccountState } from './features/accountSlice'
 import { JlptLevel, Role } from './types'
 
 export const loggedInAccount: AccountState = {

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 
 import { JlptLevel } from '../../types'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { setJlptLevel } from '../../features/account/accountSlice'
+import { setJlptLevel } from '../../features/accountSlice'
 import { RootState } from '../../app/store'
 
 const style = {

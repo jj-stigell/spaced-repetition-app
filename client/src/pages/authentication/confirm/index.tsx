@@ -12,7 +12,7 @@ import ReconfirmForm from './ReconfirmForm'
 import axios from '../../../lib/axios'
 import { confirmEmail } from '../../../config/api'
 import { useAppDispatch } from '../../../app/hooks'
-import { setNotification } from '../../../features/notification/notificationSlice'
+import { setNotification } from '../../../features/notificationSlice'
 import { AxiosError } from 'axios'
 import { login } from '../../../config/path'
 

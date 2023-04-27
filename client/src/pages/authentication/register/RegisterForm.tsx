@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom'
 
 // Project imports
 import axios from '../../../lib/axios'
-import { setNotification } from '../../../features/notification/notificationSlice'
+import { setNotification } from '../../../features/notificationSlice'
 import SubmitButton from '../../../components/SubmitButton'
 import { constants } from '../../../config/constants'
 import { useAppDispatch } from '../../../app/hooks'

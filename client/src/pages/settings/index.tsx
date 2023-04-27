@@ -16,8 +16,8 @@ import Box from '@mui/material/Box'
 // Project imports
 import { useAppDispatch } from '../../app/hooks'
 import { logout } from '../../config/api'
-import { setLogin } from '../../features/account/accountSlice'
-import { setNotification } from '../../features/notification/notificationSlice'
+import { setLogin } from '../../features/accountSlice'
+import { setNotification } from '../../features/notificationSlice'
 import axios from '../../lib/axios'
 
 const Item = styled(Paper)(({ theme }) => ({

@@ -83,6 +83,7 @@ App will run in the localhost port [3000](http://localhost:3000/)
 * [Persist](https://blog.logrocket.com/persist-state-redux-persist-redux-toolkit-react/)
 * Testing, unit, integration, E2E
 * Add client to the docker setup
+* Add password strength indicator in form
 
 ## Deployment
 Deployment is automated from branch `frontend-production`. If tests pass succesfully server code is pushed to the branch.

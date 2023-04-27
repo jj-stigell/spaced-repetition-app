@@ -5,11 +5,11 @@ import thunk from 'redux-thunk'
 import { NODE_ENV } from '../config/environment'
 
 // reducer imports
-import accountReducer from '../features/account/accountSlice'
+import accountReducer from '../features/accountSlice'
 // import customizationReducer from '../features/customizationReducer'
 // import registerReducer from '../features/OLD_DELETE/registerReducer'
-import rememberMeReducer from '../features/account/rememberMeSlice'
-import notificationReducer from '../features/notification/notificationSlice'
+import rememberMeReducer from '../features/rememberMeSlice'
+import notificationReducer from '../features/notificationSlice'
 // import deckReducer from '../features/deckReducer'
 // import cardReducer from '../features/card/cardSlice'
 

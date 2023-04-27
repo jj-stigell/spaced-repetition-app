@@ -13,7 +13,7 @@ import SubmitButton from '../../../components/SubmitButton'
 import { constants } from '../../../config/constants'
 import { resetPassword } from '../../../config/api'
 import axios from '../../../lib/axios'
-import { setNotification } from '../../../features/notification/notificationSlice'
+import { setNotification } from '../../../features/notificationSlice'
 import { useAppDispatch } from '../../../app/hooks'
 
 interface FormProps {

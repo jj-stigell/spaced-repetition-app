@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { LinearProgress, Box, linearProgressClasses } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { normalize } from '../utils/helper'

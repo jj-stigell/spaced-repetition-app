@@ -17,10 +17,19 @@
   "dashboard": {
     "title": "this is the dashboard page"
   },
-  "notFound": {
-    "title":"Oops!",
-    "description":"Sorry, page you tried to access not found.",
-    "link": "Click to return to the main page"
+  "pages": {
+    "notFound": {
+      "title":"Oops!",
+      "description":"Sorry, page you tried to access not found.",
+      "link": "Click to return to the main page"
+    },
+    "error": {
+      "title":"Oops!",
+      "description":"Sorry, an unexpected error has occurred.",
+      "errorMessage":"Following error encountered: ",
+      "link": "Click to return to the main page",
+      "unknowError": "Error unknown"
+    }
   },
   "stats": {
     "kanji": {

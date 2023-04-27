@@ -14,10 +14,11 @@ function NotFound (): JSX.Element {
       <Box sx={{ mb: 3 }}>
         <Logo fontSize={50}/>
       </Box>
-      <h1>{t('notFound.title')}</h1>
-      <p>{t('notFound.description')}</p>
+      <h1>{t('pages.notFound.title')}</h1>
+      <p>{t('pages.notFound.description')}</p>
+      <br/>
       <Link to={dashboard}>
-        {t('notFound.link')}
+        {t('pages.notFound.link')}
       </Link>
     </div>
   )
