@@ -44,7 +44,7 @@ $ npm run test
 ### Environment variables
 Running frontend requires the following environment variables to be set:
 
-* `API_SERVER`: API server url.
+* `REACT_APP_BACKEND`: API server url.
 * `NODE_ENV`: The environment in which the application is running (e.g. "development", "production", "testing").
 
 To set environment variables, you can either export them in your terminal or set them in a .env file.
@@ -53,7 +53,7 @@ To set environment variables, you can either export them in your terminal or set
 
 To export environment variables in your terminal, use the following format:
 ```
-$ export API_SERVER=value1
+$ export REACT_APP_BACKEND=value1
 $ export NODE_ENV=value2
 ```
 

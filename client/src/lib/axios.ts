@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { API_SERVER } from '../config/environment'
+import { REACT_APP_BACKEND } from '../config/environment'
 
 export default axios.create({
-  baseURL: API_SERVER,
+  baseURL: REACT_APP_BACKEND,
   timeout: 10000,
   withCredentials: true,
   responseType: 'json',
