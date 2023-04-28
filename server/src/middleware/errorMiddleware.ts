@@ -33,20 +33,6 @@ export default function errorMiddleware(
     return;
   }
 
-  if (err instanceof SyntaxError) {
-    res.status(HttpCode.BadRequest);
-
-    res.send({
-      errors: [
-        {
-          code: 'syntaxError'
-        }
-      ]
-    });
-    logger.error(err);
-    return;
-  }
-
   if (err instanceof ValidationError) {
     res.status(HttpCode.BadRequest).send({
       errors: err.errors.map((error: string) => {

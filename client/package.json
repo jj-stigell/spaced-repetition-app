@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "build:nolint": "DISABLE_ESLINT_PLUGIN=true npm run build",
     "test": "jest --verbose",
     "eject": "react-scripts eject",
