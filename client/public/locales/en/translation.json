@@ -29,6 +29,14 @@
       "errorMessage":"Following error encountered: ",
       "link": "Click to return to the main page",
       "unknowError": "Error unknown"
+    },
+    "settings": {
+      "title": "this is the settings page",
+      "changePassword": {
+        "title": "Change password",
+        "button": "Change password",
+        "passwordChangeSuccess": "Password changed succesfully"
+      }
     }
   },
   "stats": {
@@ -132,15 +140,6 @@
     "success": "Success",
     "error": "Error"
   },
-  "accountPage": {
-    "title": "Account information",
-    "sessionsTitle": "Active sessions",
-    "fetchSessionsButton": "Fetch active sessions",
-    "changePasswordTitle": "Change password",
-    "changePasswordButton": "Change password",
-    "passwordChangeSuccess": "Password changed succesfully",
-    "accountCreatedAt": "Account created at"
-  },
   "session": {
     "id": "Id",
     "browser": "Browser",
@@ -151,9 +150,6 @@
     "delete": "Delete session",
     "current": "current session",
     "sessionWarning": "This is the current session on this device. If you delete this one, you will be logged out from this device."
-  },
-  "settings": {
-    "title": "this is the settings page"
   },
   "login": {
     "title": "Sign in to your account",

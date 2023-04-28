@@ -78,6 +78,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
     validationSchema,
     onSubmit: (values: RegisterData, { resetForm }): void => {
       if (tosAccepted) {
+        setIsSubmitted(true)
         axios.post(register, {
           username: values.username,
           email: values.email,
@@ -87,10 +88,9 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           language: values.language
         })
           .then(function () {
-            setIsSubmitted(true)
             resetForm()
-            setRegisteredEmail(values.email)
             setIsSubmitted(false)
+            setRegisteredEmail(values.email)
           })
           .catch(function (error) {
             console.log('error encountered', error)
@@ -158,6 +158,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           endAdornment={
             <InputAdornment position="end">
               <IconButton
+                disabled={isSubmitted}
                 aria-label="toggle password visibility"
                 onClick={handleClickShowPassword}
                 edge="end"
@@ -188,6 +189,7 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           endAdornment={
             <InputAdornment position="end">
               <IconButton
+                disabled={isSubmitted}
                 aria-label="toggle password visibility"
                 onClick={handleClickShowPasswordConfirm}
                 edge="end"

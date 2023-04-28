@@ -19,6 +19,7 @@ import { logout } from '../../config/api'
 import { setLogin } from '../../features/accountSlice'
 import { setNotification } from '../../features/notificationSlice'
 import axios from '../../lib/axios'
+import ChangePassword from './ChangePassword'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -60,13 +61,18 @@ function Settings (): JSX.Element {
     <div id="settings-page" style={{ marginTop: 15 }}>
     <CssBaseline />
     <Container maxWidth="sm">
-    <h1>{t('settings.title')}</h1>
+    <h1>{t('pages.settings.title')}</h1>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2 }}>
             <Grid item xs={2} sm={4} md={4} key={1}>
               <Item onClick={() => { console.log('djsfklsdjlfk') } }>something</Item>
             </Grid>
         </Grid>
+      </Box>
+      {/** TODO Make the border visible */}
+      <Box sx={{ borderRadius: '16px' }}>
+        <h2>{t('pages.settings.changePassword.title')}</h2>
+        <ChangePassword />
       </Box>
       <Button
         type="submit"

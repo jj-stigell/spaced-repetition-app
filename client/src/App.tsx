@@ -26,7 +26,7 @@ import Decks from './pages/decks'
 import Study from './pages/study'
 import {
   category, dashboard, decks, emailConfirm,
-  login, register, requestResetPassword, resetPassword,
+  login, register, requestEmailConfirm, requestResetPassword, resetPassword,
   settings, statistics, studyDeck
 } from './config/path'
 
@@ -55,6 +55,7 @@ function App (): JSX.Element {
                 <Route element={<Login />} errorElement={<ErrorPage />} path={login} />
                 <Route element={<Register />} errorElement={<ErrorPage />} path={register} />
                 <Route element={<Confirm />} errorElement={<ErrorPage />} path={emailConfirm} />
+                <Route element={<Confirm />} errorElement={<ErrorPage />} path={requestEmailConfirm} />
                 <Route element={<ResetPassword />} errorElement={<ErrorPage />} path={resetPassword} />
                 <Route element={<ForgotPassword />} errorElement={<ErrorPage />} path={requestResetPassword} />
               </Route>

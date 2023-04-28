@@ -19,6 +19,12 @@ export interface RegisterData extends LoginData {
   language: string
 }
 
+export interface ChangePasswordData {
+  currentPassword: string
+  newPassword: string
+  newPasswordConfirmation: string
+}
+
 export enum JlptLevel {
   N1 = 'N1',
   N2 = 'N2',

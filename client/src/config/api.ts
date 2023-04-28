@@ -4,3 +4,4 @@ export const logout: string = '/api/v1/auth/logout' // POST
 export const confirmEmail: string = '/api/v1/account/confirmation' // POST
 export const resendConfirmation: string = '/api/v1/account/confirmation/resend' // POST
 export const resetPassword: string = '/api/v1/account/password/reset' // POST for link, PATCH for resetting
+export const setPassword: string = '/api/v1/account/password' // PATCH for setting a new password
