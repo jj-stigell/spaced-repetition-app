@@ -12,10 +12,11 @@ import AccountAction from '../database/models/accountAction';
 import { accountErrors, validationErrors } from '../configs/errorCodes';
 import { ApiError } from '../type/error';
 import { HttpCode } from '../type/httpCode';
-import { ResetPassword } from '../type/request';
+import { ChangePassword, ResetPassword } from '../type/request';
 import { findAccountById, findAccountByEmail } from './utils/account';
 import { findAccountActionById } from './utils/accountAction';
 import { sendEmailConfirmation, sendPasswordResetLink } from './utils/mailer';
+import { JwtPayload } from '../type/general';
 
 /**
  * Confirm new account email address.
@@ -26,8 +27,7 @@ import { sendEmailConfirmation, sendPasswordResetLink } from './utils/mailer';
  */
 export async function confirmEmail(req: Request, res: Response): Promise<void> {
   const requestSchema: yup.AnyObject = yup.object({
-    confirmationId: yup
-      .string()
+    confirmationId: yup.string()
       .uuid(validationErrors.ERR_INPUT_TYPE)
       .required(validationErrors.ERR_CONFIRMATION_CODE_REQUIRED)
   });
@@ -150,8 +150,7 @@ export async function requestResetPassword(req: Request, res: Response): Promise
  */
 export async function resetPassword(req: Request, res: Response): Promise<void> {
   const requestSchema: yup.AnyObject = yup.object({
-    confirmationId: yup
-      .string()
+    confirmationId: yup.string()
       .uuid(validationErrors.ERR_INPUT_TYPE)
       .required(validationErrors.ERR_CONFIRMATION_CODE_REQUIRED),
     password: yup.string()
@@ -186,5 +185,53 @@ export async function resetPassword(req: Request, res: Response): Promise<void> 
   await account.save();
   await confirmation.destroy();
 
+  res.status(HttpCode.Ok).json();
+}
+
+/**
+ * Change account password.
+ * @param {Request} req - Express request.
+ * @param {Response} res - Express response.
+ * @throws {ApiError} - If errors are encountered,
+ * function throws an error with a relevant error code.
+ */
+export async function changePassword(req: Request, res: Response): Promise<void> {
+  const requestSchema: yup.AnyObject = yup.object({
+    currentPassword: yup.string()
+      .required(validationErrors.ERR_PASSWORD_REQUIRED),
+    newPassword: yup.string()
+      .max(accountConstants.PASSWORD_MAX_LENGTH, validationErrors.ERR_PASSWORD_TOO_LONG)
+      .min(accountConstants.PASSWORD_MIN_LENGTH, validationErrors.ERR_PASSWORD_TOO_SHORT)
+      .matches(regex.LOWERCASE_REGEX, validationErrors.ERR_PASSWORD_LOWERCASE)
+      .matches(regex.UPPERCASE_REGEX, validationErrors.ERR_PASSWORD_UPPERCASE)
+      .matches(regex.NUMBER_REGEX, validationErrors.ERR_PASSWORD_NUMBER)
+      .typeError(validationErrors.ERR_INPUT_TYPE)
+      .required(validationErrors.ERR_PASSWORD_REQUIRED)
+  });
+
+  await requestSchema.validate(req.body, { abortEarly: false });
+  const { currentPassword, newPassword }: ChangePassword = req.body;
+
+  if (currentPassword === newPassword) {
+    throw new ApiError(accountErrors.ERR_PASSWORD_CURRENT_AND_NEW_EQUAL, HttpCode.BadRequest);
+  }
+
+  const user: JwtPayload = req.user as JwtPayload;
+  const account: Account = await findAccountById(user.id);
+
+  if (!account.emailVerified) {
+    throw new ApiError(accountErrors.ERR_EMAIL_NOT_CONFIRMED, HttpCode.Forbidden);
+  }
+
+  const match: boolean = await argon.verify(account.password.trim(), currentPassword);
+  if (!match) {
+    throw new ApiError(accountErrors.ERR_PASSWORD_CURRENT_INCORRECT, HttpCode.Forbidden);
+  }
+
+  account.update({
+    password: await argon.hash(newPassword.trim()),
+  });
+
+  await account.save();
   res.status(HttpCode.Ok).json();
 }
