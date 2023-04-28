@@ -129,6 +129,11 @@ router.post(
  *                       type: string
  *                       example: mike@gmail.com
  *                       description: Account email.
+ *                     role:
+ *                       type: string
+ *                       example: MEMBER
+ *                       description: Account role in the backend.
+ *                       enum: [NON_MEMBER, MEMBER, READ_RIGHT, WRITE_RIGHT, SUPERUSER]
  *                     allowNewsLetter:
  *                       type: boolean
  *                       example: true
@@ -140,7 +145,8 @@ router.post(
  *                     jlptLevel:
  *                       type: integer
  *                       example: 1
- *                       description: JLPT Nx level, x being one of [1,2,3,4,5].
+ *                       description: JLPT level.
+ *                       enum: [1, 2, 3, 4, 5]
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:

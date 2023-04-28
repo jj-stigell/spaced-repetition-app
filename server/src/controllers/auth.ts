@@ -172,6 +172,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
             data: {
               username: loginResult.username,
               email: loginResult.email,
+              role: loginResult.role,
               allowNewsLetter: loginResult.allowNewsLetter,
               language: loginResult.language,
               jlptLevel: loginResult.jlptLevel
@@ -245,6 +246,7 @@ passport.use(
 
         const role: LoginResult = {
           id: account.id,
+          role: account.role as Role,
           username: account.username,
           email: account.email,
           allowNewsLetter: account.allowNewsLetter,
