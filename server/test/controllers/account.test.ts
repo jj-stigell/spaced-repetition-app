@@ -9,7 +9,7 @@ import { accountErrors, validationErrors } from '../../src/configs/errorCodes';
 import { HttpCode } from '../../src/type/httpCode';
 import {
   EMAIL_CONFIRMATION_URI, RESEND_EMAIL_CONFIRMATION_URI, REGISTER_URI, user,
-  REQUEST_RESET_PASSWORD_URI, RESET_PASSWORD_URI
+  REQUEST_RESET_PASSWORD_URI, RESET_PASSWORD_URI, CHANGE_PASSWORD_URI, LOGIN_URI
 } from '../utils/constants';
 import { checkErrors, resetDatabase } from '../utils/helpers';
 
@@ -454,6 +454,295 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
     expect(res.body.errors).toBeDefined();
     expect(res.body.data).not.toBeDefined();
     checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_REQUIRED);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+  });
+});
+
+describe(`XXX Test PATCH ${CHANGE_PASSWORD_URI} - change existing account password`, () => {
+
+  it('should change password succesfully for confirmed email', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    let cookies: Array<string> = res.headers['set-cookie'];
+
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({ currentPassword: user.password, newPassword: validPassword })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).not.toBeDefined();
+    expect(res.statusCode).toBe(HttpCode.Ok);
+
+    // Should allow logging in with new password
+    res = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: validPassword })
+      .expect('Content-Type', /json/);
+
+    cookies = res.headers['set-cookie'];
+    expect(cookies[0]).toMatch(/^jwt/);
+    expect(res.body.errors).not.toBeDefined();
+    expect(res.statusCode).toBe(HttpCode.Ok);
+
+    // Should not allow logging in with old password
+    res = await request.post(LOGIN_URI)
+      .send(user)
+      .expect('Content-Type', /json/);
+
+    expect(res.body.data).not.toBeDefined();
+    expect(res.body.errors).toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_OR_PASSWORD_INCORRECT);
+    expect(res.statusCode).toBe(HttpCode.Unauthorized);
+  });
+
+  it('should response with error if account email not verified', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    const cookies: Array<string> = res.headers['set-cookie'];
+
+    const account: Account = await models.Account.findOne({
+      where: {
+        email: user.email
+      }
+    }) as Account;
+
+    // Set email to unverified
+    account.set({
+      emailVerified: false
+    });
+    await account.save();
+
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({ currentPassword: user.password, newPassword: validPassword })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_NOT_CONFIRMED);
+    expect(res.statusCode).toBe(HttpCode.Forbidden);
+  });
+
+  it('should response with error if not logged in', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    const res: supertest.Response = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .send({
+        currentPassword: user.password,
+        newPassword: validPassword
+      });
+
+    expect(res.body.data).not.toBeDefined();
+    expect(res.body.errors).not.toBeDefined();
+    expect(res.statusCode).toBe(HttpCode.Unauthorized);
+  });
+
+  it('should response with error if current password is not found in the body', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    const cookies: Array<string> = res.headers['set-cookie'];
+
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({ newPassword: validPassword })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_REQUIRED);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+  });
+
+  it('should response with error if new password is not found in the body', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    const cookies: Array<string> = res.headers['set-cookie'];
+
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({ currentPassword: validPassword })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_REQUIRED);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+  });
+
+  it('should response with error if current and new password are matching', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    const cookies: Array<string> = res.headers['set-cookie'];
+
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({
+        currentPassword: validPassword,
+        newPassword: validPassword
+      })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_PASSWORD_CURRENT_AND_NEW_EQUAL);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+  });
+
+  it('should response with error if current password incorrect', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    const cookies: Array<string> = res.headers['set-cookie'];
+
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({
+        currentPassword: validPassword,
+        newPassword: user.password
+      })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_PASSWORD_CURRENT_INCORRECT);
+    expect(res.statusCode).toBe(HttpCode.Forbidden);
+  });
+
+  it('should response with error if new password does not pass validation', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    const cookies: Array<string> = res.headers['set-cookie'];
+
+    // No lowercase letters.
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({
+        currentPassword: validPassword,
+        newPassword: 'NOLOWERCASE12345LETTERS'
+      })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_LOWERCASE);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+
+    // No uppercase letters.
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({
+        currentPassword: validPassword,
+        newPassword: 'nouppercase12345letters'
+      })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_UPPERCASE);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+
+    // No numbers.
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({
+        currentPassword: validPassword,
+        newPassword: 'JUSTlettersINthisEXAMPLE'
+      })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_NUMBER);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+
+    // Not long enough password.
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({
+        currentPassword: validPassword,
+        newPassword: 'x'.repeat(accountConstants.PASSWORD_MIN_LENGTH - 1)
+      })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_TOO_SHORT);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+
+    // Too long password.
+    res = await request.patch(CHANGE_PASSWORD_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({
+        currentPassword: validPassword,
+        newPassword: 'x'.repeat(accountConstants.PASSWORD_MAX_LENGTH + 1)
+      })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_TOO_LONG);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 });
