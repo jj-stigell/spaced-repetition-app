@@ -7,8 +7,9 @@
 | 25.4.2023 | 4 | Connect login, register, confirm email, resend confirm email to backend. add axios |
 | 26.4.2023 | 2 | Connect reset password to backend, base for settings page |
 | 27.4.2023 | 3 | Implement remember me, save selected level to state, fix routing issues, update error and not found pages |
+| 28.4.2023 | 4 | update login to return user data, set to state in redux. Refactor components, Change password functionality on back and frontend, change JLPT level functionality |
 |  |  |  |
-| total | 13 |  | 
+| total | 17 |  | 
 
 # Record of working hours for backend before combining repositories with frontend.
 
