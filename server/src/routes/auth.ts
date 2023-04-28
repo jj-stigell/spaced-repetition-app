@@ -81,6 +81,17 @@ router.post(
   requestWrap(register)
 );
 
+
+/*
+            data: {
+              username: loginResult.username,
+              email: loginResult.email,
+              allowNewsLetter: loginResult.allowNewsLetter,
+              language: loginResult.language,
+              jlptLevel: loginResult.jlptLevel
+            }
+*/
+
 /**
  * @swagger
  * /api/v1/auth/login:
@@ -102,6 +113,34 @@ router.post(
  *              schema:
  *                type: string
  *                example: jwt=xxxxx.yyyyy.zzzzz; Secure; HttpOnly; SameSite=None
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     username:
+ *                       type: string
+ *                       example: xXxMike
+ *                       description: Account username.
+ *                     email:
+ *                       type: string
+ *                       example: mike@gmail.com
+ *                       description: Account email.
+ *                     allowNewsLetter:
+ *                       type: boolean
+ *                       example: true
+ *                       description: Is the news letter receiving enabled.
+ *                     language:
+ *                       type: string
+ *                       example: EN
+ *                       description: Account language.
+ *                     jlptLevel:
+ *                       type: integer
+ *                       example: 1
+ *                       description: JLPT Nx level, x being one of [1,2,3,4,5].
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:
