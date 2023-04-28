@@ -26,17 +26,17 @@ export interface ChangePasswordData {
 }
 
 export enum JlptLevel {
-  N1 = 'N1',
-  N2 = 'N2',
-  N3 = 'N3',
-  N4 = 'N4',
-  N5 = 'N5',
+  N1 = 1,
+  N2,
+  N3,
+  N4,
+  N5,
 }
 
 export enum Role {
-  NonMember = 'NonMember',
-  Member = 'Member',
-  AdminRead = 'AdminRead',
-  AdminWrite = 'AdminWrite',
-  SuperUser = 'SuperUser'
+  NON_MEMBER = 'NON_MEMBER',
+  MEMBER = 'MEMBER',
+  READ_RIGHT = 'READ_RIGHT',
+  WRITE_RIGHT = 'WRITE_RIGHT',
+  SUPERUSER = 'SUPERUSER'
 }

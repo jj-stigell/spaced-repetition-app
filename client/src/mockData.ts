@@ -1,16 +1,3 @@
-import { AccountState } from './features/accountSlice'
-import { JlptLevel, Role } from './types'
-
-export const loggedInAccount: AccountState = {
-  isLoggedIn: true,
-  account: {
-    role: Role.Member,
-    jlptLevel: JlptLevel.N5,
-    username: 'testingMan',
-    email: 'test@test.com'
-  }
-}
-
 export interface JLPT {
   id: string
   name: string

@@ -5,16 +5,6 @@ export type JwtPayload = {
   sessionId: string;
 };
 
-export type LoginResult = {
-  id: number;
-  username: string;
-  email: string;
-  allowNewsLetter: boolean;
-  language: string;
-  jlptLevel: number;
-  sessionId: string;
-};
-
 export enum Role {
   NON_MEMBER = 'NON_MEMBER',
   MEMBER = 'MEMBER',
@@ -22,6 +12,17 @@ export enum Role {
   WRITE_RIGHT = 'WRITE_RIGHT',
   SUPERUSER = 'SUPERUSER'
 }
+
+export type LoginResult = {
+  id: number;
+  role: Role;
+  username: string;
+  email: string;
+  allowNewsLetter: boolean;
+  language: string;
+  jlptLevel: number;
+  sessionId: string;
+};
 
 export type BugReportData = {
   bugMessage: string;

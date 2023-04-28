@@ -1,8 +1,8 @@
 INSERT INTO account (email, username, email_verified, role, tos_accepted, allow_news_letter, password, member, selected_jlpt_level, language_id, last_login, created_at, updated_at) VALUES
-('admin@test.com', 'adminsUser', true, 'SUPERUSER', true, true, '$2b$10$jIzSAam1Nc9GDm9ltuKHve/TXl9/w4dSTiZeX0sYMyQpPS0GSRRXG', true, 5, 'EN', NOW(), NOW(), NOW()),
-('dev@dev.com', 'devUser', true, 'MEMBER', true, true, '$2b$10$jIzSAam1Nc9GDm9ltuKHve/TXl9/w4dSTiZeX0sYMyQpPS0GSRRXG', true, 5, 'EN', NOW(), NOW(), NOW()),
-('en@test.com', 'englishTest', true, 'MEMBER', true, true, '$2b$10$jIzSAam1Nc9GDm9ltuKHve/TXl9/w4dSTiZeX0sYMyQpPS0GSRRXG', true, 5, 'EN', NOW(), NOW(), NOW()),
-('fi@test.com', 'finnishTest', true, 'MEMBER', true, true, '$2b$10$jIzSAam1Nc9GDm9ltuKHve/TXl9/w4dSTiZeX0sYMyQpPS0GSRRXG', true, 5, 'FI', NOW(), NOW(), NOW()),
+('admin@test.com', 'adminsUser', true, 'SUPERUSER', true, true, '$argon2i$v=19$m=4096,t=3,p=1$Wv1BZ7sjJPR0RyGfVr2yIw$rDs06NJXo8oEnhsfTzF+Tj3RzD9jrmchAa6mjsW9gaY', true, 5, 'EN', NOW(), NOW(), NOW()),
+('dev@dev.com', 'devUser', true, 'MEMBER', true, true, '$argon2i$v=19$m=4096,t=3,p=1$Wv1BZ7sjJPR0RyGfVr2yIw$rDs06NJXo8oEnhsfTzF+Tj3RzD9jrmchAa6mjsW9gaY', true, 5, 'EN', NOW(), NOW(), NOW()),
+('en@test.com', 'englishTest', true, 'MEMBER', true, true, '$argon2i$v=19$m=4096,t=3,p=1$Wv1BZ7sjJPR0RyGfVr2yIw$rDs06NJXo8oEnhsfTzF+Tj3RzD9jrmchAa6mjsW9gaY', true, 5, 'EN', NOW(), NOW(), NOW()),
+('fi@test.com', 'finnishTest', true, 'MEMBER', true, true, '$argon2i$v=19$m=4096,t=3,p=1$Wv1BZ7sjJPR0RyGfVr2yIw$rDs06NJXo8oEnhsfTzF+Tj3RzD9jrmchAa6mjsW9gaY', true, 5, 'FI', NOW(), NOW(), NOW()),
 ('FIuoqexzdvxfbdu@mhbVNymljqgvglm.com', 'jrksiEw4oid9d', false, 'MEMBER', true, true, 'dbajocugbjbpaqvmdggxcwhaobcjvdataqpryswwtalwplbtxehktoqxxxuw', true, 5, 'EN', '2023-12-22', '2023-3-1', '2021-10-5'),
 ('qgmrrposdbajtet@oruabfqcetgijei.com', 'jrksdiE5o3id9', false, 'MEMBER', true, true, 'hvskdohmrspguygzqalzngknaerkywcrtbcybbioJPgainkvgbqpkuyhsfpw', true, 5, 'FI', '2020-3-21', '2023-2-11', '2023-4-18'),
 ('ukphtbzkdfxtmoj@jnqkqinhsvulsvl.com', 'jrksiEd4oid9d', false, 'MEMBER', true, true, 'maoxzuznsikadvkzzxkxuthbbzjgaewgoosyxdwgsqolbexzodvpeyfsaiod', true, 5, 'VN', '2020-6-11', '2024-1-14', '2023-5-14'),

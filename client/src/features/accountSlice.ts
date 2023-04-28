@@ -1,23 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { JlptLevel, Role } from '../types'
 
-export interface AccountState {
-  isLoggedIn: boolean
-  account: {
-    role: Role
-    jlptLevel: JlptLevel
-    username: string
-    email: string
-  }
+export interface Account {
+  username: string
+  email: string
+  role: Role
+  allowNewsLetter: boolean
+  language: string
+  jlptLevel: JlptLevel
 }
 
-const initialState: AccountState = {
+export interface AccountState {
+  isLoggedIn: boolean
+  account: Account
+}
+
+export const initialState: AccountState = {
   isLoggedIn: false,
   account: {
-    role: Role.NonMember,
-    jlptLevel: JlptLevel.N5,
     username: '',
-    email: ''
+    email: '',
+    role: Role.NON_MEMBER,
+    allowNewsLetter: false,
+    language: 'EN',
+    jlptLevel: JlptLevel.N5
   }
 }
 
@@ -27,12 +33,6 @@ const accountSlice = createSlice({
   reducers: {
     setAccount (state, action) {
       return action.payload
-    },
-    setLogin (state, action) {
-      return {
-        ...state,
-        isLoggedIn: action.payload
-      }
     },
     setJlptLevel (state, action: PayloadAction<JlptLevel>) {
       return {
@@ -46,7 +46,7 @@ const accountSlice = createSlice({
   }
 })
 
-export const { setAccount, setJlptLevel, setLogin } = accountSlice.actions
+export const { setJlptLevel, setAccount } = accountSlice.actions
 
 /*
 export const logOutAccount = () => {

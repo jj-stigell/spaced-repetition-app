@@ -16,7 +16,7 @@ import Box from '@mui/material/Box'
 // Project imports
 import { useAppDispatch } from '../../app/hooks'
 import { logout } from '../../config/api'
-import { setLogin } from '../../features/accountSlice'
+import { initialState, setAccount } from '../../features/accountSlice'
 import { setNotification } from '../../features/notificationSlice'
 import axios from '../../lib/axios'
 import ChangePassword from './ChangePassword'
@@ -39,7 +39,7 @@ function Settings (): JSX.Element {
   const handleLogout = (): void => {
     axios.post(logout)
       .then(function () {
-        dispatch(setLogin(false))
+        dispatch(setAccount(initialState))
       })
       .catch(function (error) {
         console.log('error encountered', error)

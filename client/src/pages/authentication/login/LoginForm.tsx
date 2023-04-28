@@ -1,3 +1,5 @@
+/* eslint-disable padded-blocks */
+/* eslint-disable no-multiple-empty-lines */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import * as React from 'react'
@@ -20,7 +22,7 @@ import { Link } from 'react-router-dom'
 import axios from '../../../lib/axios'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { RootState } from '../../../app/store'
-import { setLogin } from '../../../features/accountSlice'
+import { Account, setAccount } from '../../../features/accountSlice'
 import { RememberMe, setRememberMe as SetRememberMe, resetRememberMe } from '../../../features/rememberMeSlice'
 import { setNotification } from '../../../features/notificationSlice'
 import { LoginData } from '../../../types'
@@ -60,8 +62,9 @@ function LoginForm (): JSX.Element {
         email: values.email,
         password: values.password
       })
-        .then(function () {
-          dispatch(setLogin(true))
+        .then(function (response) {
+          const accountInformation: Account = response.data.data
+          dispatch(setAccount({ isLoggedIn: true, account: accountInformation }))
 
           // Store remember me if selected, otherwise clear.
           if (rememberMe) {
