@@ -1,15 +1,19 @@
 import React from 'react'
 
+import { AxiosError } from 'axios'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
 
+import axios from '../../lib/axios'
 import { JlptLevel } from '../../types'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { setJlptLevel } from '../../features/accountSlice'
 import { RootState } from '../../app/store'
+import { changeJlptLevel } from '../../config/api'
+import { setNotification } from '../../features/notificationSlice'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -47,6 +51,26 @@ function LevelSelector (): JSX.Element {
   const handleLevelSelection = (selectedLevel: JlptLevel): void => {
     dispatch(setJlptLevel(selectedLevel))
     handleModalClick()
+
+    axios.patch(changeJlptLevel, {
+      jlptLevel: selectedLevel
+    })
+      .catch(function (error) {
+        console.log('error encountered', error)
+        const errorCode: string | null = error?.response?.data?.errors[0]?.code
+
+        if (errorCode != null) {
+        // TODO: what if there are multiple errors.
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+        } else if (error instanceof AxiosError) {
+          dispatch(setNotification({ message: error.message, severity: 'error' }))
+        } else {
+          dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+        }
+      }).finally(function () {
+        console.log('JLPT level set to:', selectedLevel)
+      })
   }
 
   return (

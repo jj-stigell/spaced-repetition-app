@@ -245,7 +245,7 @@
   "modals": {
     "jlptSelector": {
       "title": "Select JLPT Level",
-      "button": "JLPT {{level}} - Click to change"
+      "button": "JLPT N{{level}} - Click to change"
     }
   },
   "errors": {
