@@ -1,7 +1,8 @@
 import { DataTypes, QueryInterface, Transaction } from 'sequelize';
-import { bugs, card } from '../../configs/constants';
+import { bugs } from '../../configs/constants';
 import logger from '../../configs/winston';
-import { DeckCategory } from '../../type/constants';
+import { BugType, CardType, DeckCategory, JlptLevel } from '../../type/constants';
+import { Role } from '../../type/general';
 
 export default {
   up: async (queryInterface: QueryInterface): Promise<void> => {
@@ -43,6 +44,20 @@ export default {
           unique: true,
           allowNull: false
         },
+        selected_jlpt_level: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          defaultValue: JlptLevel.N5,
+          validate: {
+            isIn: [[
+              JlptLevel.N1,
+              JlptLevel.N2,
+              JlptLevel.N3,
+              JlptLevel.N4,
+              JlptLevel.N5
+            ]],
+          }
+        },
         email_verified: {
           type: DataTypes.BOOLEAN,
           allowNull: false,
@@ -68,9 +83,15 @@ export default {
           defaultValue: true
         },
         role: {
-          type: DataTypes.ENUM('USER', 'READ_RIGHT', 'WRITE_RIGHT', 'SUPERUSER'),
-          defaultValue: 'USER',
-          allowNull: false
+          defaultValue: Role.NON_MEMBER,
+          allowNull: false,
+          type: DataTypes.ENUM(
+            Role.NON_MEMBER,
+            Role.MEMBER,
+            Role.READ_RIGHT,
+            Role.WRITE_RIGHT,
+            Role.SUPERUSER
+          )
         },
         language_id: {
           type: DataTypes.CHAR(2),
@@ -97,8 +118,16 @@ export default {
         },
         jlpt_level: {
           type: DataTypes.INTEGER,
+          allowNull: false,
+          defaultValue: JlptLevel.N5,
           validate: {
-            isIn: [[1, 2, 3, 4, 5]],
+            isIn: [[
+              JlptLevel.N1,
+              JlptLevel.N2,
+              JlptLevel.N3,
+              JlptLevel.N4,
+              JlptLevel.N5
+            ]],
           }
         },
         deck_name: {
@@ -267,7 +296,12 @@ export default {
           autoIncrement: true
         },
         type: {
-          type: DataTypes.ENUM(...card.CARD_TYPES),
+          type: DataTypes.ENUM(
+            CardType.KANJI,
+            CardType.KANA,
+            CardType.VOCABULARY,
+            CardType.SENTENCE
+          ),
           allowNull: false
         },
         language_id: {
@@ -323,7 +357,12 @@ export default {
           onUpdate: 'CASCADE'
         },
         type: {
-          type: DataTypes.ENUM(...bugs.BUG_TYPES),
+          type: DataTypes.ENUM(
+            BugType.TRANSLATION,
+            BugType.UI,
+            BugType.FUNCTIONALITY,
+            BugType.OTHER
+          ),
           allowNull: false
         },
         bug_message: {

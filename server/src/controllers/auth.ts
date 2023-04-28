@@ -15,7 +15,7 @@ import Account from '../database/models/account';
 import UserAction from '../database/models/accountAction';
 import { accountErrors, validationErrors } from '../configs/errorCodes';
 import { ApiError, InvalidCredentials } from '../type/error';
-import { JwtPayload, LoginResult } from '../type/general';
+import { JwtPayload, LoginResult, Role } from '../type/general';
 import { HttpCode } from '../type/httpCode';
 import { Register } from '../type/request';
 import { sendEmailConfirmation } from './utils/mailer';
@@ -103,7 +103,8 @@ export async function register(req: Request, res: Response): Promise<void> {
       password: await argon.hash(password.trim()),
       allowNewsLetter: allowNewsLetter ?? false,
       tosAccepted: acceptTos,
-      languageId: language.toUpperCase()
+      languageId: language.toUpperCase(),
+      role: Role.MEMBER
     }, { transaction: t });
 
     const confirmation: UserAction = await models.AccountAction.create({
@@ -167,7 +168,15 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
             sameSite: 'none',
             maxAge: accountConstants.JWT_EXPIRY_TIME,
           });
-          return res.status(HttpCode.Ok).json();
+          return res.status(HttpCode.Ok).json({
+            data: {
+              username: loginResult.username,
+              email: loginResult.email,
+              allowNewsLetter: loginResult.allowNewsLetter,
+              language: loginResult.language,
+              jlptLevel: loginResult.jlptLevel
+            }
+          });
         }
       );
     }
@@ -236,6 +245,11 @@ passport.use(
 
         const role: LoginResult = {
           id: account.id,
+          username: account.username,
+          email: account.email,
+          allowNewsLetter: account.allowNewsLetter,
+          language: account.languageId,
+          jlptLevel: account.selectedJlptLevel,
           sessionId: session.id
         };
         return done(null, role, { message: 'success' });

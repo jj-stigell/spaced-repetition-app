@@ -3,7 +3,7 @@ import {
 } from 'sequelize';
 
 import { sequelize } from '..';
-import { DeckCategory } from '../../type/constants';
+import { DeckCategory, JlptLevel } from '../../type/constants';
 import Language from './language';
 
 export default class Deck extends Model<
@@ -31,7 +31,13 @@ Deck.init(
     jlptLevel: {
       type: DataTypes.INTEGER,
       validate: {
-        isIn: [[1, 2, 3, 4, 5]],
+        isIn: [[
+          JlptLevel.N1,
+          JlptLevel.N2,
+          JlptLevel.N3,
+          JlptLevel.N4,
+          JlptLevel.N5
+        ]],
       }
     },
     deckName: {

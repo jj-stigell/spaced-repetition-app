@@ -79,7 +79,7 @@ Promise<[Array<string>, Array<string>, Array<string>, Array<string>]> {
       email: user.email
     }
   }) as Account;
-  normalUser.set({ emailVerified: true, role: Role.User });
+  normalUser.set({ emailVerified: true, role: Role.MEMBER });
   await normalUser.save();
 
   const adminReadAccount: Account = await models.Account.findOne({
@@ -87,7 +87,7 @@ Promise<[Array<string>, Array<string>, Array<string>, Array<string>]> {
       email: adminRead.email
     }
   }) as Account;
-  adminReadAccount.set({ emailVerified: true, role: Role.Read });
+  adminReadAccount.set({ emailVerified: true, role: Role.READ_RIGHT });
   await adminReadAccount.save();
 
   const adminWriteAccount: Account = await models.Account.findOne({
@@ -95,7 +95,7 @@ Promise<[Array<string>, Array<string>, Array<string>, Array<string>]> {
       email: adminWrite.email
     }
   }) as Account;
-  adminWriteAccount.set({ emailVerified: true, role: Role.Write });
+  adminWriteAccount.set({ emailVerified: true, role: Role.WRITE_RIGHT });
   await adminWriteAccount.save();
 
   const superUserAccount: Account = await models.Account.findOne({
@@ -103,7 +103,7 @@ Promise<[Array<string>, Array<string>, Array<string>, Array<string>]> {
       email: superuser.email
     }
   }) as Account;
-  superUserAccount.set({ emailVerified: true, role: Role.Super });
+  superUserAccount.set({ emailVerified: true, role: Role.SUPERUSER });
   await superUserAccount.save();
 
   res = await request.post(LOGIN_URI).send(user);

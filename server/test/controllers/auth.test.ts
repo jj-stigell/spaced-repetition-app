@@ -11,6 +11,7 @@ import {
   newAccount, LOGIN_URI, LOGOUT_URI, REGISTER_URI, user
 } from '../utils/constants';
 import { checkErrors, resetDatabase } from '../utils/helpers';
+import { JlptLevel } from '../../src/type/constants';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let account: Account;
@@ -74,6 +75,11 @@ describe(`Test POST ${LOGIN_URI} - login to account`, () => {
     const cookies: Array<string> = res.headers['set-cookie'];
     expect(cookies[0]).toMatch(/^jwt/);
     expect(res.body.errors).not.toBeDefined();
+    expect(res.body.data.email).toBe(user.email);
+    expect(res.body.data.username).toBe(user.username);
+    expect(res.body.data.allowNewsLetter).toBe(user.allowNewsLetter);
+    expect(res.body.data.language).toBe(user.language);
+    expect(res.body.data.jlptLevel).toBe(JlptLevel.N5);
     expect(res.statusCode).toBe(HttpCode.Ok);
   });
 

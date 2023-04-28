@@ -39,6 +39,20 @@ export enum DeckCategory {
   GRAMMAR = 'GRAMMAR'
 }
 
+export enum CardType {
+  KANJI = 'KANJI',
+  KANA = 'KANA',
+  VOCABULARY = 'VOCABULARY',
+  SENTENCE = 'SENTENCE'
+}
+
+export enum BugType {
+  TRANSLATION = 'TRANSLATION',
+  UI = 'UI',
+  FUNCTIONALITY = 'FUNCTIONALITY',
+  OTHER = 'OTHER'
+}
+
 export enum JlptLevel {
   N1 = 1,
   N2,

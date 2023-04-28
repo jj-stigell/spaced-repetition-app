@@ -7,14 +7,20 @@ export type JwtPayload = {
 
 export type LoginResult = {
   id: number;
+  username: string;
+  email: string;
+  allowNewsLetter: boolean;
+  language: string;
+  jlptLevel: number;
   sessionId: string;
 };
 
 export enum Role {
-  User = 'USER',
-  Read = 'READ_RIGHT',
-  Write = 'WRITE_RIGHT',
-  Super = 'SUPERUSER'
+  NON_MEMBER = 'NON_MEMBER',
+  MEMBER = 'MEMBER',
+  READ_RIGHT = 'READ_RIGHT',
+  WRITE_RIGHT = 'WRITE_RIGHT',
+  SUPERUSER = 'SUPERUSER'
 }
 
 export type BugReportData = {

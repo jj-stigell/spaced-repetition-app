@@ -3,7 +3,7 @@ import {
 } from 'sequelize';
 
 import { sequelize } from '..';
-import { card } from '../../configs/constants';
+import { CardType } from '../../type/constants';
 import Language from './language';
 
 export default class Card extends Model<
@@ -25,7 +25,12 @@ Card.init({
     autoIncrement: true
   },
   type: {
-    type: DataTypes.ENUM(...card.CARD_TYPES),
+    type: DataTypes.ENUM(
+      CardType.KANJI,
+      CardType.KANA,
+      CardType.VOCABULARY,
+      CardType.SENTENCE
+    ),
     allowNull: false
   },
   languageId: {

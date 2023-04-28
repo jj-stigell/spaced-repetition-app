@@ -4,6 +4,7 @@ import {
 
 import { sequelize } from '..';
 import { bugs } from '../../configs/constants';
+import { BugType } from '../../type/constants';
 import Account from './account';
 import Card from './card';
 
@@ -45,7 +46,12 @@ BugReport.init({
     }
   },
   type: {
-    type: DataTypes.ENUM(...bugs.BUG_TYPES),
+    type: DataTypes.ENUM(
+      BugType.TRANSLATION,
+      BugType.UI,
+      BugType.FUNCTIONALITY,
+      BugType.OTHER
+    ),
     allowNull: false
   },
   bugMessage: {

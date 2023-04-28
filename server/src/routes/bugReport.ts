@@ -152,7 +152,7 @@ export const router: Router = Router();
 router.get(
   '/',
   passport.authenticate('jwt', { session: false }),
-  authorizationMiddleware([Role.Super, Role.Write, Role.Read]),
+  authorizationMiddleware([Role.SUPERUSER, Role.WRITE_RIGHT, Role.READ_RIGHT]),
   requestWrap(getBugReports)
 );
 
@@ -194,7 +194,7 @@ router.get(
 router.get(
   '/:bugId',
   passport.authenticate('jwt', { session: false }),
-  authorizationMiddleware([Role.Super, Role.Write, Role.Read]),
+  authorizationMiddleware([Role.SUPERUSER, Role.WRITE_RIGHT, Role.READ_RIGHT]),
   requestWrap(getBugReportById)
 );
 
@@ -273,7 +273,7 @@ router.post(
 router.delete(
   '/:bugId',
   passport.authenticate('jwt', { session: false }),
-  authorizationMiddleware([Role.Super, Role.Write]),
+  authorizationMiddleware([Role.SUPERUSER, Role.WRITE_RIGHT]),
   requestWrap(deleteBugReport)
 );
 
@@ -310,6 +310,6 @@ router.delete(
 router.patch(
   '/:bugId',
   passport.authenticate('jwt', { session: false }),
-  authorizationMiddleware([Role.Super, Role.Write]),
+  authorizationMiddleware([Role.SUPERUSER, Role.WRITE_RIGHT]),
   requestWrap(updateBugReport)
 );

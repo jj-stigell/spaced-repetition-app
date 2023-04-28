@@ -3,6 +3,8 @@ import {
 } from 'sequelize';
 
 import { sequelize } from '..';
+import { JlptLevel } from '../../type/constants';
+import { Role } from '../../type/general';
 import Language from './language';
 
 export default class Account extends Model<
@@ -12,6 +14,7 @@ export default class Account extends Model<
   declare id: CreationOptional<number>;
   declare email: string;
   declare username: string;
+  declare selectedJlptLevel: CreationOptional<number>;
   declare emailVerified: CreationOptional<boolean>;
   declare allowNewsLetter: CreationOptional<boolean>;
   declare tosAccepted: CreationOptional<boolean>;
@@ -44,6 +47,20 @@ Account.init(
       unique: true,
       allowNull: false
     },
+    selectedJlptLevel: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: JlptLevel.N5,
+      validate: {
+        isIn: [[
+          JlptLevel.N1,
+          JlptLevel.N2,
+          JlptLevel.N3,
+          JlptLevel.N4,
+          JlptLevel.N5
+        ]],
+      }
+    },
     emailVerified: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -69,9 +86,15 @@ Account.init(
       defaultValue: true
     },
     role: {
-      type: DataTypes.ENUM('USER', 'READ_RIGHT', 'WRITE_RIGHT', 'SUPERUSER'),
-      defaultValue: 'USER',
-      allowNull: false
+      defaultValue: Role.NON_MEMBER,
+      allowNull: false,
+      type: DataTypes.ENUM(
+        Role.NON_MEMBER,
+        Role.MEMBER,
+        Role.READ_RIGHT,
+        Role.WRITE_RIGHT,
+        Role.SUPERUSER
+      )
     },
     languageId: {
       type: DataTypes.CHAR(2),
