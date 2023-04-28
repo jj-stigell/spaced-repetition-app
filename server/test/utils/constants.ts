@@ -8,6 +8,7 @@ export const RESEND_EMAIL_CONFIRMATION_URI: string = '/api/v1/account/confirmati
 export const REQUEST_RESET_PASSWORD_URI: string = '/api/v1/account/password/reset';
 export const RESET_PASSWORD_URI: string = '/api/v1/account/password/reset';
 export const CHANGE_PASSWORD_URI: string = '/api/v1/account/password';
+export const CHANGE_JLPT_LEVEL_URI: string = '/api/v1/account/jlpt-level';
 export const BUGREPORT_URI: string = '/api/v1/bug';
 
 export const user: Register = {

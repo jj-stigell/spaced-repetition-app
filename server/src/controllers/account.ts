@@ -17,6 +17,7 @@ import { findAccountById, findAccountByEmail } from './utils/account';
 import { findAccountActionById } from './utils/accountAction';
 import { sendEmailConfirmation, sendPasswordResetLink } from './utils/mailer';
 import { JwtPayload } from '../type/general';
+import { JlptLevel } from '../type/constants';
 
 /**
  * Confirm new account email address.
@@ -230,6 +231,42 @@ export async function changePassword(req: Request, res: Response): Promise<void>
 
   account.update({
     password: await argon.hash(newPassword.trim()),
+  });
+
+  await account.save();
+  res.status(HttpCode.Ok).json();
+}
+
+/**
+ * Change account JLPT level.
+ * @param {Request} req - Express request.
+ * @param {Response} res - Express response.
+ * @throws {ApiError} - If errors are encountered,
+ * function throws an error with a relevant error code.
+ */
+export async function changeJlptLevel(req: Request, res: Response): Promise<void> {
+  const requestSchema: yup.AnyObject = yup.object({
+    jlptLevel: yup.number()
+      .oneOf(
+        [JlptLevel.N1, JlptLevel.N2, JlptLevel.N3, JlptLevel.N4, JlptLevel.N5]
+        , validationErrors.ERR_INVALID_JLPT_LEVEL
+      )
+      .typeError(validationErrors.ERR_INPUT_TYPE)
+      .required(validationErrors.ERR_JLPT_LEVEL_REQUIRED)
+  });
+
+  await requestSchema.validate(req.body, { abortEarly: false });
+  const jlptLevel: number = req.body.jlptLevel;
+
+  const user: JwtPayload = req.user as JwtPayload;
+  const account: Account = await findAccountById(user.id);
+
+  if (!account.emailVerified) {
+    throw new ApiError(accountErrors.ERR_EMAIL_NOT_CONFIRMED, HttpCode.Forbidden);
+  }
+
+  account.update({
+    selectedJlptLevel: jlptLevel,
   });
 
   await account.save();

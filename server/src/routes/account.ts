@@ -2,7 +2,8 @@ import { Router } from 'express';
 import passport from 'passport';
 
 import {
-  confirmEmail, resendConfirmEmail, requestResetPassword, resetPassword, changePassword
+  confirmEmail, resendConfirmEmail, requestResetPassword,
+  resetPassword, changePassword, changeJlptLevel
 } from '../controllers/account';
 import { requestWrap } from '../util/requestWrap.ts';
 
@@ -211,6 +212,8 @@ router.patch(
  *         description: Password changed succesfully.
  *       400:
  *         $ref: '#/components/responses/ValidationError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  *       403:
  *         description: The account email is not confirmed or current password is incorrect.
  *         content:
@@ -230,4 +233,50 @@ router.patch(
   '/password',
   passport.authenticate('jwt', { session: false }),
   requestWrap(changePassword)
+);
+
+/**
+ * @swagger
+ * /api/v1/account/jlpt-level:
+ *   patch:
+ *     tags: [Account]
+ *     description: Change account JLPT level.
+ *     requestBody:
+ *       description: Desired JLPT level in the request body.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               jlptLevel:
+ *                 type: integer
+ *                 example: 1
+ *                 description: JLPT level.
+ *                 enum: [1, 2, 3, 4, 5]
+ *     responses:
+ *       200:
+ *         description: JLPT level changed succesfully.
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: The account email is not confirmed.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Failure'
+ *       404:
+ *         description: The account not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Failure'
+ *     security:
+ *       - cookieAuth: []
+ */
+router.patch(
+  '/jlpt-level',
+  passport.authenticate('jwt', { session: false }),
+  requestWrap(changeJlptLevel)
 );

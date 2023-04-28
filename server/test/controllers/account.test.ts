@@ -8,10 +8,12 @@ import AccountAction from '../../src/database/models/accountAction';
 import { accountErrors, validationErrors } from '../../src/configs/errorCodes';
 import { HttpCode } from '../../src/type/httpCode';
 import {
-  EMAIL_CONFIRMATION_URI, RESEND_EMAIL_CONFIRMATION_URI, REGISTER_URI, user,
-  REQUEST_RESET_PASSWORD_URI, RESET_PASSWORD_URI, CHANGE_PASSWORD_URI, LOGIN_URI
+  user, EMAIL_CONFIRMATION_URI, RESEND_EMAIL_CONFIRMATION_URI,
+  REGISTER_URI, REQUEST_RESET_PASSWORD_URI, RESET_PASSWORD_URI,
+  CHANGE_PASSWORD_URI, LOGIN_URI, CHANGE_JLPT_LEVEL_URI
 } from '../utils/constants';
 import { checkErrors, resetDatabase } from '../utils/helpers';
+import { JlptLevel } from '../../src/type/constants';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let account: Account;
@@ -458,7 +460,7 @@ describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
   });
 });
 
-describe(`XXX Test PATCH ${CHANGE_PASSWORD_URI} - change existing account password`, () => {
+describe(`Test PATCH ${CHANGE_PASSWORD_URI} - change existing account password`, () => {
 
   it('should change password succesfully for confirmed email', async () => {
     // First confirm the account email.
@@ -743,6 +745,171 @@ describe(`XXX Test PATCH ${CHANGE_PASSWORD_URI} - change existing account passwo
     expect(res.body.errors).toBeDefined();
     expect(res.body.data).not.toBeDefined();
     checkErrors(res.body.errors, validationErrors.ERR_PASSWORD_TOO_LONG);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+  });
+});
+
+describe(`Test PATCH ${CHANGE_JLPT_LEVEL_URI} - change account JLPT level`, () => {
+
+  it('should change JLPT level succesfully for confirmed email', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    const cookies: Array<string> = res.headers['set-cookie'];
+
+    async function loop(jlptLevel: number): Promise<void> {
+      res = await request.patch(CHANGE_JLPT_LEVEL_URI)
+        .set('Accept', 'application/json')
+        .set('Cookie', cookies)
+        .send({ jlptLevel: jlptLevel })
+        .expect('Content-Type', /json/);
+
+      expect(res.body.errors).not.toBeDefined();
+      expect(res.statusCode).toBe(HttpCode.Ok);
+      // Check change was success
+      const account: Account = await models.Account.findOne({
+        where: {
+          email: user.email
+        }
+      }) as Account;
+      expect(account.selectedJlptLevel).toBe(jlptLevel);
+    }
+
+    for (let i: number = 1; i < 6; i++) {
+      await loop(i);
+    }
+  });
+
+  it('should response with error if not logged in', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    const res: supertest.Response = await request.patch(CHANGE_JLPT_LEVEL_URI)
+      .set('Accept', 'application/json')
+      .send({ jlptLevel: JlptLevel.N3 });
+
+    expect(res.body.data).not.toBeDefined();
+    expect(res.body.errors).not.toBeDefined();
+    expect(res.statusCode).toBe(HttpCode.Unauthorized);
+  });
+
+
+  it('should response with error if account email not verified', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    const cookies: Array<string> = res.headers['set-cookie'];
+
+    const account: Account = await models.Account.findOne({
+      where: {
+        email: user.email
+      }
+    }) as Account;
+
+    // Set email to unverified
+    account.set({
+      emailVerified: false
+    });
+    await account.save();
+
+    res = await request.patch(CHANGE_JLPT_LEVEL_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({ jlptLevel: JlptLevel.N3 })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, accountErrors.ERR_EMAIL_NOT_CONFIRMED);
+    expect(res.statusCode).toBe(HttpCode.Forbidden);
+  });
+
+  it('should response with error if JLPT level is not found in the body', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie.
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    const cookies: Array<string> = res.headers['set-cookie'];
+
+    // Wrong type (string).
+    res = await request.patch(CHANGE_JLPT_LEVEL_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send()
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_JLPT_LEVEL_REQUIRED);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+
+  });
+
+  it('should response with error if JLPT level does not pass validation', async () => {
+    // First confirm the account email.
+    await request.post(EMAIL_CONFIRMATION_URI)
+      .set('Accept', 'application/json')
+      .send({ confirmationId: confirmationCode.id });
+
+    // Login and take cookie.
+    let res: supertest.Response = await request.post(LOGIN_URI)
+      .send({ email: user.email, password: user.password });
+
+    const cookies: Array<string> = res.headers['set-cookie'];
+
+    // Wrong type (string).
+    res = await request.patch(CHANGE_JLPT_LEVEL_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({ jlptLevel: 'x' })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_INPUT_TYPE);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+
+    // Level out of range (0).
+    res = await request.patch(CHANGE_JLPT_LEVEL_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({ jlptLevel: 0 })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_INVALID_JLPT_LEVEL);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
+
+    // Level out of range (6).
+    res = await request.patch(CHANGE_JLPT_LEVEL_URI)
+      .set('Accept', 'application/json')
+      .set('Cookie', cookies)
+      .send({ jlptLevel: 6 })
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_INVALID_JLPT_LEVEL);
     expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 });

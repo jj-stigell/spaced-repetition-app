@@ -75,7 +75,6 @@ export type DeckErrors = {
 };
 
 export type GeneralErrors = {
-  readonly ERR_INVALID_JLPT_LEVEL: string;
   readonly ERR_INVALID_LANGUAGE_ID: string;
   readonly INTERNAL_SERVER_ERROR: string;
   readonly UNAUTHENTICATED: string;
@@ -123,4 +122,6 @@ export type ValidationErrors = {
   readonly ERR_TOS_NOT_ACCEPTED: string;
   readonly ERR_ACCEPT_TOS_REQUIRED: string;
   readonly ERR_CONFIRMATION_CODE_REQUIRED: string;
+  readonly ERR_INVALID_JLPT_LEVEL: string;
+  readonly ERR_JLPT_LEVEL_REQUIRED: string;
 };
