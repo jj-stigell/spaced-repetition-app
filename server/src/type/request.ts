@@ -15,5 +15,9 @@ export type Login = {
 export type ResetPassword = {
   confirmationId: string;
   password: string;
-  passwordConfirmation: string;
+}
+
+export type ChangePassword = {
+  currentPassword: string;
+  newPassword: string;
 }

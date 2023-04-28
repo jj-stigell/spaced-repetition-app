@@ -35,20 +35,17 @@ import { findAccountByEmail } from './utils/account';
 */
 export async function register(req: Request, res: Response): Promise<void> {
   const requestSchema: yup.ObjectSchema<Register> = yup.object({
-    email: yup.
-      string()
+    email: yup.string()
       .email(validationErrors.ERR_NOT_VALID_EMAIL)
       .max(accountConstants.EMAIL_MAX_LENGTH, validationErrors.ERR_EMAIL_TOO_LONG)
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .required(validationErrors.ERR_EMAIL_REQUIRED),
-    username: yup
-      .string()
+    username: yup.string()
       .max(accountConstants.USERNAME_MAX_LENGTH, validationErrors.ERR_USERNAME_TOO_LONG)
       .min(accountConstants.USERNAME_MIN_LENGTH, validationErrors.ERR_USERNAME_TOO_SHORT)
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .required(validationErrors.ERR_USERNAME_REQUIRED),
-    password: yup
-      .string()
+    password: yup.string()
       .max(accountConstants.PASSWORD_MAX_LENGTH, validationErrors.ERR_PASSWORD_TOO_LONG)
       .min(accountConstants.PASSWORD_MIN_LENGTH, validationErrors.ERR_PASSWORD_TOO_SHORT)
       .matches(regex.LOWERCASE_REGEX, validationErrors.ERR_PASSWORD_LOWERCASE)
@@ -56,16 +53,13 @@ export async function register(req: Request, res: Response): Promise<void> {
       .matches(regex.NUMBER_REGEX, validationErrors.ERR_PASSWORD_NUMBER)
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .required(validationErrors.ERR_PASSWORD_REQUIRED),
-    acceptTos: yup
-      .boolean()
+    acceptTos: yup.boolean()
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .required(validationErrors.ERR_ACCEPT_TOS_REQUIRED),
-    allowNewsLetter: yup
-      .boolean()
+    allowNewsLetter: yup.boolean()
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .notRequired(),
-    language: yup
-      .string()
+    language: yup.string()
       .oneOf(general.AVAILABLE_LANGUAGES)
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .required()
