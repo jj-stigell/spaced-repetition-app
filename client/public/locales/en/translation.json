@@ -31,7 +31,16 @@
       "unknowError": "Error unknown"
     },
     "settings": {
-      "title": "this is the settings page",
+      "title": "Profile and settings",
+      "accountInformation": {
+        "title": "Account information",
+        "username": "Username",
+        "email": "Email address",
+        "memberStatus": "Member status",
+        "active": "Active",
+        "expired": "Expired"
+
+      },
       "changePassword": {
         "title": "Change password",
         "button": "Change password",

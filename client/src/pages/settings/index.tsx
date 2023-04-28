@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-multiple-empty-lines */
 /* eslint-disable no-trailing-spaces */
 import React from 'react'
@@ -20,16 +21,16 @@ import { initialState, setAccount } from '../../features/accountSlice'
 import { setNotification } from '../../features/notificationSlice'
 import axios from '../../lib/axios'
 import ChangePassword from './ChangePassword'
+import Logout from './Logout'
+import AccountInformation from './AccountInformation'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
-  padding: theme.spacing(6),
+  padding: theme.spacing(2),
+  marginBottom: 10,
   textAlign: 'center',
-  color: theme.palette.text.secondary,
-  '&:hover': {
-    backgroundColor: '#ddd'
-  }
+  color: theme.palette.text.secondary
 }))
 
 function Settings (): JSX.Element {
@@ -59,30 +60,15 @@ function Settings (): JSX.Element {
 
   return (
     <div id="settings-page" style={{ marginTop: 15 }}>
-    <CssBaseline />
     <Container maxWidth="sm">
-    <h1>{t('pages.settings.title')}</h1>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2 }}>
-            <Grid item xs={2} sm={4} md={4} key={1}>
-              <Item onClick={() => { console.log('djsfklsdjlfk') } }>something</Item>
-            </Grid>
-        </Grid>
-      </Box>
-      {/** TODO Make the border visible */}
-      <Box sx={{ borderRadius: '16px' }}>
-        <h2>{t('pages.settings.changePassword.title')}</h2>
+      <h1>{t('pages.settings.title')}</h1>
+      <Item>
+        <AccountInformation />
+      </Item>
+      <Item>
         <ChangePassword />
-      </Box>
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        onClick={handleLogout}
-        sx={{ mt: 3, mb: 2 }}
-      >
-        {t('buttonGeneral.logout')}
-      </Button>
+      </Item>
+      <Logout />
     </Container>
     </div>
   )

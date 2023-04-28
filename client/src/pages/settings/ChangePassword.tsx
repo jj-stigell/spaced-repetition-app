@@ -86,107 +86,110 @@ function ChangePassword (): JSX.Element {
   })
 
   return (
-    <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
-      <FormControl sx={{ width: '100%' }} variant="outlined">
-        <InputLabel sx={{ mt: 2 }} htmlFor="outlined-adornment-current-password">{t('misc.password')}</InputLabel>
-        <OutlinedInput
-          sx={{ mt: 2 }}
-          id="currentPassword"
-          label={t('misc.password')}
-          name="currentPassword"
-          disabled={isSubmitted}
-          type={showCurrentPassword ? 'text' : 'password'}
-          value={formik.values.currentPassword}
-          onChange={formik.handleChange}
-          error={(formik.touched.currentPassword === true) && Boolean(formik.errors.currentPassword)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                disabled={isSubmitted}
-                aria-label="toggle password visibility"
-                onClick={() => { setShowCurrentPassword(!showCurrentPassword) }}
-                edge="end"
-              >
-                {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-        {Boolean(formik.errors.currentPassword) && (formik.touched.currentPassword === true) && (
-          <FormHelperText error id="password-error">
-            {formik.errors.currentPassword}
-          </FormHelperText>
-        )}
-      </FormControl>
-      <FormControl sx={{ width: '100%' }} variant="outlined">
-        <InputLabel sx={{ mt: 2 }} htmlFor="outlined-adornment-new-password">{t('misc.newPassword')}</InputLabel>
-        <OutlinedInput
-          sx={{ mt: 2 }}
-          id="newPassword"
-          label={t('misc.newPassword')}
-          name="newPassword"
-          disabled={isSubmitted}
-          type={showNewPassword ? 'text' : 'password'}
-          value={formik.values.newPassword}
-          onChange={formik.handleChange}
-          error={(formik.touched.newPassword === true) && Boolean(formik.errors.newPassword)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                disabled={isSubmitted}
-                aria-label="toggle password visibility"
-                onClick={() => { setShowNewPassword(!showNewPassword) }}
-                edge="end"
-              >
-                {showNewPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-        {Boolean(formik.errors.newPassword) && (formik.touched.newPassword === true) && (
-          <FormHelperText error id="new-password-error">
-            {formik.errors.newPassword}
-          </FormHelperText>
-        )}
-      </FormControl>
-      <FormControl sx={{ width: '100%' }} variant="outlined">
-        <InputLabel sx={{ mt: 2 }} htmlFor="outlined-adornment-new-password-confirmation">{t('misc.confirmNewPassword')}</InputLabel>
-        <OutlinedInput
-          sx={{ mt: 2 }}
-          id="newPasswordConfirmation"
-          label={t('misc.confirmNewPassword')}
-          name="newPasswordConfirmation"
-          disabled={isSubmitted}
-          type={showNewPasswordConfirm ? 'text' : 'password'}
-          value={formik.values.newPasswordConfirmation}
-          onChange={formik.handleChange}
-          error={(formik.touched.newPasswordConfirmation === true) && Boolean(formik.errors.newPasswordConfirmation)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                disabled={isSubmitted}
-                aria-label="toggle password visibility"
-                onClick={() => { setShowNewPasswordConfirm(!showNewPasswordConfirm) }}
-                edge="end"
-              >
-                {showNewPasswordConfirm ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-        {Boolean(formik.errors.newPasswordConfirmation) && (formik.touched.newPasswordConfirmation === true) && (
-          <FormHelperText error id="new-password-confirmation-error">
-            {formik.errors.newPasswordConfirmation}
-          </FormHelperText>
-        )}
-      </FormControl>
-      { isSubmitted &&
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <CircularProgress color='inherit' />
-        </Box>
-      }
-      <SubmitButton buttonText={t('pages.settings.changePassword.button')} disabled={isSubmitted} />
-    </Box>
+    <>
+      <h2>{t('pages.settings.changePassword.title')}</h2>
+      <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
+        <FormControl sx={{ width: '100%' }} variant="outlined">
+          <InputLabel sx={{ mt: 2 }} htmlFor="outlined-adornment-current-password">{t('misc.password')}</InputLabel>
+          <OutlinedInput
+            sx={{ mt: 2 }}
+            id="currentPassword"
+            label={t('misc.password')}
+            name="currentPassword"
+            disabled={isSubmitted}
+            type={showCurrentPassword ? 'text' : 'password'}
+            value={formik.values.currentPassword}
+            onChange={formik.handleChange}
+            error={(formik.touched.currentPassword === true) && Boolean(formik.errors.currentPassword)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  disabled={isSubmitted}
+                  aria-label="toggle password visibility"
+                  onClick={() => { setShowCurrentPassword(!showCurrentPassword) }}
+                  edge="end"
+                >
+                  {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          {Boolean(formik.errors.currentPassword) && (formik.touched.currentPassword === true) && (
+            <FormHelperText error id="password-error">
+              {formik.errors.currentPassword}
+            </FormHelperText>
+          )}
+        </FormControl>
+        <FormControl sx={{ width: '100%' }} variant="outlined">
+          <InputLabel sx={{ mt: 2 }} htmlFor="outlined-adornment-new-password">{t('misc.newPassword')}</InputLabel>
+          <OutlinedInput
+            sx={{ mt: 2 }}
+            id="newPassword"
+            label={t('misc.newPassword')}
+            name="newPassword"
+            disabled={isSubmitted}
+            type={showNewPassword ? 'text' : 'password'}
+            value={formik.values.newPassword}
+            onChange={formik.handleChange}
+            error={(formik.touched.newPassword === true) && Boolean(formik.errors.newPassword)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  disabled={isSubmitted}
+                  aria-label="toggle password visibility"
+                  onClick={() => { setShowNewPassword(!showNewPassword) }}
+                  edge="end"
+                >
+                  {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          {Boolean(formik.errors.newPassword) && (formik.touched.newPassword === true) && (
+            <FormHelperText error id="new-password-error">
+              {formik.errors.newPassword}
+            </FormHelperText>
+          )}
+        </FormControl>
+        <FormControl sx={{ width: '100%' }} variant="outlined">
+          <InputLabel sx={{ mt: 2 }} htmlFor="outlined-adornment-new-password-confirmation">{t('misc.confirmNewPassword')}</InputLabel>
+          <OutlinedInput
+            sx={{ mt: 2 }}
+            id="newPasswordConfirmation"
+            label={t('misc.confirmNewPassword')}
+            name="newPasswordConfirmation"
+            disabled={isSubmitted}
+            type={showNewPasswordConfirm ? 'text' : 'password'}
+            value={formik.values.newPasswordConfirmation}
+            onChange={formik.handleChange}
+            error={(formik.touched.newPasswordConfirmation === true) && Boolean(formik.errors.newPasswordConfirmation)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  disabled={isSubmitted}
+                  aria-label="toggle password visibility"
+                  onClick={() => { setShowNewPasswordConfirm(!showNewPasswordConfirm) }}
+                  edge="end"
+                >
+                  {showNewPasswordConfirm ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          {Boolean(formik.errors.newPasswordConfirmation) && (formik.touched.newPasswordConfirmation === true) && (
+            <FormHelperText error id="new-password-confirmation-error">
+              {formik.errors.newPasswordConfirmation}
+            </FormHelperText>
+          )}
+        </FormControl>
+        { isSubmitted &&
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <CircularProgress color='inherit' />
+          </Box>
+        }
+        <SubmitButton buttonText={t('pages.settings.changePassword.button')} disabled={isSubmitted} />
+      </Box>
+    </>
   )
 }
 
