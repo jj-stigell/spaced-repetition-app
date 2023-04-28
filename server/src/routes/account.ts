@@ -1,7 +1,8 @@
 import { Router } from 'express';
+import passport from 'passport';
 
 import {
-  confirmEmail, resendConfirmEmail, requestResetPassword, resetPassword
+  confirmEmail, resendConfirmEmail, requestResetPassword, resetPassword, changePassword
 } from '../controllers/account';
 import { requestWrap } from '../util/requestWrap.ts';
 
@@ -180,4 +181,53 @@ router.post(
 router.patch(
   '/password/reset',
   requestWrap(resetPassword)
+);
+
+/**
+ * @swagger
+ * /api/v1/account/password:
+ *   patch:
+ *     tags: [Account]
+ *     description: Change account password.
+ *     requestBody:
+ *       description: Current and new password.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 example: ThisIsMyNewPassword123
+ *                 description: Password currently used for the account in plain text.
+ *                 required: true
+ *               newPassword:
+ *                 type: string
+ *                 example: ThisIsMyCurrentPassword123
+ *                 description: New password for the account in plain text.
+ *                 required: true
+ *     responses:
+ *       200:
+ *         description: Password changed succesfully.
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       403:
+ *         description: The account email is not confirmed or current password is incorrect.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Failure'
+ *       404:
+ *         description: The account not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Failure'
+ *     security:
+ *       - cookieAuth: []
+ */
+router.patch(
+  '/password',
+  passport.authenticate('jwt', { session: false }),
+  requestWrap(changePassword)
 );
