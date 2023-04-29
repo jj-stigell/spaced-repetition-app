@@ -1,7 +1,0 @@
-INSERT INTO deck_translation (deck_id, language_id, title, description, active, created_at, updated_at) VALUES 
-(1, 'EN', 'JLPT N5 Kanji - english title', 'Learn all N5 kanji!', true, NOW(), NOW()),
-(1, 'FI', 'JLPT N5 Kanji - suomekielinen otsikko', 'Opi kaikki N5 kanjit!', true, NOW(), NOW()),
-(2, 'EN', 'JLPT N5 Vocabulary - english title', 'Learn all N5 vocabulary!', true, NOW(), NOW()),
-(2, 'FI', 'JLPT N5 Sanasto - suomekielinen otsikko', 'Opi kaikki N5 sanat!', true, NOW(), NOW()),
-(3, 'EN', 'JLPT N5 Kanji - english title', 'Learn all N5 kanji by regocnise', true, NOW(), NOW()),
-(3, 'FI', 'JLPT N5 Kanji - suomekielinen otsikko', 'Opi kaikki N5 kanjit tunnistamalla', true, NOW(), NOW());
