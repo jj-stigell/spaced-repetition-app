@@ -7,13 +7,9 @@ import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
-import { categories, Category, JLPT, jlptLevels } from '../../mockData'
 import Button from '@mui/material/Button'
-import LevelSelector from '../category/LevelSelector'
 import { useNavigate, useParams } from 'react-router-dom'
 import CircularLoader from '../../components/CircularLoader'
-import CircularProgress from '@mui/material/CircularProgress'
-import SubmitButton from '../../components/SubmitButton'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',

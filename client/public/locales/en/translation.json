@@ -46,6 +46,9 @@
         "button": "Change password",
         "passwordChangeSuccess": "Password changed succesfully"
       }
+    },
+    "categories": {
+      "CUSTOM": "Your custom decks"
     }
   },
   "stats": {
