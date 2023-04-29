@@ -13,15 +13,15 @@ import { Role } from '../../src/type/general';
 import { adminRead, adminWrite, LOGIN_URI, REGISTER_URI, superuser, user } from './constants';
 
 const account: string = fs.readFileSync(
-  path.resolve(__dirname, '../../mockData/account.sql'), 'utf8'
+  path.resolve(__dirname, '../../dbBaseData/account.sql'), 'utf8'
 );
 
 const bugReport: string = fs.readFileSync(
-  path.resolve(__dirname, '../../mockData/bug_report.sql'), 'utf8'
+  path.resolve(__dirname, '../../dbBaseData/bug_report.sql'), 'utf8'
 );
 
 const card: string = fs.readFileSync(
-  path.resolve(__dirname, '../../mockData/card.sql'), 'utf8'
+  path.resolve(__dirname, '../../dbBaseData/card.sql'), 'utf8'
 );
 
 const queryInterface: QueryInterface = sequelize.getQueryInterface();
