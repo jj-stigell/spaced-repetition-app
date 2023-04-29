@@ -12,6 +12,7 @@ import { NODE_ENV } from '../configs/environment';
 import { router as authRouter } from './auth';
 import { router as accountRouter } from './account';
 import { router as bugReportRouter } from './bugReport';
+import { router as deckRouter } from './deck';
 
 const options: OAS3Options = {
   definition,
@@ -26,8 +27,9 @@ router.use(cookieParser());
 router.use('/auth/', authRouter);
 router.use('/account/', accountRouter);
 router.use('/bug/', bugReportRouter);
+router.use('/deck/', deckRouter);
 
-if (NODE_ENV !== 'production') {
+if (NODE_ENV === 'development') {
   router.use('/api-docs', swaggerUI.serve);
   router.get('/api-docs', swaggerUI.setup(openapiSpecification));
 }
