@@ -46,7 +46,7 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
 }
 
 /**
- * Get all cards belonging to a deck.
+ * Get all decks based on category and JLPT level.
  * @param {Request} req - Express request.
  * @param {Response} res - Express response.
  * @throws {Yup.ValidationError} - If id validation fails.
@@ -69,11 +69,9 @@ export async function decks(req: Request, res: Response): Promise<void> {
   const deckId: number = Number(req.params.bugId);
   await idSchema.validate({ id: deckId });
 
-  // Check user is allowed to access deck
+  // Check user is member, if not provide basic deck info
 
-  // Check redis cache for cached cards, deckId+langId
-
-  // Check deck exists
+  // Check redis cache for cached decks, langId
 
   // Check translation available
 
