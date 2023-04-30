@@ -145,6 +145,12 @@ export type EmailClientArgs<TemplateData> = {
   readonly templateData: TemplateData;
 };
 
+export type Category = {
+  readonly category: DeckCategory;
+  readonly decks: number;
+  progress: Progress
+}
+
 export type GeneralErrors = {
   readonly ERR_INVALID_LANGUAGE_ID: string;
   readonly INTERNAL_SERVER_ERROR: string;
@@ -189,6 +195,12 @@ export type LoginResult = {
   readonly jlptLevel: number;
   readonly sessionId: string;
 };
+
+export type Progress = {
+  new: number;
+  learning: number;
+  mature: number;
+}
 
 export type RegisterData = {
   readonly email: string;

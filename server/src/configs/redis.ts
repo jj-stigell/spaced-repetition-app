@@ -10,15 +10,15 @@ if (!REDIS_URL) {
   logger.error('Redis connection url missing!');
 }
 
-export const client: RedisClientType = createClient({
+export const redisClient: RedisClientType = createClient({
   url: REDIS_URL
 });
 
-client.on('error', (err: unknown) => logger.error('Redis Client Error', err));
+redisClient.on('error', (err: unknown) => logger.error('Redis Client Error', err));
 
 export const connectToRedis = async (): Promise<void> => {
   try {
-    await client.connect();
+    await redisClient.connect();
     logger.info('redis connected');
   } catch (error) {
     logger.info('redis connection failed', error);

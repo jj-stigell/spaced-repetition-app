@@ -29,6 +29,10 @@ export const router: Router = Router();
  *         type: string
  *         example: First 20 Kanji for JLPT N5
  *         description: Deck description, localized.
+ *       cards:
+ *         type: integer
+ *         example: 21
+ *         description: Total amount of cards in deck.
  *       favorite:
  *         type: boolean
  *         example: true
@@ -38,7 +42,7 @@ export const router: Router = Router();
  *         description: >
  *           User specific progress on the deck. How many new, study and matured cards the deck has.
  *           Total value equals to the sum of cards in the deck.
- *           Available for roles higher than equal to 'MEMBER'.
+ *           Available for roles equal or higher than 'MEMBER'.
  *         properties:
  *           new:
  *             type: integer
@@ -65,7 +69,7 @@ export const router: Router = Router();
  *     parameters:
  *       - name: category
  *         in: query
- *         description: Language code in ISO 639-1, if language not available, defaults to EN.
+ *         description: Category name.
  *         required: true
  *         schema:
  *           type: string

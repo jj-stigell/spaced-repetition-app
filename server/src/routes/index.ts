@@ -12,6 +12,7 @@ import { NODE_ENV } from '../configs/environment';
 import { router as authRouter } from './auth';
 import { router as accountRouter } from './account';
 import { router as bugReportRouter } from './bugReport';
+import { router as categoryRouter } from './category';
 import { router as deckRouter } from './deck';
 
 const options: OAS3Options = {
@@ -27,6 +28,7 @@ router.use(cookieParser());
 router.use('/auth/', authRouter);
 router.use('/account/', accountRouter);
 router.use('/bug/', bugReportRouter);
+router.use('/category/', categoryRouter);
 router.use('/deck/', deckRouter);
 
 if (NODE_ENV === 'development') {
