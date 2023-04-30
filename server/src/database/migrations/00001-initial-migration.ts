@@ -1,8 +1,7 @@
 import { DataTypes, QueryInterface, Transaction } from 'sequelize';
 import { bugs } from '../../configs/constants';
 import logger from '../../configs/winston';
-import { BugType, CardType, DeckCategory, JlptLevel } from '../../type/constants';
-import { Role } from '../../type/general';
+import { BugType, CardType, DeckCategory, JlptLevel, Role } from '../../type';
 
 export default {
   up: async (queryInterface: QueryInterface): Promise<void> => {

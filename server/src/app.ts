@@ -3,7 +3,7 @@ import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
 
 // Project imports
-import { FRONTEND_ORIGIN } from './configs/environment';
+import { FRONTEND_URL } from './configs/environment';
 import errorMiddleware from './middleware/errorMiddleware';
 import loggerMiddleware from './middleware/loggerMiddleware';
 import { router } from './routes/index';
@@ -18,7 +18,7 @@ app.use(loggerMiddleware);
 
 app.use(cors({
   credentials: true,
-  origin: FRONTEND_ORIGIN
+  origin: FRONTEND_URL
 }));
 
 app.use('/api/v1/', router);

@@ -2,15 +2,14 @@
 import path from 'path';
 
 // Project imports
-import { general } from '../../../configs/constants';
-import { NODE_ENV } from '../../../configs/environment';
-import { ConfirmEmailPayload } from '../../../type/email';
+import { FRONTEND_URL, NODE_ENV } from '../../../configs/environment';
 import { sendMail } from './emailClient';
 import confirmAccountTranslations from './locales/confirmAccount.json';
 import resetPasswordTranslations from './locales/resetPassword.json';
 
 // Dev delete later
 import { DEV_EMAIL } from '../../../configs/environment';
+import { ConfirmEmailPayload } from '../../../type';
 
 export async function sendEmailConfirmation(
   language: string, username: string, email: string, confirmationId: string
@@ -33,7 +32,7 @@ export async function sendEmailConfirmation(
     translation,
     email: NODE_ENV === 'production' ? email : DEV_EMAIL,
     username: username,
-    url: `${general.FRONTEND_URL}/auth/confirm-email/${confirmationId}`,
+    url: `${FRONTEND_URL}/auth/confirm-email/${confirmationId}`,
   };
 
   await sendMail<ConfirmEmailPayload>({
@@ -65,7 +64,7 @@ export async function sendPasswordResetLink(
     translation,
     email: NODE_ENV === 'production' ? email : DEV_EMAIL,
     username: username,
-    url: `${general.FRONTEND_URL}/auth/forgot-password/reset/${confirmationId}`,
+    url: `${FRONTEND_URL}/auth/forgot-password/reset/${confirmationId}`,
   };
 
   await sendMail<ConfirmEmailPayload>({

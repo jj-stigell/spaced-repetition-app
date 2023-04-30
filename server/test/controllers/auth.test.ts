@@ -6,12 +6,11 @@ import { app } from '../../src/app';
 import models from '../../src/database/models';
 import Account from '../../src/database/models/account';
 import { accountErrors } from '../../src/configs/errorCodes';
-import { HttpCode } from '../../src/type/httpCode';
 import {
   newAccount, LOGIN_URI, LOGOUT_URI, REGISTER_URI, user
 } from '../utils/constants';
 import { checkErrors, resetDatabase } from '../utils/helpers';
-import { JlptLevel } from '../../src/type/constants';
+import { HttpCode, JlptLevel } from '../../src/type';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let account: Account;

@@ -3,7 +3,7 @@ import {
 } from 'sequelize';
 
 import { sequelize } from '..';
-import { CardType } from '../../type/constants';
+import { CardType } from '../../type';
 import Language from './language';
 
 export default class Card extends Model<

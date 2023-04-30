@@ -1,7 +1,8 @@
 import {
-  AccountErrors, AdminErrors, BugErrors, CardErrors, DeckErrors,
-  GeneralErrors, ReviewErrors, SessionErrors, ValidationErrors
-} from '../type/error';
+  AccountErrors, AdminErrors, BugErrors,
+  CardErrors, DeckErrors, GeneralErrors,
+  ReviewErrors, SessionErrors, ValidationErrors
+} from '../type';
 
 export const accountErrors: AccountErrors = {
   ERR_ACCOUNT_NOT_FOUND: 'ERR_ACCOUNT_NOT_FOUND',

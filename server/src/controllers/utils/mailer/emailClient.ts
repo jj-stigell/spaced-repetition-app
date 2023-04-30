@@ -6,7 +6,7 @@ import Mail from 'nodemailer/lib/mailer';
 import {
   EMAIL_ORIGIN, STMP_HOST, STMP_PORT, STMP_USER, STMP_PASSWORD
 } from '../../../configs/environment';
-import { EmailClientArgs } from '../../../type/email';
+import { EmailClientArgs } from '../../../type';
 
 export async function sendMail<TemplateData>(
   data: EmailClientArgs<TemplateData>

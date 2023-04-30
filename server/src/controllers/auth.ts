@@ -1,27 +1,25 @@
 import argon from 'argon2';
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import passport from 'passport';
 import { Strategy as JWTStrategy, VerifiedCallback } from 'passport-jwt';
 import { IVerifyOptions, Strategy as LocalStrategy } from 'passport-local';
 import { QueryTypes, Transaction } from 'sequelize';
 import * as yup from 'yup';
 
-import { account as accountConstants, general, regex } from '../configs/constants';
+import { account as accountConstants, regex } from '../configs/constants';
 import { JWT_SECRET, NODE_ENV } from '../configs/environment';
 import { sequelize } from '../database';
 import models from '../database/models';
 import Account from '../database/models/account';
 import UserAction from '../database/models/accountAction';
 import { accountErrors, validationErrors } from '../configs/errorCodes';
-import { ApiError, InvalidCredentials } from '../type/error';
-import { JwtPayload, LoginResult, Role } from '../type/general';
-import { HttpCode } from '../type/httpCode';
-import { Register } from '../type/request';
+import { ApiError, InvalidCredentials } from '../class';
 import { sendEmailConfirmation } from './utils/mailer';
 import UAParser, { IResult } from 'ua-parser-js';
 import Session from '../database/models/session';
 import { findAccountByEmail } from './utils/account';
+import { RegisterData, HttpCode, Role, LoginResult } from '../type';
 
 /**
  * Registers a new user account with the provided email, username, password, and other fields.
@@ -34,7 +32,7 @@ import { findAccountByEmail } from './utils/account';
  * the function throws an ApiError with the corresponding HTTP status code.
 */
 export async function register(req: Request, res: Response): Promise<void> {
-  const requestSchema: yup.ObjectSchema<Register> = yup.object({
+  const requestSchema: yup.ObjectSchema<RegisterData> = yup.object({
     email: yup.string()
       .email(validationErrors.ERR_NOT_VALID_EMAIL)
       .max(accountConstants.EMAIL_MAX_LENGTH, validationErrors.ERR_EMAIL_TOO_LONG)
@@ -60,7 +58,7 @@ export async function register(req: Request, res: Response): Promise<void> {
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .notRequired(),
     language: yup.string()
-      .oneOf(general.AVAILABLE_LANGUAGES)
+      .oneOf(['EN', 'FI'])
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .required()
   });
@@ -71,7 +69,9 @@ export async function register(req: Request, res: Response): Promise<void> {
   }
 
   await requestSchema.validate(req.body, { abortEarly: false });
-  const { email, username, password, acceptTos, allowNewsLetter, language }: Register = req.body;
+  const {
+    email, username, password, acceptTos, allowNewsLetter, language
+  }: RegisterData = req.body;
 
   if (!acceptTos) {
     throw new ApiError(validationErrors.ERR_TOS_NOT_ACCEPTED, HttpCode.BadRequest);

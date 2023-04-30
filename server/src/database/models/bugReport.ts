@@ -4,7 +4,7 @@ import {
 
 import { sequelize } from '..';
 import { bugs } from '../../configs/constants';
-import { BugType } from '../../type/constants';
+import { BugType } from '../../type';
 import Account from './account';
 import Card from './card';
 

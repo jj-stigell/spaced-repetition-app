@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { QueryInterface, Transaction } from 'sequelize';
+import { QueryInterface } from 'sequelize';
 import supertest from 'supertest';
 
 import { app } from '../../src/app';
@@ -8,8 +8,7 @@ import logger from '../../src/configs/winston';
 import { sequelize } from '../../src/database';
 import models from '../../src/database/models';
 import Account from '../../src/database/models/account';
-import { ApiErrorContent } from '../../src/type/error';
-import { Role } from '../../src/type/general';
+import { Role, ApiErrorContent } from '../../src/type';
 import { adminRead, adminWrite, LOGIN_URI, REGISTER_URI, superuser, user } from './constants';
 
 const account: string = fs.readFileSync(
@@ -29,40 +28,20 @@ const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let res: supertest.Response;
 
 export async function resetDatabase(): Promise<void> {
-  // Truncate all data that might have been affected by the tests and reload them from file.
-  const firstTransaction: Transaction = await queryInterface.sequelize.transaction();
-  const secondTransaction: Transaction = await queryInterface.sequelize.transaction();
-
   try {
+    // Truncate all data that might have been affected by the tests and reload them from file.
     await queryInterface.sequelize.query(
-      'TRUNCATE bug_report, card, session, account, account_action;',
-      { transaction: firstTransaction }
+      'TRUNCATE bug_report, card, session, account, account_action;'
     );
+    await queryInterface.sequelize.query('ALTER SEQUENCE account_id_seq RESTART WITH 230792;');
+    await queryInterface.sequelize.query('ALTER SEQUENCE bug_report_id_seq RESTART;');
+    await queryInterface.sequelize.query('ALTER SEQUENCE card_id_seq RESTART;');
 
-    await queryInterface.sequelize.query(
-      'ALTER SEQUENCE account_id_seq RESTART WITH 230792;', { transaction: firstTransaction }
-    );
-
-    await queryInterface.sequelize.query(
-      'ALTER SEQUENCE bug_report_id_seq RESTART;', { transaction: firstTransaction }
-    );
-
-    await queryInterface.sequelize.query(
-      'ALTER SEQUENCE card_id_seq RESTART;', { transaction: firstTransaction }
-    );
-    await firstTransaction.commit();
+    // Load data to db.
+    await queryInterface.sequelize.query(account);
+    await queryInterface.sequelize.query(card);
+    await queryInterface.sequelize.query(bugReport);
   } catch (err) {
-    await firstTransaction.rollback();
-    logger.error(err);
-  }
-
-  try {
-    await queryInterface.sequelize.query(account, { transaction: secondTransaction });
-    await queryInterface.sequelize.query(card, { transaction: secondTransaction });
-    await queryInterface.sequelize.query(bugReport, { transaction: secondTransaction });
-    await secondTransaction.commit();
-  } catch (err) {
-    await secondTransaction.rollback();
     logger.error(err);
   }
 }

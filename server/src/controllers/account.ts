@@ -10,14 +10,12 @@ import models from '../database/models';
 import Account from '../database/models/account';
 import AccountAction from '../database/models/accountAction';
 import { accountErrors, validationErrors } from '../configs/errorCodes';
-import { ApiError } from '../type/error';
-import { HttpCode } from '../type/httpCode';
-import { ChangePassword, ResetPassword } from '../type/request';
+import { ApiError } from '../class';
 import { findAccountById, findAccountByEmail } from './utils/account';
 import { findAccountActionById } from './utils/accountAction';
 import { sendEmailConfirmation, sendPasswordResetLink } from './utils/mailer';
-import { JwtPayload } from '../type/general';
-import { JlptLevel } from '../type/constants';
+import { JwtPayload } from 'jsonwebtoken';
+import { HttpCode, ResetPasswordData, ChangePasswordData, JlptLevel } from '../type';
 
 /**
  * Confirm new account email address.
@@ -165,7 +163,7 @@ export async function resetPassword(req: Request, res: Response): Promise<void> 
   });
 
   await requestSchema.validate(req.body, { abortEarly: false });
-  const { confirmationId, password }: ResetPassword = req.body;
+  const { confirmationId, password }: ResetPasswordData = req.body;
 
   const confirmation: AccountAction = await findAccountActionById(confirmationId);
 
@@ -211,7 +209,7 @@ export async function changePassword(req: Request, res: Response): Promise<void>
   });
 
   await requestSchema.validate(req.body, { abortEarly: false });
-  const { currentPassword, newPassword }: ChangePassword = req.body;
+  const { currentPassword, newPassword }: ChangePasswordData = req.body;
 
   if (currentPassword === newPassword) {
     throw new ApiError(accountErrors.ERR_PASSWORD_CURRENT_AND_NEW_EQUAL, HttpCode.BadRequest);

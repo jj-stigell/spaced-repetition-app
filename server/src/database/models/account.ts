@@ -3,8 +3,7 @@ import {
 } from 'sequelize';
 
 import { sequelize } from '..';
-import { JlptLevel } from '../../type/constants';
-import { Role } from '../../type/general';
+import { JlptLevel, Role } from '../../type';
 import Language from './language';
 
 export default class Account extends Model<

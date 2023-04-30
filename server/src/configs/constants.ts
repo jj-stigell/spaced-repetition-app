@@ -1,7 +1,7 @@
 import {
-  AccountConstants, BugConstants, CardConstants, DeckConstants,
-  GeneralConstants, RegexConstants, ReviewConstants
-} from '../type/constants';
+  AccountConstants, BugConstants, CardConstants,
+  RegexConstants, ReviewConstants
+} from '../type';
 
 export const account: AccountConstants = {
   USERNAME_MAX_LENGTH: 14,
@@ -30,17 +30,6 @@ export const card: CardConstants = {
   HINT_MIN_LENGTH: 1,
   HINT_MAX_LENGTH: 25,
   DEFAULT_EASY_FACTOR: 2.5
-};
-
-export const deck: DeckConstants = {
-  MAX_AMOUNT_OF_DECKS: 50
-};
-
-export const general: GeneralConstants = {
-  FRONTEND_URL: 'https://www.app.yomiko.io',
-  DEFAULT_LANGUAGE: 'EN',
-  AVAILABLE_LANGUAGES: ['EN', 'FI', 'JP'],
-  JLPT_LEVELS: [1, 2, 3, 4, 5] // Available JLPT levels, officially
 };
 
 export const regex: RegexConstants = {

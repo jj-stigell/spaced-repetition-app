@@ -81,17 +81,6 @@ router.post(
   requestWrap(register)
 );
 
-
-/*
-            data: {
-              username: loginResult.username,
-              email: loginResult.email,
-              allowNewsLetter: loginResult.allowNewsLetter,
-              language: loginResult.language,
-              jlptLevel: loginResult.jlptLevel
-            }
-*/
-
 /**
  * @swagger
  * /api/v1/auth/login:

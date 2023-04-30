@@ -18,7 +18,7 @@ export const STMP_USER: string | undefined = process.env.STMP_USER;
 export const STMP_PASSWORD: string | undefined = process.env.STMP_PASSWORD;
 
 // Frontend
-export const FRONTEND_ORIGIN: string = process.env.FRONTEND_ORIGIN ?? 'http://localhost:3000';
+export const FRONTEND_URL: string = process.env.FRONTEND_URL ?? 'http://localhost:3000';
 
 // DEV
 export const DEV_EMAIL: string = process.env.DEV_EMAIL ?? '';

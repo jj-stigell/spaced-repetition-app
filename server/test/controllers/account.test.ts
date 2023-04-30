@@ -6,14 +6,13 @@ import models from '../../src/database/models';
 import Account from '../../src/database/models/account';
 import AccountAction from '../../src/database/models/accountAction';
 import { accountErrors, validationErrors } from '../../src/configs/errorCodes';
-import { HttpCode } from '../../src/type/httpCode';
 import {
   user, EMAIL_CONFIRMATION_URI, RESEND_EMAIL_CONFIRMATION_URI,
   REGISTER_URI, REQUEST_RESET_PASSWORD_URI, RESET_PASSWORD_URI,
   CHANGE_PASSWORD_URI, LOGIN_URI, CHANGE_JLPT_LEVEL_URI
 } from '../utils/constants';
 import { checkErrors, resetDatabase } from '../utils/helpers';
-import { JlptLevel } from '../../src/type/constants';
+import { HttpCode, JlptLevel } from '../../src/type';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let account: Account;

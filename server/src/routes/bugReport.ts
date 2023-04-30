@@ -5,7 +5,7 @@ import {
   createBugReport, deleteBugReport, getBugReportById, getBugReports, updateBugReport
 } from '../controllers/bugReport';
 import { authorizationMiddleware } from '../middleware/authorizationMiddleware';
-import { Role } from '../type/general';
+import { Role } from '../type';
 import { requestWrap } from '../util/requestWrap.ts';
 
 export const router: Router = Router();

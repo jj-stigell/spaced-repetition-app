@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as yup from 'yup';
-import { HttpCode } from '../type/httpCode';
+import { HttpCode } from '../type';
 
 import { idSchema } from './utils/validator';
 
@@ -44,6 +44,31 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
     data: {}
   });
 }
+
+// SELECT category, decks FROM study_category WHERE jlpt_level = 1 ORDER BY category ASC;
+
+/*
+count finished decks for the user to display progress
+
+{
+  category: 'KANJI',
+  decks: 10,
+  progress: 5
+}
+
+
+
+decks 10
+
+
+count deck where category = KANJI and level
+
+SELECT COUNT(*) FROM deck
+JOIN account_deck_settings
+ON deck.id = account_deck_settings.deck_id deck.category = KANJI AND deck.jlpt_level = 1
+AND account_deck_settings.mastered = TRUE;
+
+*/
 
 /**
  * Get all decks based on category and JLPT level.

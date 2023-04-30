@@ -3,15 +3,15 @@ import * as yup from 'yup';
 
 import { bugs } from '../configs/constants';
 import { bugErrors, validationErrors } from '../configs/errorCodes';
-import { HttpCode } from '../type/httpCode';
 import BugReport from '../database/models/bugReport';
 import models from '../database/models';
-import {
-  BugReportData, BugReportOptions, BugReportQueryParams, JwtPayload, SolvedBugReportData
-} from '../type/general';
 import { findBugReportById } from './utils/bugReport';
 import { findCardById } from './utils/card';
 import { idSchema } from './utils/validator';
+import { JwtPayload } from 'jsonwebtoken';
+import {
+  BugReportQueryParams, BugReportOptions, HttpCode, BugReportData, SolvedBugReportData
+} from '../type';
 
 /**
  * Get all bugs, filtering by type and pagination optional.

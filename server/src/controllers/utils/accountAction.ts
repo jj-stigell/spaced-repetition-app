@@ -1,7 +1,7 @@
 import { accountErrors } from '../../configs/errorCodes';
 import AccountAction from '../../database/models/accountAction';
-import { ApiError } from '../../type/error';
-import { HttpCode } from '../../type/httpCode';
+import { ApiError } from '../../class';
+import { HttpCode } from '../../type';
 
 /**
  * Finds a account action by its ID.

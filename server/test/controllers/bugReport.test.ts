@@ -6,11 +6,10 @@ import models from '../../src/database/models';
 import {
   bugErrors, cardErrors, generalErrors, validationErrors
 } from '../../src/configs/errorCodes';
-import { HttpCode } from '../../src/type/httpCode';
 import { BUGREPORT_URI } from '../utils/constants';
 import { checkErrors, getCookies, resetDatabase } from '../utils/helpers';
-import { BugReportData, SolvedBugReportData } from '../../src/type/general';
 import BugReport from '../../src/database/models/bugReport';
+import { BugReportData, SolvedBugReportData, HttpCode } from '../../src/type';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let res: supertest.Response;
