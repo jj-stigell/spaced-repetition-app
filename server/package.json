@@ -9,7 +9,7 @@
     "build": "npx tsc && npm run copy-locales && npm run copy-templates",
     "start": "node build/src/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "test": "NODE_ENV=test jest --verbose --detectOpenHandles --coverage",
+    "test": "NODE_ENV=test jest --verbose --detectOpenHandles --coverage --forceExit",
     "lint": "npx eslint `find . -name '*.ts' -not -path './node_modules/*'`",
     "lint:fix": "npx eslint `find . -name '*.ts' -not -path './node_modules/*'` --fix",
     "migration:up": "npx sequelize-cli db:migrate",

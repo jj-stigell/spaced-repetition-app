@@ -3,23 +3,22 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import logger from './winston';
-import { NODE_ENV } from './environment';
 
-const REDIS_URL: string | undefined = process.env.REDIS_URL;
+const REDIS_HOST: string = process.env.REDIS_HOST || 'localhost';
+const REDIS_PORT: number = isNaN(Number(process.env.REDIS_PORT)) ?
+  6379 : Number(process.env.REDIS_PORT);
 
-if (!REDIS_URL && NODE_ENV === 'production') {
-  logger.error('Redis connection url missing, required in production!');
-  process.exit();
-}
+export const redisClient: RedisClientType = createClient({
+  legacyMode: true,
+  socket: {
+    host: REDIS_HOST,
+    port: REDIS_PORT
+  }
+});
 
-export const redisClient: RedisClientType =
-  NODE_ENV === 'production'
-    ? createClient({
-      url: REDIS_URL,
-    })
-    : createClient();
-
-redisClient.on('error', (err: unknown) => logger.error('Redis Client Error', err));
+redisClient.on('error', (err: unknown) => {
+  logger.error('Redis Client Error', err);
+});
 
 export const connectToRedis = async (): Promise<void> => {
   try {
@@ -27,13 +26,10 @@ export const connectToRedis = async (): Promise<void> => {
     logger.info('redis connected');
   } catch (error) {
     logger.info('redis connection failed', error);
-    // https://www.knowledgehut.com/blog/web-development/node-js-process-exit
-    // process.exit();
   }
 };
 
-/*
-process.on("exit", function(){
-    redisClient.quit();
+// https://www.knowledgehut.com/blog/web-development/node-js-process-exit
+process.on('exit', function () {
+  redisClient.quit();
 });
-*/
