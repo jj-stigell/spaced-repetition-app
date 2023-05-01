@@ -3,16 +3,21 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import logger from './winston';
+import { NODE_ENV } from './environment';
 
 const REDIS_URL: string | undefined = process.env.REDIS_URL;
 
-if (!REDIS_URL) {
-  logger.error('Redis connection url missing!');
+if (!REDIS_URL && NODE_ENV === 'production') {
+  logger.error('Redis connection url missing, required in production!');
+  process.exit();
 }
 
-export const redisClient: RedisClientType = createClient({
-  url: REDIS_URL
-});
+export const redisClient: RedisClientType =
+  NODE_ENV === 'production'
+    ? createClient({
+      url: REDIS_URL,
+    })
+    : createClient();
 
 redisClient.on('error', (err: unknown) => logger.error('Redis Client Error', err));
 
