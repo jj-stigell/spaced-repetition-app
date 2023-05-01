@@ -7,8 +7,8 @@ import { NODE_ENV } from '../configs/environment';
 import logger from '../configs/winston';
 
 export const sequelize: Sequelize = new Sequelize(
-  credentials.database,
-  credentials.username,
+  credentials.database as string,
+  credentials.username as string,
   credentials.password,
   {
     host: credentials.host,

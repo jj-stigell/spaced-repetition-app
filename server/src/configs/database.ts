@@ -1,12 +1,20 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-const username: string = String(process.env.POSTGRES_USER);
-const password: string = String(process.env.POSTGRES_PASSWORD);
-const database: string = String(process.env.POSTGRES_DATABASE);
-const host: string = String(process.env.POSTGRES_HOST);
+import { NODE_ENV } from './environment';
+import logger from './winston';
+
+const username: string | undefined = process.env.POSTGRES_USER;
+const password: string | undefined = process.env.POSTGRES_PASSWORD;
+const database: string | undefined = process.env.POSTGRES_DATABASE;
+const host: string | undefined = process.env.POSTGRES_HOST;
 const port: number = isNaN(Number(process.env.POSTGRES_PORT)) ?
   5432 : Number(process.env.POSTGRES_PORT);
+
+if ((!username || !password || !database || !host) && NODE_ENV === 'production') {
+  logger.error('PostgreSQL credential(s) missing, required in production!');
+  process.exit();
+}
 
 export = {
   username,
