@@ -22,5 +22,13 @@ export const connectToRedis = async (): Promise<void> => {
     logger.info('redis connected');
   } catch (error) {
     logger.info('redis connection failed', error);
+    // https://www.knowledgehut.com/blog/web-development/node-js-process-exit
+    // process.exit();
   }
 };
+
+/*
+process.on("exit", function(){
+    redisClient.quit();
+});
+*/

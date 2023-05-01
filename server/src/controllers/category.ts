@@ -31,7 +31,7 @@ export async function categories(req: Request, res: Response): Promise<void> {
   const { level }: { level: number }  =
   await requestSchema.validate(req.query, { abortEarly: false });
 
-  const cache: string | null = await redisClient.get('categories');
+  const cache: string | null = await redisClient.get(`categoryN${level}`);
   let categories: Array<Category> = [];
 
   if (!cache) {
@@ -55,7 +55,7 @@ export async function categories(req: Request, res: Response): Promise<void> {
 
     const data: string = JSON.stringify(categories);
     // Set to cache with 10 hour expiry time.
-    await redisClient.set('categories', data, { EX: 10 * 60 * 60 });
+    await redisClient.set(`categoryN${level}`, data, { EX: 10 * 60 * 60 });
   } else {
     logger.info('Cache hit on categories in redis');
     categories = JSON.parse(cache);
