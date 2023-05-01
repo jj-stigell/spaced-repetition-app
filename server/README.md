@@ -36,7 +36,8 @@ Running server requires the following environment variables to be set:
 * `DEV_EMAIL`: Email address that will be used during development, not in production. Must be set if NODE_ENV = development
 * `JWT_SECRET`: Secret key used to sign and verify JSON Web Tokens.
 * `FRONTEND_URL`: Hostname of the frontend application that will be accessing this backend server.
-* `REDIS_URL`: Redis connection url for caching results.
+* `REDIS_HOST`: Redis host.
+* `REDIS_PORT`: Redis port.
 
 To set environment variables, you can either export them in your terminal or set them in a .env file.
 

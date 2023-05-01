@@ -9,8 +9,10 @@
 | 27.4.2023 | 3 | Implement remember me, save selected level to state, fix routing issues, update error and not found pages |
 | 28.4.2023 | 4 | update login to return user data, set to state in redux. Refactor components, Change password functionality on back and frontend, change JLPT level functionality |
 | 29.4.2023 | 2 | Add redis and decks api endpoint documentation |
+| 30.4.2023 | 2 | Add category route and controller. |
+| 1.5.2023 | 2 | Add category tests and update docker setup to include redis |
 |  |  |  |
-| total | 19 |  | 
+| total | 23 |  | 
 
 # Record of working hours for backend before combining repositories with frontend.
 
