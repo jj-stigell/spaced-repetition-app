@@ -115,7 +115,7 @@ export const router: Router = Router();
  */
 router.get(
   '/',
-  passport.authenticate('jwt', { session: false }),
+  //passport.authenticate('jwt', { session: false }),
   requestWrap(decks)
 );
 

@@ -138,7 +138,7 @@ export type DeckErrors = {
   readonly ERR_DECK_NOT_FOUND: string;
 };
 
-export type DeckWithCustomData = {
+export type FormattedDeckData = {
   id: number;
   memberOnly: boolean;
   name: string;
@@ -205,7 +205,7 @@ export type LoginResult = {
 };
 
 export type Progress = {
-  progress: {
+  progress?: {
     new: number;
     learning: number;
     mature: number;

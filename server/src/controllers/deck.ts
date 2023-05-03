@@ -9,7 +9,7 @@ import models from '../database/models';
 import Account from '../database/models/account';
 import Deck from '../database/models/deck';
 import DeckTranslation from '../database/models/deckTranslation';
-import { DeckCategory, DeckWithCustomData, HttpCode, JlptLevel, JwtPayload, Role } from '../type';
+import { DeckCategory, FormattedDeckData, HttpCode, JlptLevel, JwtPayload, Role } from '../type';
 import { findAccountById } from './utils/account';
 import { idSchema } from './utils/validator';
 
@@ -117,12 +117,11 @@ export async function decks(req: Request, res: Response): Promise<void> {
   console.log('JLPT catgories', Object.values(DeckCategory));
 
   const cache: string | null = await redisClient.get(`decksN${level}lang${language}`);
-  let decks: Array<Deck> = [];
-  let decksWithCustomData: Array<DeckWithCustomData> = [];
+  let formattedDecks: Array<FormattedDeckData> = [];
 
   if (cache) {
     logger.info(`Cache hit on decks in redis, language ${language}`);
-    decks = JSON.parse(cache);
+    formattedDecks = JSON.parse(cache);
   } else {
     logger.info('No cache hit on decks, querying db');
 
@@ -141,11 +140,27 @@ export async function decks(req: Request, res: Response): Promise<void> {
       }
     });
 
-    // TODO format cards here to have the correct format
+    formattedDecks = decks.map((deck: Deck): FormattedDeckData => {
+      return {
+        id: deck.id,
+        memberOnly: deck.memberOnly,
+        name: 'fsdfsdf',
+        description: 'sdfdsfdsf',
+        cards: 54,
+        favorite: true,
+        progress: {
+          // TODO implement progress search for member users.
+          // Temporary place holders.
+          new: 3,
+          learning: 4,
+          mature: 6
+        }
+      };
+    });
 
     console.log(decks);
 
-    const data: string = JSON.stringify(decks);
+    const data: string = JSON.stringify(formattedDecks);
     // Set to cache with 10 hour expiry time.
     await redisClient.set(`decksN${level}lang${language}`, data, { EX: 36000 });
   }
@@ -155,33 +170,11 @@ export async function decks(req: Request, res: Response): Promise<void> {
     const account: Account = await findAccountById(user.id);
 
     if (account.role !== Role.NON_MEMBER) {
-      decksWithCustomData = decks.map((deck: Deck): DeckWithCustomData => {
-
-        return {
-          id: deck.id,
-          memberOnly: deck.memberOnly,
-          name: 'fsdfsdf',
-          description: 'sdfdsfdsf',
-          cards: 54,
-          favorite: true,
-          progress: {
-            // TODO implement progress search for member users.
-            // Temporary place holders.
-            new: 3,
-            learning: 4,
-            mature: 6
-          }
-        };
-      });
+      console.log('Get memeber extras');
     }
-
-    res.status(HttpCode.Ok).json({
-      data: decksWithCustomData
-    });
-    return;
   }
 
   res.status(HttpCode.Ok).json({
-    data: decks
+    data: formattedDecks
   });
 }
