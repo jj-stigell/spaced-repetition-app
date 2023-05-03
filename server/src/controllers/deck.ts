@@ -1,7 +1,14 @@
 import { Request, Response } from 'express';
 import * as yup from 'yup';
-import { HttpCode } from '../type';
 
+import { validationErrors } from '../configs/errorCodes';
+import { redisClient } from '../configs/redis';
+import logger from '../configs/winston';
+import models from '../database/models';
+import Account from '../database/models/account';
+import Deck from '../database/models/deck';
+import { DeckCategory, DeckWithCustomData, HttpCode, JlptLevel, JwtPayload, Role } from '../type';
+import { findAccountById } from './utils/account';
 import { idSchema } from './utils/validator';
 
 /**
@@ -27,6 +34,7 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
 
   const deckId: number = Number(req.params.bugId);
   await idSchema.validate({ id: deckId });
+
 
   // Check user is allowed to access deck
 
@@ -79,7 +87,20 @@ AND account_deck_settings.mastered = TRUE;
  */
 export async function decks(req: Request, res: Response): Promise<void> {
   const requestSchema: yup.AnyObject = yup.object({
-    languageid: yup.string()
+    level: yup.number()
+      .integer(validationErrors.ERR_INPUT_TYPE)
+      .typeError(validationErrors.ERR_INPUT_TYPE)
+      .oneOf(
+        [JlptLevel.N1, JlptLevel.N2, JlptLevel.N3, JlptLevel.N4, JlptLevel.N5],
+        validationErrors.ERR_INVALID_JLPT_LEVEL)
+      .required(validationErrors.ERR_JLPT_LEVEL_REQUIRED),
+    category: yup.string()
+      .typeError(validationErrors.ERR_INPUT_TYPE)
+      .oneOf(
+        Object.values(DeckCategory),
+        validationErrors.ERR_INVALID_CATEGORY)
+      .required(validationErrors.ERR_CATEGORY_REQUIRED),
+    language: yup.string()
       .transform((value: string, originalValue: string) => {
         return originalValue ? originalValue.toUpperCase() : value;
       })
@@ -87,12 +108,86 @@ export async function decks(req: Request, res: Response): Promise<void> {
       .notRequired()
   });
 
-  const languageid: string | undefined = await requestSchema.validate(
-    req.query.languageid, { abortEarly: false }
-  );
+  const { level, category, language }: { level: number, category: string, language: string }  =
+  await requestSchema.validate(req.query, { abortEarly: false });
 
-  const deckId: number = Number(req.params.bugId);
-  await idSchema.validate({ id: deckId });
+  console.log('JLPT LEVELS', Object.values(JlptLevel));
+  console.log('JLPT catgories', Object.values(DeckCategory));
+
+  const cache: string | null = await redisClient.get(`decksN${level}lang${language}`);
+  let decks: Array<Deck> = [];
+  let decksWithCustomData: Array<DeckWithCustomData> = [];
+
+  if (cache) {
+    logger.info(`Cache hit on decks in redis, language ${language}`);
+    decks = JSON.parse(cache);
+  } else {
+    logger.info('No cache hit on decks, querying db');
+
+    const decks: Array<Deck> = await models.Deck.findAll({
+      where: {
+        jlptLevel: level,
+        category
+      }
+    });
+
+    const data: string = JSON.stringify(decks);
+    // Set to cache with 10 hour expiry time.
+    await redisClient.set(`decksN${level}lang${language}`, data, { EX: 10 * 60 * 60 });
+  }
+
+  if (decks.length !== 0) {
+    const user: JwtPayload = req.user as JwtPayload;
+    const account: Account = await findAccountById(user.id);
+
+    if (account.role !== Role.NON_MEMBER) {
+      decksWithCustomData = decks.map((deck: Deck): DeckWithCustomData => {
+
+        return {
+          id: deck.id,
+          memberOnly: deck.memberOnly,
+          name: 'fsdfsdf',
+          description: 'sdfdsfdsf',
+          cards: 54,
+          favorite: true,
+          progress: {
+            // TODO implement progress search for member users.
+            // Temporary place holders.
+            new: 3,
+            learning: 4,
+            mature: 6
+          }
+        };
+      });
+    }
+
+    res.status(HttpCode.Ok).json({
+      data: decksWithCustomData
+    });
+    return;
+  }
+
+
+  /*
+
+  */
+
+
+  /*
+export const decks: any = {
+  id: 1,
+  memberOnly: true,
+  name: "Kanji Deck 1",
+  description: "First 20 Kanji for JLPT N5",
+  cards: 21,
+  favorite: true,
+  progress: {
+    new: 5,
+    learning: 7,
+    mature: 9
+  }
+};
+  */
 
   // Check user is member, if not provide basic deck info
 
@@ -105,6 +200,17 @@ export async function decks(req: Request, res: Response): Promise<void> {
   // Format cards to match client layout
 
   res.status(HttpCode.Ok).json({
-    data: {}
+    data: decks
   });
 }
+
+/*
+  const requestSchema: yup.AnyObject = yup.object({
+    languageid: yup.string()
+      .transform((value: string, originalValue: string) => {
+        return originalValue ? originalValue.toUpperCase() : value;
+      })
+      .oneOf(['EN', 'FI', 'VN'])
+      .notRequired()
+  });
+  */

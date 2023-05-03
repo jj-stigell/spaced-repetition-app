@@ -138,6 +138,15 @@ export type DeckErrors = {
   readonly ERR_DECK_NOT_FOUND: string;
 };
 
+export type DeckWithCustomData = {
+  id: number;
+  memberOnly: boolean;
+  name: string;
+  description: string;
+  cards: number;
+  favorite: boolean;
+} & Progress
+
 export type EmailClientArgs<TemplateData> = {
   readonly to: string;
   readonly subject: string;
@@ -148,8 +157,7 @@ export type EmailClientArgs<TemplateData> = {
 export type Category = {
   readonly category: DeckCategory;
   readonly decks: number;
-  progress: Progress
-}
+} & Progress
 
 export type GeneralErrors = {
   readonly ERR_INVALID_LANGUAGE_ID: string;
@@ -197,9 +205,11 @@ export type LoginResult = {
 };
 
 export type Progress = {
-  new: number;
-  learning: number;
-  mature: number;
+  progress: {
+    new: number;
+    learning: number;
+    mature: number;
+  }
 }
 
 export type RegisterData = {
@@ -294,4 +304,6 @@ export type ValidationErrors = {
   readonly ERR_CONFIRMATION_CODE_REQUIRED: string;
   readonly ERR_INVALID_JLPT_LEVEL: string;
   readonly ERR_JLPT_LEVEL_REQUIRED: string;
+  readonly ERR_INVALID_CATEGORY: string;
+  readonly ERR_CATEGORY_REQUIRED: string;
 };

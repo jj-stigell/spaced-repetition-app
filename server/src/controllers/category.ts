@@ -23,7 +23,7 @@ export async function categories(req: Request, res: Response): Promise<void> {
       .integer(validationErrors.ERR_INPUT_TYPE)
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .oneOf(
-        [JlptLevel.N1, JlptLevel.N2, JlptLevel.N3, JlptLevel.N4, JlptLevel.N5,],
+        [JlptLevel.N1, JlptLevel.N2, JlptLevel.N3, JlptLevel.N4, JlptLevel.N5],
         validationErrors.ERR_INVALID_JLPT_LEVEL)
       .required(validationErrors.ERR_JLPT_LEVEL_REQUIRED)
   });
@@ -34,7 +34,10 @@ export async function categories(req: Request, res: Response): Promise<void> {
   const cache: string | null = await redisClient.get(`categoryN${level}`);
   let categories: Array<Category> = [];
 
-  if (!cache) {
+  if (cache) {
+    logger.info('Cache hit on categories in redis');
+    categories = JSON.parse(cache);
+  } else {
     logger.info('No cache hit on categories, querying db');
 
     categories = await sequelize.query(
@@ -56,9 +59,6 @@ export async function categories(req: Request, res: Response): Promise<void> {
     const data: string = JSON.stringify(categories);
     // Set to cache with 10 hour expiry time.
     await redisClient.set(`categoryN${level}`, data, { EX: 10 * 60 * 60 });
-  } else {
-    logger.info('Cache hit on categories in redis');
-    categories = JSON.parse(cache);
   }
 
   if (categories.length !== 0) {
