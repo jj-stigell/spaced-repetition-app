@@ -5,7 +5,7 @@ import {
   confirmEmail, resendConfirmEmail, requestResetPassword,
   resetPassword, changePassword, changeJlptLevel
 } from '../controllers/account';
-import { requestWrap } from '../util/requestWrap.ts';
+import { requestWrap } from '../util/requestWrap';
 
 export const router: Router = Router();
 

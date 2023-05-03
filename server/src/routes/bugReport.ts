@@ -6,7 +6,7 @@ import {
 } from '../controllers/bugReport';
 import { authorizationMiddleware } from '../middleware/authorizationMiddleware';
 import { Role } from '../type';
-import { requestWrap } from '../util/requestWrap.ts';
+import { requestWrap } from '../util/requestWrap';
 
 export const router: Router = Router();
 

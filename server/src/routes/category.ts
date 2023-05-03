@@ -2,7 +2,7 @@ import { Router } from 'express';
 import passport from 'passport';
 
 import { categories } from '../controllers/category';
-import { requestWrap } from '../util/requestWrap.ts';
+import { requestWrap } from '../util/requestWrap';
 
 export const router: Router = Router();
 /**

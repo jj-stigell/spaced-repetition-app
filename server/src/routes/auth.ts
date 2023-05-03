@@ -2,7 +2,7 @@ import { Router } from 'express';
 import passport from 'passport';
 
 import { login, logout, register } from '../controllers/auth';
-import { requestWrap } from '../util/requestWrap.ts';
+import { requestWrap } from '../util/requestWrap';
 
 export const router: Router = Router();
 
