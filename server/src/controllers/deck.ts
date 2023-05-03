@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Op } from 'sequelize';
 import * as yup from 'yup';
 
 import { validationErrors } from '../configs/errorCodes';
@@ -7,6 +8,7 @@ import logger from '../configs/winston';
 import models from '../database/models';
 import Account from '../database/models/account';
 import Deck from '../database/models/deck';
+import DeckTranslation from '../database/models/deckTranslation';
 import { DeckCategory, DeckWithCustomData, HttpCode, JlptLevel, JwtPayload, Role } from '../type';
 import { findAccountById } from './utils/account';
 import { idSchema } from './utils/validator';
@@ -128,12 +130,24 @@ export async function decks(req: Request, res: Response): Promise<void> {
       where: {
         jlptLevel: level,
         category
+      },
+      include: {
+        model: DeckTranslation,
+        where: {
+          languageId: {
+            [Op.or]: [language, 'EN']
+          }
+        }
       }
     });
 
+    // TODO format cards here to have the correct format
+
+    console.log(decks);
+
     const data: string = JSON.stringify(decks);
     // Set to cache with 10 hour expiry time.
-    await redisClient.set(`decksN${level}lang${language}`, data, { EX: 10 * 60 * 60 });
+    await redisClient.set(`decksN${level}lang${language}`, data, { EX: 36000 });
   }
 
   if (decks.length !== 0) {
@@ -167,50 +181,7 @@ export async function decks(req: Request, res: Response): Promise<void> {
     return;
   }
 
-
-  /*
-
-  */
-
-
-  /*
-export const decks: any = {
-  id: 1,
-  memberOnly: true,
-  name: "Kanji Deck 1",
-  description: "First 20 Kanji for JLPT N5",
-  cards: 21,
-  favorite: true,
-  progress: {
-    new: 5,
-    learning: 7,
-    mature: 9
-  }
-};
-  */
-
-  // Check user is member, if not provide basic deck info
-
-  // Check redis cache for cached decks, langId
-
-  // Check translation available
-
-  // Server correct translation if available to the user
-
-  // Format cards to match client layout
-
   res.status(HttpCode.Ok).json({
     data: decks
   });
 }
-
-/*
-  const requestSchema: yup.AnyObject = yup.object({
-    languageid: yup.string()
-      .transform((value: string, originalValue: string) => {
-        return originalValue ? originalValue.toUpperCase() : value;
-      })
-      .oneOf(['EN', 'FI', 'VN'])
-      .notRequired()
-  });
-  */

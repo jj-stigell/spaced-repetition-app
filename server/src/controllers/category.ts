@@ -58,7 +58,7 @@ export async function categories(req: Request, res: Response): Promise<void> {
 
     const data: string = JSON.stringify(categories);
     // Set to cache with 10 hour expiry time.
-    await redisClient.set(`categoryN${level}`, data, { EX: 10 * 60 * 60 });
+    await redisClient.set(`categoryN${level}`, data, { EX: 36000 });
   }
 
   if (categories.length !== 0) {
