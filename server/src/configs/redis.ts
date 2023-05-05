@@ -4,17 +4,23 @@ dotenv.config();
 
 import logger from './winston';
 
+const REDIS_URL: string | undefined = process.env.REDIS_URL;
 const REDIS_HOST: string = process.env.REDIS_HOST || 'localhost';
 const REDIS_PORT: number = isNaN(Number(process.env.REDIS_PORT)) ?
   6379 : Number(process.env.REDIS_PORT);
 
-export const redisClient: RedisClientType = createClient({
-  legacyMode: true,
-  socket: {
-    host: REDIS_HOST,
-    port: REDIS_PORT
-  }
-});
+export const redisClient: RedisClientType = REDIS_URL ?
+  createClient({
+    legacyMode: true,
+    url: REDIS_URL
+  })
+  : createClient({
+    legacyMode: true,
+    socket: {
+      host: REDIS_HOST,
+      port: REDIS_PORT
+    }
+  });
 
 redisClient.on('error', (err: unknown) => {
   logger.error('Redis Client Error', err);
