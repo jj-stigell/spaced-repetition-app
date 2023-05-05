@@ -11,11 +11,9 @@ const REDIS_PORT: number = isNaN(Number(process.env.REDIS_PORT)) ?
 
 export const redisClient: RedisClientType = REDIS_URL ?
   createClient({
-    legacyMode: true,
     url: REDIS_URL
   })
   : createClient({
-    legacyMode: true,
     socket: {
       host: REDIS_HOST,
       port: REDIS_PORT
@@ -24,6 +22,7 @@ export const redisClient: RedisClientType = REDIS_URL ?
 
 redisClient.on('error', (err: unknown) => {
   logger.error('Redis Client Error', err);
+  console.log('Redis Client Error', err);
 });
 
 export const connectToRedis = async (): Promise<void> => {
