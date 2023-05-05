@@ -33,15 +33,15 @@ export async function resetDatabase(): Promise<void> {
   try {
     // Truncate all data that might have been affected by the tests and reload them from file.
     await queryInterface.sequelize.query(
-      'TRUNCATE bug_report, card, session, account, account_action;'
+      'TRUNCATE bug_report, session, account, account_action;'
     );
     await queryInterface.sequelize.query('ALTER SEQUENCE account_id_seq RESTART WITH 230792;');
     await queryInterface.sequelize.query('ALTER SEQUENCE bug_report_id_seq RESTART;');
-    await queryInterface.sequelize.query('ALTER SEQUENCE card_id_seq RESTART;');
+    //await queryInterface.sequelize.query('ALTER SEQUENCE card_id_seq RESTART;');
 
     // Load data to db.
     await queryInterface.sequelize.query(account);
-    await queryInterface.sequelize.query(card);
+    //await queryInterface.sequelize.query(card);
     await queryInterface.sequelize.query(bugReport);
   } catch (err) {
     logger.error(err);
