@@ -4,6 +4,7 @@ import AccountAction from './accountAction';
 import Session from './session';
 import BugReport from './bugReport';
 import Card from './card';
+import CardList from './cardList';
 import DeckTranslation from './deckTranslation';
 import Deck from './deck';
 
@@ -80,6 +81,28 @@ Deck.hasMany(DeckTranslation, {
 DeckTranslation.belongsTo(Deck, {
   targetKey: 'id',
   foreignKey: 'deckId'
+});
+
+// Deck & card association through CardList join table.
+// Cascade on delete/update.
+Deck.hasMany(CardList, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+CardList.belongsTo(Deck, {
+  targetKey: 'id',
+  foreignKey: 'deckId'
+});
+
+Card.hasMany(CardList, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+CardList.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
 });
 
 export default {

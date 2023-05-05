@@ -1,7 +1,7 @@
 import { DataTypes, QueryInterface, Transaction } from 'sequelize';
 import { bugs } from '../../configs/constants';
 import logger from '../../configs/winston';
-import { BugType, CardType, DeckCategory, JlptLevel, Role } from '../../type';
+import { BugType, CardType, DeckCategory, JlptLevel, ReviewType, Role } from '../../type';
 
 export default {
   up: async (queryInterface: QueryInterface): Promise<void> => {
@@ -172,12 +172,8 @@ export default {
         }
       }, { transaction });
       await queryInterface.createTable('deck_translation', {
-        id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true
-        },
         deck_id: {
+          primaryKey: true,
           type: DataTypes.INTEGER,
           allowNull: false,
           references: {
@@ -186,6 +182,7 @@ export default {
           }
         },
         language_id: {
+          primaryKey: true,
           type: DataTypes.CHAR(2),
           allowNull: false,
           references: {
@@ -400,6 +397,48 @@ export default {
           defaultValue: DataTypes.NOW
         }
       }, { transaction });
+      await queryInterface.createTable('card_list', {
+        deck_id: {
+          primaryKey: true,
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'deck',
+            key: 'id'
+          }
+        },
+        card_id: {
+          primaryKey: true,
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'card',
+            key: 'id'
+          },
+        },
+        active: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+          defaultValue: false
+        },
+        learning_order: {
+          type: DataTypes.INTEGER
+        },
+        review_type: {
+          type: DataTypes.ENUM(ReviewType.RECALL, ReviewType.RECOGNISE),
+          allowNull: false
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        }
+      }, { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
@@ -409,6 +448,7 @@ export default {
   down: async (queryInterface: QueryInterface): Promise<void> => {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
     try {
+      await queryInterface.dropTable('card_list', { transaction });
       await queryInterface.dropTable('bug_report', { transaction });
       await queryInterface.dropTable('card', { transaction });
       await queryInterface.dropTable('account_action', { transaction });

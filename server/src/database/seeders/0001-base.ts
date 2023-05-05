@@ -27,6 +27,10 @@ const deckTranslation: string = fs.readFileSync(
   path.resolve(__dirname, '../../../../dbBaseData/deck_translation.sql'), 'utf8'
 );
 
+const cardList: string = fs.readFileSync(
+  path.resolve(__dirname, '../../../../dbBaseData/card_list.sql'), 'utf8'
+);
+
 export default {
   up: async (queryInterface: QueryInterface): Promise<void> => {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
@@ -37,6 +41,7 @@ export default {
       await queryInterface.sequelize.query(bugReport, { transaction });
       await queryInterface.sequelize.query(deck, { transaction });
       await queryInterface.sequelize.query(deckTranslation, { transaction });
+      await queryInterface.sequelize.query(cardList, { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
@@ -46,6 +51,7 @@ export default {
   down: async (queryInterface: QueryInterface): Promise<void> => {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
     try {
+      await queryInterface.bulkDelete('card_list', {}, { transaction });
       await queryInterface.bulkDelete('deck_translation', {}, { transaction });
       await queryInterface.bulkDelete('deck', {}, { transaction });
       await queryInterface.bulkDelete('bug_report', {}, { transaction });

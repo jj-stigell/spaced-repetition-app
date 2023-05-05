@@ -1,25 +1,26 @@
 import {
-  CreationOptional, DataTypes, Model, InferAttributes, InferCreationAttributes, ForeignKey
+  DataTypes, Model, InferAttributes, InferCreationAttributes, ForeignKey, CreationOptional
 } from 'sequelize';
 
 import { sequelize } from '..';
+import { ReviewType } from '../../type';
 import Deck from './deck';
-import Language from './language';
+import Card from './card';
 
-export default class DeckTranslation extends Model<
-  InferAttributes<DeckTranslation>,
-  InferCreationAttributes<DeckTranslation>
+export default class CardList extends Model<
+  InferAttributes<CardList>,
+  InferCreationAttributes<CardList>
 > {
   declare deckId: ForeignKey<Deck['id']>;
-  declare languageId: ForeignKey<Language['id']>;
-  declare title: string;
-  declare description: string;
+  declare cardId: ForeignKey<Card['id']>;
   declare active: boolean;
+  declare learningOrder: number;
+  declare reviewType: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-DeckTranslation.init(
+CardList.init(
   {
     deckId: {
       primaryKey: true,
@@ -30,33 +31,32 @@ DeckTranslation.init(
         key: 'id'
       }
     },
-    languageId: {
+    cardId: {
       primaryKey: true,
-      type: DataTypes.CHAR(2),
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'language',
+        model: 'card',
         key: 'id'
-      }
-    },
-    title: {
-      type: DataTypes.STRING(60),
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING(60),
-      allowNull: false,
+      },
     },
     active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false
     },
+    learningOrder: {
+      type: DataTypes.INTEGER
+    },
+    reviewType: {
+      type: DataTypes.ENUM(ReviewType.RECALL, ReviewType.RECOGNISE),
+      allowNull: false
+    },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
   {
     sequelize,
-    tableName: 'deck_translation'
+    tableName: 'card_list'
   }
 );
