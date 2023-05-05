@@ -193,14 +193,24 @@ export async function decks(req: Request, res: Response): Promise<void> {
   }
 
   if (decks.length !== 0) {
-    /*
-    const user: JwtPayload = req.user as JwtPayload;
-    const account: Account = await findAccountById(user.id);
+    // TODO, use token user information
+    //const user: JwtPayload = req.user as JwtPayload;
+    const account: Account = await findAccountById(230795);
 
     if (account.role !== Role.NON_MEMBER) {
-      console.log('Get memeber extras');
+      // TODO, replace placeholder data with data from DB.
+      formattedDecks = formattedDecks.map((deck: FormattedDeckData) => {
+        return {
+          ...deck,
+          favorite: true,
+          progress: {
+            new: 5,
+            learning: 6,
+            mature: 3
+          }
+        };
+      });
     }
-    */
   }
 
   res.status(HttpCode.Ok).json({
