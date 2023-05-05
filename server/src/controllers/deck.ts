@@ -110,68 +110,97 @@ export async function decks(req: Request, res: Response): Promise<void> {
       .notRequired()
   });
 
-  const { level, category, language }: { level: number, category: string, language: string }  =
+  const { level, category, language }:
+  { level: number, category: string, language: string | undefined }  =
   await requestSchema.validate(req.query, { abortEarly: false });
 
-  console.log('JLPT LEVELS', Object.values(JlptLevel));
-  console.log('JLPT catgories', Object.values(DeckCategory));
-
-  const cache: string | null = await redisClient.get(`decksN${level}lang${language}`);
+  const languageId: string = language ?? 'EN';
+  const cache: string | null = await redisClient.get(`decks:n${level}:lang${languageId}`);
   let formattedDecks: Array<FormattedDeckData> = [];
 
   if (cache) {
-    logger.info(`Cache hit on decks in redis, language ${language}`);
+    logger.info(`Cache hit on decks in redis, language ${languageId}`);
     formattedDecks = JSON.parse(cache);
   } else {
     logger.info('No cache hit on decks, querying db');
 
-    const decks: Array<Deck> = await models.Deck.findAll({
+    type DeckTranslationData = {
+      id: number,
+      deckId: number,
+      languageId: string,
+      title: string,
+      description: string,
+      active: boolean,
+      createdAt: Date,
+      updatedAt: Date
+    }
+
+    type DeckData = {
+      id: number;
+      jlptLevel: number;
+      deckName: string;
+      cards: number;
+      category: string;
+      memberOnly: boolean;
+      languageId: string;
+      active: boolean;
+      createdAt: Date;
+      updatedAt: Date;
+      DeckTranslations: Array<DeckTranslationData>
+    }
+
+    const decks: Array<DeckData> = await models.Deck.findAll({
       where: {
         jlptLevel: level,
         category
       },
       include: {
         model: DeckTranslation,
+        required: false,
         where: {
+          active: true,
           languageId: {
-            [Op.or]: [language, 'EN']
+            [Op.or]: [languageId, 'EN']
           }
         }
       }
-    });
+    }) as unknown as Array<DeckData>;
 
-    formattedDecks = decks.map((deck: Deck): FormattedDeckData => {
+    formattedDecks = decks.map((deck: DeckData): FormattedDeckData => {
+      // Check if language specific translation exists.
+      const translation: DeckTranslationData | undefined = deck.DeckTranslations.find(
+        (translation: DeckTranslationData) => translation.languageId === languageId
+      );
+
+      // English translation always exists.
+      const defaultTranslation: DeckTranslationData = deck.DeckTranslations.find(
+        (translation: DeckTranslationData) => translation.languageId === 'EN'
+      ) as DeckTranslationData;
+
       return {
         id: deck.id,
         memberOnly: deck.memberOnly,
-        name: 'fsdfsdf',
-        description: 'sdfdsfdsf',
-        cards: 54,
-        favorite: true,
-        progress: {
-          // TODO implement progress search for member users.
-          // Temporary place holders.
-          new: 3,
-          learning: 4,
-          mature: 6
-        }
+        translationAvailable: translation ? true : false,
+        title: translation?.title ?? defaultTranslation.title,
+        description: translation?.description ?? defaultTranslation.description,
+        cards: deck.cards,
       };
     });
 
-    console.log(decks);
-
     const data: string = JSON.stringify(formattedDecks);
     // Set to cache with 10 hour expiry time.
-    await redisClient.set(`decksN${level}lang${language}`, data, { EX: 36000 });
+    await redisClient.set(`decks:n${level}:lang${languageId}`, data, { EX: 36000 });
   }
 
   if (decks.length !== 0) {
+    /*
     const user: JwtPayload = req.user as JwtPayload;
     const account: Account = await findAccountById(user.id);
 
     if (account.role !== Role.NON_MEMBER) {
       console.log('Get memeber extras');
     }
+    */
   }
 
   res.status(HttpCode.Ok).json({
