@@ -13,6 +13,7 @@ export default class Deck extends Model<
   declare id: CreationOptional<number>;
   declare jlptLevel: number;
   declare deckName: string;
+  declare cards: number;
   declare category: string;
   declare memberOnly: boolean;
   declare languageId: ForeignKey<Language['id']>;
@@ -44,6 +45,11 @@ Deck.init(
       type: DataTypes.STRING(60),
       allowNull: false,
       unique: true,
+    },
+    cards: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
     },
     category: {
       type: DataTypes.ENUM(
