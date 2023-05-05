@@ -22,7 +22,7 @@ import { idSchema } from './utils/validator';
  */
 export async function cardsFromDeck(req: Request, res: Response): Promise<void> {
   const requestSchema: yup.AnyObject = yup.object({
-    languageid: yup.string()
+    language: yup.string()
       .transform((value: string, originalValue: string) => {
         return originalValue ? originalValue.toUpperCase() : value;
       })
@@ -30,28 +30,42 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
       .notRequired()
   });
 
-  const languageid: string | undefined = await requestSchema.validate(
-    req.query.languageid, { abortEarly: false }
+  const language: string | undefined = await requestSchema.validate(
+    req.query.language, { abortEarly: false }
   );
 
+  const languageId: string = language ?? 'EN';
   const deckId: number = Number(req.params.bugId);
   await idSchema.validate({ id: deckId });
 
+  const cache: string | null = await redisClient.get(`deck:${deckId}:lang${languageId}`);
+  let cards: Array<any> = [];
+
+  if (cache) {
+    logger.info(`Cache hit on deck cards in redis, language ${languageId}`);
+    cards = JSON.parse(cache);
+  } else {
+    logger.info('No cache hit on deck cards, querying db');
+
+
+
+
+
+  }
+
+
+
+
 
   // Check user is allowed to access deck
-
   // Check redis cache for cached cards, deckId+langId
-
   // Check deck exists
-
   // Check translation available
-
   // Server correct translation if available to the user
-
   // Format cards to match client layout
 
   res.status(HttpCode.Ok).json({
-    data: {}
+    data: cards
   });
 }
 
@@ -97,6 +111,9 @@ export async function decks(req: Request, res: Response): Promise<void> {
         validationErrors.ERR_INVALID_JLPT_LEVEL)
       .required(validationErrors.ERR_JLPT_LEVEL_REQUIRED),
     category: yup.string()
+      .transform((value: string, originalValue: string) => {
+        return originalValue ? originalValue.toUpperCase() : value;
+      })
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .oneOf(
         Object.values(DeckCategory),
