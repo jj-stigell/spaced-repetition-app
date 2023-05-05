@@ -141,10 +141,11 @@ export type DeckErrors = {
 export type FormattedDeckData = {
   id: number;
   memberOnly: boolean;
-  name: string;
+  translationAvailable: boolean;
+  title: string;
   description: string;
   cards: number;
-  favorite: boolean;
+  favorite?: boolean;
 } & Progress
 
 export type EmailClientArgs<TemplateData> = {
@@ -257,6 +258,11 @@ export type ReviewErrors = {
   readonly ERR_PUSH_REVIEWS_LIMIT_EXCEEDED: string;
   readonly ERR_INVALID_RESULT_TYPE: string;
 };
+
+export enum ReviewType {
+  RECALL = 'RECALL',
+  RECOGNISE = 'RECOGNISE'
+}
 
 export enum Role {
   NON_MEMBER = 'NON_MEMBER',
