@@ -31,8 +31,8 @@ export const sequelize: Sequelize = new Sequelize(
 export const connectToDatabase = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
-    logger.info('database connected');
+    logger.info('postgresql database connected');
   } catch (error) {
-    logger.info('database connection failed', error);
+    logger.error('postgresql database connection failed', error);
   }
 };
