@@ -249,6 +249,11 @@
     "jlptSelector": {
       "title": "Select JLPT Level",
       "button": "JLPT N{{level}} - Click to change"
+    },
+    "studySelector": {
+      "title": "Select study style",
+      "studyDueAndNew": "Only new and due cards",
+      "studyAll": "All cards"
     }
   },
   "errors": {
