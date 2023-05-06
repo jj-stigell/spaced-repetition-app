@@ -222,12 +222,7 @@ passport.use(
       done: (error: unknown | null, user?: LoginResult | false, options?: IVerifyOptions) => void
     ) => {
       try {
-        const account: Account = await findAccountByEmail(email);
-
-        if (!account.emailVerified) {
-          throw new ApiError(accountErrors.ERR_EMAIL_NOT_CONFIRMED, HttpCode.Forbidden);
-        }
-
+        const account: Account = await findAccountByEmail(email, true);
         const userAgent: string = req?.headers['user-agent'] ?? '';
         const parsedUserAgent: IResult | undefined = UAParser(userAgent);
 
