@@ -110,6 +110,7 @@ export default {
   AccountAction,
   BugReport,
   Card,
+  CardList,
   Deck,
   DeckTranslation,
   Language,

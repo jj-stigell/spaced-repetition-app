@@ -6,7 +6,7 @@ import { HttpCode } from '../../type';
 /**
  * Finds a card by its ID.
  * @param {number} id - The ID of the card to be found.
- * @returns {Promise<BugReport>} - A promise that resolves with the found card model object.
+ * @returns {Promise<Card>} - A promise that resolves with the found card model object.
  * @throws {ApiError} - If the card is not found, it throws an error with a message
  * indicating the missing card with the specific ID.
  */
