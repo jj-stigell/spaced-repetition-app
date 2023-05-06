@@ -8,10 +8,10 @@ export const router: Router = Router();
 /**
  * @swagger
  * definitions:
- *   Decks:
+ *   Deck:
  *     type: object
  *     description: >
- *       All decks found based on query. Includes deck and personalized information (based on role).
+ *       Deck and personalized information (based on role).
  *     properties:
  *       id:
  *         type: integer
@@ -56,6 +56,29 @@ export const router: Router = Router();
  *             type: integer
  *             example: 9
  *             description: Cards studied enough become mature after certain review interval.
+ *   Card:
+ *     type: object
+ *     description: >
+ *       Card data.
+ *     properties:
+ *       id:
+ *         type: integer
+ *         example: 136
+ *         description: Card id.
+ *       learningOrder:
+ *         type: integer
+ *         example: 1
+ *         description: Order of learning for the card, deck specific.
+ *       reviewType:
+ *         type: string
+ *         enum: [RECOGNISE, RECALL]
+ *         example: RECALL
+ *         description: What way the card is studied.
+ *       cardType:
+ *         type: string
+ *         enum: [KANJI, KANA, VOCABULARY, SENTENCE]
+ *         example: KANJI
+ *         description: Type of the card.
  */
 
 /**
@@ -93,7 +116,7 @@ export const router: Router = Router();
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/definitions/Decks'
+ *                     $ref: '#/definitions/Deck'
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:
@@ -115,7 +138,7 @@ export const router: Router = Router();
  */
 router.get(
   '/',
-  //passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   requestWrap(decks)
 );
 
@@ -124,9 +147,15 @@ router.get(
  * /api/v1/deck/{deckId}/cards:
  *   get:
  *     tags: [Deck]
- *     description: Get deck based on its id (PK).
+ *     description: Get cards from deck based on its id (PK).
  *     parameters:
- *       - name: languageid
+ *       - name: deckId
+ *         in: path
+ *         description: Id of the deck, of which cards are requested.
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - name: language
  *         in: query
  *         description: Language code in ISO 639-1, if language not available, defaults to EN.
  *         required: false
@@ -144,7 +173,7 @@ router.get(
  *                 data:
  *                   type: array
  *                   items:
- *                     $ref: '#/definitions/BugReport'
+ *                     $ref: '#/definitions/Card'
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:
@@ -158,7 +187,7 @@ router.get(
  *             schema:
  *               $ref: '#/definitions/Failure'
  *       404:
- *         description: The deck not found.
+ *         description: The deck or account not found.
  *         content:
  *           application/json:
  *             schema:
