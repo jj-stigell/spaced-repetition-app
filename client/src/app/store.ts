@@ -7,25 +7,25 @@ import { NODE_ENV } from '../config/environment'
 // reducer imports
 import accountReducer from '../features/accountSlice'
 // import customizationReducer from '../features/customizationReducer'
-// import registerReducer from '../features/OLD_DELETE/registerReducer'
 import rememberMeReducer from '../features/rememberMeSlice'
 import notificationReducer from '../features/notificationSlice'
-// import deckReducer from '../features/deckReducer'
+import categoryReducer from '../features/categorySlice'
+import deckReducer from '../features/deckSlice'
 // import cardReducer from '../features/card/cardSlice'
 
 export const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['register', 'notification', 'account'] // TODO remove account from here in production later on
+  blacklist: ['register', 'notification', 'account', 'category', 'deck'] // TODO remove account from here in production later on
 }
 
 const appReducer = combineReducers({
   account: accountReducer,
   // customization: customizationReducer,
-  // register: registerReducer
   remember: rememberMeReducer,
-  notification: notificationReducer
-  // decks: deckReducer,
+  notification: notificationReducer,
+  category: categoryReducer,
+  deck: deckReducer
   // cards: cardReducer
 })
 
