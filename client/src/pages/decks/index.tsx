@@ -10,6 +10,16 @@ import CssBaseline from '@mui/material/CssBaseline'
 import Button from '@mui/material/Button'
 import { useNavigate, useParams } from 'react-router-dom'
 import CircularLoader from '../../components/CircularLoader'
+import { setNotification } from '../../features/notificationSlice'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { Deck, DeckCategory, Role } from '../../types'
+import axios from '../../lib/axios'
+import { getDecks } from '../../config/api'
+import { RootState } from '../../app/store'
+import { DeckState, setDecks } from '../../features/deckSlice'
+import { AxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
+import { Account } from '../../features/accountSlice'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -22,79 +32,48 @@ const Item = styled(Paper)(({ theme }) => ({
   }
 }))
 
-export interface Deck {
-  id: number
-  name: string
-  description: string
-  dueCards: number
-  newCards: number
-}
-
 function Decks (): JSX.Element {
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const { t } = useTranslation()
   const { category } = useParams()
+  const account: Account = useAppSelector((state: RootState) => state.account.account)
+  const deck: DeckState = useAppSelector((state: RootState) => state.deck)
 
-  const [decks, setDecks] = React.useState<Deck[]>([])
+  React.useEffect(() => {
+    if (category !== undefined) {
+      if (deck.category === undefined || deck.category !== category) {
+        axios.get(`${getDecks}?level=${account.jlptLevel}&category=${category}`)
+          .then(function (response) {
+            dispatch(setDecks({ category: category as DeckCategory, decks: response.data.data }))
+          })
+          .catch(function (error) {
+            console.log('error encountered', error)
+            const errorCode: string | null = error?.response?.data?.errors[0]?.code
 
-  // temporary mock data
-  const decksMock: Deck[] = [
-    {
-      id: 1,
-      name: 'master deck',
-      description: 'includes all the cards from individual decks',
-      dueCards: 10,
-      newCards: 3
-    },
-    {
-      id: 2,
-      name: `${category ?? 'xxx'} deck 1`,
-      description: `first 25 ${category ?? 'xxx'} cards`,
-      dueCards: 3,
-      newCards: 7
-    },
-    {
-      id: 3,
-      name: `${category ?? 'xxx'} deck 2`,
-      description: `cards 26 to 50 ${category ?? 'xxx'} cards`,
-      dueCards: 14,
-      newCards: 0
-    },
-    {
-      id: 4,
-      name: `${category ?? 'xxx'} deck 3`,
-      description: `cards 51 to 75 ${category ?? 'xxx'} cards`,
-      dueCards: 8,
-      newCards: 3
-    },
-    {
-      id: 5,
-      name: `${category ?? 'xxx'} deck 4`,
-      description: `cards 76 to 100 ${category ?? 'xxx'} cards`,
-      dueCards: 0,
-      newCards: 6
-    },
-    {
-      id: 6,
-      name: `${category ?? 'xxx'} deck 5`,
-      description: `cards 101 to 120 ${category ?? 'xxx'} cards`,
-      dueCards: 2,
-      newCards: 0
+            if (errorCode != null) {
+            // TODO: what if there are multiple errors.
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+              dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+            } else if (error instanceof AxiosError) {
+              dispatch(setNotification({ message: error.message, severity: 'error' }))
+            } else {
+              dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+            }
+          })
+      }
+    } else {
+      // TODO add category missing error translation.
+      dispatch(setNotification({ message: t('CATEGORY.MISSING'), severity: 'error' }))
     }
-  ]
-
+  }, [])
 
   const handleClick = (id: number): void => {
     console.log('deck selected', id)
     navigate(`/study/deck/${id}`)
   }
 
-  React.useEffect(() => {
-    setTimeout(() => {
-      setDecks(decksMock)
-    }, 1000)
-  }, [])
-
-  if (decks.length === 0) {
+  if (deck.decks.length === 0) {
     return (<CircularLoader />)
   }
 
@@ -112,16 +91,37 @@ function Decks (): JSX.Element {
         </Button>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2 }}>
-            {decks.map((deck: Deck) => (
+            {deck.decks.map((deck: Deck) => (
               <Grid item xs={2} sm={4} md={4} key={deck.id}>
                 <Item onClick={() => { handleClick(deck.id) }}>
-                  {deck.name}
+                  {deck.title}
+                  <br/>
+                  { account.role === Role.NON_MEMBER
+                    ? <>Member deck, NO ACCESS</>
+                    : <>Member deck, study now</>
+                  }
+                  <br/>
+                  { account.role !== Role.NON_MEMBER &&
+                    <>Favorite: {((deck?.favorite) === true) ? <>true</> : <>false</>}</>
+                  }
                   <br/>
                   description: {deck.description}
                   <br/>
-                  due: {deck.dueCards}
+                  due: 4
                   <br/>
-                  new: {deck.newCards}
+                  new: 3
+                  { ((deck?.progress) !== undefined) &&
+                  <div>
+                    <br/>
+                    Progress:
+                    <br/>
+                    new cards: {deck.progress.new}
+                    <br/>
+                    learning cards: {deck.progress.learning}
+                    <br/>
+                    matured cards: {deck.progress.mature}
+                  </div>
+                  }
                   </Item>
               </Grid>
             ))}

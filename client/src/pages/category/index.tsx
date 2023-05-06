@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { AxiosError } from 'axios'
 import { experimentalStyled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
@@ -10,10 +11,13 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import LevelSelector from './LevelSelector'
-import { DeckCategory, JlptLevel, Role } from '../../types'
+import { Category, JlptLevel } from '../../types'
 import { RootState } from '../../app/store'
-import { useAppSelector } from '../../app/hooks'
-import { Account } from '../../features/accountSlice'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import axios from '../../lib/axios'
+import { getCategories } from '../../config/api'
+import { setNotification } from '../../features/notificationSlice'
+import { CategoryState, setCategories } from '../../features/categorySlice'
 
 const Item = experimentalStyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -28,20 +32,35 @@ const Item = experimentalStyled(Paper)(({ theme }) => ({
 
 function Study (): JSX.Element {
   const navigate = useNavigate()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t } = useTranslation()
-  const account: Account = useAppSelector((state: RootState) => state.account.account)
-  let categories: string[] = Object.values(DeckCategory)
+  const dispatch = useAppDispatch()
+  const categories: CategoryState = useAppSelector((state: RootState) => state.category)
+  const jlptLevel: JlptLevel = useAppSelector((state: RootState) => state.account.account.jlptLevel)
 
-  // Display kana decks only in JLPT N5 level.
-  if (account.jlptLevel !== JlptLevel.N5) {
-    categories = categories.filter((cat: string) => cat !== DeckCategory.KANA)
-  }
+  React.useEffect(() => {
+    // Only fetch categories if undefined or does not match the set JLPT level.
+    if (categories.jlptLevel === undefined || categories.jlptLevel !== jlptLevel) {
+      axios.get(`${getCategories}?level=${jlptLevel}`)
+        .then(function (response) {
+          console.log('Response for setting categories:', response.data.data)
+          dispatch(setCategories({ jlptLevel, categories: response.data.data }))
+        })
+        .catch(function (error) {
+          console.log('error encountered', error)
+          const errorCode: string | null = error?.response?.data?.errors[0]?.code
 
-  // Don't display custom and favorite decks only to members.
-  if (account.role === Role.NON_MEMBER) {
-    categories = categories.filter((cat: string) => cat !== DeckCategory.CUSTOM && cat !== DeckCategory.FAVORITE)
-  }
+          if (errorCode != null) {
+            // TODO: what if there are multiple errors.
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+          } else if (error instanceof AxiosError) {
+            dispatch(setNotification({ message: error.message, severity: 'error' }))
+          } else {
+            dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+          }
+        })
+    }
+  }, [jlptLevel])
 
   return (
     <div id="study-page" style={{ marginTop: 15 }}>
@@ -52,9 +71,26 @@ function Study (): JSX.Element {
         </div>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2 }}>
-            {categories.map((category: string) => (
-              <Grid item xs={2} sm={4} md={4} key={category}>
-                <Item onClick={() => { navigate(`/study/decks/${category.toLowerCase()}`) }}>{category}</Item>
+            {categories.categories.map((category: Category) => (
+              <Grid item xs={2} sm={4} md={4} key={category.category}>
+                <Item onClick={() => { navigate(`/study/decks/${category.category.toLowerCase()}`) }}>
+                  Category: {category.category}
+                  <br/>
+                  Decks: {category.decks}
+                  <br/>
+                  { ((category?.progress) !== undefined) &&
+                  <div>
+                    <br/>
+                    Progress:
+                    <br/>
+                    new decks: {category.progress.new}
+                    <br/>
+                    learning decks: {category.progress.learning}
+                    <br/>
+                    finished decks: {category.progress.mature}
+                  </div>
+                  }
+                </Item>
               </Grid>
             ))}
           </Grid>
