@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from 'express';
 import { Op } from 'sequelize';
 import * as yup from 'yup';
@@ -12,6 +13,10 @@ import DeckTranslation from '../database/models/deckTranslation';
 import { DeckCategory, FormattedDeckData, HttpCode, JlptLevel, JwtPayload, Role } from '../type';
 import { findAccountById } from './utils/account';
 import { idSchema } from './utils/validator';
+import { findDeckById } from './utils/deck';
+import CardList from '../database/models/cardList';
+import Card from '../database/models/card';
+import { ApiError } from '../class';
 
 /**
  * Get all cards belonging to a deck.
@@ -30,36 +35,57 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
       .notRequired()
   });
 
-  const language: string | undefined = await requestSchema.validate(
-    req.query.language, { abortEarly: false }
+  const { language }: { language: string | undefined } = await requestSchema.validate(
+    req.query, { abortEarly: false }
   );
 
   const languageId: string = language ?? 'EN';
-  const deckId: number = Number(req.params.bugId);
+  const deckId: number = Number(req.params.deckId);
   await idSchema.validate({ id: deckId });
 
+  // Check deck exists.
+  const deck: Deck = await findDeckById(deckId);
+  const account: Account = await findAccountById(230793, true);
+
+  if (deck.memberOnly && account.role === Role.NON_MEMBER) {
+    throw new ApiError('deck only for members', HttpCode.Forbidden);
+  }
+
   const cache: string | null = await redisClient.get(`deck:${deckId}:lang${languageId}`);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cards: Array<any> = [];
 
   if (cache) {
-    logger.info(`Cache hit on deck cards in redis, language ${languageId}`);
+    logger.info(`Cache hit on cards in redis, language ${languageId}`);
     cards = JSON.parse(cache);
   } else {
-    logger.info('No cache hit on deck cards, querying db');
+    logger.info('No cache hit on cards, querying db');
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cardList: Array<any> = await models.CardList.findAll({
+      where: {
+        deckId
+      },
+      include: {
+        model: Card,
+        required: true
+      },
+      order: [['learningOrder', 'ASC']]
+    });
 
+    cards = cardList.map((card: any) => {
+      return {
+        id: card.cardId,
+        learningOrder: card.learningOrder,
+        reviewType: card.reviewType,
+        cardType: card.card.type
+      };
+    });
 
-
-
+    // Set to cache with 10 hour expiry time.
+    await redisClient.set(`deck:${deckId}:lang${languageId}`, JSON.stringify(cards), { EX: 36000 });
   }
 
-
-
-
-
-  // Check user is allowed to access deck
-  // Check redis cache for cached cards, deckId+langId
-  // Check deck exists
   // Check translation available
   // Server correct translation if available to the user
   // Format cards to match client layout
@@ -80,10 +106,7 @@ count finished decks for the user to display progress
   progress: 5
 }
 
-
-
 decks 10
-
 
 count deck where category = KANJI and level
 
@@ -91,7 +114,6 @@ SELECT COUNT(*) FROM deck
 JOIN account_deck_settings
 ON deck.id = account_deck_settings.deck_id deck.category = KANJI AND deck.jlpt_level = 1
 AND account_deck_settings.mastered = TRUE;
-
 */
 
 /**
@@ -132,7 +154,9 @@ export async function decks(req: Request, res: Response): Promise<void> {
   await requestSchema.validate(req.query, { abortEarly: false });
 
   const languageId: string = language ?? 'EN';
-  const cache: string | null = await redisClient.get(`decks:n${level}:lang${languageId}`);
+  const cache: string | null = await redisClient.get(
+    `decks:n${level}:lang${languageId}:cat${category}`
+  );
   let formattedDecks: Array<FormattedDeckData> = [];
 
   if (cache) {
@@ -204,9 +228,11 @@ export async function decks(req: Request, res: Response): Promise<void> {
       };
     });
 
-    const data: string = JSON.stringify(formattedDecks);
     // Set to cache with 10 hour expiry time.
-    await redisClient.set(`decks:n${level}:lang${languageId}`, data, { EX: 36000 });
+    await redisClient.set(
+      `decks:n${level}:lang${languageId}:cat${category}`,
+      JSON.stringify(formattedDecks), { EX: 36000 }
+    );
   }
 
   if (decks.length !== 0) {
