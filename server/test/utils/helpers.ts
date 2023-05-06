@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import fs from 'fs';
 import path from 'path';
 import { QueryInterface } from 'sequelize';

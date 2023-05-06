@@ -2,7 +2,7 @@ import argon from 'argon2';
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import passport from 'passport';
-import { Strategy as JWTStrategy, VerifiedCallback } from 'passport-jwt';
+import { Strategy as JWTStrategy, StrategyOptions, VerifiedCallback } from 'passport-jwt';
 import { IVerifyOptions, Strategy as LocalStrategy } from 'passport-local';
 import { QueryTypes, Transaction } from 'sequelize';
 import * as yup from 'yup';
@@ -260,16 +260,28 @@ passport.use(
   ),
 );
 
-passport.use('jwt', new JWTStrategy(
-  {
-    secretOrKey: JWT_SECRET,
-    jwtFromRequest: (req: Request): string | null => {
-      return (req && req.cookies) ? req.cookies['jwt'] : null;
-    }
-  },
-  async (jwt_payload: JwtPayload, done: VerifiedCallback): Promise<void> => {
+
+const options: StrategyOptions = {
+  secretOrKey: JWT_SECRET,
+  //ignoreExpiration: true,
+  jwtFromRequest: (req: Request): string | null => {
+    return (req && req.cookies) ? req.cookies['jwt'] : null;
+  }
+};
+
+passport.use('jwt', new JWTStrategy(options,
+  async (jwtPayload: JwtPayload, done: VerifiedCallback): Promise<void> => {
     try {
-      return done(null, jwt_payload);
+      /*
+      console.log('checking JWT');
+      const now: number = Date.now() / 1000;
+      const exp: number = jwtPayload.exp as number;
+      if (exp < now) {
+        console.log('jwt expired');
+        return done(null, false, { message: 'Token expired' });
+      }
+      */
+      return done(null, jwtPayload);
     } catch(e) {
       return done(e, false);
     }

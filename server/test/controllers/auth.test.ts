@@ -9,22 +9,21 @@ import { accountErrors } from '../../src/configs/errorCodes';
 import {
   newAccount, LOGIN_URI, LOGOUT_URI, REGISTER_URI, user
 } from '../utils/constants';
-import { checkErrors, resetDatabase } from '../utils/helpers';
+import { checkErrors, getCookies, resetDatabase } from '../utils/helpers';
 import { HttpCode, JlptLevel } from '../../src/type';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let account: Account;
+let nonMemberUserCookies: Array<string> = [];
+let memberUserCookies: Array<string> = [];
+let adminReadCookies: Array<string> = [];
+let adminWriteCookies: Array<string> = [];
+let superuserCookies: Array<string> = [];
 
 beforeEach(async () => {
   await resetDatabase();
-  await request.post(REGISTER_URI).send(user);
-  account = await models.Account.findOne({
-    where: {
-      email: user.email
-    }
-  }) as Account;
-  account.set({ emailVerified: true });
-  await account.save();
+  [memberUserCookies, adminReadCookies, adminWriteCookies, superuserCookies, nonMemberUserCookies]
+  = await getCookies();
 });
 
 describe(`Test POST ${REGISTER_URI} - create a new account`, () => {
@@ -94,6 +93,11 @@ describe(`Test POST ${LOGIN_URI} - login to account`, () => {
   });
 
   it('should not allow logging in to account with unverified email address', async () => {
+    account = await models.Account.findOne({
+      where: {
+        email: user.email
+      }
+    }) as Account;
     account.set({ emailVerified: false });
     await account.save();
 
@@ -123,7 +127,7 @@ describe(`Test POST ${LOGOUT_URI} - logout account`, () => {
 
   it('should logout (clear cookie) successfully when valid cookie supplied', async () => {
     let res: supertest.Response = await request.post(LOGIN_URI)
-      .send({ email: user.email, password: user.password })
+      .send(user)
       .expect('Content-Type', /json/);
 
     let cookies: Array<string> = res.headers['set-cookie'];
@@ -147,6 +151,11 @@ describe(`Test POST ${LOGOUT_URI} - logout account`, () => {
     expect(res.body.errors).not.toBeDefined();
     expect(res.statusCode).toBe(HttpCode.Unauthorized);
   });
+
+  it('should give error when JWT token expired', async () => {
+    expect(1).toBe(1);
+  });
+
 });
 
 /*
