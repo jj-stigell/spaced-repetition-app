@@ -11,6 +11,8 @@ export const CHANGE_PASSWORD_URI: string = '/api/v1/account/password';
 export const CHANGE_JLPT_LEVEL_URI: string = '/api/v1/account/jlpt-level';
 export const BUGREPORT_URI: string = '/api/v1/bug';
 export const CATEGORIES_URI: string = '/api/v1/category';
+export const DECKS_URI: string = '/api/v1/deck';
+export const CARDS_FROM_DECK_URI: string = '/api/v1/deck/:deckId/cards';
 
 export const user: RegisterData = {
   email: 'userAccount@test.com',
