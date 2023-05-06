@@ -62,6 +62,29 @@ export enum ReviewType {
   RECOGNISE = 'RECOGNISE',
 }
 
+export interface Category extends Progress {
+  readonly category: DeckCategory
+  readonly decks: number
+}
+
+export interface Deck extends Progress {
+  id: number
+  memberOnly: boolean
+  translationAvailable: boolean
+  title: string
+  description: string
+  cards: number
+  favorite?: boolean
+}
+
+export interface Progress {
+  progress?: {
+    new: number
+    learning: number
+    mature: number
+  }
+}
+
 export interface answerOption {
   option: string
   correct: boolean
@@ -112,7 +135,9 @@ export interface JLPT {
   name: string
 }
 
+/*
 export interface Category {
   id: DeckCategory
   name: string
 }
+*/

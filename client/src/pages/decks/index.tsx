@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-multiple-empty-lines */
 import React from 'react'
+
+import { AxiosError } from 'axios'
 import { experimentalStyled as styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
@@ -9,6 +9,8 @@ import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
 import Button from '@mui/material/Button'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+
 import CircularLoader from '../../components/CircularLoader'
 import { setNotification } from '../../features/notificationSlice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
@@ -17,9 +19,8 @@ import axios from '../../lib/axios'
 import { getDecks } from '../../config/api'
 import { RootState } from '../../app/store'
 import { DeckState, setDecks } from '../../features/deckSlice'
-import { AxiosError } from 'axios'
-import { useTranslation } from 'react-i18next'
 import { Account } from '../../features/accountSlice'
+import StudyOptions from './StudySelector'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -40,7 +41,11 @@ function Decks (): JSX.Element {
   const account: Account = useAppSelector((state: RootState) => state.account.account)
   const deck: DeckState = useAppSelector((state: RootState) => state.deck)
 
+  const [selectedDeckId, setSelectedDeckId] = React.useState<number>(1)
+  const [showModal, setShowModal] = React.useState<boolean>(false)
+
   React.useEffect(() => {
+    // TODO make loading view with skeleton
     if (category !== undefined) {
       if (deck.category === undefined || deck.category !== category) {
         axios.get(`${getDecks}?level=${account.jlptLevel}&category=${category}`)
@@ -69,8 +74,8 @@ function Decks (): JSX.Element {
   }, [])
 
   const handleClick = (id: number): void => {
-    console.log('deck selected', id)
-    navigate(`/study/deck/${id}`)
+    setSelectedDeckId(id)
+    setShowModal(true)
   }
 
   if (deck.decks.length === 0) {
@@ -80,6 +85,7 @@ function Decks (): JSX.Element {
   return (
     <div id="study-page-decks" style={{ marginTop: 15 }}>
       <CssBaseline />
+      <StudyOptions deckId={selectedDeckId} open={showModal} setOpen={setShowModal} />
       <Container maxWidth="sm">
         <Button
           fullWidth
@@ -99,6 +105,11 @@ function Decks (): JSX.Element {
                   { account.role === Role.NON_MEMBER
                     ? <>Member deck, NO ACCESS</>
                     : <>Member deck, study now</>
+                  }
+                  <br/>
+                  { deck.translationAvailable
+                    ? <>Translation available</>
+                    : <>Translation not available, using english</>
                   }
                   <br/>
                   { account.role !== Role.NON_MEMBER &&

@@ -14,6 +14,7 @@ import { setJlptLevel } from '../../features/accountSlice'
 import { RootState } from '../../app/store'
 import { changeJlptLevel } from '../../config/api'
 import { setNotification } from '../../features/notificationSlice'
+import { initialState, setDecks } from '../../features/deckSlice'
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -50,6 +51,7 @@ function LevelSelector (): JSX.Element {
 
   const handleLevelSelection = (selectedLevel: JlptLevel): void => {
     dispatch(setJlptLevel(selectedLevel))
+    dispatch(setDecks(initialState))
     handleModalClick()
 
     axios.patch(changeJlptLevel, {
