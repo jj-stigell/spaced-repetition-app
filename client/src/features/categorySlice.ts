@@ -17,10 +17,13 @@ const categorySlice = createSlice({
   reducers: {
     setCategories (state, action: PayloadAction<CategoryState>) {
       return action.payload
+    },
+    resetCategories () {
+      return initialState
     }
   }
 })
 
-export const { setCategories } = categorySlice.actions
+export const { setCategories, resetCategories } = categorySlice.actions
 
 export default categorySlice.reducer

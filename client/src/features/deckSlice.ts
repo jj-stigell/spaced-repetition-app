@@ -17,10 +17,13 @@ const deckSlice = createSlice({
   reducers: {
     setDecks (state, action: PayloadAction<DeckState>) {
       return action.payload
+    },
+    resetDecks () {
+      return initialState
     }
   }
 })
 
-export const { setDecks } = deckSlice.actions
+export const { setDecks, resetDecks } = deckSlice.actions
 
 export default deckSlice.reducer

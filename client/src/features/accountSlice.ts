@@ -34,6 +34,15 @@ const accountSlice = createSlice({
     setAccount (state, action) {
       return action.payload
     },
+    resetAccount (state) {
+      return {
+        isLoggedIn: false,
+        account: {
+          ...initialState.account,
+          language: state.account.language
+        }
+      }
+    },
     setJlptLevel (state, action: PayloadAction<JlptLevel>) {
       return {
         ...state,
@@ -46,7 +55,7 @@ const accountSlice = createSlice({
   }
 })
 
-export const { setJlptLevel, setAccount } = accountSlice.actions
+export const { setJlptLevel, setAccount, resetAccount } = accountSlice.actions
 
 /*
 export const logOutAccount = () => {

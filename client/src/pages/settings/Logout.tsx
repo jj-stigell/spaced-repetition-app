@@ -8,9 +8,11 @@ import { useTranslation } from 'react-i18next'
 // Project imports
 import { useAppDispatch } from '../../app/hooks'
 import { logout } from '../../config/api'
-import { initialState, setAccount } from '../../features/accountSlice'
+import { resetAccount } from '../../features/accountSlice'
 import { setNotification } from '../../features/notificationSlice'
 import axios from '../../lib/axios'
+import { resetDecks } from '../../features/deckSlice'
+import { resetCategories } from '../../features/categorySlice'
 
 function Logout (): JSX.Element {
   const dispatch = useAppDispatch()
@@ -32,7 +34,9 @@ function Logout (): JSX.Element {
           dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
         }
       }).finally(function () {
-        dispatch(setAccount(initialState))
+        dispatch(resetAccount())
+        dispatch(resetDecks())
+        dispatch(resetCategories())
       })
   }
 
