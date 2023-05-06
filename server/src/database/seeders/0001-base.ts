@@ -51,6 +51,7 @@ export default {
   down: async (queryInterface: QueryInterface): Promise<void> => {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
     try {
+      await queryInterface.bulkDelete('account_action', {}, { transaction });
       await queryInterface.bulkDelete('card_list', {}, { transaction });
       await queryInterface.bulkDelete('deck_translation', {}, { transaction });
       await queryInterface.bulkDelete('deck', {}, { transaction });
