@@ -148,6 +148,31 @@ export type FormattedDeckData = {
   favorite?: boolean;
 } & Progress
 
+export type DeckTranslationData = {
+  id: number,
+  deckId: number,
+  languageId: string,
+  title: string,
+  description: string,
+  active: boolean,
+  createdAt: Date,
+  updatedAt: Date
+}
+
+export type DeckData = {
+  id: number;
+  jlptLevel: number;
+  deckName: string;
+  cards: number;
+  category: string;
+  memberOnly: boolean;
+  languageId: string;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  DeckTranslations: Array<DeckTranslationData>
+}
+
 export type EmailClientArgs<TemplateData> = {
   readonly to: string;
   readonly subject: string;

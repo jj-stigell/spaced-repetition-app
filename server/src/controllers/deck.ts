@@ -10,7 +10,10 @@ import models from '../database/models';
 import Account from '../database/models/account';
 import Deck from '../database/models/deck';
 import DeckTranslation from '../database/models/deckTranslation';
-import { DeckCategory, FormattedDeckData, HttpCode, JlptLevel, JwtPayload, Role } from '../type';
+import {
+  DeckCategory, DeckData, DeckTranslationData,
+  FormattedDeckData, HttpCode, JlptLevel, Role
+} from '../type';
 import { findAccountById } from './utils/account';
 import { idSchema } from './utils/validator';
 import { findDeckById } from './utils/deck';
@@ -164,31 +167,6 @@ export async function decks(req: Request, res: Response): Promise<void> {
     formattedDecks = JSON.parse(cache);
   } else {
     logger.info('No cache hit on decks, querying db');
-
-    type DeckTranslationData = {
-      id: number,
-      deckId: number,
-      languageId: string,
-      title: string,
-      description: string,
-      active: boolean,
-      createdAt: Date,
-      updatedAt: Date
-    }
-
-    type DeckData = {
-      id: number;
-      jlptLevel: number;
-      deckName: string;
-      cards: number;
-      category: string;
-      memberOnly: boolean;
-      languageId: string;
-      active: boolean;
-      createdAt: Date;
-      updatedAt: Date;
-      DeckTranslations: Array<DeckTranslationData>
-    }
 
     const decks: Array<DeckData> = await models.Deck.findAll({
       where: {
