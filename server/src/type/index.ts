@@ -337,4 +337,6 @@ export type ValidationErrors = {
   readonly ERR_JLPT_LEVEL_REQUIRED: string;
   readonly ERR_INVALID_CATEGORY: string;
   readonly ERR_CATEGORY_REQUIRED: string;
+  readonly ERR_LANGUAGE_REQUIRED: string;
+  readonly ERR_LANGUAGE_ID_NOT_VALID: string;
 };

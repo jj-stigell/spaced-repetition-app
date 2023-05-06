@@ -58,9 +58,12 @@ export async function register(req: Request, res: Response): Promise<void> {
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .notRequired(),
     language: yup.string()
-      .oneOf(['EN', 'FI'])
+      .transform((value: string, originalValue: string) => {
+        return originalValue ? originalValue.toUpperCase() : value;
+      })
+      .oneOf(['EN', 'FI', 'VN'], validationErrors.ERR_LANGUAGE_ID_NOT_VALID)
       .typeError(validationErrors.ERR_INPUT_TYPE)
-      .required()
+      .required(validationErrors.ERR_LANGUAGE_REQUIRED)
   });
 
   // DELETE WHEN MVP READY

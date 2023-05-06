@@ -5,7 +5,7 @@ import supertest, { SuperAgentTest } from 'supertest';
 import { app } from '../../src/app';
 import models from '../../src/database/models';
 import Account from '../../src/database/models/account';
-import { accountErrors } from '../../src/configs/errorCodes';
+import { accountErrors, validationErrors } from '../../src/configs/errorCodes';
 import {
   newAccount, LOGIN_URI, LOGOUT_URI, REGISTER_URI, user
 } from '../utils/constants';
@@ -28,10 +28,30 @@ beforeEach(async () => {
 
 describe(`Test POST ${REGISTER_URI} - create a new account`, () => {
 
-  it('should allow creation of a new account', async () => {
+  it('should allow creation of a new account, with language set to EN', async () => {
     const res: supertest.Response = await request.post(REGISTER_URI)
       .set('Accept', 'application/json')
       .send(newAccount)
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).not.toBeDefined();
+    expect(res.statusCode).toBe(HttpCode.Ok);
+  });
+
+  it('should allow creation of a new account, with language set to FI', async () => {
+    const res: supertest.Response = await request.post(REGISTER_URI)
+      .set('Accept', 'application/json')
+      .send({...newAccount, language: 'fi'})
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).not.toBeDefined();
+    expect(res.statusCode).toBe(HttpCode.Ok);
+  });
+
+  it('should allow creation of a new account, with language set to VN', async () => {
+    const res: supertest.Response = await request.post(REGISTER_URI)
+      .set('Accept', 'application/json')
+      .send({...newAccount, language: 'vn'})
       .expect('Content-Type', /json/);
 
     expect(res.body.errors).not.toBeDefined();
@@ -60,6 +80,18 @@ describe(`Test POST ${REGISTER_URI} - create a new account`, () => {
     expect(res.body.data).not.toBeDefined();
     checkErrors(res.body.errors, accountErrors.ERR_USERNAME_IN_USE);
     expect(res.statusCode).toBe(HttpCode.Conflict);
+  });
+
+  it('should not allow creation of a new account if language id not valid', async () => {
+    const  res: supertest.Response = await request.post(REGISTER_URI)
+      .set('Accept', 'application/json')
+      .send({...newAccount, language: 'XX'})
+      .expect('Content-Type', /json/);
+
+    expect(res.body.errors).toBeDefined();
+    expect(res.body.data).not.toBeDefined();
+    checkErrors(res.body.errors, validationErrors.ERR_LANGUAGE_ID_NOT_VALID);
+    expect(res.statusCode).toBe(HttpCode.BadRequest);
   });
 });
 
