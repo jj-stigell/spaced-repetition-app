@@ -1,9 +1,9 @@
 {
   "name": "yomiko-backend",
   "version": "0.1.0",
-  "author": "-",
-  "license": "-",
-  "description": "",
+  "author": "js",
+  "license": "UNLICENSED",
+  "description": "Backend for the Yomiko app",
   "main": "",
   "scripts": {
     "build": "npx tsc && yarn run copy-locales && yarn run copy-templates",
