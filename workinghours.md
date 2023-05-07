@@ -13,6 +13,7 @@
 | 1.5.2023 | 2 | Add category tests and update docker setup to include redis |
 | 5.5.2023 | 2 | update redis config, add data to db, update fetch deck and categories controllers |
 | 6.5.2023 | 5 | Persist and clear redux state (depending on action), fetch deck and category information from server |
+| 7.5.2023 | 2 | Fix deployment issues, refactor |
 |  |  |  |
 | total | 30 |  | 
 
