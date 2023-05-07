@@ -4,6 +4,7 @@ import {
 
 import { sequelize } from '..';
 import Account from './account';
+import { ActionType } from '../../type';
 
 export default class AccountAction extends Model<
   InferAttributes<AccountAction>,
@@ -34,7 +35,10 @@ AccountAction.init(
       }
     },
     type: {
-      type: DataTypes.ENUM('CONFIRM_EMAIL', 'RESET_PASSWORD'),
+      type: DataTypes.ENUM(
+        ActionType.CONFIRM_EMAIL,
+        ActionType.RESET_PASSWORD
+      ),
       allowNull: false
     },
     expireAt: {

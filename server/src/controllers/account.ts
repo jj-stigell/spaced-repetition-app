@@ -1,5 +1,4 @@
 // Modules
-import argon from 'argon2';
 import { Request, Response } from 'express';
 import * as yup from 'yup';
 
@@ -15,7 +14,10 @@ import { findAccountById, findAccountByEmail } from './utils/account';
 import { findAccountActionById } from './utils/accountAction';
 import { sendEmailConfirmation, sendPasswordResetLink } from './utils/mailer';
 import { JwtPayload } from 'jsonwebtoken';
-import { HttpCode, ResetPasswordData, ChangePasswordData, JlptLevel } from '../type';
+import {
+  ActionType, HttpCode, ResetPasswordData, ChangePasswordData, JlptLevel
+} from '../type';
+import { comparePassword } from './utils/password';
 
 /**
  * Confirm new account email address.
@@ -35,15 +37,9 @@ export async function confirmEmail(req: Request, res: Response): Promise<void> {
   );
   const confirmationId: string = req.body.confirmationId;
 
-  const confirmation: AccountAction = await findAccountActionById(confirmationId);
-
-  if (confirmation.type !== 'CONFIRM_EMAIL') {
-    throw new ApiError(accountErrors.ERR_INCORRECT_ACTION_TYPE, HttpCode.Conflict);
-  }
-
-  if (confirmation?.expireAt && confirmation.expireAt < new Date) {
-    throw new ApiError(accountErrors.ERR_CONFIRMATION_CODE_EXPIRED, HttpCode.NotFound);
-  }
+  const confirmation: AccountAction = await findAccountActionById(
+    confirmationId, ActionType.CONFIRM_EMAIL
+  );
 
   const account: Account = await findAccountById(confirmation.accountId);
 
@@ -56,7 +52,6 @@ export async function confirmEmail(req: Request, res: Response): Promise<void> {
   });
 
   await account.save();
-
   res.status(HttpCode.Ok).json();
 }
 
@@ -127,7 +122,7 @@ export async function requestResetPassword(req: Request, res: Response): Promise
 
   const confirmation: AccountAction = await models.AccountAction.create({
     accountId: account.id,
-    type: 'RESET_PASSWORD',
+    type: ActionType.RESET_PASSWORD,
     expireAt: new Date(Date.now() + accountConstants.CONFIRMATION_EXPIRY_TIME)
   });
 
@@ -165,25 +160,17 @@ export async function resetPassword(req: Request, res: Response): Promise<void> 
   await requestSchema.validate(req.body, { abortEarly: false });
   const { confirmationId, password }: ResetPasswordData = req.body;
 
-  const confirmation: AccountAction = await findAccountActionById(confirmationId);
+  const confirmation: AccountAction = await findAccountActionById(
+    confirmationId, ActionType.RESET_PASSWORD
+  );
 
-  if (confirmation.type !== 'RESET_PASSWORD') {
-    throw new ApiError(accountErrors.ERR_INCORRECT_ACTION_TYPE, HttpCode.Conflict);
-  }
-
-  const account: Account = await findAccountById(confirmation.accountId);
-
-  if (!account.emailVerified) {
-    throw new ApiError(accountErrors.ERR_EMAIL_NOT_CONFIRMED, HttpCode.Forbidden);
-  }
+  const account: Account = await findAccountById(confirmation.accountId, true);
 
   account.update({
-    password: await argon.hash(password.trim()),
+    password
   });
 
   await account.save();
-  await confirmation.destroy();
-
   res.status(HttpCode.Ok).json();
 }
 
@@ -222,13 +209,13 @@ export async function changePassword(req: Request, res: Response): Promise<void>
     throw new ApiError(accountErrors.ERR_EMAIL_NOT_CONFIRMED, HttpCode.Forbidden);
   }
 
-  const match: boolean = await argon.verify(account.password.trim(), currentPassword);
+  const match: boolean = await comparePassword(account.password, currentPassword);
   if (!match) {
     throw new ApiError(accountErrors.ERR_PASSWORD_CURRENT_INCORRECT, HttpCode.Forbidden);
   }
 
   account.update({
-    password: await argon.hash(newPassword.trim()),
+    password: newPassword
   });
 
   await account.save();
@@ -246,8 +233,8 @@ export async function changeJlptLevel(req: Request, res: Response): Promise<void
   const requestSchema: yup.AnyObject = yup.object({
     jlptLevel: yup.number()
       .oneOf(
-        [JlptLevel.N1, JlptLevel.N2, JlptLevel.N3, JlptLevel.N4, JlptLevel.N5]
-        , validationErrors.ERR_INVALID_JLPT_LEVEL
+        [JlptLevel.N1, JlptLevel.N2, JlptLevel.N3, JlptLevel.N4, JlptLevel.N5],
+        validationErrors.ERR_INVALID_JLPT_LEVEL
       )
       .typeError(validationErrors.ERR_INPUT_TYPE)
       .required(validationErrors.ERR_JLPT_LEVEL_REQUIRED)

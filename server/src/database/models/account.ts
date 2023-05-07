@@ -1,10 +1,12 @@
 import {
-  CreationOptional, DataTypes, Model, InferAttributes, InferCreationAttributes, ForeignKey
+  CreationOptional, DataTypes, Model, InferAttributes,
+  InferCreationAttributes, ForeignKey, CreateOptions
 } from 'sequelize';
 
 import { sequelize } from '..';
 import { JlptLevel, Role } from '../../type';
 import Language from './language';
+import { hashPassword } from '../../controllers/utils/password';
 
 export default class Account extends Model<
   InferAttributes<Account>,
@@ -102,6 +104,9 @@ Account.init(
       references: {
         model: 'language',
         key: 'id'
+      },
+      set(value: string) {
+        this.setDataValue('languageId', value.toUpperCase());
       }
     },
     lastLogin: {
@@ -114,6 +119,16 @@ Account.init(
   },
   {
     sequelize,
-    tableName: 'account'
+    tableName: 'account',
+    hooks: {
+      beforeCreate: (async (account: Account) => {
+        account.password = await hashPassword(account.password);
+      }),
+      beforeUpdate: (async (account: Account, options: CreateOptions) => {
+        if (options.fields?.includes('password')) {
+          account.password = await hashPassword(account.password);
+        }
+      })
+    }
   }
 );

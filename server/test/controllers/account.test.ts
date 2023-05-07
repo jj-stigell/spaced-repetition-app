@@ -38,7 +38,7 @@ beforeEach(async () => {
   }) as AccountAction;
 });
 
-describe(`Test POST ${EMAIL_CONFIRMATION_URI}`, () => {
+describe(`Test POST ${EMAIL_CONFIRMATION_URI} - confirm account email`, () => {
 
   it('should allow confirmation of (unconfirmed) email', async () => {
     const res: supertest.Response = await request.post(EMAIL_CONFIRMATION_URI)
@@ -141,7 +141,7 @@ describe(`Test POST ${EMAIL_CONFIRMATION_URI}`, () => {
   });
 });
 
-describe(`Test POST ${RESEND_EMAIL_CONFIRMATION_URI}`, () => {
+describe(`Test POST ${RESEND_EMAIL_CONFIRMATION_URI} - resend email confirmation code`, () => {
 
   it('should resend confirmation code for (unconfirmed) email', async () => {
     let rows: number = await models.AccountAction.count();
@@ -235,7 +235,7 @@ describe(`Test POST ${RESEND_EMAIL_CONFIRMATION_URI}`, () => {
   });
 });
 
-describe(`Test POST ${REQUEST_RESET_PASSWORD_URI}`, () => {
+describe(`Test POST ${REQUEST_RESET_PASSWORD_URI} - request password reset code`, () => {
 
   it('should send password reset link for confirmed email', async () => {
     // First confirm the account email.
@@ -306,7 +306,7 @@ describe(`Test POST ${REQUEST_RESET_PASSWORD_URI}`, () => {
   });
 });
 
-describe(`Test PATCH ${RESET_PASSWORD_URI}`, () => {
+describe(`Test PATCH ${RESET_PASSWORD_URI} - reset (forgotten) password using reset code`, () => {
 
   it('should reset password succesfully for confirmed email', async () => {
     // First confirm the account email.

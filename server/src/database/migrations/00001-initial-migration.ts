@@ -1,7 +1,9 @@
 import { DataTypes, QueryInterface, Transaction } from 'sequelize';
 import { bugs } from '../../configs/constants';
 import logger from '../../configs/winston';
-import { BugType, CardType, DeckCategory, JlptLevel, ReviewType, Role } from '../../type';
+import {
+  ActionType, BugType, CardType, DeckCategory, JlptLevel, ReviewType, Role
+} from '../../type';
 
 export default {
   up: async (queryInterface: QueryInterface): Promise<void> => {
@@ -272,7 +274,10 @@ export default {
           }
         },
         type: {
-          type: DataTypes.ENUM('CONFIRM_EMAIL', 'RESET_PASSWORD'),
+          type: DataTypes.ENUM(
+            ActionType.CONFIRM_EMAIL,
+            ActionType.RESET_PASSWORD
+          ),
           allowNull: false
         },
         expire_at: {

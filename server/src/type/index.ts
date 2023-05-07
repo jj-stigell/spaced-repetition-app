@@ -18,12 +18,6 @@ export type AccountErrors = {
   readonly ERR_PASSWORD_CURRENT_INCORRECT: string;
 };
 
-export type AdminErrors = {
-  readonly ERR_NO_ADMIN_RIGHTS: string;
-  readonly ERR_NO_ADMIN_READ_RIGHTS: string;
-  readonly ERR_NO_ADMIN_WRITE_RIGHTS: string;
-};
-
 export type AccountConstants = {
   readonly USERNAME_MAX_LENGTH: number;
   readonly USERNAME_MIN_LENGTH: number;
@@ -33,6 +27,17 @@ export type AccountConstants = {
   readonly CONFIRMATION_EXPIRY_TIME: number;
   readonly JWT_EXPIRY_TIME: number;
   readonly SESSION_LIFETIME: number;
+};
+
+export enum ActionType {
+  CONFIRM_EMAIL = 'CONFIRM_EMAIL',
+  RESET_PASSWORD = 'RESET_PASSWORD'
+}
+
+export type AdminErrors = {
+  readonly ERR_NO_ADMIN_RIGHTS: string;
+  readonly ERR_NO_ADMIN_READ_RIGHTS: string;
+  readonly ERR_NO_ADMIN_WRITE_RIGHTS: string;
 };
 
 export type ApiErrorContent = {

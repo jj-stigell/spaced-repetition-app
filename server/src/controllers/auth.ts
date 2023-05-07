@@ -1,4 +1,3 @@
-import argon from 'argon2';
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import passport from 'passport';
@@ -7,7 +6,7 @@ import { IVerifyOptions, Strategy as LocalStrategy } from 'passport-local';
 import { QueryTypes, Transaction } from 'sequelize';
 import * as yup from 'yup';
 
-import { account as accountConstants, regex } from '../configs/constants';
+import { account, account as accountConstants, regex } from '../configs/constants';
 import { JWT_SECRET, NODE_ENV } from '../configs/environment';
 import { sequelize } from '../database';
 import models from '../database/models';
@@ -19,7 +18,8 @@ import { sendEmailConfirmation } from './utils/mailer';
 import UAParser, { IResult } from 'ua-parser-js';
 import Session from '../database/models/session';
 import { findAccountByEmail } from './utils/account';
-import { RegisterData, HttpCode, Role, LoginResult } from '../type';
+import { RegisterData, HttpCode, Role, LoginResult, ActionType } from '../type';
+import { comparePassword } from './utils/password';
 
 /**
  * Registers a new user account with the provided email, username, password, and other fields.
@@ -103,24 +103,27 @@ export async function register(req: Request, res: Response): Promise<void> {
     const newAccount: Account = await models.Account.create({
       email,
       username,
-      password: await argon.hash(password.trim()),
+      password,
       allowNewsLetter: allowNewsLetter ?? false,
       tosAccepted: acceptTos,
-      languageId: language.toUpperCase(),
+      languageId: language,
       role: Role.MEMBER
     }, { transaction: t });
 
     const confirmation: UserAction = await models.AccountAction.create({
       accountId: newAccount.id,
-      type: 'CONFIRM_EMAIL',
-      expireAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+      type: ActionType.CONFIRM_EMAIL,
+      expireAt: new Date(Date.now() + account.CONFIRMATION_EXPIRY_TIME)
     }, { transaction: t });
 
-    if (NODE_ENV !== 'test') {
-      await sendEmailConfirmation(
-        language, newAccount.username, newAccount.email, confirmation.id
-      );
-    }
+    // After succesful commit. Not run if transaction is rolled back.
+    t.afterCommit(async () => {
+      if (NODE_ENV !== 'test') {
+        await sendEmailConfirmation(
+          language, newAccount.username, newAccount.email, confirmation.id
+        );
+      }
+    });
   });
 
   res.status(HttpCode.Ok).json();
@@ -229,6 +232,11 @@ passport.use(
         const userAgent: string = req?.headers['user-agent'] ?? '';
         const parsedUserAgent: IResult | undefined = UAParser(userAgent);
 
+        const match: boolean = await comparePassword(account.password, password);
+        if (!match) {
+          throw new InvalidCredentials();
+        }
+
         const session: Session = await Session.create({
           accountId: account.id,
           expireAt: new Date(Date.now() + accountConstants.JWT_EXPIRY_TIME),
@@ -236,11 +244,6 @@ passport.use(
           os: parsedUserAgent?.os.name ?? '-',
           device: parsedUserAgent?.device.type ?? '-'
         });
-
-        const match: boolean = await argon.verify(account.password.trim(), password);
-        if (!match) {
-          throw new InvalidCredentials();
-        }
 
         const role: LoginResult = {
           id: account.id,

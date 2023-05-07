@@ -11,6 +11,9 @@ export const NODE_ENV: string = process.env.NODE_ENV ?? 'development';
 export const JWT_SECRET: string =
 NODE_ENV === 'test' ? NODE_ENV : process.env.JWT_SECRET ?? 'development';
 
+// PEPPER
+export const PEPPER: string = NODE_ENV === 'test' ? NODE_ENV : process.env.PEPPER ?? 'development';
+
 // Email environment variables.
 export const EMAIL_ORIGIN: string | undefined = process.env.EMAIL_ORIGIN;
 export const STMP_HOST: string | undefined = process.env.STMP_HOST;
