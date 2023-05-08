@@ -5,10 +5,20 @@ import { experimentalStyled as styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
 import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import CircularLoader from '../../components/CircularLoader'
 import { mockCards } from '../../mockData'
-import { Card } from '../../types'
+import { Card, CardType } from '../../types'
+import axios from '../../lib/axios'
+import { RootState } from '../../app/store'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { setNotification } from '../../features/notificationSlice'
+import { AxiosError } from 'axios'
+import { setCards } from '../../features/cardSlice'
+import { useTranslation } from 'react-i18next'
+import { constants } from '../../config/constants'
+import { category } from '../../config/path'
+import ErrorPage from '../error'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -27,10 +37,17 @@ fecth cards based on deck id and feed one by one to the review
 
 function Study (): JSX.Element {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { id } = useParams()
+  const dispatch = useAppDispatch()
+  const [searchParams] = useSearchParams()
+  const [isLoading, setIsLoading] = React.useState<boolean>(true)
+  const [showError, setShowError] = React.useState<boolean>(false)
+  const language: string = useAppSelector((state: RootState) => state.account.account.language)
+  const activeCard: Card | undefined = useAppSelector((state: RootState) => state.card.activeCard)
+  const onlyDue: string = searchParams.get('onlydue') === null ? 'false' : 'true'
 
-  const [cards, setCards] = React.useState<Card[]>()
-  const [currentCard, setCurrentCard] = React.useState<Card | null>(null)
+  console.log('LANGAUGE is', language)
 
   /*
   1. get deck cards by id from api
@@ -42,24 +59,63 @@ function Study (): JSX.Element {
   7. cards empty display message and redirect to deck list
   */
 
-  const handleClick = (id: number): void => {
-    console.log('deck selected', id)
-    navigate(`/study/deck/${id}`)
-  }
+  //    axios.get(`api/v1/deck/${id}/cards?language=${language}${(onlyDue !== null) ? `&onlydue=${onlyDue}` : ''}`)
 
   React.useEffect(() => {
-    setTimeout(() => {
-      // TODO fetch from api
-      setCurrentCard(mockCards.pop() as Card)
-      setCards(mockCards)
+    if ((id !== undefined) && !isNaN(Number(id))) {
+      axios.get(`api/v1/deck/${id}/cards?language=${language}&onlydue=${onlyDue}`)
+        .then(function (response) {
+          console.log(response)
 
-      console.log(mockCards)
-      console.log(currentCard)
-      console.log(cards)
-    }, 1000)
+          const cards: Card[] = response.data.data
+          if (cards.length > 1) {
+            const firstCard: Card = cards.shift() as Card
+
+            console.log('First card is', firstCard)
+            console.log('Rest of the cards', cards)
+
+            dispatch(setCards({ activeCard: firstCard, cards }))
+          } else {
+          // TODO: add the translation
+            dispatch(setNotification({ message: t('errors.cardLoadingError'), severity: 'error' }))
+          }
+        })
+        .catch(function (error) {
+          console.log('error encountered', error)
+          const errorCode: string | null = error?.response?.data?.errors[0]?.code
+
+          if (errorCode != null) {
+          // TODO: what if there are multiple errors.
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+          } else if (error instanceof AxiosError) {
+            dispatch(setNotification({ message: error.message, severity: 'error' }))
+          } else {
+            dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+          }
+        }).finally(() => {
+          setIsLoading(false)
+        })
+    } else {
+      setShowError(true)
+      // TODO: add translation
+      dispatch(setNotification({
+        message: t('deck id is missing or wrong type, returning to deck selection in 5 secs'),
+        severity: 'error',
+        autoHideDuration: constants.redirectTimeout * 1000
+      }))
+      setTimeout(() => {
+        navigate(category)
+      }, constants.redirectTimeout * 1000)
+    }
   }, [])
 
-  if (currentCard == null) {
+  if (showError) {
+    // TODO: make this nicer
+    return (<>Error encountered</>)
+  }
+
+  if (isLoading) {
     return (<CircularLoader />)
   }
 
@@ -67,7 +123,24 @@ function Study (): JSX.Element {
     <div id="study-page-card" style={{ marginTop: 15 }}>
       <CssBaseline />
       <Container maxWidth="sm">
-        kjflskdjflksdjkflsd
+      {(() => {
+        switch (activeCard?.cardType) {
+          case CardType.KANJI:
+            return (
+              <>
+              <p>KANJI CARD</p>
+              </>
+            )
+          case CardType.HIRAGANA:
+            return <p>HIRAGANA CARD</p>
+          case CardType.KATAKANA:
+            return <p>KATAKANA CARD</p>
+          case CardType.VOCABULARY:
+            return <p>VOCAB CARD</p>
+          default:
+            return <>Could not load card</>
+        }
+      })()}
       </Container>
     </div>
   )

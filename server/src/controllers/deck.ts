@@ -12,7 +12,7 @@ import Deck from '../database/models/deck';
 import DeckTranslation from '../database/models/deckTranslation';
 import {
   DeckCategory, DeckData, DeckTranslationData,
-  FormattedDeckData, HttpCode, JlptLevel, Role
+  FormattedDeckData, HttpCode, JlptLevel, JwtPayload, Role
 } from '../type';
 import { findAccountById } from './utils/account';
 import { idSchema } from './utils/validator';
@@ -35,10 +35,16 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
         return originalValue ? originalValue.toUpperCase() : value;
       })
       .oneOf(['EN', 'FI', 'VN'])
-      .notRequired()
+      .notRequired(),
+    dueonly: yup.boolean()
+      .typeError(validationErrors.ERR_INPUT_TYPE)
+      .notRequired(),
   });
 
-  const { language }: { language: string | undefined } = await requestSchema.validate(
+  const { language, dueonly }: {
+    language: string | undefined,
+    dueonly: boolean | undefined
+  } = await requestSchema.validate(
     req.query, { abortEarly: false }
   );
 
@@ -48,50 +54,66 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
 
   // Check deck exists.
   const deck: Deck = await findDeckById(deckId);
-  const account: Account = await findAccountById(230793, true);
+  const userData: JwtPayload = req.user as JwtPayload;
+  const account: Account = await findAccountById(userData.id, true);
 
   if (deck.memberOnly && account.role === Role.NON_MEMBER) {
+    // TODO: add proper error code
     throw new ApiError('deck only for members', HttpCode.Forbidden);
   }
 
-  const cache: string | null = await redisClient.get(`deck:${deckId}:lang${languageId}`);
+  if (dueonly && account.role === Role.NON_MEMBER) {
+    // TODO: add proper error code
+    throw new ApiError('due only cards is a member feature', HttpCode.Forbidden);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let cards: Array<any> = [];
 
-  if (cache) {
-    logger.info(`Cache hit on cards in redis, language ${languageId}`);
-    cards = JSON.parse(cache);
+  if (dueonly) {
+    cards = [];
   } else {
-    logger.info('No cache hit on cards, querying db');
+    const cache: string | null = await redisClient.get(`deck:${deckId}:lang${languageId}`);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cardList: Array<any> = await models.CardList.findAll({
-      where: {
-        deckId
-      },
-      include: {
-        model: Card,
-        required: true
-      },
-      order: [['learningOrder', 'ASC']]
-    });
+    if (cache) {
+      logger.info(`Cache hit on cards in redis, language ${languageId}`);
+      cards = JSON.parse(cache);
+    } else {
+      logger.info('No cache hit on cards, querying db');
 
-    cards = cardList.map((card: any) => {
-      return {
-        id: card.cardId,
-        learningOrder: card.learningOrder,
-        reviewType: card.reviewType,
-        cardType: card.card.type
-      };
-    });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const cardList: Array<any> = await models.CardList.findAll({
+        where: {
+          deckId
+        },
+        include: {
+          model: Card,
+          required: true
+        },
+        order: [['learningOrder', 'ASC']]
+      });
 
-    // Set to cache with 10 hour expiry time.
-    await redisClient.set(`deck:${deckId}:lang${languageId}`, JSON.stringify(cards), { EX: 36000 });
+      cards = cardList.map((card: any) => {
+        return {
+          id: card.cardId,
+          learningOrder: card.learningOrder,
+          reviewType: card.reviewType,
+          cardType: card.card.type
+        };
+      });
+
+      // Set to cache with 10 hour expiry time.
+      await redisClient.set(
+        `deck:${deckId}:lang${languageId}`, JSON.stringify(cards), { EX: 36000 }
+      );
+    }
   }
 
   // Check translation available
   // Server correct translation if available to the user
   // Format cards to match client layout
+
+  console.log('CARDSS', cards);
 
   res.status(HttpCode.Ok).json({
     data: cards

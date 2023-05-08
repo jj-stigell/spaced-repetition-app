@@ -5,6 +5,7 @@ import thunk from 'redux-thunk'
 import { NODE_ENV } from '../config/environment'
 
 import accountReducer from '../features/accountSlice'
+import cardReducer from '../features/cardSlice'
 import categoryReducer from '../features/categorySlice'
 import deckReducer from '../features/deckSlice'
 import notificationReducer from '../features/notificationSlice'
@@ -18,6 +19,7 @@ export const persistConfig = {
 
 const appReducer = combineReducers({
   account: accountReducer,
+  card: cardReducer,
   category: categoryReducer,
   deck: deckReducer,
   notification: notificationReducer,

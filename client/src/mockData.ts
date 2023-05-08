@@ -1,33 +1,9 @@
 import { CardType, ReviewType, Card } from './types'
 
-/*
-export const jlptLevels: JLPT[] = [
-  {
-    id: 'N1',
-    name: 'JLPT N1'
-  },
-  {
-    id: 'N2',
-    name: 'JLPT N2'
-  },
-  {
-    id: 'N3',
-    name: 'JLPT N3'
-  },
-  {
-    id: 'N4',
-    name: 'JLPT N4'
-  },
-  {
-    id: 'N5',
-    name: 'JLPT N5'
-  }
-]
-*/
-
 export const mockCards: Card[] = [
   {
     id: 1,
+    learningOrder: 1,
     cardType: CardType.KANJI,
     reviewType: ReviewType.RECOGNISE,
     card: {
@@ -61,6 +37,7 @@ export const mockCards: Card[] = [
   },
   {
     id: 2,
+    learningOrder: 2,
     cardType: CardType.KANJI,
     reviewType: ReviewType.RECALL,
     card: {
@@ -94,6 +71,7 @@ export const mockCards: Card[] = [
   },
   {
     id: 3,
+    learningOrder: 3,
     cardType: CardType.HIRAGANA,
     reviewType: ReviewType.RECOGNISE,
     card: {
@@ -123,6 +101,7 @@ export const mockCards: Card[] = [
   },
   {
     id: 4,
+    learningOrder: 4,
     cardType: CardType.KATAKANA,
     reviewType: ReviewType.RECOGNISE,
     card: {
@@ -152,6 +131,7 @@ export const mockCards: Card[] = [
   },
   {
     id: 5,
+    learningOrder: 5,
     cardType: CardType.VOCABULARY,
     reviewType: ReviewType.RECALL,
     card: {
@@ -181,6 +161,7 @@ export const mockCards: Card[] = [
   },
   {
     id: 6,
+    learningOrder: 6,
     cardType: CardType.VOCABULARY,
     reviewType: ReviewType.RECOGNISE,
     card: {

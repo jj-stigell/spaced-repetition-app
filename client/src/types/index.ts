@@ -119,6 +119,7 @@ export interface VocabularyCard {
 
 export interface Card {
   id: number
+  learningOrder: number
   cardType: CardType
   reviewType: ReviewType
   card: KanjiCard | VocabularyCard | KanaCard

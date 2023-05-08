@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { constants } from '../config/constants'
-import { category, dashboard, settings, statistics } from '../config/path'
+import { category, dashboard, settings } from '../config/path'
 
 function TopAppBar (): JSX.Element {
   const { t } = useTranslation()
@@ -98,6 +98,8 @@ function TopAppBar (): JSX.Element {
                   {t('navbar.study')}
                 </Typography>
               </MenuItem>
+              {
+                /*
               <MenuItem key='statistics' onClick={() => {
                 handleCloseNavMenu()
                 navigate(statistics)
@@ -106,6 +108,8 @@ function TopAppBar (): JSX.Element {
                   {t('navbar.statistics')}
                 </Typography>
               </MenuItem>
+                */
+              }
               <MenuItem key='settings' onClick={() => {
                 handleCloseNavMenu()
                 navigate(settings)
@@ -155,16 +159,20 @@ function TopAppBar (): JSX.Element {
             >
               {t('navbar.study')}
             </Button>
-            <Button
-              key='statistics'
-              onClick={() => {
-                handleCloseNavMenu()
-                navigate(statistics)
-              }}
-              sx={{ my: 2, color: 'inherit', display: 'block' }}
-            >
-              {t('navbar.statistics')}
-            </Button>
+            {
+              /*
+              <Button
+                key='statistics'
+                onClick={() => {
+                  handleCloseNavMenu()
+                  navigate(statistics)
+                }}
+                sx={{ my: 2, color: 'inherit', display: 'block' }}
+              >
+                {t('navbar.statistics')}
+              </Button>
+              */
+            }
             <Button
               key='settings'
               onClick={() => {
