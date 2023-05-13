@@ -85,36 +85,31 @@ export interface Progress {
   }
 }
 
-export interface answerOption {
+export interface AnswerOption {
   option: string
   correct: boolean
 }
 
 export interface KanaCard {
-  kana: string
   story: string
   hint: string
-  answerOptions: answerOption[]
+  answerOptions: AnswerOption[]
 }
 
 export interface KanjiCard {
-  kanji: string
-  keyword: string
   story: string
   hint: string
   onyomi: string
   kunyomi: string
   onyomiRomaji: string
   kunyomiRomaji: string
-  answerOptions: answerOption[]
+  answerOptions: AnswerOption[]
 }
 
 export interface VocabularyCard {
-  word: string
-  keyword: string
   reading: string
   readingRomaji: string
-  answerOptions: answerOption[]
+  answerOptions: AnswerOption[]
 }
 
 export interface Card {
@@ -122,7 +117,10 @@ export interface Card {
   learningOrder: number
   cardType: CardType
   reviewType: ReviewType
-  card: KanjiCard | VocabularyCard | KanaCard
+  card: {
+    value: string
+    keyword: string
+  } & (KanjiCard | VocabularyCard | KanaCard)
 }
 
 export interface CardStore {
