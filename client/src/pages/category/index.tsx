@@ -6,7 +6,6 @@ import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
-import CssBaseline from '@mui/material/CssBaseline'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -64,7 +63,6 @@ function Study (): JSX.Element {
 
   return (
     <div id="study-page" style={{ marginTop: 15 }}>
-      <CssBaseline />
       <Container maxWidth="sm">
         <div className="jlpt-level">
           <LevelSelector />

@@ -5,14 +5,10 @@ import React from 'react'
 
 // Third party imports
 import { AxiosError } from 'axios'
-import Button from '@mui/material/Button'
 import { useTranslation } from 'react-i18next'
-import CssBaseline from '@mui/material/CssBaseline'
 import Container from '@mui/material/Container'
 import { experimentalStyled as styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
-import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
 
 // Project imports
 import { useAppDispatch } from '../../app/hooks'

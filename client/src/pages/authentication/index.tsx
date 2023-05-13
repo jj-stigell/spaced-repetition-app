@@ -2,7 +2,7 @@ import * as React from 'react'
 
 // Third party imports
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { Container, Box, CssBaseline } from '@mui/material'
+import { Container, Box } from '@mui/material'
 import { Outlet } from 'react-router-dom'
 
 // Project imports
@@ -15,7 +15,6 @@ function Authentication (): JSX.Element {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <Box
           sx={{
             marginTop: 5,
