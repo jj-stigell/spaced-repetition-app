@@ -7,7 +7,7 @@ export const mockCards: Card[] = [
     cardType: CardType.KANJI,
     reviewType: ReviewType.RECOGNISE,
     card: {
-      kanji: '車',
+      value: '車',
       keyword: 'car',
       story: 'looks like a vehicle from birds eye view',
       hint: 'pictograph',
@@ -41,7 +41,7 @@ export const mockCards: Card[] = [
     cardType: CardType.KANJI,
     reviewType: ReviewType.RECALL,
     card: {
-      kanji: '車',
+      value: '車',
       keyword: 'car',
       story: 'looks like a vehicle from birds eye view',
       hint: 'pictograph',
@@ -51,19 +51,19 @@ export const mockCards: Card[] = [
       kunyomiRomaji: 'kuruma',
       answerOptions: [
         {
-          option: 'car',
+          option: '車',
           correct: true
         },
         {
-          option: 'airplane',
+          option: '船',
           correct: false
         },
         {
-          option: 'boat',
+          option: '倫',
           correct: false
         },
         {
-          option: 'bicycle',
+          option: '牛',
           correct: false
         }
       ]
@@ -75,7 +75,7 @@ export const mockCards: Card[] = [
     cardType: CardType.HIRAGANA,
     reviewType: ReviewType.RECOGNISE,
     card: {
-      kana: 'か',
+      value: 'か',
       keyword: 'ka',
       story: 'shape is almost like "ka" in cursive',
       hint: 'I dont have any hints for you',
@@ -105,7 +105,7 @@ export const mockCards: Card[] = [
     cardType: CardType.KATAKANA,
     reviewType: ReviewType.RECOGNISE,
     card: {
-      kana: 'ホ',
+      value: 'ホ',
       keyword: 'ho',
       story: 'Looks like the HOly cross with sunlight shining behind it',
       hint: 'jesus christ',
@@ -135,7 +135,7 @@ export const mockCards: Card[] = [
     cardType: CardType.VOCABULARY,
     reviewType: ReviewType.RECALL,
     card: {
-      word: '自転車',
+      value: '自転車',
       keyword: 'bicycle',
       reading: 'じてんしゃ',
       readingRomaji: 'jitensha',
@@ -165,7 +165,7 @@ export const mockCards: Card[] = [
     cardType: CardType.VOCABULARY,
     reviewType: ReviewType.RECOGNISE,
     card: {
-      word: '建物',
+      value: '建物',
       keyword: 'building',
       reading: 'たてもの',
       readingRomaji: 'tatemono',
