@@ -7,7 +7,6 @@ import { useTheme } from '@mui/material'
 // Project imports
 import Login from './pages/authentication/login'
 import AuthGuard from './utils/routeGuard/AuthGuard'
-import ErrorPage from './pages/error'
 import NotFound from './pages/notFound'
 import GuestGuard from './utils/routeGuard/GuestGuard'
 import Settings from './pages/settings'
@@ -28,6 +27,7 @@ import {
   login, register, requestEmailConfirm, requestResetPassword, resetPassword,
   settings, studyDeck
 } from './config/path'
+import RouterError from './pages/error/RouterError'
 
 function App (): JSX.Element {
   const theme = useTheme()
@@ -39,29 +39,29 @@ function App (): JSX.Element {
             {/* Protected routes */}
             <Route element={<AuthGuard />}>
               <Route element={<MainLayout />}>
-                <Route element={<Dashboard />} errorElement={<ErrorPage />} path={dashboard} />
-                <Route element={<Decks />} errorElement={<ErrorPage />} path={decks} />
-                <Route element={<Category />} errorElement={<ErrorPage />} path={category} />
-                {/* <Route element={<Statistics />} errorElement={<ErrorPage />} path={statistics} /> */}
-                <Route element={<Settings />} errorElement={<ErrorPage />} path={settings} />
+                <Route element={<Dashboard />} errorElement={<RouterError />} path={dashboard} />
+                <Route element={<Decks />} errorElement={<RouterError />} path={decks} />
+                <Route element={<Category />} errorElement={<RouterError />} path={category} />
+                {/* <Route element={<Statistics />} errorElement={<RouterError />} path={statistics} /> */}
+                <Route element={<Settings />} errorElement={<RouterError />} path={settings} />
               </Route>
               {/* Do not render main layout when in study mode */}
-              <Route element={<Study />} errorElement={<ErrorPage />} path={studyDeck} />
+              <Route element={<Study />} errorElement={<RouterError />} path={studyDeck} />
             </Route>
             {/* Guest routes */}
             <Route element={<GuestGuard />}>
               <Route element={<Authentication />}>
-                <Route element={<Login />} errorElement={<ErrorPage />} path={login} />
-                <Route element={<Register />} errorElement={<ErrorPage />} path={register} />
-                <Route element={<Confirm />} errorElement={<ErrorPage />} path={emailConfirm} />
-                <Route element={<Confirm />} errorElement={<ErrorPage />} path={requestEmailConfirm} />
-                <Route element={<ResetPassword />} errorElement={<ErrorPage />} path={resetPassword} />
-                <Route element={<ForgotPassword />} errorElement={<ErrorPage />} path={requestResetPassword} />
+                <Route element={<Login />} errorElement={<RouterError />} path={login} />
+                <Route element={<Register />} errorElement={<RouterError />} path={register} />
+                <Route element={<Confirm />} errorElement={<RouterError />} path={emailConfirm} />
+                <Route element={<Confirm />} errorElement={<RouterError />} path={requestEmailConfirm} />
+                <Route element={<ResetPassword />} errorElement={<RouterError />} path={resetPassword} />
+                <Route element={<ForgotPassword />} errorElement={<RouterError />} path={requestResetPassword} />
               </Route>
             </Route>
             {/* Not found route */}
-            <Route element={<SandBox />} errorElement={<ErrorPage />} path="/sandbox" />
-            <Route path="*" element={<NotFound />} errorElement={<ErrorPage />}/>
+            <Route element={<SandBox />} errorElement={<RouterError />} path="/sandbox" />
+            <Route path="*" element={<NotFound />} errorElement={<RouterError />}/>
           </Routes>
       </Router>
     </div>
