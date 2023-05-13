@@ -49,6 +49,39 @@
     },
     "categories": {
       "CUSTOM": "Your custom decks"
+    },
+    "review": {
+      "loadingMessage": "Loading Cards",
+      "reviewFinished": {
+        "title": "All cards reviewed, good work!",
+        "redirectMessage": "Redirecting back to deck page in {{count}} seconds",
+        "redirectImmediately": "Click link below to go immediately:",
+        "redirectLink": "Go back to decks"
+      },
+      "buttons": {
+        "result": {
+          "again": "Again",
+          "hard": "Hard",
+          "easy": "Easy"
+        }
+      },
+      "help": {
+        "showHint": "Show hint"
+      },
+      "tabs": {
+        "grammar": {
+          "title": "Grammar"
+        },
+        "examples": {
+          "title": "Examples"
+        },
+        "edit": {
+          "title": "Edit"
+        },
+        "bugReport": {
+          "title": "Bug report"
+        }
+      }
     }
   },
   "stats": {
@@ -111,34 +144,6 @@
       "storyPlaceholder": "Enter your story here",
       "hintPlaceholder": "Enter your hint here",
       "editTitle": "Edit customized card data"
-    }
-  },
-  "review": {
-    "loadingMessage": "Loading Cards",
-    "reviewFinished": "All reviewed, good work! Redirecting to dashboard",
-    "buttons": {
-      "result": {
-        "again": "Again",
-        "hard": "Hard",
-        "easy": "Easy"
-      }
-    },
-    "help": {
-      "showHint": "Show hint"
-    },
-    "tabs": {
-      "grammar": {
-        "title": "Grammar"
-      },
-      "examples": {
-        "title": "Examples"
-      },
-      "edit": {
-        "title": "Edit"
-      },
-      "bugReport": {
-        "title": "Bug report"
-      }
     }
   },
   "buttonGeneral": {
@@ -263,6 +268,8 @@
     "ERR_CONFIRMATION_CODE_NOT_FOUND": "Verification code not found.",
     "ERR_CONFIRMATION_CODE_REQUIRED": "Confirmation code required.",
     "ERR_DATE_REQUIRED": "Date required",
+    "ERR_DECK_EMPTY": "No cards were available in the requested deck.",
+    "ERR_DECK_ID_MISSING_OR_INVALID": "Provided deck id invalid or missing, please do not try to access decks via URL field.",
     "ERR_EMAIL_ALREADY_CONFIRMED": "Email address is already verified.",
     "ERR_EMAIL_IN_USE": "Email address is already in use, select another one.",
     "ERR_EMAIL_NOT_CONFIRMED": "Email address is not verified.",
