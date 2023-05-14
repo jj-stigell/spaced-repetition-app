@@ -4,7 +4,8 @@
 import React from 'react'
 
 import { AxiosError } from 'axios'
-import { Box, Button, Typography, Container } from '@mui/material'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { Box, Button, Typography, Container, Tab } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useParams, useSearchParams } from 'react-router-dom'
 import _ from 'lodash'
@@ -21,6 +22,7 @@ import ReviewFinished from './ReviewFinished'
 import CardFront from './CardFront'
 import AnswerOptions from './AnswerOptions'
 import ReviewError from '../error/ReviewError'
+import CardInformation from './CardInformation'
 
 /*
 1. get deck cards by id from api
@@ -80,7 +82,8 @@ function Study (): JSX.Element {
         })
         .catch(function (error) {
           console.log('ERROR ENCOUNTERED', error)
-          const errorCode: string | null = error?.response?.data?.errors[0]?.code ?? null
+          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+          const errorCode: string | null = error?.response?.data?.errors ? error?.response?.data?.errors[0]?.code : null
 
           if (errorCode != null) {
             dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
@@ -107,6 +110,7 @@ function Study (): JSX.Element {
   function resetView (): void {
     setCorrectAnswer(false)
     setShowAnswer(false)
+    setActiveTab('1')
   }
 
   function handleAnswer (option: AnswerOption): void {
@@ -159,6 +163,12 @@ function Study (): JSX.Element {
     }
   }
 
+  const [activeTab, setActiveTab] = React.useState('1')
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string): void => {
+    setActiveTab(newValue)
+  }
+
   if (reviewsFinished) {
     return (<ReviewFinished />)
   }
@@ -181,15 +191,26 @@ function Study (): JSX.Element {
   return (
     <div id="study-page-card" style={{ marginTop: 10 }}>
       <Container maxWidth="sm">
-        <p style={{ textAlign: 'center' }}>DEV BUILD:: {activeCard.cardType} CARD, {activeCard.reviewType} REVIEW</p>
+        <p style={{ textAlign: 'center', fontSize: 13 }}>DEV BUILD:: {activeCard.cardType} CARD, {activeCard.reviewType} REVIEW</p>
         <CardFront frontValue={activeCard.reviewType === ReviewType.RECALL ? activeCard.card.keyword : activeCard.card.value} />
-        <hr/>
-        <br/>
-        { copyOfOptions != null &&
-          <AnswerOptions options={copyOfOptions} handleAnswer={handleAnswer} showAnswer={showAnswer} pressedButton={pressedButton} />
-        }
-        <br/>
-        <br/>
+        <Box sx={{ width: '100%', typography: 'body1' }}>
+          <TabContext value={activeTab}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <TabList onChange={handleChange} aria-label="lab API tabs example" sx={{ backgroundColor: '#4f7ce3' }} variant="fullWidth">
+                <Tab label="Answer options" value="1" />
+                <Tab label="Details" value="2" disabled={!showAnswer} />
+              </TabList>
+            </Box>
+            <TabPanel value="1">
+              { copyOfOptions != null &&
+                <AnswerOptions options={copyOfOptions} handleAnswer={handleAnswer} showAnswer={showAnswer} pressedButton={pressedButton} />
+              }
+            </TabPanel>
+            <TabPanel value="2">
+              <CardInformation />
+            </TabPanel>
+          </TabContext>
+        </Box>
         { showAnswer &&
           <Button
             onClick={() => { showNextCard() }}
