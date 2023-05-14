@@ -1,8 +1,14 @@
+/* eslint-disable padded-blocks */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-multiple-empty-lines */
 import React from 'react'
-import Container from '@mui/material/Container'
+
+import { AxiosError } from 'axios'
+import { Box, Button, Typography, Container } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { useParams, useSearchParams } from 'react-router-dom'
+import _ from 'lodash'
+
 import CircularLoader from '../../components/CircularLoader'
 import { mockCards } from '../../mockData'
 import { AnswerOption, Card, ReviewType } from '../../types'
@@ -10,14 +16,21 @@ import axios from '../../lib/axios'
 import { RootState } from '../../app/store'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { setNotification } from '../../features/notificationSlice'
-import { AxiosError } from 'axios'
-import { setCards } from '../../features/cardSlice'
-import { useTranslation } from 'react-i18next'
-import { Box, Button, Typography } from '@mui/material'
+import { resetCards, setCards } from '../../features/cardSlice'
 import ReviewFinished from './ReviewFinished'
 import CardFront from './CardFront'
 import AnswerOptions from './AnswerOptions'
 import ReviewError from '../error/ReviewError'
+
+/*
+1. get deck cards by id from api
+2. set cards to storage
+3. set first as the crrect card
+4. conditionally render correct type
+5. after answer reschedule
+6. take next card
+7. cards empty display message and redirect to deck list
+*/
 
 function Study (): JSX.Element {
   const { t } = useTranslation()
@@ -35,7 +48,7 @@ function Study (): JSX.Element {
   const [pressedButton, setPressedButton] = React.useState<string>('')
 
   const language: string = useAppSelector((state: RootState) => state.account.account.language)
-  const activeCard: Card | undefined = useAppSelector((state: RootState) => state.card.activeCard)
+  const activeCard: Card | null = useAppSelector((state: RootState) => state.card.activeCard)
   const otherCards: Card[] = useAppSelector((state: RootState) => state.card.cards)
 
   function shuffleOptions (array: AnswerOption[]): AnswerOption[] {
@@ -46,55 +59,42 @@ function Study (): JSX.Element {
     return array
   }
 
-  let copyOfOptions: AnswerOption[] | undefined = ((activeCard?.card.answerOptions) !== undefined) ? [...activeCard.card.answerOptions] : undefined
+  let copyOfOptions: AnswerOption[] | null = ((activeCard?.card.answerOptions) !== undefined) ? [...activeCard.card.answerOptions] : null
 
-  if (copyOfOptions !== undefined && !showAnswer) {
-    console.log('SHUFFLING')
-    copyOfOptions = shuffleOptions(copyOfOptions)
+  if (copyOfOptions != null && !showAnswer) {
+    console.log('SHUFFLING in upper pat')
+    copyOfOptions = shuffleOptions([...copyOfOptions])
   }
-
-  /*
-  1. get deck cards by id from api
-  2. set cards to storage
-  3. set first as the crrect card
-  4. conditionally render correct type
-  5. after answer reschedule
-  6.take next card
-  7. cards empty display message and redirect to deck list
-  */
 
   React.useEffect(() => {
     if ((id !== undefined) && !isNaN(Number(id))) {
       axios.get(`api/v1/deck/${id}/cards`, { params: { language, onlyDue } })
         .then(function (response) {
-          console.log(response)
-
           const cards: Card[] = mockCards // response.data.data
-
           if (cards.length > 0) {
             const firstCard: Card = cards.shift() as Card
-
-            console.log('First card is', firstCard)
-            console.log('Rest of the cards', cards)
-
             dispatch(setCards({ activeCard: firstCard, cards }))
           } else {
             setIsError(t('errors.ERR_DECK_EMPTY'))
           }
         })
         .catch(function (error) {
-          console.log('error encountered', error)
-          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-          const errorCode: string | null = error?.response?.data?.errors ? error?.response?.data?.errors[0]?.code : null
+          console.log('ERROR ENCOUNTERED', error)
+          const errorCode: string | null = error?.response?.data?.errors[0]?.code ?? null
 
           if (errorCode != null) {
-          // TODO: what if there are multiple errors.
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+            // setIsError(t(`errors.${errorCode}`))
           } else if (error instanceof AxiosError) {
-            dispatch(setNotification({ message: error.message, severity: 'error' }))
+            if (error.request.status === 401) {
+              console.log('Should logout automatically and clear localstorage on http code:', error.request.status)
+            } else {
+              dispatch(setNotification({ message: error.message, severity: 'error' }))
+            // setIsError(error.message)
+            }
           } else {
             dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+            // setIsError(t('errors.ERR_CHECK_CONNECTION'))
           }
         }).finally(() => {
           setIsLoading(false)
@@ -102,21 +102,17 @@ function Study (): JSX.Element {
     } else {
       setIsError(t('errors.ERR_DECK_ID_MISSING_OR_INVALID'))
     }
-    setIsLoading(false)
   }, [])
 
-  const resetView = (): void => {
+  function resetView (): void {
     setCorrectAnswer(false)
     setShowAnswer(false)
   }
 
-  const handleAnswer = (option: AnswerOption): void => {
-    console.log('ANSWER BOOLEAN:::', option.correct)
-    console.log('shuffled cards in handle answer', copyOfOptions)
+  function handleAnswer (option: AnswerOption): void {
     setCorrectAnswer(option.correct)
     setPressedButton(option.option)
     setShowAnswer(true)
-    console.log('shuffled cards in handle answer last one', copyOfOptions)
     if (correctAnswer) {
       // RESCHEDULE BASED ON
       // card id
@@ -133,25 +129,32 @@ function Study (): JSX.Element {
     }
   }
 
-  const showNextCard = (): void => {
-    if (otherCards.length === 0) {
-      // STOP REVIEW
-      console.log('NO MORE CARDS!!!!')
+  function showNextCard (): void {
+    if (otherCards.length === 0 && correctAnswer) {
+      // All cards reviewed, set reviews finished screen.
+      dispatch(resetCards())
       setReviewsFinished(true)
     } else {
-      // possibly only one in cards
-
-      // at least one value in array
-      // [card1, card2, ..., cardN]
-
+      // at least one in other cards array ([card1, card2, ..., cardN])
       // If one [card1], newCards become [] and new active = card1
       // Next round evaluation len arr == 0
+      const newCards: Card[] = _.cloneDeep(otherCards)
 
-      // Is this copy shallow one level copy of the array?
-      const newCards: Card[] = [...otherCards]
+      if (!correctAnswer) {
+        // Answer is not correct but cards are left, set the failed card to last in the current deck.
+        // push the current active card to othercards last place
+
+        // What if only one card left:
+        // active card is answered incorrectly and other cards is empty
+        if (activeCard != null) {
+          newCards.push(activeCard)
+        }
+      }
+
+      // Shift the first to active card
+      // Set rest as the other cards array
       const newActiveCard: Card | undefined = newCards.shift()
-
-      dispatch(setCards({ activeCard: newActiveCard, cards: newCards }))
+      dispatch(setCards({ activeCard: newActiveCard ?? null, cards: newCards }))
       resetView()
     }
   }
@@ -160,7 +163,11 @@ function Study (): JSX.Element {
     return (<ReviewFinished />)
   }
 
-  if (isLoading || activeCard === undefined) {
+  if (isError != null) {
+    return (<ReviewError errorMessage={isError} />)
+  }
+
+  if (isLoading || activeCard == null) {
     return (
       <Box>
         <CircularLoader />
@@ -171,10 +178,6 @@ function Study (): JSX.Element {
     )
   }
 
-  if (isError != null) {
-    return (<ReviewError errorMessage={isError} />)
-  }
-
   return (
     <div id="study-page-card" style={{ marginTop: 10 }}>
       <Container maxWidth="sm">
@@ -182,12 +185,12 @@ function Study (): JSX.Element {
         <CardFront frontValue={activeCard.reviewType === ReviewType.RECALL ? activeCard.card.keyword : activeCard.card.value} />
         <hr/>
         <br/>
-        { copyOfOptions !== undefined &&
+        { copyOfOptions != null &&
           <AnswerOptions options={copyOfOptions} handleAnswer={handleAnswer} showAnswer={showAnswer} pressedButton={pressedButton} />
         }
         <br/>
         <br/>
-        { showAnswer && correctAnswer &&
+        { showAnswer &&
           <Button
             onClick={() => { showNextCard() }}
             color={'success'}
@@ -222,6 +225,3 @@ function Study (): JSX.Element {
 }
 
 export default Study
-
-//                   pressedButton === option.option && showAnswer && correctAnswer ? 'green' : 'blue'
-
