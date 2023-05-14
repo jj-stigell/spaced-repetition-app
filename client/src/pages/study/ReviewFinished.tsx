@@ -6,23 +6,17 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
 // Project imports
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
-import { DeckCategory, Role } from '../../types'
-import { resetCards } from '../../features/cardSlice'
 import { constants } from '../../config/constants'
+import { DeckCategory, Role } from '../../types'
 
 function ReviewFinished (): JSX.Element {
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const [count, setCount] = React.useState<number>(constants.redirectTimeout)
   const { role } = useAppSelector((state: RootState) => state.account.account)
   const category = useAppSelector((state: RootState) => state.deck.category) as DeckCategory
-
-  React.useEffect(() => {
-    dispatch(resetCards())
-  }, [])
 
   React.useEffect(() => {
     if (count === 0) {
