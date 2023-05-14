@@ -15,19 +15,18 @@ import Dashboard from './pages/dashboard'
 import Category from './pages/category'
 import Register from './pages/authentication/register'
 import Confirm from './pages/authentication/confirm'
-import SandBox from './pages/sandbox'
 import Notification from './components/Notification'
 import Authentication from './pages/authentication'
 import ForgotPassword from './pages/authentication/forgotPassword'
 import ResetPassword from './pages/authentication/resetPassword'
 import Decks from './pages/decks'
 import Study from './pages/study'
+import RouterError from './pages/error/RouterError'
 import {
   category, dashboard, decks, emailConfirm,
   login, register, requestEmailConfirm, requestResetPassword, resetPassword,
   settings, studyDeck
 } from './config/path'
-import RouterError from './pages/error/RouterError'
 
 function App (): JSX.Element {
   const theme = useTheme()
@@ -61,7 +60,6 @@ function App (): JSX.Element {
               </Route>
             </Route>
             {/* Not found route */}
-            <Route element={<SandBox />} errorElement={<RouterError />} path="/sandbox" />
             <Route path="*" element={<NotFound />} errorElement={<RouterError />}/>
           </Routes>
       </Router>

@@ -103,7 +103,6 @@ function LoginForm (): JSX.Element {
         name="email"
         type="text"
         autoComplete="email"
-        autoFocus
         value={formik.values.email}
         onChange={formik.handleChange}
         error={(formik.touched.email === true) && Boolean(formik.errors.email)}
