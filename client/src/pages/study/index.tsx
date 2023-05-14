@@ -30,7 +30,7 @@ function Study (): JSX.Element {
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const [showAnswer, setShowAnswer] = React.useState<boolean>(false)
   const [correctAnswer, setCorrectAnswer] = React.useState<boolean>(false)
-  const [reviewsFinished, setReviewsFinished] = React.useState<boolean>(true)
+  const [reviewsFinished, setReviewsFinished] = React.useState<boolean>(false)
   const [isError, setIsError] = React.useState<string | null>(null)
   const [pressedButton, setPressedButton] = React.useState<string>('')
 
@@ -112,44 +112,47 @@ function Study (): JSX.Element {
 
   const handleAnswer = (option: AnswerOption): void => {
     console.log('ANSWER BOOLEAN:::', option.correct)
-    console.log('shiuffled cards in handle answer', copyOfOptions)
+    console.log('shuffled cards in handle answer', copyOfOptions)
+    setCorrectAnswer(option.correct)
     setPressedButton(option.option)
     setShowAnswer(true)
-    console.log('shiuffled cards in handle answer last one', copyOfOptions)
-    if (option.correct) {
-      setCorrectAnswer(true)
-
+    console.log('shuffled cards in handle answer last one', copyOfOptions)
+    if (correctAnswer) {
       // RESCHEDULE BASED ON
       // card id
       // review type
       const today = new Date()
       const formattedDate = today.toISOString().slice(0, 10)
       console.log('client date', formattedDate) // output: '2023-05-10'
-      console.log('reschedule to date', 54656)
 
-      // SET NEXT CARD TO THE VIEW
+      const rescheduleDays = 5 // Number of days to reschedule
+      const rescheduleDate = new Date()
+      rescheduleDate.setDate(today.getDate() + rescheduleDays)
+      const formattedRescheduleDate = rescheduleDate.toISOString().slice(0, 10)
+      console.log('reschedule to date', formattedRescheduleDate)
+    }
+  }
 
-      setTimeout(() => {
-        if (otherCards.length === 0) {
-          // STOP REVIEW
-          console.log('NO MORE CARDS!!!!')
-          setReviewsFinished(true)
-        } else {
-          // possibly only one in cards
+  const showNextCard = (): void => {
+    if (otherCards.length === 0) {
+      // STOP REVIEW
+      console.log('NO MORE CARDS!!!!')
+      setReviewsFinished(true)
+    } else {
+      // possibly only one in cards
 
-          // at least one value in array
-          // [card1, card2, ..., cardN]
+      // at least one value in array
+      // [card1, card2, ..., cardN]
 
-          // If one [card1], newCards become [] and new active = card1
-          // Next round evaluation len arr == 0
+      // If one [card1], newCards become [] and new active = card1
+      // Next round evaluation len arr == 0
 
-          const newCards: Card[] = [...otherCards]
-          const newActiveCard: Card | undefined = newCards.shift()
+      // Is this copy shallow one level copy of the array?
+      const newCards: Card[] = [...otherCards]
+      const newActiveCard: Card | undefined = newCards.shift()
 
-          dispatch(setCards({ activeCard: newActiveCard, cards: newCards }))
-          resetView()
-        }
-      }, 8000)
+      dispatch(setCards({ activeCard: newActiveCard, cards: newCards }))
+      resetView()
     }
   }
 
@@ -172,8 +175,6 @@ function Study (): JSX.Element {
     return (<ReviewError errorMessage={isError} />)
   }
 
-
-
   return (
     <div id="study-page-card" style={{ marginTop: 10 }}>
       <Container maxWidth="sm">
@@ -188,8 +189,7 @@ function Study (): JSX.Element {
         <br/>
         { showAnswer && correctAnswer &&
           <Button
-            onClick={() => {
-            }}
+            onClick={() => { showNextCard() }}
             color={'success'}
             type="button"
             fullWidth
