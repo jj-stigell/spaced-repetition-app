@@ -93,7 +93,6 @@ export interface AnswerOption {
 export interface KanaCard {
   story: string
   hint: string
-  answerOptions: AnswerOption[]
 }
 
 export interface KanjiCard {
@@ -103,13 +102,11 @@ export interface KanjiCard {
   kunyomi: string
   onyomiRomaji: string
   kunyomiRomaji: string
-  answerOptions: AnswerOption[]
 }
 
 export interface VocabularyCard {
   reading: string
   readingRomaji: string
-  answerOptions: AnswerOption[]
 }
 
 export interface Card {
@@ -120,6 +117,7 @@ export interface Card {
   card: {
     value: string
     keyword: string
+    answerOptions: AnswerOption[]
   } & (KanjiCard | VocabularyCard | KanaCard)
 }
 
