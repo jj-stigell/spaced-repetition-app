@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Card } from '../types'
 
 interface CardState {
-  activeCard?: Card
+  activeCard: Card | null
   cards: Card[]
 }
 
 const initialState: CardState = {
-  activeCard: undefined,
+  activeCard: null,
   cards: []
 }
 
