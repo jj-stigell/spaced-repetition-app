@@ -1,4 +1,4 @@
-import { CardType, ReviewType, Card } from './types'
+import { CardType, ReviewType, Card, ExampleSentence } from './types'
 
 export const mockCards: Card[] = [
   {
@@ -188,5 +188,29 @@ export const mockCards: Card[] = [
         }
       ]
     }
+  }
+]
+
+export const exampleSentences: ExampleSentence[] = [
+  {
+    id: 354,
+    sentence: '昨日は車で学校に行きました。',
+    translation: 'Yesterday I went to school by car.',
+    furigana: 'きのうはくるまでがっこうにいきました。',
+    audio: 'https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-1.mp3'
+  },
+  {
+    id: 287,
+    sentence: '車のタイヤがパンクされた。',
+    translation: 'Cars tire was blown.',
+    furigana: 'くるまのたいやがぱんくされた。',
+    audio: 'https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-1.mp3'
+  },
+  {
+    id: 186,
+    sentence: 'あの車は日産です。',
+    translation: 'That car is Nissan.',
+    furigana: 'あのくるまはにっさんです。',
+    audio: 'https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-1.mp3'
   }
 ]
