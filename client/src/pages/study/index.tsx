@@ -19,7 +19,7 @@ import axios from '../../lib/axios'
 import { RootState } from '../../app/store'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { setNotification } from '../../features/notificationSlice'
-import { resetCards, setCards } from '../../features/cardSlice'
+import { resetCards, setCards, setNextCard } from '../../features/cardSlice'
 import ReviewFinished from './ReviewFinished'
 import CardFront from './CardFront'
 import AnswerOptions from './AnswerOptions'
@@ -50,24 +50,20 @@ function Study (): JSX.Element {
   const [reviewsFinished, setReviewsFinished] = React.useState<boolean>(false)
   const [isError, setIsError] = React.useState<string | null>(null)
   const [pressedButton, setPressedButton] = React.useState<string>('')
+  const [activeTab, setActiveTab] = React.useState('1')
 
   const language: string = useAppSelector((state: RootState) => state.account.account.language)
   const activeCard: Card | null = useAppSelector((state: RootState) => state.card.activeCard)
   const otherCards: Card[] = useAppSelector((state: RootState) => state.card.cards)
 
-  function shuffleOptions (array: AnswerOption[]): AnswerOption[] {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]]
-    }
-    return array
+  const handleChange = (event: React.SyntheticEvent, newValue: string): void => {
+    setActiveTab(newValue)
   }
 
-  let shufledOptions: AnswerOption[] | null = ((activeCard?.card.answerOptions) !== undefined) ? [...activeCard.card.answerOptions] : null
-
-  if (shufledOptions != null && !showAnswer) {
-    console.log('SHUFFLING in upper pat')
-    shufledOptions = shuffleOptions([...shufledOptions])
+  function resetView (): void {
+    setCorrectAnswer(false)
+    setShowAnswer(false)
+    setActiveTab('1')
   }
 
   React.useEffect(() => {
@@ -109,12 +105,6 @@ function Study (): JSX.Element {
     }
   }, [])
 
-  function resetView (): void {
-    setCorrectAnswer(false)
-    setShowAnswer(false)
-    setActiveTab('1')
-  }
-
   function handleAnswer (option: AnswerOption): void {
     setCorrectAnswer(option.correct)
     setPressedButton(option.option)
@@ -141,34 +131,9 @@ function Study (): JSX.Element {
       dispatch(resetCards())
       setReviewsFinished(true)
     } else {
-      // at least one in other cards array ([card1, card2, ..., cardN])
-      // If one [card1], newCards become [] and new active = card1
-      // Next round evaluation len arr == 0
-      const newCards: Card[] = _.cloneDeep(otherCards)
-
-      if (!correctAnswer) {
-        // Answer is not correct but cards are left, set the failed card to last in the current deck.
-        // push the current active card to othercards last place
-
-        // What if only one card left:
-        // active card is answered incorrectly and other cards is empty
-        if (activeCard != null) {
-          newCards.push(activeCard)
-        }
-      }
-
-      // Shift the first to active card
-      // Set rest as the other cards array
-      const newActiveCard: Card | undefined = newCards.shift()
-      dispatch(setCards({ activeCard: newActiveCard ?? null, cards: newCards }))
+      dispatch(setNextCard({ correctAnswer }))
       resetView()
     }
-  }
-
-  const [activeTab, setActiveTab] = React.useState('1')
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string): void => {
-    setActiveTab(newValue)
   }
 
   if (reviewsFinished) {
@@ -210,8 +175,8 @@ function Study (): JSX.Element {
             </Box>
             <TabPanel value="1">
               <Container maxWidth="sm">
-                { shufledOptions != null &&
-                  <AnswerOptions options={shufledOptions} handleAnswer={handleAnswer} showAnswer={showAnswer} pressedButton={pressedButton} />
+                { activeCard.card.answerOptions != null &&
+                  <AnswerOptions options={activeCard.card.answerOptions} handleAnswer={handleAnswer} showAnswer={showAnswer} pressedButton={pressedButton} />
                 }
                 { showAnswer &&
                 <Button
@@ -251,7 +216,7 @@ function Study (): JSX.Element {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          reset
+          Reset
         </Button>
     </div>
   )

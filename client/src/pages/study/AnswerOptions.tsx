@@ -15,17 +15,15 @@ function AnswerOptions (
             key={option.option}
             onClick={() => {
               if (!showAnswer) {
-                // console.log('BUTTON CLIKED, SHUFFLED CARDS:', copyOfOptions)
                 handleAnswer(option)
               }
             }}
             disabled={showAnswer && !option.correct && pressedButton !== option.option}
-            // color={!showAnswer ? 'primary' : correctAnswer && showAnswer && option.correct ? 'success' : 'success'}
             type="button"
             fullWidth
             variant="contained"
             sx={{
-              mt: 3,
+              mt: 0,
               mb: 2,
               boxShadow: 3,
               padding: 1,

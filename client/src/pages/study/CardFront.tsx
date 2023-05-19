@@ -2,7 +2,7 @@ import React from 'react'
 
 function CardFront ({ frontValue }: { frontValue: string }): JSX.Element {
   return (
-    <p style={{ fontSize: 55, textAlign: 'center', marginBottom: 30 }}>
+    <p style={{ fontSize: 55, textAlign: 'center', marginBottom: 40 }}>
       {frontValue}
     </p>
   )

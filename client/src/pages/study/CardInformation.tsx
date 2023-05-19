@@ -9,7 +9,8 @@ import CircularLoader from '../../components/CircularLoader'
 import axios from '../../lib/axios'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
-import { Card } from '../../types'
+import { Card, ExampleSentence } from '../../types'
+import { exampleSentences as xxx } from '../../mockData'
 
 export interface Examples {
   id: number
@@ -24,6 +25,8 @@ function CardInformation (): JSX.Element {
 
   const activeCard: Card = useAppSelector((state: RootState) => state.card.activeCard) as Card
   const language: string = useAppSelector((state: RootState) => state.account.account.language)
+
+  const [exampleSentences, setExampleSentences] = React.useState<ExampleSentence[] | null>(null)
 
   React.useEffect(() => {
     axios.get(`api/v1/card/${activeCard.id}/examples`, { params: { language } })
@@ -48,6 +51,8 @@ function CardInformation (): JSX.Element {
         }
       }).finally(() => {
         setIsLoading(false)
+        setIsError(null)
+        setExampleSentences(xxx)
       })
   }, [])
 
@@ -66,9 +71,19 @@ function CardInformation (): JSX.Element {
   }
 
   return (
-    <p style={{ fontSize: 55, textAlign: 'center', marginBottom: 30 }}>
-      grammar stuffff
-    </p>
+    <>
+      <p style={{ fontSize: 55, textAlign: 'center', marginBottom: 30 }}>Examples</p>
+      <ul>
+      { exampleSentences?.map((sentence: ExampleSentence) => {
+        return (
+          <li key={sentence.id}>
+            {sentence.sentence} = {sentence.translation}
+          </li>
+        )
+      })
+      }
+      </ul>
+    </>
   )
 }
 
