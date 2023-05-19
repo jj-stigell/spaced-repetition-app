@@ -6,6 +6,8 @@ import React from 'react'
 import { AxiosError } from 'axios'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Typography, Container, Tab } from '@mui/material'
+import LockIcon from '@mui/icons-material/Lock'
+import LockOpenIcon from '@mui/icons-material/LockOpen'
 import { useTranslation } from 'react-i18next'
 import { useParams, useSearchParams } from 'react-router-dom'
 import _ from 'lodash'
@@ -61,11 +63,11 @@ function Study (): JSX.Element {
     return array
   }
 
-  let copyOfOptions: AnswerOption[] | null = ((activeCard?.card.answerOptions) !== undefined) ? [...activeCard.card.answerOptions] : null
+  let shufledOptions: AnswerOption[] | null = ((activeCard?.card.answerOptions) !== undefined) ? [...activeCard.card.answerOptions] : null
 
-  if (copyOfOptions != null && !showAnswer) {
+  if (shufledOptions != null && !showAnswer) {
     console.log('SHUFFLING in upper pat')
-    copyOfOptions = shuffleOptions([...copyOfOptions])
+    shufledOptions = shuffleOptions([...shufledOptions])
   }
 
   React.useEffect(() => {
@@ -190,45 +192,56 @@ function Study (): JSX.Element {
 
   return (
     <div id="study-page-card" style={{ marginTop: 10 }}>
-      <Container maxWidth="sm">
-        <p style={{ textAlign: 'center', fontSize: 13 }}>DEV BUILD:: {activeCard.cardType} CARD, {activeCard.reviewType} REVIEW</p>
+        {/* <p style={{ textAlign: 'center', fontSize: 13 }}>DEV BUILD:: {activeCard.cardType} CARD, {activeCard.reviewType} REVIEW</p> */}
         <CardFront frontValue={activeCard.reviewType === ReviewType.RECALL ? activeCard.card.keyword : activeCard.card.value} />
         <Box sx={{ width: '100%', typography: 'body1' }}>
           <TabContext value={activeTab}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList onChange={handleChange} aria-label="lab API tabs example" sx={{ backgroundColor: '#4f7ce3' }} variant="fullWidth">
+              <TabList onChange={handleChange} aria-label="study-tabs" sx={{ backgroundColor: '#4f7ce3' }} variant="fullWidth">
                 <Tab label="Answer options" value="1" />
-                <Tab label="Details" value="2" disabled={!showAnswer} />
+                <Tab
+                  icon={showAnswer ? <LockOpenIcon fontSize="small" /> : <LockIcon fontSize="small" />}
+                  iconPosition="start"
+                  label="Details"
+                  value="2"
+                  disabled={!showAnswer}
+                />
               </TabList>
             </Box>
             <TabPanel value="1">
-              { copyOfOptions != null &&
-                <AnswerOptions options={copyOfOptions} handleAnswer={handleAnswer} showAnswer={showAnswer} pressedButton={pressedButton} />
-              }
+              <Container maxWidth="sm">
+                { shufledOptions != null &&
+                  <AnswerOptions options={shufledOptions} handleAnswer={handleAnswer} showAnswer={showAnswer} pressedButton={pressedButton} />
+                }
+                { showAnswer &&
+                <Button
+                  onClick={() => { showNextCard() }}
+                  color="success"
+                  type="button"
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    mt: 0,
+                    mb: 2,
+                    boxShadow: 3,
+                    padding: 1,
+                    fontSize: 30,
+                    '&:hover': {
+                      backgroundColor: '#e8ad09'
+                    },
+                    backgroundColor: '#fcba03'
+                  }}
+                >
+                  Next card
+                </Button>
+                }
+              </Container>
             </TabPanel>
             <TabPanel value="2">
               <CardInformation />
             </TabPanel>
           </TabContext>
         </Box>
-        { showAnswer &&
-          <Button
-            onClick={() => { showNextCard() }}
-            color={'success'}
-            type="button"
-            fullWidth
-            variant="contained"
-            sx={{
-              mt: 3,
-              mb: 2,
-              boxShadow: 3,
-              padding: 1,
-              fontSize: 30
-            }}
-          >
-            Next card
-          </Button>
-        }
         <br/>
         <Button
           onClick={() => { resetView() }}
@@ -240,7 +253,6 @@ function Study (): JSX.Element {
         >
           reset
         </Button>
-      </Container>
     </div>
   )
 }
