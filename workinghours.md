@@ -15,8 +15,9 @@
 | 6.5.2023 | 5 | Persist and clear redux state (depending on action), fetch deck and category information from server |
 | 7.5.2023 | 2 | Fix deployment issues, refactor |
 | 13.5.2023 | 3 | Add error page for card loading, add reviews finished page, add review page |
+| 19.5.2023 | 2 | Use skeleton when loading, move shuffle to redux |
 |  |  |  |
-| total | 30 |  | 
+| total | 32 |  |
 
 # Record of working hours for backend before combining repositories with frontend.
 
