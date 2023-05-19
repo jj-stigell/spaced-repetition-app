@@ -9,13 +9,14 @@ import RegisterSuccess from './RegisterSuccess'
 import RegisterForm from './RegisterForm'
 
 function Register (): JSX.Element {
-  const [registeredEmail, setRegisteredEmail] = React.useState<string | null>(null)
   const { t } = useTranslation()
+
+  const [registeredEmail, setRegisteredEmail] = React.useState<string | null>(null)
 
   return (
     <>
       <Typography component="h1" variant="h5" textAlign='center'>
-        { (registeredEmail != null) ? t('register.successTitle') : t('register.title')}
+        { (registeredEmail != null) ? t('pages.register.successTitle') : t('pages.register.title')}
       </Typography>
       { (registeredEmail != null)
         ? <RegisterSuccess email={registeredEmail}/>

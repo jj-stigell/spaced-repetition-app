@@ -16,14 +16,13 @@ import axios from '../../../lib/axios'
 import { setNotification } from '../../../features/notificationSlice'
 import { useAppDispatch } from '../../../app/hooks'
 
-interface FormProps {
+function Form ({ setResetInProcess, setSuccess }: {
   setResetInProcess: React.Dispatch<React.SetStateAction<boolean>>
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-function Form ({ setResetInProcess, setSuccess }: FormProps): JSX.Element {
+}): JSX.Element {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+
   const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
   const [apiError, setApiError] = React.useState<null | string>(null)
 
@@ -40,46 +39,43 @@ function Form ({ setResetInProcess, setSuccess }: FormProps): JSX.Element {
     },
     validationSchema,
     onSubmit: (values): void => {
-      console.log('Reset password for email address:', values.email)
       setIsSubmitted(true)
       setResetInProcess(true)
 
       axios.post(resetPassword, {
         email: values.email
-      })
-        .then(function () {
-          setIsSubmitted(false)
-          setResetInProcess(false)
-          setSuccess(true)
-        })
-        .catch(function (error) {
-          setIsSubmitted(false)
-          setResetInProcess(false)
-          setSuccess(false)
-          console.log('error encountered', error)
-          const errorCode: string | null = error?.response?.data?.errors[0].code
+      }).then(function () {
+        setIsSubmitted(false)
+        setResetInProcess(false)
+        setSuccess(true)
+      }).catch(function (error) {
+        setIsSubmitted(false)
+        setResetInProcess(false)
+        setSuccess(false)
+        console.log('error encountered', error)
+        const errorCode: string | null = error?.response?.data?.errors[0].code
 
-          if (errorCode != null) {
-            if (errorCode.startsWith('ERR_EMAIL')) {
-              setApiError(t(`errors.${errorCode}`))
-            } else {
-              // TODO: what if there are multiple errors.
-              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-              dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
-            }
-          } else if (error instanceof AxiosError) {
-            dispatch(setNotification({ message: error.message, severity: 'error' }))
+        if (errorCode != null) {
+          if (errorCode.startsWith('ERR_EMAIL')) {
+            setApiError(t(`errors.${errorCode}`))
           } else {
-            dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+            // TODO: what if there are multiple errors.
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
           }
-        })
+        } else if (error instanceof AxiosError) {
+          dispatch(setNotification({ message: error.message, severity: 'error' }))
+        } else {
+          dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+        }
+      })
     }
   })
 
   return (
     <>
       <Box sx={{ mt: 3, textAlign: 'center' }}>
-        {t('password.forgotPassword.resetDescription', { redirectTimeout: constants.redirectTimeout })}
+        {t('pages.password.forgotPassword.resetDescription', { redirectTimeout: constants.redirectTimeout })}
       </Box>
       <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
         <TextField
@@ -106,7 +102,7 @@ function Form ({ setResetInProcess, setSuccess }: FormProps): JSX.Element {
             <CircularProgress color='inherit' />
           </Box>
         }
-        <SubmitButton buttonText={t('password.forgotPassword.resetButton')} disabled={isSubmitted} />
+        <SubmitButton buttonText={t('pages.password.forgotPassword.resetButton')} disabled={isSubmitted} />
       </Box>
     </>
   )

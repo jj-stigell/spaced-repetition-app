@@ -1,9 +1,9 @@
 import * as React from 'react'
 
 // Third party imports
-import { Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, Link } from 'react-router-dom'
+import { Box } from '@mui/material'
 
 // Project imports
 import { constants } from '../../../config/constants'
@@ -22,7 +22,7 @@ function RegisterSuccess ({ email }: { email: string }): JSX.Element {
   return (
     <div style={{ textAlign: 'center' }}>
       <Box sx={{ mt: 4 }}>
-        {t('register.success', { email, redirectTimeout: constants.redirectTimeout })}
+        {t('pages.register.success', { email, redirectTimeout: constants.redirectTimeout })}
       </Box>
       <Box sx={{ mt: 4 }}>
         {t('misc.redirectMessage')}

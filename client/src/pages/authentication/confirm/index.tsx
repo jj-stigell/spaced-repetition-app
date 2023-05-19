@@ -18,11 +18,12 @@ import { login } from '../../../config/path'
 
 function Confirm (): JSX.Element {
   const { confirmationId } = useParams()
-  const [confirmInProsess, setConfirmInProsess] = React.useState<boolean>(confirmationId != null)
-  const [confirmSuccess, setConfirmSuccess] = React.useState<boolean>(false)
-  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const { t } = useTranslation()
+
+  const [confirmInProsess, setConfirmInProsess] = React.useState<boolean>(confirmationId != null)
+  const [confirmSuccess, setConfirmSuccess] = React.useState<boolean>(false)
 
   React.useEffect(() => {
     if (confirmInProsess) {
@@ -58,7 +59,7 @@ function Confirm (): JSX.Element {
   return (
     <>
       <Typography component="h1" variant="h5" sx={{ marginTop: 2, marginBottom: 5, textAlign: 'center' }}>
-        { confirmInProsess ? t('confirm.title') : (confirmSuccess ? t('confirm.successTitle') : t('confirm.failureTitle'))}
+        { confirmInProsess ? t('pages.confirm.title') : (confirmSuccess ? t('pages.confirm.successTitle') : t('pages.confirm.failureTitle'))}
       </Typography>
       { confirmInProsess
         ? <CircularLoader />

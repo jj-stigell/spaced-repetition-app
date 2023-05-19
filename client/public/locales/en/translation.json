@@ -14,10 +14,60 @@
     "logout": "Logout",
     "jlptLevel": "JLPT Level"
   },
-  "dashboard": {
-    "title": "this is the dashboard page"
-  },
   "pages": {
+    "dashboard": {
+      "title": "this is the dashboard page"
+    },
+    "login": {
+      "title": "Sign in to your account",
+      "lastLogin": "Latest login at",
+      "logInButton": "Sign in",
+      "welcomeBack": "Welcome back!",
+      "enterCredentials": "Enter your credentials to continue",
+      "rememberMe": "Remember me",
+      "resendVerificationLink": "Resend verification",
+      "linkToLogin": "Go back to login page, click here.",
+      "emailNotVerifiedMessage": "Email address is not verified. Please check your email for the verification link. if you have not received the link, you can resend the verification link from here:"
+    },
+    "register": {
+      "title": "Create a new account and start learning",
+      "successTitle": "New account created!",
+      "success": "New user created successfully with email address {{email}}. We sent you a confirm link by email, please confirm your email and start learning. Redirecting to login page in {{redirectTimeout}} seconds.",
+      "registerButton": "Register",
+      "noAccount": "Don't have an account? Sign Up",
+      "haveAccount": "Have an account?",
+      "enterCreds": "Enter your credentials to continue",
+      "agreeWith": "I have read and agree to the",
+      "TOS": "Terms of Service",
+      "cancelSuccessDisplay": "If you want to return to the register form, click here"
+    },
+    "confirm": {
+      "title": "Confirming email address",
+      "successTitle": "Email address confirmed!",
+      "failureTitle": "Email address confirmation failed",
+      "success": "Your email address confirmation was successful. Redirecting to login page in {{redirectTimeout}} seconds.",
+      "resend": {
+        "resendConfirmButton": "Resend confirmation code",
+        "resendConfirmDescription": "Confirmation failed, please resend the confirmation by entering your email address below.",
+        "resendSuccess": "New confirmation code sent to email address {{email}}. Redirecting to login page in {{redirectTimeout}} seconds."
+      }
+    },
+    "password": {
+      "forgotPassword": {
+        "title": "Reset account password",
+        "resetDescription": "To reset account password, enter the email address you use for the account in the field below.",
+        "successTitle": "Password reset link sent succesfully. Please check your email inbox.",
+        "failureTitle": "Email address verification failed",
+        "resetButton": "Send reset link"
+      },
+      "resetPassword": {
+        "title": "Set new password",
+        "resetDescription": "Input the new password and password confirmation below and submit to change the password",
+        "successTitle": "Password changed succesfully. Redirecting to login page in {{redirectTimeout}} seconds.",
+        "failureTitle": "Password update failed, please try again.",
+        "resetButton": "Set new password"
+      }
+    },
     "notFound": {
       "title":"Oops!",
       "description":"Sorry, page you tried to access not found.",
@@ -49,6 +99,10 @@
     },
     "categories": {
       "CUSTOM": "Your custom decks"
+    },
+    "decks": {
+      "title": "Available decks",
+      "returnButtom": "Back to category select"
     },
     "review": {
       "loadingMessage": "Loading Cards",
@@ -84,6 +138,8 @@
       }
     }
   },
+
+
   "stats": {
     "kanji": {
       "title": "Kanji learning progress:",
@@ -137,15 +193,6 @@
     "dueAndNewCards": "Cards due: {{old}} old, {{new}} new",
     "onlyNewCards": "Cards due: {{new}} new"
   },
-  "card": {
-    "accountCard": {
-      "accountStory": "Account custom story",
-      "accountHint": "Account custom hint",
-      "storyPlaceholder": "Enter your story here",
-      "hintPlaceholder": "Enter your hint here",
-      "editTitle": "Edit customized card data"
-    }
-  },
   "buttonGeneral": {
     "delete": "Delete",
     "cancel": "Cancel",
@@ -167,56 +214,6 @@
     "delete": "Delete session",
     "current": "current session",
     "sessionWarning": "This is the current session on this device. If you delete this one, you will be logged out from this device."
-  },
-  "login": {
-    "title": "Sign in to your account",
-    "lastLogin": "Latest login at",
-    "logInButton": "Sign in",
-    "welcomeBack": "Welcome back!",
-    "enterCredentials": "Enter your credentials to continue",
-    "rememberMe": "Remember me",
-    "resendVerificationLink": "Resend verification",
-    "linkToLogin": "Go back to login page, click here.",
-    "emailNotVerifiedMessage": "Email address is not verified. Please check your email for the verification link. if you have not received the link, you can resend the verification link from here:"
-  },
-  "register": {
-    "title": "Create a new account and start learning",
-    "successTitle": "New account created!",
-    "success": "New user created successfully with email address {{email}}. We sent you a confirm link by email, please confirm your email and start learning. Redirecting to login page in {{redirectTimeout}} seconds.",
-    "registerButton": "Register",
-    "noAccount": "Don't have an account? Sign Up",
-    "haveAccount": "Have an account?",
-    "enterCreds": "Enter your credentials to continue",
-    "agreeWith": "I have read and agree to the",
-    "TOS": "Terms of Service",
-    "cancelSuccessDisplay": "If you want to return to the register form, click here"
-  },
-  "confirm": {
-    "title": "Confirming email address",
-    "successTitle": "Email address confirmed!",
-    "failureTitle": "Email address confirmation failed",
-    "success": "Your email address confirmation was successful. Redirecting to login page in {{redirectTimeout}} seconds.",
-    "resend": {
-      "resendConfirmButton": "Resend confirmation code",
-      "resendConfirmDescription": "Confirmation failed, please resend the confirmation by entering your email address below.",
-      "resendSuccess": "New confirmation code sent to email address {{email}}. Redirecting to login page in {{redirectTimeout}} seconds."
-    }
-  },
-  "password": {
-    "forgotPassword": {
-      "title": "Reset account password",
-      "resetDescription": "To reset account password, enter the email address you use for the account in the field below.",
-      "successTitle": "Password reset link sent succesfully. Please check your email inbox.",
-      "failureTitle": "Email address verification failed",
-      "resetButton": "Send reset link"
-    },
-    "resetPassword": {
-      "title": "Set new password",
-      "resetDescription": "Input the new password and password confirmation below and submit to change the password",
-      "successTitle": "Password changed succesfully. Redirecting to login page in {{redirectTimeout}} seconds.",
-      "failureTitle": "Password update failed, please try again.",
-      "resetButton": "Set new password"
-    }
   },
   "passwordStrength": {
     "poor": "Poor",

@@ -9,6 +9,7 @@ import { Outlet } from 'react-router-dom'
 import Copyright from '../../components/Copyright'
 import Logo from '../../components/Logo'
 
+// TODO: theming in one place???
 const theme = createTheme()
 
 function Authentication (): JSX.Element {

@@ -22,7 +22,7 @@ function ConfirmSuccess (): JSX.Element {
   return (
     <div style={{ textAlign: 'center' }}>
       <Box sx={{ mt: 4 }}>
-        {t('confirm.success', { redirectTimeout: constants.redirectTimeout })}
+        {t('pages.confirm.success', { redirectTimeout: constants.redirectTimeout })}
       </Box>
       <Box sx={{ mt: 4 }}>
         {t('misc.redirectMessage')}

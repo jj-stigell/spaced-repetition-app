@@ -3,13 +3,13 @@ import * as React from 'react'
 
 // Third party imports
 import { AxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
 import {
   Box, FormControl, FormHelperText,
   IconButton, InputAdornment, InputLabel,
   OutlinedInput
 } from '@mui/material'
-import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 
@@ -28,6 +28,7 @@ function Form (): JSX.Element {
   const { confirmationId } = useParams()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+
   const [submitting, setSubmitting] = React.useState<boolean>(false)
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const [showPasswordConfirm, setShowPasswordConfirm] = React.useState<boolean>(false)
@@ -61,45 +62,42 @@ function Form (): JSX.Element {
     validationSchema,
     onSubmit: (values, { resetForm }): void => {
       setSubmitting(true)
-      console.log('Changing password to:', values.password, 'id is:', confirmationId)
 
       axios.patch(resetPassword, {
         password: values.password,
         confirmationId
+      }).then(function () {
+        setSubmitting(false)
+        resetForm()
+        dispatch(setNotification(
+          { message: t('pages.password.resetPassword.successTitle', { redirectTimeout: constants.redirectTimeout }), severity: 'success' }
+        ))
+
+        setTimeout(() => {
+          navigate(login)
+        }, constants.redirectTimeout * 1000)
+      }).catch(function (error) {
+        setSubmitting(false)
+        console.log('error encountered', error)
+        const errorCode: string | null = error?.response?.data?.errors[0].code
+
+        if (errorCode != null) {
+          // TODO: what if there are multiple errors.
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+        } else if (error instanceof AxiosError) {
+          dispatch(setNotification({ message: error.message, severity: 'error' }))
+        } else {
+          dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+        }
       })
-        .then(function () {
-          setSubmitting(false)
-          resetForm()
-          dispatch(setNotification(
-            { message: t('password.resetPassword.successTitle', { redirectTimeout: constants.redirectTimeout }), severity: 'success' }
-          ))
-
-          setTimeout(() => {
-            navigate(login)
-          }, constants.redirectTimeout * 1000)
-        })
-        .catch(function (error) {
-          setSubmitting(false)
-          console.log('error encountered', error)
-          const errorCode: string | null = error?.response?.data?.errors[0].code
-
-          if (errorCode != null) {
-            // TODO: what if there are multiple errors.
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
-          } else if (error instanceof AxiosError) {
-            dispatch(setNotification({ message: error.message, severity: 'error' }))
-          } else {
-            dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
-          }
-        })
     }
   })
 
   return (
     <>
       <Box sx={{ mt: 4, textAlign: 'center' }}>
-        {t('password.resetPassword.resetDescription', { redirectTimeout: constants.redirectTimeout })}
+        {t('pages.password.resetPassword.resetDescription', { redirectTimeout: constants.redirectTimeout })}
       </Box>
       <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
       <FormControl sx={{ width: '100%' }} variant="outlined">
@@ -164,7 +162,7 @@ function Form (): JSX.Element {
           </FormHelperText>
         )}
       </FormControl>
-        <SubmitButton buttonText={t('password.resetPassword.resetButton')} />
+        <SubmitButton buttonText={t('pages.password.resetPassword.resetButton')} />
       </Box>
     </>
   )

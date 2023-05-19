@@ -13,7 +13,7 @@ function Login (): JSX.Element {
   return (
     <>
       <Typography component="h1" variant="h5" textAlign='center'>
-        {t('login.title')}
+        {t('pages.login.title')}
       </Typography>
       <Form />
     </>

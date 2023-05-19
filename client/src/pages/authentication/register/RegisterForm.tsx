@@ -3,16 +3,16 @@ import * as React from 'react'
 
 // Third party imports
 import { AxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import {
   Box, Grid, Link as MuiLink, Checkbox, TextField,
   FormControlLabel, FormControl, OutlinedInput,
   InputLabel, InputAdornment, IconButton,
   FormHelperText, CircularProgress
 } from '@mui/material'
-import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import { Link } from 'react-router-dom'
 
 // Project imports
 import axios from '../../../lib/axios'
@@ -25,13 +25,12 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { register } from '../../../config/api'
 import { login } from '../../../config/path'
 
-interface FormProps {
-  setRegisteredEmail: React.Dispatch<React.SetStateAction<string | null>>
-}
-
-function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
+function RegisterForm (
+  { setRegisteredEmail }: { setRegisteredEmail: React.Dispatch<React.SetStateAction<string | null>> }
+): JSX.Element {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
+
   const [tosAccepted, setTosAccepted] = React.useState<boolean>(false)
   const [tosError, setTosError] = React.useState<boolean>(false)
   const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
@@ -86,26 +85,24 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           acceptTos: tosAccepted,
           allowNewsLetter: values.allowNewsLetter,
           language: values.language
+        }).then(function () {
+          resetForm()
+          setIsSubmitted(false)
+          setRegisteredEmail(values.email)
+        }).catch(function (error) {
+          console.log('error encountered', error)
+          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+          if (error?.response?.data?.errors[0].code) {
+            // TODO: what if there are multiple errors.
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            dispatch(setNotification({ message: t(`errors.${error.response.data.errors[0].code}`), severity: 'error' }))
+          } else if (error instanceof AxiosError) {
+            dispatch(setNotification({ message: error.message, severity: 'error' }))
+          } else {
+            dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+          }
+          setIsSubmitted(false)
         })
-          .then(function () {
-            resetForm()
-            setIsSubmitted(false)
-            setRegisteredEmail(values.email)
-          })
-          .catch(function (error) {
-            console.log('error encountered', error)
-            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-            if (error?.response?.data?.errors[0].code) {
-              // TODO: what if there are multiple errors.
-              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-              dispatch(setNotification({ message: t(`errors.${error.response.data.errors[0].code}`), severity: 'error' }))
-            } else if (error instanceof AxiosError) {
-              dispatch(setNotification({ message: error.message, severity: 'error' }))
-            } else {
-              dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
-            }
-            setIsSubmitted(false)
-          })
       } else {
         setTosError(true)
         dispatch(setNotification({ message: t('errors.ERR_ACCEPT_TOS_REQUIRED'), severity: 'error' }))
@@ -226,9 +223,9 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
             />}
             label=''
         />
-        {t('register.agreeWith')} {' '}
+        {t('pages.register.agreeWith')} {' '}
         <MuiLink href={constants.tosLink} target='_blank'>
-          {t('register.TOS')}
+          {t('pages.register.TOS')}
         </MuiLink>
       </div>
       { isSubmitted &&
@@ -236,11 +233,11 @@ function RegisterForm ({ setRegisteredEmail }: FormProps): JSX.Element {
           <CircularProgress color='inherit' />
         </Box>
       }
-      <SubmitButton buttonText={t('register.registerButton')} disabled={isSubmitted} />
+      <SubmitButton buttonText={t('pages.register.registerButton')} disabled={isSubmitted} />
       <Grid container>
         <Grid item>
           <Link to={login}>
-            {t('register.haveAccount')}
+            {t('pages.register.haveAccount')}
           </Link>
         </Grid>
       </Grid>

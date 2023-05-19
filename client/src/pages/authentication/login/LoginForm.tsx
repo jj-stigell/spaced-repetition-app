@@ -1,6 +1,3 @@
-/* eslint-disable padded-blocks */
-/* eslint-disable no-multiple-empty-lines */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import * as React from 'react'
 
@@ -8,6 +5,7 @@ import * as React from 'react'
 import { AxiosError } from 'axios'
 import { useFormik } from 'formik'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 import * as yup from 'yup'
 import {
   Box, Grid, Checkbox, TextField,
@@ -16,7 +14,6 @@ import {
   IconButton
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
 
 // Project imports
 import axios from '../../../lib/axios'
@@ -34,7 +31,9 @@ import { login } from '../../../config/api'
 function LoginForm (): JSX.Element {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
+
   const { rememberMeEmail, rememberMePassword }: RememberMe = useAppSelector((state: RootState) => state.remember)
+
   const [rememberMe, setRememberMe] = React.useState<boolean>(rememberMeEmail != null && rememberMePassword != null)
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const [loggingIn, setLoggingIn] = React.useState<boolean>(false)
@@ -61,33 +60,31 @@ function LoginForm (): JSX.Element {
       axios.post(login, {
         email: values.email,
         password: values.password
+      }).then(function (response) {
+        const accountInformation: Account = response.data.data
+        dispatch(setAccount({ isLoggedIn: true, account: accountInformation }))
+
+        // Store remember me if selected, otherwise clear.
+        if (rememberMe) {
+          dispatch(SetRememberMe({ rememberMeEmail: values.email, rememberMePassword: values.password }))
+        } else {
+          dispatch(resetRememberMe({}))
+        }
+      }).catch(function (error) {
+        console.log('error encountered', error)
+        const errorCode: string | null = error?.response?.data?.errors[0].code
+        setLoggingIn(false)
+
+        if (errorCode != null) {
+          // TODO: what if there are multiple errors.
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+        } else if (error instanceof AxiosError) {
+          dispatch(setNotification({ message: error.message, severity: 'error' }))
+        } else {
+          dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+        }
       })
-        .then(function (response) {
-          const accountInformation: Account = response.data.data
-          dispatch(setAccount({ isLoggedIn: true, account: accountInformation }))
-
-          // Store remember me if selected, otherwise clear.
-          if (rememberMe) {
-            dispatch(SetRememberMe({ rememberMeEmail: values.email, rememberMePassword: values.password }))
-          } else {
-            dispatch(resetRememberMe({}))
-          }
-        })
-        .catch(function (error) {
-          console.log('error encountered', error)
-          const errorCode: string | null = error?.response?.data?.errors[0].code
-          setLoggingIn(false)
-
-          if (errorCode != null) {
-            // TODO: what if there are multiple errors.
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
-          } else if (error instanceof AxiosError) {
-            dispatch(setNotification({ message: error.message, severity: 'error' }))
-          } else {
-            dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
-          }
-        })
     }
   })
 
@@ -148,9 +145,9 @@ function LoginForm (): JSX.Element {
           value="remember"
           color="primary"
           />}
-        label={t('login.rememberMe')}
+        label={t('pages.login.rememberMe')}
       />
-      <SubmitButton buttonText={t('login.logInButton')} disabled={loggingIn} />
+      <SubmitButton buttonText={t('pages.login.logInButton')} disabled={loggingIn} />
       <Grid container>
         <Grid item xs>
           <Link to={requestResetPassword}>
@@ -159,7 +156,7 @@ function LoginForm (): JSX.Element {
         </Grid>
         <Grid item>
           <Link to={register}>
-          {t('register.noAccount')}
+          {t('pages.register.noAccount')}
           </Link>
         </Grid>
       </Grid>
@@ -168,5 +165,3 @@ function LoginForm (): JSX.Element {
 }
 
 export default LoginForm
-
-// variant="body2"

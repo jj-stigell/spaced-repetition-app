@@ -19,10 +19,11 @@ import { login } from '../../../config/path'
 import SubmitButton from '../../../components/SubmitButton'
 
 function ReconfirmForm (): JSX.Element {
-  const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+
+  const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
 
   const validationSchema: yup.AnySchema = yup.object({
     email: yup.string()
@@ -44,7 +45,7 @@ function ReconfirmForm (): JSX.Element {
         .then(function () {
           setIsSubmitted(false)
           dispatch(setNotification(
-            { message: t('confirm.resend.resendSuccess', { email: values.email, redirectTimeout: constants.redirectTimeout }), severity: 'success' }
+            { message: t('pages.confirm.resend.resendSuccess', { email: values.email, redirectTimeout: constants.redirectTimeout }), severity: 'success' }
           ))
 
           setTimeout(() => {
@@ -72,7 +73,7 @@ function ReconfirmForm (): JSX.Element {
   return (
     <>
       <Box sx={{ mt: 4, textAlign: 'center' }}>
-        {t('confirm.resend.resendConfirmDescription', { redirectTimeout: constants.redirectTimeout })}
+        {t('pages.confirm.resend.resendConfirmDescription', { redirectTimeout: constants.redirectTimeout })}
       </Box>
       <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
         <TextField
@@ -96,7 +97,7 @@ function ReconfirmForm (): JSX.Element {
             <CircularProgress color='inherit' />
           </Box>
         }
-        <SubmitButton buttonText={t('confirm.resend.resendConfirmButton')} disabled={isSubmitted} />
+        <SubmitButton buttonText={t('pages.confirm.resend.resendConfirmButton')} disabled={isSubmitted} />
       </Box>
     </>
   )
