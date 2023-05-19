@@ -131,7 +131,7 @@ function Study (): JSX.Element {
       dispatch(resetCards())
       setReviewsFinished(true)
     } else {
-      dispatch(setNextCard({ correctAnswer }))
+      dispatch(setNextCard(correctAnswer))
       resetView()
     }
   }

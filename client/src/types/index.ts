@@ -104,6 +104,14 @@ export interface KanjiCard {
   kunyomiRomaji: string
 }
 
+export interface ExampleSentence {
+  id: number
+  sentence: string
+  translation: string
+  furigana: string
+  audio: string
+}
+
 export interface VocabularyCard {
   reading: string
   readingRomaji: string
