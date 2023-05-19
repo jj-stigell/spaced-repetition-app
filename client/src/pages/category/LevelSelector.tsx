@@ -14,28 +14,30 @@ import { setJlptLevel } from '../../features/accountSlice'
 import { RootState } from '../../app/store'
 import { changeJlptLevel } from '../../config/api'
 import { setNotification } from '../../features/notificationSlice'
-import { initialState, setDecks } from '../../features/deckSlice'
+import { resetDecks } from '../../features/deckSlice'
 
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 300,
+  width: 350,
   bgcolor: 'background.paper',
-  border: '1px solid #e70a28',
+  border: '3px solid #fad25f',
+  borderRadius: 3,
   boxShadow: 24,
   p: 4
 }
 
 const buttonStyle = {
-  bgcolor: '#bbbbbb',
+  bgcolor: '#f7e09e',
   '&:hover': {
-    bgcolor: '#e70a28'
+    bgcolor: '#fad25f'
   },
+  color: 'black',
   marginBottom: 3,
   flexGrow: 0,
-  width: '50%',
+  width: '75%',
   alignSelf: 'center'
 }
 
@@ -51,28 +53,27 @@ function LevelSelector (): JSX.Element {
 
   const handleLevelSelection = (selectedLevel: JlptLevel): void => {
     dispatch(setJlptLevel(selectedLevel))
-    dispatch(setDecks(initialState))
+    dispatch(resetDecks())
     handleModalClick()
 
     axios.patch(changeJlptLevel, {
       jlptLevel: selectedLevel
-    })
-      .catch(function (error) {
-        console.log('error encountered', error)
-        const errorCode: string | null = error?.response?.data?.errors[0]?.code
+    }).catch(function (error) {
+      console.log('error encountered', error)
+      const errorCode: string | null = error?.response?.data?.errors[0]?.code
 
-        if (errorCode != null) {
+      if (errorCode != null) {
         // TODO: what if there are multiple errors.
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
-        } else if (error instanceof AxiosError) {
-          dispatch(setNotification({ message: error.message, severity: 'error' }))
-        } else {
-          dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
-        }
-      }).finally(function () {
-        console.log('JLPT level set to:', selectedLevel)
-      })
+        dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
+      } else if (error instanceof AxiosError) {
+        dispatch(setNotification({ message: error.message, severity: 'error' }))
+      } else {
+        dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
+      }
+    }).finally(function () {
+      console.log('JLPT level set to:', selectedLevel)
+    })
   }
 
   return (
@@ -80,28 +81,28 @@ function LevelSelector (): JSX.Element {
       <Button
         fullWidth
         variant="contained"
+        onClick={handleModalClick}
         sx={{
-          bgcolor: '#bbbbbb',
+          bgcolor: '#f7e09e',
           '&:hover': {
-            bgcolor: '#e70a28'
+            bgcolor: '#fad25f'
           },
           marginBottom: 3,
           flexGrow: 0,
           mt: 3,
           mb: 2
         }}
-        onClick={handleModalClick}
       >
         {t('modals.jlptSelector.button', { level: jlptLevel })}
       </Button>
       <Modal
         open={open}
         onClose={handleModalClick}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="modal-select-jlpt-level"
+        aria-describedby="modal-select-the-desired-jlpt-level-for-studying"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ textAlign: 'center', marginBottom: 3 }}>
+          <Typography id="jlpt-level-title" variant="h6" component="h2" sx={{ textAlign: 'center', marginBottom: 3 }}>
             {t('modals.jlptSelector.title')}
           </Typography>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
