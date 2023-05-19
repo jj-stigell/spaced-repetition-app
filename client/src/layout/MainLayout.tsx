@@ -6,6 +6,7 @@ import { Box } from '@mui/material'
 
 // Project imports
 import TopAppBar from '../components/TopAppBar'
+import Footer from '../components/Footer'
 
 function MainLayout (): JSX.Element {
   return (
@@ -14,6 +15,7 @@ function MainLayout (): JSX.Element {
       <Box sx={{ flexGrow: 1, marginLeft: 2, marginRight: 2, marginTop: 7 }}>
         <Outlet/>
       </Box>
+      <Footer />
     </Box>
   )
 }
