@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Third party imports
 import { AxiosError } from 'axios'
 import { experimentalStyled as styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
@@ -11,7 +12,7 @@ import Button from '@mui/material/Button'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import CircularLoader from '../../components/CircularLoader'
+// Project imports
 import { setNotification } from '../../features/notificationSlice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { Deck, DeckCategory, Role } from '../../types'
@@ -20,7 +21,9 @@ import { getDecks } from '../../config/api'
 import { RootState } from '../../app/store'
 import { DeckState, setDecks } from '../../features/deckSlice'
 import { Account } from '../../features/accountSlice'
+import { category as categoryPath } from '../../config/path'
 import StudyOptions from './StudySelector'
+import { Skeleton } from '@mui/material'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -38,11 +41,12 @@ function Decks (): JSX.Element {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { category } = useParams()
-  const account: Account = useAppSelector((state: RootState) => state.account.account)
-  const deck: DeckState = useAppSelector((state: RootState) => state.deck)
 
   const [selectedDeckId, setSelectedDeckId] = React.useState<number>(1)
   const [showModal, setShowModal] = React.useState<boolean>(false)
+
+  const account: Account = useAppSelector((state: RootState) => state.account.account)
+  const deck: DeckState = useAppSelector((state: RootState) => state.deck)
 
   React.useEffect(() => {
     // TODO make loading view with skeleton
@@ -54,7 +58,8 @@ function Decks (): JSX.Element {
           })
           .catch(function (error) {
             console.log('error encountered', error)
-            const errorCode: string | null = error?.response?.data?.errors[0]?.code
+            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+            const errorCode: string | null = error?.response?.data?.errors ? error?.response?.data?.errors[0]?.code : null
 
             if (errorCode != null) {
             // TODO: what if there are multiple errors.
@@ -78,26 +83,28 @@ function Decks (): JSX.Element {
     setShowModal(true)
   }
 
-  if (deck.decks.length === 0) {
-    return (<CircularLoader />)
-  }
-
   return (
     <div id="study-page-decks" style={{ marginTop: 15 }}>
       <CssBaseline />
       <StudyOptions deckId={selectedDeckId} open={showModal} setOpen={setShowModal} />
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Button
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
-          onClick={() => { navigate(-1) }}
+          onClick={() => { navigate(categoryPath) }}
         >
-          Back to category select
+          {t('pages.decks.returnButton')}
         </Button>
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2 }}>
-            {deck.decks.map((deck: Deck) => (
+          <Grid container spacing={{ xs: 2, md: 2 }} columns={{ xs: 1, sm: 8, md: 8 }}>
+            { deck.decks.length === 0
+              ? [1, 2, 3, 4, 5, 6].map((number: number) => (
+              <Grid item xs={2} sm={4} md={4} key={number}>
+                <Skeleton variant="rounded" height={200} />
+              </Grid>
+                ))
+              : deck.decks.map((deck: Deck) => (
               <Grid item xs={2} sm={4} md={4} key={deck.id}>
                 <Item onClick={() => { handleClick(deck.id) }}>
                   {deck.title}
@@ -135,7 +142,7 @@ function Decks (): JSX.Element {
                   }
                   </Item>
               </Grid>
-            ))}
+              ))}
           </Grid>
         </Box>
       </Container>

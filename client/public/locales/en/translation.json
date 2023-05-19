@@ -102,7 +102,7 @@
     },
     "decks": {
       "title": "Available decks",
-      "returnButtom": "Back to category select"
+      "returnButton": "Back to category select"
     },
     "review": {
       "loadingMessage": "Loading Cards",

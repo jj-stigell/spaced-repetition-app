@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
 
 import { AxiosError } from 'axios'
@@ -17,6 +18,7 @@ import axios from '../../lib/axios'
 import { getCategories } from '../../config/api'
 import { setNotification } from '../../features/notificationSlice'
 import { CategoryState, setCategories } from '../../features/categorySlice'
+import { Skeleton } from '@mui/material'
 
 const Item = experimentalStyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -33,20 +35,27 @@ function Study (): JSX.Element {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+
   const categories: CategoryState = useAppSelector((state: RootState) => state.category)
   const jlptLevel: JlptLevel = useAppSelector((state: RootState) => state.account.account.jlptLevel)
 
   React.useEffect(() => {
     // Only fetch categories if undefined or does not match the set JLPT level.
     if (categories.jlptLevel === undefined || categories.jlptLevel !== jlptLevel) {
+      setIsLoading(true)
       axios.get(`${getCategories}?level=${jlptLevel}`)
         .then(function (response) {
           console.log('Response for setting categories:', response.data.data)
           dispatch(setCategories({ jlptLevel, categories: response.data.data }))
+          setIsLoading(false)
         })
         .catch(function (error) {
+          setIsLoading(false)
           console.log('error encountered', error)
-          const errorCode: string | null = error?.response?.data?.errors[0]?.code
+          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+          const errorCode: string | null = error?.response?.data?.errors ? error?.response?.data?.errors[0]?.code : null
 
           if (errorCode != null) {
             // TODO: what if there are multiple errors.
@@ -63,13 +72,19 @@ function Study (): JSX.Element {
 
   return (
     <div id="study-page" style={{ marginTop: 15 }}>
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <div className="jlpt-level">
           <LevelSelector />
         </div>
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 1, sm: 2, md: 2 }}>
-            {categories.categories.map((category: Category) => (
+          <Grid container spacing={{ xs: 2, md: 2 }} columns={{ xs: 1, sm: 8, md: 8 }}>
+            { categories.categories.length === 0 || isLoading
+              ? [1, 2, 3, 4, 5, 6].map((number: number) => (
+              <Grid item xs={2} sm={4} md={4} key={number}>
+                <Skeleton variant="rounded" height={200} />
+              </Grid>
+                ))
+              : categories.categories.map((category: Category) => (
               <Grid item xs={2} sm={4} md={4} key={category.category}>
                 <Item onClick={() => { navigate(`/study/decks/${category.category.toLowerCase()}`) }}>
                   Category: {category.category}
@@ -90,7 +105,7 @@ function Study (): JSX.Element {
                   }
                 </Item>
               </Grid>
-            ))}
+              ))}
           </Grid>
         </Box>
       </Container>
