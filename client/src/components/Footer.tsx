@@ -11,11 +11,9 @@ function Footer (): JSX.Element {
     <Box
       component="footer"
       sx={{
-        backgroundColor: '#f7e09e',
-        color: '#ffffff',
+        backgroundColor: 'primary.main',
         padding: 1,
-        textAlign: 'center',
-        marginTop: 3
+        textAlign: 'center'
       }}
     >
       <Copyright />

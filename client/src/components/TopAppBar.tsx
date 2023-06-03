@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+// Third party imports
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -10,10 +11,10 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Container from '@mui/material/Container'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
-// import TranslateIcon from '@mui/icons-material/Translate'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+// Project imports
 import { constants } from '../config/constants'
 import { category, dashboard, settings } from '../config/path'
 
@@ -31,10 +32,9 @@ function TopAppBar (): JSX.Element {
   }
 
   return (
-    <AppBar position="fixed" style={{ background: '#fad25f' }}>
+    <AppBar position="fixed" style={{ background: 'primary.main' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <TranslateIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
@@ -45,13 +45,12 @@ function TopAppBar (): JSX.Element {
               fontFamily: 'Pacifico',
               fontWeight: 500,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'primary.dark',
               textDecoration: 'none'
             }}
           >
-            {constants.appName}
+            {constants.appName} beta
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -89,7 +88,6 @@ function TopAppBar (): JSX.Element {
                   {t('navbar.dashboard')}
                 </Typography>
               </MenuItem>
-
               <MenuItem key='study' onClick={() => {
                 handleCloseNavMenu()
                 navigate(category)
@@ -98,18 +96,6 @@ function TopAppBar (): JSX.Element {
                   {t('navbar.study')}
                 </Typography>
               </MenuItem>
-              {
-                /*
-              <MenuItem key='statistics' onClick={() => {
-                handleCloseNavMenu()
-                navigate(statistics)
-              }}>
-                <Typography textAlign="center" color="inherit">
-                  {t('navbar.statistics')}
-                </Typography>
-              </MenuItem>
-                */
-              }
               <MenuItem key='settings' onClick={() => {
                 handleCloseNavMenu()
                 navigate(settings)
@@ -120,7 +106,6 @@ function TopAppBar (): JSX.Element {
               </MenuItem>
             </Menu>
           </Box>
-          {/* <TranslateIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
@@ -132,11 +117,11 @@ function TopAppBar (): JSX.Element {
               fontFamily: 'Pacifico',
               fontWeight: 500,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: 'primary.dark',
               textDecoration: 'none'
             }}
           >
-            {constants.appName}
+            {constants.appName} beta
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
@@ -159,20 +144,6 @@ function TopAppBar (): JSX.Element {
             >
               {t('navbar.study')}
             </Button>
-            {
-              /*
-              <Button
-                key='statistics'
-                onClick={() => {
-                  handleCloseNavMenu()
-                  navigate(statistics)
-                }}
-                sx={{ my: 2, color: 'inherit', display: 'block' }}
-              >
-                {t('navbar.statistics')}
-              </Button>
-              */
-            }
             <Button
               key='settings'
               onClick={() => {
@@ -189,4 +160,5 @@ function TopAppBar (): JSX.Element {
     </AppBar>
   )
 }
+
 export default TopAppBar
