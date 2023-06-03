@@ -16,13 +16,13 @@ function RegisterSuccess ({ email }: { email: string }): JSX.Element {
   React.useEffect(() => {
     setTimeout(() => {
       navigate(login)
-    }, constants.redirectTimeout * 1000)
+    }, (constants.redirectTimeout + 5) * 1000)
   }, [])
 
   return (
     <div style={{ textAlign: 'center' }}>
       <Box sx={{ mt: 4 }}>
-        {t('pages.register.success', { email, redirectTimeout: constants.redirectTimeout })}
+        {t('pages.register.success', { email, redirectTimeout: constants.redirectTimeout + 5 })}
       </Box>
       <Box sx={{ mt: 4 }}>
         {t('misc.redirectMessage')}

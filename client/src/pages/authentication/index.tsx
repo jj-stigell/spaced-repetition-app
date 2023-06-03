@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 // Third party imports
-import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { Container, Box } from '@mui/material'
 import { Outlet } from 'react-router-dom'
 
@@ -9,19 +8,19 @@ import { Outlet } from 'react-router-dom'
 import Copyright from '../../components/Copyright'
 import Logo from '../../components/Logo'
 
-// TODO: theming in one place???
-const theme = createTheme()
-
 function Authentication (): JSX.Element {
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" sx={{ pt: 3, pb: 2 }}>
         <Box
           sx={{
-            marginTop: 5,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
+            border: 2,
+            borderRadius: 3,
+            padding: 5,
+            paddingTop: 2,
+            borderColor: 'primary.dark'
           }}
         >
           <Box sx={{ mb: 3 }}>
@@ -29,9 +28,8 @@ function Authentication (): JSX.Element {
           </Box>
           <Outlet/>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        <Copyright sx={{ mt: 4 }} />
       </Container>
-    </ThemeProvider>
   )
 }
 

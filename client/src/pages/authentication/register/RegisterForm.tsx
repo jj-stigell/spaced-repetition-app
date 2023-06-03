@@ -6,7 +6,7 @@ import { AxiosError } from 'axios'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import {
-  Box, Grid, Link as MuiLink, Checkbox, TextField,
+  Box, Grid, Checkbox, TextField,
   FormControlLabel, FormControl, OutlinedInput,
   InputLabel, InputAdornment, IconButton,
   FormHelperText, CircularProgress
@@ -24,6 +24,7 @@ import { RegisterData } from '../../../types'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { register } from '../../../config/api'
 import { login } from '../../../config/path'
+import TosDialog from './Tos'
 
 function RegisterForm (
   { setRegisteredEmail }: { setRegisteredEmail: React.Dispatch<React.SetStateAction<string | null>> }
@@ -33,6 +34,7 @@ function RegisterForm (
 
   const [tosAccepted, setTosAccepted] = React.useState<boolean>(false)
   const [tosError, setTosError] = React.useState<boolean>(false)
+  const [showTos, setShowTos] = React.useState<boolean>(false)
   const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const [showPasswordConfirm, setShowPasswordConfirm] = React.useState<boolean>(false)
@@ -224,9 +226,9 @@ function RegisterForm (
             label=''
         />
         {t('pages.register.agreeWith')} {' '}
-        <MuiLink href={constants.tosLink} target='_blank'>
+        <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => { setShowTos(true) }}>
           {t('pages.register.TOS')}
-        </MuiLink>
+        </span>
       </div>
       { isSubmitted &&
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -241,6 +243,7 @@ function RegisterForm (
           </Link>
         </Grid>
       </Grid>
+      <TosDialog show={showTos} setShow={setShowTos}/>
     </Box>
   )
 }
