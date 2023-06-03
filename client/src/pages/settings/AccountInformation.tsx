@@ -24,8 +24,8 @@ function AccountInformation (): JSX.Element {
         </Typography>
         <Typography variant="body1" color="text.primary">
           {t('pages.settings.accountInformation.memberStatus')}: {role === 'NON_MEMBER'
-            ? t('pages.settings.accountInformation.expired')
-            : t('pages.settings.accountInformation.active')}
+            ? t('pages.settings.accountInformation.expired') + ' 😅'
+            : t('pages.settings.accountInformation.active') + ' 😊'}
         </Typography>
       </Box>
     </>

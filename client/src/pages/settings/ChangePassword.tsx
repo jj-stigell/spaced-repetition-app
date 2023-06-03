@@ -6,7 +6,7 @@ import { AxiosError } from 'axios'
 import {
   Box, FormControl, OutlinedInput,
   InputLabel, InputAdornment, IconButton,
-  FormHelperText, CircularProgress
+  FormHelperText, CircularProgress, Button
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
@@ -16,7 +16,6 @@ import { Visibility, VisibilityOff } from '@mui/icons-material'
 // Project imports
 import axios from '../../lib/axios'
 import { setNotification } from '../../features/notificationSlice'
-import SubmitButton from '../../components/SubmitButton'
 import { constants } from '../../config/constants'
 import { useAppDispatch } from '../../app/hooks'
 import { ChangePasswordData } from '../../types'
@@ -25,6 +24,7 @@ import { setPassword } from '../../config/api'
 function ChangePassword (): JSX.Element {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
+
   const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
   const [showCurrentPassword, setShowCurrentPassword] = React.useState<boolean>(false)
   const [showNewPassword, setShowNewPassword] = React.useState<boolean>(false)
@@ -87,7 +87,9 @@ function ChangePassword (): JSX.Element {
 
   return (
     <>
-      <h2>{t('pages.settings.changePassword.title')}</h2>
+      <div style={{ textAlign: 'center' }}>
+        <h2>{t('pages.settings.changePassword.title')}</h2>
+      </div>
       <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
         <FormControl sx={{ width: '100%' }} variant="outlined">
           <InputLabel sx={{ mt: 2 }} htmlFor="outlined-adornment-current-password">{t('misc.password')}</InputLabel>
@@ -187,7 +189,15 @@ function ChangePassword (): JSX.Element {
             <CircularProgress color='inherit' />
           </Box>
         }
-        <SubmitButton buttonText={t('pages.settings.changePassword.button')} disabled={isSubmitted} />
+        <Button
+          disabled={isSubmitted}
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          {t('pages.settings.changePassword.button')}
+        </Button>
       </Box>
     </>
   )
