@@ -61,6 +61,5 @@ export const constants = {
   },
   homePage: 'https://www.yomiko.io/',
   appName: 'Yomiko',
-  tosLink: 'https://www.yomiko.io/tos',
   redirectTimeout: 5
 }

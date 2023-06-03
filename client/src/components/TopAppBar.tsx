@@ -130,7 +130,7 @@ function TopAppBar (): JSX.Element {
                 handleCloseNavMenu()
                 navigate(dashboard)
               }}
-              sx={{ my: 2, color: 'inherit', display: 'block' }}
+              sx={{ my: 2, backgroundColor: 'primary.main', display: 'block' }}
             >
               {t('navbar.dashboard')}
             </Button>
@@ -140,7 +140,7 @@ function TopAppBar (): JSX.Element {
                 handleCloseNavMenu()
                 navigate(category)
               }}
-              sx={{ my: 2, color: 'inherit', display: 'block' }}
+              sx={{ my: 2, backgroundColor: 'primary.main', display: 'block' }}
             >
               {t('navbar.study')}
             </Button>
@@ -150,7 +150,7 @@ function TopAppBar (): JSX.Element {
                 handleCloseNavMenu()
                 navigate(settings)
               }}
-              sx={{ my: 2, color: 'inherit', display: 'block' }}
+              sx={{ my: 2, backgroundColor: 'primary.main', display: 'block' }}
             >
               {t('navbar.settings')}
             </Button>

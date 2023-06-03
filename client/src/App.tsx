@@ -2,7 +2,7 @@ import React from 'react'
 
 // Third party imports
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { CssBaseline, useTheme } from '@mui/material'
+import { useTheme } from '@mui/material'
 
 // Project imports
 import Login from './pages/authentication/login'
@@ -30,9 +30,12 @@ import {
 
 function App (): JSX.Element {
   const theme = useTheme()
+
   return (
-    <div style={{ backgroundColor: theme.palette.primary.main }}>
-      <CssBaseline />
+    <div style={{
+      backgroundColor: theme.palette.primary.light,
+      minHeight: '100vh'
+    }}>
       <Notification />
         <Router>
           <Routes>

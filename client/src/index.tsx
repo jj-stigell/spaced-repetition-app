@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 
 // Third party imports
 import { PersistGate } from 'redux-persist/integration/react'
-import { createTheme, ThemeProvider } from '@mui/material'
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
 import { Provider } from 'react-redux'
 
 // Project imports
@@ -20,7 +20,22 @@ const root = ReactDOM.createRoot(
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#FFFFFF'
+      dark: '#353c27',
+      main: '#82945d',
+      light: '#e9ede3'
+    }
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: '#ffffff', // Set the text color to white
+          backgroundColor: '#f49b25', // Set the background color to pink
+          '&:hover': {
+            backgroundColor: '#b45534' // Set the hover background color to a lighter shade of pink
+          }
+        }
+      }
     }
   }
 })
@@ -30,6 +45,7 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider theme={theme}>
+          <CssBaseline />
           <App />
         </ThemeProvider>
       </PersistGate>
