@@ -2,13 +2,10 @@
 import path from 'path';
 
 // Project imports
-import { FRONTEND_URL, NODE_ENV } from '../../../configs/environment';
+import { EMAIL_ORIGIN, FRONTEND_URL } from '../../../configs/environment';
 import { sendMail } from './emailClient';
 import confirmAccountTranslations from './locales/confirmAccount.json';
 import resetPasswordTranslations from './locales/resetPassword.json';
-
-// Dev delete later
-import { DEV_EMAIL } from '../../../configs/environment';
 import { ConfirmEmailPayload } from '../../../type';
 
 export async function sendEmailConfirmation(
@@ -30,8 +27,8 @@ export async function sendEmailConfirmation(
 
   const templateData: ConfirmEmailPayload = {
     translation,
-    email: NODE_ENV === 'production' ? email : DEV_EMAIL,
-    username: username,
+    email,
+    username,
     url: `${FRONTEND_URL}/auth/confirm-email/${confirmationId}`,
   };
 
@@ -39,7 +36,7 @@ export async function sendEmailConfirmation(
     subject,
     templateData,
     templatePath: path.join(__dirname, './templates/confirmAccount.html'),
-    to: NODE_ENV === 'production' ? email : DEV_EMAIL
+    to: email
   });
 }
 
@@ -62,7 +59,7 @@ export async function sendPasswordResetLink(
 
   const templateData: ConfirmEmailPayload = {
     translation,
-    email: NODE_ENV === 'production' ? email : DEV_EMAIL,
+    email,
     username: username,
     url: `${FRONTEND_URL}/auth/forgot-password/reset/${confirmationId}`,
   };
@@ -71,6 +68,6 @@ export async function sendPasswordResetLink(
     subject,
     templateData,
     templatePath: path.join(__dirname, './templates/resetPassword.html'),
-    to: NODE_ENV === 'production' ? email : DEV_EMAIL
+    to: email
   });
 }

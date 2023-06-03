@@ -1,23 +1,45 @@
 # Yomiko backend
+
 Backend for a [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetition) app for studying Japanese.
 
-## Record of working hours for the Full Stack Open project
-Project's record of working hours is in the file workinghours.md.
-This file includes only hours spent developing the backend.
-Frontend time keeping is in the frontend GitHub repository
-
 # Table of Contents
-* [Setup](#setup)
+
+* [Running the app](#running-the-app)
+    * [Run in production mode](#run-in-production-mode)
+    * [Run in development mode](#run-in-development-mode)
+    * [Run tests](#)
     * [Environment variables](#environment-variables)
-* [Tech stack](#tech-stack)
-* [Libraries](#libraries)
+* [Tech stack and libraries](#tech-stack-and-libraries)
 * [TODOs](#todos)
 * [Deployment](#deployment)
 
-## Setup
---
+## Running the app
+
+You can run the backend after building or in development mode, where the backend is restarted automatically everytime
+any file has been edited and saved.
+
+### Run in production mode
+
+1. Set environment variables accordingly
+2. Run build command `npm run build`
+3. Run start command `npm run start`
+4. Backend will run at localhost on the port you defined in the encironment variables.
+
+### Run in development mode
+
+1. Set environment variables accordingly
+2. Run command `npm run dev`
+4. Backend will run at localhost on the port you defined in the encironment variables.
+
+### Run tests
+
+1. Set environment variables accordingly
+2. Run test command `npm run test`
+
+You can also run tests in container, see readme file in folder "docker-tests".
 
 ### Environment variables
+
 Running server requires the following environment variables to be set:
 
 * `PORT`: Port number that the application will listen to for incoming requests.
@@ -33,7 +55,6 @@ Running server requires the following environment variables to be set:
 * `STMP_PORT`: Port number that the SMTP server is listening to.
 * `STMP_USER`: Username used to authenticate with the SMTP server.
 * `STMP_PASSWORD`: Password used to authenticate with the SMTP server.
-* `DEV_EMAIL`: Email address that will be used during development, not in production. Must be set if NODE_ENV = development
 * `JWT_SECRET`: Secret key used to sign and verify JSON Web Tokens.
 * `FRONTEND_URL`: Hostname of the frontend application that will be accessing this backend server.
 * `REDIS_HOST`: Redis host.
@@ -55,19 +76,20 @@ $ export HOST=value2
 To set environment variables using a `.env` file, use the example file `.env.example`
 in the root directory of your project and add the environment variables.
 
-## Tech stack
+## Tech stack and libraries
+
 - [NodeJs](https://nodejs.org/en/), cross-platform JavaScript runtime environment. [License information](https://github.com/nodejs/node/blob/main/LICENSE)
 - [PostgreSQL](https://www.postgresql.org/), relational database. [PostgreSQL License](https://www.postgresql.org/about/licence/)
-
-## Libraries
 - [Sequelize](https://sequelize.org/), modern TypeScript and Node.js ORM.
 - [JWT](https://jwt.io/) for user authentication. [MIT License](https://github.com/auth0/node-jsonwebtoken/blob/HEAD/LICENSE)
 - [Yup](https://www.npmjs.com/package/yup), Yup is a JavaScript schema builder for value parsing and validation. [MIT License](https://github.com/jquense/yup/blob/master/LICENSE.md)
 
 ## TODOs
+
 Check code for TODOs
 
 ## Deployment
+
 Deployment is automated from branch `backend-production`. If tests pass succesfully server code is pushed to the branch.
 [Render](https://render.com/) fetches automatically changes made to the branch and releases the newest version of the
 production version.

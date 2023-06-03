@@ -88,7 +88,7 @@ export async function resendConfirmEmail(req: Request, res: Response): Promise<v
 
   if (NODE_ENV !== 'test') {
     await sendEmailConfirmation(
-      account.languageId, account.username, email, confirmation.id
+      account.languageId, account.username, account.email, confirmation.id
     );
   }
 

@@ -1,6 +1,6 @@
 # Testing in container
 
-Docker environment where backend tests can be executed against a PostgreSQL instance running in a container.
+Docker environment where backend tests can be executed against a PostgreSQL and Redis instance running in a container.
 
 ## Usage
 
