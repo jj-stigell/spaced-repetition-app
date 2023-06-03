@@ -1,5 +1,5 @@
 {
-  "title": "SRS-app for learning Japanese",
+  "title": "Yomiko SRS-app for learning Japanese",
   "navbar": {
     "dashboard": "Dashboard",
     "study": "Study",
@@ -16,7 +16,9 @@
   },
   "pages": {
     "dashboard": {
-      "title": "this is the dashboard page"
+      "title": "this is the dashboard page",
+      "jlptSelectorButton": "JLPT N{{level}} - Click to change",
+      "goToStudyButton": "Go to study"
     },
     "login": {
       "title": "Sign in to your account",
@@ -27,12 +29,12 @@
       "rememberMe": "Remember me",
       "resendVerificationLink": "Resend verification",
       "linkToLogin": "Go back to login page, click here.",
-      "emailNotVerifiedMessage": "Email address is not verified. Please check your email for the verification link. if you have not received the link, you can resend the verification link from here:"
+      "emailNotVerifiedMessage": "Email address is not verified. Please check your email for the verification link, check spam folder also. If you have not received the link, you can resend the verification link from here:"
     },
     "register": {
       "title": "Create a new account and start learning",
       "successTitle": "New account created!",
-      "success": "New user created successfully with email address {{email}}. We sent you a confirm link by email, please confirm your email and start learning. Redirecting to login page in {{redirectTimeout}} seconds.",
+      "success": "New user created successfully with email address {{email}}. We sent you a confirm link by email (just in case check spam folder), please confirm your email and start learning. Redirecting to login page in {{redirectTimeout}} seconds.",
       "registerButton": "Register",
       "noAccount": "Don't have an account? Sign Up",
       "haveAccount": "Have an account?",
@@ -98,7 +100,8 @@
       }
     },
     "categories": {
-      "CUSTOM": "Your custom decks"
+      "CUSTOM": "Your custom decks",
+      "returnButton": "Back to dashboard"
     },
     "decks": {
       "title": "Available decks",
@@ -138,39 +141,33 @@
       }
     }
   },
-
-
+  "modals": {
+    "jlptSelector": {
+      "title": "Select JLPT Level"
+    },
+    "studySelector": {
+      "title": "Select study style",
+      "studyDueAndNew": "Only new and due cards",
+      "studyAll": "All cards"
+    },
+    "tos": {
+      "title": "Terms of Service (available only in english)",
+      "lastUpdated": "Last updated",
+      "closeButton": "Close"
+    }
+  },
   "stats": {
-    "kanji": {
-      "title": "Kanji learning progress:",
-      "infoNew": "How many new kanji (not seen before) are left to learn.",
-      "infoLearning": "Kanji that have been reviewed at least once but are not yet fully learned",
-      "infoMatured": "Kanji that are well learned with and review interval of {{matureInterval}}"
-    },
-    "word": {
-      "title": "Word learning progress:",
-      "infoNew": "How many new words (not seen before) are left to learn.",
-      "infoLearning": "Words that have been reviewed at least once but are not yet fully learned",
-      "infoMatured": "Words that are well learned with and review interval of {{matureInterval}}"
-    },
-    "labels": {
-      "new": "New",
-      "learning": "Learning",
-      "matured": "Matured",
-      "recall": "Recall",
-      "recognise": "Recognise"
-    },
-    "heatmap": {
-      "title": "Reviews heatmap:",
-      "hoverData": "{{date}}, reviews: {{count}}",
-      "hoverDataNoReviews": "No reviews"
-    },
-    "dueCount": {
-      "title": "Due cards count:",
-      "noDues": "No reviews due",
-      "ShowOnlyDues": "List only days with due cards",
-      "date": "Date:",
-      "due": "Due:"
+    "radarChart": {
+      "title": "JLPT N{{level}} progress",
+      "studyTip": "You are least performing in {{category}} category, consider doing some extra study.",
+      "labels": {
+        "kanji": "Kanji",
+        "kana": "Kana",
+        "vocabulary": "Vocabulary",
+        "grammar": "Grammar",
+        "listening": "Listening",
+        "reading": "Reading"
+      }
     }
   },
   "deck": {
@@ -246,17 +243,6 @@
     "body1": "Thank you for visiting our website. We are currently in the process of building and designing our new website, and apologize for any inconvenience this may cause.",
     "body2": "We are working hard to bring you a fully functional and user-friendly website as soon as possible. In the meantime, please bear with us as we complete this process.",
     "body3": "Please check back soon to see the finished product."
-  },
-  "modals": {
-    "jlptSelector": {
-      "title": "Select JLPT Level",
-      "button": "JLPT N{{level}} - Click to change"
-    },
-    "studySelector": {
-      "title": "Select study style",
-      "studyDueAndNew": "Only new and due cards",
-      "studyAll": "All cards"
-    }
   },
   "errors": {
     "ERR_ACCEPT_TOS_REQUIRED": "Terms of service must be accecpted.",
