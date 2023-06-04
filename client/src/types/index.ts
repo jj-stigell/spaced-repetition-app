@@ -1,12 +1,3 @@
-/* Type for weekly occurring event. */
-export interface WeeklyEvent {
-  weekday: number
-  startHour: number
-  endHour: number
-  timeZone: string
-  multiplier: number
-}
-
 export interface LoginData {
   email: string
   password: string
@@ -140,9 +131,7 @@ export interface JLPT {
   name: string
 }
 
-/*
-export interface Category {
-  id: DeckCategory
-  name: string
+export interface RadarChartPayload {
+  label: string
+  value: number
 }
-*/
