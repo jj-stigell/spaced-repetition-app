@@ -2,7 +2,7 @@
 import path from 'path';
 
 // Project imports
-import { EMAIL_ORIGIN, FRONTEND_URL } from '../../../configs/environment';
+import { FRONTEND_URL } from '../../../configs/environment';
 import { sendMail } from './emailClient';
 import confirmAccountTranslations from './locales/confirmAccount.json';
 import resetPasswordTranslations from './locales/resetPassword.json';

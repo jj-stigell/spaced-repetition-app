@@ -93,6 +93,7 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
         order: [['learningOrder', 'ASC']]
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cards = cardList.map((card: any) => {
         return {
           id: card.cardId,

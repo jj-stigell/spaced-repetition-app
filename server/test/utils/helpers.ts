@@ -22,6 +22,7 @@ const bugReport: string = fs.readFileSync(
   path.resolve(__dirname, '../../dbBaseData/bug_report.sql'), 'utf8'
 );
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const card: string = fs.readFileSync(
   path.resolve(__dirname, '../../dbBaseData/card.sql'), 'utf8'
 );
