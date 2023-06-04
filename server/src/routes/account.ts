@@ -237,12 +237,12 @@ router.patch(
 
 /**
  * @swagger
- * /api/v1/account/jlpt-level:
+ * /api/v1/account:
  *   patch:
  *     tags: [Account]
- *     description: Change account JLPT level.
+ *     description: Change account settings (JLPT level and language).
  *     requestBody:
- *       description: Desired JLPT level in the request body.
+ *       description: Desired values to be changed.
  *       content:
  *         application/json:
  *           schema:
@@ -253,9 +253,14 @@ router.patch(
  *                 example: 1
  *                 description: JLPT level.
  *                 enum: [1, 2, 3, 4, 5]
+ *               language:
+ *                 type: string
+ *                 example: 1
+ *                 description: UI and study material language.
+ *                 enum: [en, fi]
  *     responses:
  *       200:
- *         description: JLPT level changed succesfully.
+ *         description: Account details updated succesfully.
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:
@@ -276,7 +281,7 @@ router.patch(
  *       - cookieAuth: []
  */
 router.patch(
-  '/jlpt-level',
+  '/',
   passport.authenticate('jwt', { session: false }),
   requestWrap(changeJlptLevel)
 );

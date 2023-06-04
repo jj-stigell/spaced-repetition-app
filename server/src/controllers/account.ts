@@ -237,12 +237,17 @@ export async function changeJlptLevel(req: Request, res: Response): Promise<void
         validationErrors.ERR_INVALID_JLPT_LEVEL
       )
       .typeError(validationErrors.ERR_INPUT_TYPE)
-      .required(validationErrors.ERR_JLPT_LEVEL_REQUIRED)
+      .notRequired(),
+    language: yup.string()
+      .transform((value: string, originalValue: string) => {
+        return originalValue ? originalValue.toUpperCase() : value;
+      })
+      .oneOf(['EN', 'FI', 'VN'], validationErrors.ERR_LANGUAGE_ID_NOT_VALID)
+      .typeError(validationErrors.ERR_INPUT_TYPE)
+      .notRequired()
   });
 
   await requestSchema.validate(req.body, { abortEarly: false });
-  const jlptLevel: number = req.body.jlptLevel;
-
   const user: JwtPayload = req.user as JwtPayload;
   const account: Account = await findAccountById(user.id);
 
@@ -251,7 +256,8 @@ export async function changeJlptLevel(req: Request, res: Response): Promise<void
   }
 
   account.update({
-    selectedJlptLevel: jlptLevel,
+    selectedJlptLevel: req.body.jlptLevel ?? account.selectedJlptLevel,
+    languageId: req.body.language ?? account.languageId
   });
 
   await account.save();
