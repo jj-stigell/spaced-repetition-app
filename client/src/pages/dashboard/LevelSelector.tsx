@@ -12,7 +12,7 @@ import { JlptLevel } from '../../types'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { setJlptLevel } from '../../features/accountSlice'
 import { RootState } from '../../app/store'
-import { changeJlptLevel } from '../../config/api'
+import { changeSettings } from '../../config/api'
 import { setNotification } from '../../features/notificationSlice'
 import { resetDecks } from '../../features/deckSlice'
 
@@ -53,7 +53,7 @@ function LevelSelector (): JSX.Element {
     dispatch(resetDecks())
     handleModalClick()
 
-    axios.patch(changeJlptLevel, {
+    axios.patch(changeSettings, {
       jlptLevel: selectedLevel
     }).catch(function (error) {
       console.log('error encountered', error)

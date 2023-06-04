@@ -18,7 +18,8 @@
     "dashboard": {
       "title": "this is the dashboard page",
       "jlptSelectorButton": "JLPT N{{level}} - Click to change",
-      "goToStudyButton": "Go to study"
+      "goToStudyButton": "Go to study",
+      "revHistoryTitle": "Review history, and coming reviews"
     },
     "login": {
       "title": "Sign in to your account",

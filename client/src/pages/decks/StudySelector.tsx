@@ -9,30 +9,8 @@ import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 350,
-  bgcolor: 'background.paper',
-  border: '3px solid #fad25f',
-  borderRadius: 3,
-  boxShadow: 24,
-  p: 4
-}
-
-const buttonStyle = {
-  bgcolor: '#f7e09e',
-  '&:hover': {
-    bgcolor: '#fad25f'
-  },
-  color: 'black',
-  marginBottom: 3,
-  flexGrow: 0,
-  width: '75%',
-  alignSelf: 'center'
-}
+// Project imports
+import { modalButtonStyle, modalStyle } from '../dashboard/LevelSelector'
 
 function StudyOptions (
   { deckId, open, setOpen }:
@@ -47,21 +25,21 @@ function StudyOptions (
 
   return (
     <Modal
-      open={open}
+      open
       onClose={() => { setOpen(!open) }}
       aria-labelledby="modal-select-study-type"
       aria-describedby="modal-select-study-due-or-all-cards"
     >
-      <Box sx={style}>
+      <Box sx={modalStyle}>
         <Typography id="study-type-title" variant="h6" component="h2" sx={{ textAlign: 'center', marginBottom: 3 }}>
           {t('modals.studySelector.title')}
         </Typography>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Button sx={buttonStyle} disabled onClick={() => { handleStudyOptions(deckId, true) }}>
+          <Button sx={modalButtonStyle} disabled onClick={() => { handleStudyOptions(deckId, true) }}>
             <LockIcon fontSize="small" />
             {t('modals.studySelector.studyDueAndNew')}
           </Button>
-          <Button sx={buttonStyle} onClick={() => { handleStudyOptions(deckId, false) }}>
+          <Button sx={modalButtonStyle} onClick={() => { handleStudyOptions(deckId, false) }}>
             {t('modals.studySelector.studyAll')}
           </Button>
         </div>

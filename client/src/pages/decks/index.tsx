@@ -2,12 +2,9 @@ import React from 'react'
 
 // Third party imports
 import { AxiosError } from 'axios'
-import { experimentalStyled as styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
-import CssBaseline from '@mui/material/CssBaseline'
 import Button from '@mui/material/Button'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -15,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 // Project imports
 import { setNotification } from '../../features/notificationSlice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { Deck, DeckCategory, Role } from '../../types'
+import { Deck, DeckCategory } from '../../types'
 import axios from '../../lib/axios'
 import { getDecks } from '../../config/api'
 import { RootState } from '../../app/store'
@@ -24,17 +21,7 @@ import { Account } from '../../features/accountSlice'
 import { category as categoryPath } from '../../config/path'
 import StudyOptions from './StudySelector'
 import { Skeleton } from '@mui/material'
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(3),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  '&:hover': {
-    backgroundColor: '#ddd'
-  }
-}))
+import DeckCard from './DeckCard'
 
 function Decks (): JSX.Element {
   const navigate = useNavigate()
@@ -85,13 +72,12 @@ function Decks (): JSX.Element {
 
   return (
     <div id="study-page-decks" style={{ marginTop: 15 }}>
-      <CssBaseline />
       <StudyOptions deckId={selectedDeckId} open={showModal} setOpen={setShowModal} />
       <Container maxWidth="md">
         <Button
           fullWidth
           variant="contained"
-          sx={{ mt: 3, mb: 2 }}
+          sx={{ mt: 2, mb: 2 }}
           onClick={() => { navigate(categoryPath) }}
         >
           {t('pages.decks.returnButton')}
@@ -105,43 +91,7 @@ function Decks (): JSX.Element {
               </Grid>
                 ))
               : deck.decks.map((deck: Deck) => (
-              <Grid item xs={2} sm={4} md={4} key={deck.id}>
-                <Item onClick={() => { handleClick(deck.id) }}>
-                  {deck.title}
-                  <br/>
-                  { account.role === Role.NON_MEMBER
-                    ? <>Member deck, NO ACCESS</>
-                    : <>Member deck, study now</>
-                  }
-                  <br/>
-                  { deck.translationAvailable
-                    ? <>Translation available</>
-                    : <>Translation not available, using english</>
-                  }
-                  <br/>
-                  { account.role !== Role.NON_MEMBER &&
-                    <>Favorite: {((deck?.favorite) === true) ? <>true</> : <>false</>}</>
-                  }
-                  <br/>
-                  description: {deck.description}
-                  <br/>
-                  due: 4
-                  <br/>
-                  new: 3
-                  { ((deck?.progress) !== undefined) &&
-                  <div>
-                    <br/>
-                    Progress:
-                    <br/>
-                    new cards: {deck.progress.new}
-                    <br/>
-                    learning cards: {deck.progress.learning}
-                    <br/>
-                    matured cards: {deck.progress.mature}
-                  </div>
-                  }
-                  </Item>
-              </Grid>
+                <DeckCard deck={deck} handleClick={handleClick} key={deck.id}/>
               ))}
           </Grid>
         </Box>

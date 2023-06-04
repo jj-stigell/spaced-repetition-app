@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
 
 import { AxiosError } from 'axios'
@@ -6,11 +5,11 @@ import { experimentalStyled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
+import { Button, Skeleton } from '@mui/material'
 import Container from '@mui/material/Container'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import LevelSelector from './LevelSelector'
 import { Category, JlptLevel } from '../../types'
 import { RootState } from '../../app/store'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
@@ -18,7 +17,7 @@ import axios from '../../lib/axios'
 import { getCategories } from '../../config/api'
 import { setNotification } from '../../features/notificationSlice'
 import { CategoryState, setCategories } from '../../features/categorySlice'
-import { Skeleton } from '@mui/material'
+import { dashboard } from '../../config/path'
 
 const Item = experimentalStyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -73,9 +72,14 @@ function Study (): JSX.Element {
   return (
     <div id="study-page" style={{ marginTop: 15 }}>
       <Container maxWidth="md">
-        <div className="jlpt-level">
-          <LevelSelector />
-        </div>
+      <Button
+          fullWidth
+          variant="contained"
+          sx={{ mt: 2, mb: 2 }}
+          onClick={() => { navigate(dashboard) }}
+        >
+          {t('pages.categories.returnButton')}
+        </Button>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={{ xs: 2, md: 2 }} columns={{ xs: 1, sm: 8, md: 8 }}>
             { categories.categories.length === 0 || isLoading

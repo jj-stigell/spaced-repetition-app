@@ -156,20 +156,21 @@ function Study (): JSX.Element {
   }
 
   return (
-    <div id="study-page-card" style={{ marginTop: 10 }}>
+    <div id="study-page-card" style={{ marginTop: 10, backgroundColor: '#66f287' }}>
         {/* <p style={{ textAlign: 'center', fontSize: 13 }}>DEV BUILD:: {activeCard.cardType} CARD, {activeCard.reviewType} REVIEW</p> */}
         <CardFront frontValue={activeCard.reviewType === ReviewType.RECALL ? activeCard.card.keyword : activeCard.card.value} />
-        <Box sx={{ width: '100%', typography: 'body1' }}>
+        <Box sx={{ width: '100%', typography: 'body1', backgroundColor: '#4f7ce3' }}>
           <TabContext value={activeTab}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label="study-tabs" sx={{ backgroundColor: '#4f7ce3' }} variant="fullWidth">
                 <Tab label="Answer options" value="1" />
                 <Tab
-                  icon={showAnswer ? <LockOpenIcon fontSize="small" /> : <LockIcon fontSize="small" />}
+                  // icon={showAnswer ? <LockOpenIcon fontSize="small" /> : <LockIcon fontSize="small" />}
                   iconPosition="start"
                   label="Details"
                   value="2"
-                  disabled={!showAnswer}
+                  disabled={true}
+                  // disabled={!showAnswer}
                 />
               </TabList>
             </Box>
