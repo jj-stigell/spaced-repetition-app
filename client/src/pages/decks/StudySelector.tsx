@@ -25,7 +25,7 @@ function StudyOptions (
 
   return (
     <Modal
-      open
+      open={open}
       onClose={() => { setOpen(!open) }}
       aria-labelledby="modal-select-study-type"
       aria-describedby="modal-select-study-due-or-all-cards"

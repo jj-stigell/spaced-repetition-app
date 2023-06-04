@@ -1,9 +1,7 @@
 import React from 'react'
 
 import { AxiosError } from 'axios'
-import { experimentalStyled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import { Button, Skeleton } from '@mui/material'
 import Container from '@mui/material/Container'
@@ -18,17 +16,7 @@ import { getCategories } from '../../config/api'
 import { setNotification } from '../../features/notificationSlice'
 import { CategoryState, setCategories } from '../../features/categorySlice'
 import { dashboard } from '../../config/path'
-
-const Item = experimentalStyled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(6),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  '&:hover': {
-    backgroundColor: '#ddd'
-  }
-}))
+import CategoryCard from './CategoryCard'
 
 function Study (): JSX.Element {
   const navigate = useNavigate()
@@ -89,26 +77,7 @@ function Study (): JSX.Element {
               </Grid>
                 ))
               : categories.categories.map((category: Category) => (
-              <Grid item xs={2} sm={4} md={4} key={category.category}>
-                <Item onClick={() => { navigate(`/study/decks/${category.category.toLowerCase()}`) }}>
-                  Category: {category.category}
-                  <br/>
-                  Decks: {category.decks}
-                  <br/>
-                  { ((category?.progress) !== undefined) &&
-                  <div>
-                    <br/>
-                    Progress:
-                    <br/>
-                    new decks: {category.progress.new}
-                    <br/>
-                    learning decks: {category.progress.learning}
-                    <br/>
-                    finished decks: {category.progress.mature}
-                  </div>
-                  }
-                </Item>
-              </Grid>
+                <CategoryCard key={category.category} category={category} />
               ))}
           </Grid>
         </Box>
