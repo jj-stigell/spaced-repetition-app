@@ -30,7 +30,7 @@ import { login } from '../../../config/api'
 
 function LoginForm (): JSX.Element {
   const dispatch = useAppDispatch()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const { rememberMeEmail, rememberMePassword }: RememberMe = useAppSelector((state: RootState) => state.remember)
 
@@ -62,6 +62,7 @@ function LoginForm (): JSX.Element {
         password: values.password
       }).then(function (response) {
         const accountInformation: Account = response.data.data
+        void i18n.changeLanguage(accountInformation.language.toLocaleLowerCase())
         dispatch(setAccount({ isLoggedIn: true, account: accountInformation }))
 
         // Store remember me if selected, otherwise clear.

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 // Project imports
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
+import LanguageSelector from '../../components/LanguageSelector'
 
 function AccountInformation (): JSX.Element {
   const { username, email, role } = useAppSelector((state: RootState) => state.account.account)
@@ -27,6 +28,8 @@ function AccountInformation (): JSX.Element {
             ? t('pages.settings.accountInformation.expired') + ' 😅'
             : t('pages.settings.accountInformation.active') + ' 😊'}
         </Typography>
+        <Typography sx={{ pt: 2 }}>{t('pages.settings.accountInformation.languageSelectorTitle')}</Typography>
+        <LanguageSelector callApi={true}/>
       </Box>
     </>
   )

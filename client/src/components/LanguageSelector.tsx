@@ -9,21 +9,26 @@ import { useAppSelector } from '../app/hooks'
 import { useDispatch } from 'react-redux'
 
 import { setLanguage } from '../features/accountSlice'
+import axios from '../lib/axios'
+import { changeSettings } from '../config/api'
 
 const languages = [
   { code: 'en', nativeName: 'English', flag: '🇬🇧' },
   { code: 'fi', nativeName: 'Suomeksi', flag: '🇫🇮' }
 ]
 
-function LanguageSelector (): JSX.Element {
+function LanguageSelector ({ callApi = false }: { callApi?: boolean }): JSX.Element {
   const { t, i18n } = useTranslation()
   const dispatch = useDispatch()
   const language: string = useAppSelector((state: RootState) => state.account.account.language).toLocaleLowerCase()
-  const [lang, setLang] = React.useState<string>('')
+  const [lang, setLang] = React.useState<string>(language)
 
   React.useEffect(() => {
     void i18n.changeLanguage(lang)
     dispatch(setLanguage(lang.toUpperCase()))
+    if (callApi) {
+      void axios.patch(changeSettings, { language: lang })
+    }
   }, [lang])
 
   return (

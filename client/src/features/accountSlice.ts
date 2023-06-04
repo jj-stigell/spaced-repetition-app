@@ -51,19 +51,19 @@ const accountSlice = createSlice({
           jlptLevel: action.payload
         }
       }
+    },
+    setLanguage (state, action: PayloadAction<string>) {
+      return {
+        ...state,
+        account: {
+          ...state.account,
+          language: action.payload
+        }
+      }
     }
   }
 })
 
-export const { setJlptLevel, setAccount, resetAccount } = accountSlice.actions
-
-/*
-export const logOutAccount = () => {
-  return async (dispatch) => {
-    dispatch(resetAccount(null))
-    localStorage.removeItem('srs-token')
-  }
-}
-*/
+export const { setJlptLevel, setAccount, resetAccount, setLanguage } = accountSlice.actions
 
 export default accountSlice.reducer
