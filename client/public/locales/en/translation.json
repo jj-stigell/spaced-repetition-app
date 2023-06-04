@@ -90,8 +90,9 @@
         "email": "Email address",
         "memberStatus": "Member status",
         "active": "Active",
-        "expired": "Expired"
-
+        "expired": "Expired",
+        "languageSelectorTitle": "Select UI & study language",
+        "languageSelectorInfo": "This value will be used as a default language for studying. If study material is not available in your language, the default study language will be set to English."
       },
       "changePassword": {
         "title": "Change password",

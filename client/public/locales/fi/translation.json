@@ -90,8 +90,9 @@
         "email": "Sähköpostiosoite",
         "memberStatus": "Jäsenen tila",
         "active": "Aktiivinen",
-        "expired": "Vanhentunut"
-
+        "expired": "Vanhentunut",
+        "languageSelectorTitle": "Valitse käyttöliittymän ja opiskelumateriaalin kieli.",
+        "languageSelectorInfo": "Valittua kieltä käytetään oletus kielenä opiskelussa. Jos opiskelumateriaali ei ole saatavilla valitulla kielellä, käytetään englannin kieltä sen tilalla."
       },
       "changePassword": {
         "title": "Vaihda salasana",

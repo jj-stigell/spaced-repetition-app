@@ -19,12 +19,14 @@ import axios from '../../../lib/axios'
 import { setNotification } from '../../../features/notificationSlice'
 import SubmitButton from '../../../components/SubmitButton'
 import { constants } from '../../../config/constants'
-import { useAppDispatch } from '../../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { RegisterData } from '../../../types'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { register } from '../../../config/api'
 import { login } from '../../../config/path'
 import TosDialog from './Tos'
+import LanguageSelector from '../../../components/LanguageSelector'
+import { RootState } from '../../../app/store'
 
 function RegisterForm (
   { setRegisteredEmail }: { setRegisteredEmail: React.Dispatch<React.SetStateAction<string | null>> }
@@ -38,6 +40,8 @@ function RegisterForm (
   const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
   const [showPassword, setShowPassword] = React.useState<boolean>(false)
   const [showPasswordConfirm, setShowPasswordConfirm] = React.useState<boolean>(false)
+
+  const language: string = useAppSelector((state: RootState) => state.account.account.language).toLowerCase()
 
   const handleClickShowPassword = (): void => { setShowPassword(!showPassword) }
   const handleClickShowPasswordConfirm = (): void => { setShowPasswordConfirm(!showPasswordConfirm) }
@@ -74,7 +78,7 @@ function RegisterForm (
       username: '',
       password: '',
       passwordConfirmation: '',
-      language: 'EN'
+      language
     },
     validationSchema,
     onSubmit: (values: RegisterData, { resetForm }): void => {
@@ -86,7 +90,7 @@ function RegisterForm (
           password: values.password,
           acceptTos: tosAccepted,
           allowNewsLetter: values.allowNewsLetter,
-          language: values.language
+          language
         }).then(function () {
           resetForm()
           setIsSubmitted(false)
@@ -204,6 +208,9 @@ function RegisterForm (
           </FormHelperText>
         )}
       </FormControl>
+      <Box sx={{ pt: 2 }}>
+        <LanguageSelector />
+      </Box>
       <div style={{
         marginTop: 2,
         fontSize: 15,
