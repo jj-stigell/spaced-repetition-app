@@ -73,7 +73,7 @@ function Decks (): JSX.Element {
   return (
     <div id="study-page-decks" style={{ marginTop: 15 }}>
       <StudyOptions deckId={selectedDeckId} open={showModal} setOpen={setShowModal} />
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ pb: 3 }}>
         <Button
           fullWidth
           variant="contained"

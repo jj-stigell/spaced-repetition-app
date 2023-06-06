@@ -102,15 +102,49 @@
       }
     },
     "categories": {
-      "CUSTOM": "Your custom decks",
-      "returnButton": "Back to dashboard"
+      "kanji": {
+        "title": "N{{jlptLevel}} kanji characters",
+        "description": "Learn all N{{jlptLevel}} Kanji characters, {{amount}} decks available for studying."
+      },
+      "kana": {
+        "title": "N{{jlptLevel}} kana characters",
+        "description": "Learn all N{{jlptLevel}} Kana characters, {{amount}} decks available for studying."
+      },
+      "vocabulary": {
+        "title": "N{{jlptLevel}} vocabulary",
+        "description": "Learn all N{{jlptLevel}} vocabulary fun and easy, {{amount}} decks available for studying."
+      },
+      "grammar": {
+        "title": "N{{jlptLevel}} grammar",
+        "description": "Learn all N{{jlptLevel}} grammar points efficiently, {{amount}} decks available for studying."
+      },
+      "returnButton": "Back to dashboard",
+      "studyButton": "Study"
     },
     "decks": {
       "title": "Available decks",
-      "returnButton": "Back to category select"
+      "deck": {
+        "translationAvailable": "Translation available",
+        "translationNotAvailable": "Translation not available, using english"
+      },
+      "returnButton": "Back to category select",
+      "studyButton": "Start studying"
     },
     "review": {
       "loadingMessage": "Loading Cards",
+      "view": {
+        "nextCardButton": "Next card",
+        "answerOptionsTab": {
+          "button": "Answer options"
+        },
+        "detailsOptionsTab": {
+          "button": "Details"
+        },
+        "dialMenu": {
+          "backToDeck": "Back to deck select",
+          "bugReport": "Send a bug Report"
+        }
+      },
       "reviewFinished": {
         "title": "All cards reviewed, good work!",
         "redirectMessage": "Redirecting back to deck page in {{count}} seconds",
@@ -136,9 +170,6 @@
         },
         "edit": {
           "title": "Edit"
-        },
-        "bugReport": {
-          "title": "Bug report"
         }
       }
     }
@@ -156,6 +187,12 @@
       "title": "Terms of Service (available only in english)",
       "lastUpdated": "Last updated",
       "closeButton": "Close"
+    },
+    "bugReport": {
+      "title": "To send a new bug report, please fill all the fields and click send. Thank you!",
+      "sendSuccess": "Thank you for sending bug report! This will help us to provide better experience!",
+      "sendButton": "Send report",
+      "closeButton": "Cancel"
     }
   },
   "stats": {

@@ -10,7 +10,7 @@ function ErrorPage ({ children }: { children: JSX.Element }): JSX.Element {
   const { t } = useTranslation()
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: '50px' }}>
+    <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop: '50px' }}>
       <h1>{t('pages.error.title')}</h1>
       <p>{t('pages.error.description')}</p>
       <br/>

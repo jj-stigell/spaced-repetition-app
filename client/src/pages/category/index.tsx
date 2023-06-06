@@ -59,7 +59,7 @@ function Study (): JSX.Element {
 
   return (
     <div id="study-page" style={{ marginTop: 15 }}>
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ pb: 3 }}>
       <Button
           fullWidth
           variant="contained"

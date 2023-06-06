@@ -39,6 +39,7 @@ export const router: Router = Router();
  *       type:
  *         type: string
  *         description: Bug report type.
+ *         enum: [TRANSLATION, UI, FUNCTIONALITY, OTHER]
  *       bugMessage:
  *         type: string
  *         description: Brief message describing the bug.
@@ -66,7 +67,8 @@ export const router: Router = Router();
  *       type:
  *         type: string
  *         description: Bug report type.
- *         required: true
+ *         required: true,
+ *         enum: [TRANSLATION, UI, FUNCTIONALITY, OTHER]
  *       bugMessage:
  *         type: string
  *         description: Brief message describing the bug.
@@ -84,6 +86,7 @@ export const router: Router = Router();
  *         type: string
  *         description: Bug report type.
  *         required: false
+ *         enum: [TRANSLATION, UI, FUNCTIONALITY, OTHER]
  *       bugMessage:
  *         type: string
  *         description: Brief message describing the bug.

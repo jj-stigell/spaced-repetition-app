@@ -10,7 +10,7 @@ import axios from '../../lib/axios'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
 import { Card, ExampleSentence } from '../../types'
-import { exampleSentences as xxx } from '../../mockData'
+import { exampleSentences as examples } from '../../mockData'
 
 export interface Examples {
   id: number
@@ -34,7 +34,6 @@ function CardInformation (): JSX.Element {
         setCardData(response.data)
       })
       .catch(function (error) {
-        console.log('ERROR ENCOUNTERED', error)
         // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         const errorCode: string | null = error?.response?.data?.errors ? error?.response?.data?.errors[0]?.code : null
 
@@ -52,7 +51,7 @@ function CardInformation (): JSX.Element {
       }).finally(() => {
         setIsLoading(false)
         setIsError(null)
-        setExampleSentences(xxx)
+        setExampleSentences(examples)
       })
   }, [])
 

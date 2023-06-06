@@ -4,6 +4,7 @@ import { AxiosError } from 'axios'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
+import LockIcon from '@mui/icons-material/Lock'
 import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
 
@@ -93,9 +94,9 @@ function LevelSelector (): JSX.Element {
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <Button sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N5) }}>JLPT N5</Button>
             <Button sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N4) }}>JLPT N4</Button>
-            <Button sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N3) }}>JLPT N3</Button>
-            <Button sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N2) }}>JLPT N2</Button>
-            <Button sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N1) }}>JLPT N1</Button>
+            <Button disabled sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N3) }}><LockIcon fontSize="small" />JLPT N3</Button>
+            <Button disabled sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N2) }}><LockIcon fontSize="small" />JLPT N2</Button>
+            <Button disabled sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N1) }}><LockIcon fontSize="small" />JLPT N1</Button>
           </div>
         </Box>
       </Modal>

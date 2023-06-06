@@ -16,8 +16,10 @@
 | 7.5.2023 | 2 | Fix deployment issues, refactor |
 | 13.5.2023 | 3 | Add error page for card loading, add reviews finished page, add review page |
 | 19.5.2023 | 2 | Use skeleton when loading, move shuffle to redux |
+| 3.6.2023 | 3 | Unify theme/styling across client |
+| 4.6.2023 | 2 | Enable multilanguage client with i18n, add lang selectors to settings and register views |
 |  |  |  |
-| total | 32 |  |
+| total | 35 |  |
 
 # Record of working hours for backend before combining repositories with frontend.
 

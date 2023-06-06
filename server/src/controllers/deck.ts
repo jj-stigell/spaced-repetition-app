@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from 'express';
 import { Op } from 'sequelize';
 import * as yup from 'yup';
@@ -17,7 +16,6 @@ import {
 import { findAccountById } from './utils/account';
 import { idSchema } from './utils/validator';
 import { findDeckById } from './utils/deck';
-import CardList from '../database/models/cardList';
 import Card from '../database/models/card';
 import { ApiError } from '../class';
 
@@ -113,34 +111,10 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
   // Check translation available
   // Server correct translation if available to the user
   // Format cards to match client layout
-
-  console.log('CARDSS', cards);
-
   res.status(HttpCode.Ok).json({
     data: cards
   });
 }
-
-// SELECT category, decks FROM study_category WHERE jlpt_level = 1 ORDER BY category ASC;
-
-/*
-count finished decks for the user to display progress
-
-{
-  category: 'KANJI',
-  decks: 10,
-  progress: 5
-}
-
-decks 10
-
-count deck where category = KANJI and level
-
-SELECT COUNT(*) FROM deck
-JOIN account_deck_settings
-ON deck.id = account_deck_settings.deck_id deck.category = KANJI AND deck.jlpt_level = 1
-AND account_deck_settings.mastered = TRUE;
-*/
 
 /**
  * Get all decks based on category and JLPT level.

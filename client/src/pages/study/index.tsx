@@ -1,16 +1,12 @@
 /* eslint-disable padded-blocks */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-multiple-empty-lines */
 import React from 'react'
 
 import { AxiosError } from 'axios'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Typography, Container, Tab } from '@mui/material'
-import LockIcon from '@mui/icons-material/Lock'
-import LockOpenIcon from '@mui/icons-material/LockOpen'
 import { useTranslation } from 'react-i18next'
 import { useParams, useSearchParams } from 'react-router-dom'
-import _ from 'lodash'
 
 import CircularLoader from '../../components/CircularLoader'
 import { mockCards } from '../../mockData'
@@ -25,16 +21,7 @@ import CardFront from './CardFront'
 import AnswerOptions from './AnswerOptions'
 import ReviewError from '../error/ReviewError'
 import CardInformation from './CardInformation'
-
-/*
-1. get deck cards by id from api
-2. set cards to storage
-3. set first as the crrect card
-4. conditionally render correct type
-5. after answer reschedule
-6. take next card
-7. cards empty display message and redirect to deck list
-*/
+import DialMenu from './DialMenu'
 
 function Study (): JSX.Element {
   const { t } = useTranslation()
@@ -79,23 +66,19 @@ function Study (): JSX.Element {
           }
         })
         .catch(function (error) {
-          console.log('ERROR ENCOUNTERED', error)
           // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
           const errorCode: string | null = error?.response?.data?.errors ? error?.response?.data?.errors[0]?.code : null
 
           if (errorCode != null) {
             dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
-            // setIsError(t(`errors.${errorCode}`))
           } else if (error instanceof AxiosError) {
             if (error.request.status === 401) {
               console.log('Should logout automatically and clear localstorage on http code:', error.request.status)
             } else {
               dispatch(setNotification({ message: error.message, severity: 'error' }))
-            // setIsError(error.message)
             }
           } else {
             dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
-            // setIsError(t('errors.ERR_CHECK_CONNECTION'))
           }
         }).finally(() => {
           setIsLoading(false)
@@ -109,20 +92,6 @@ function Study (): JSX.Element {
     setCorrectAnswer(option.correct)
     setPressedButton(option.option)
     setShowAnswer(true)
-    if (correctAnswer) {
-      // RESCHEDULE BASED ON
-      // card id
-      // review type
-      const today = new Date()
-      const formattedDate = today.toISOString().slice(0, 10)
-      console.log('client date', formattedDate) // output: '2023-05-10'
-
-      const rescheduleDays = 5 // Number of days to reschedule
-      const rescheduleDate = new Date()
-      rescheduleDate.setDate(today.getDate() + rescheduleDays)
-      const formattedRescheduleDate = rescheduleDate.toISOString().slice(0, 10)
-      console.log('reschedule to date', formattedRescheduleDate)
-    }
   }
 
   function showNextCard (): void {
@@ -156,21 +125,25 @@ function Study (): JSX.Element {
   }
 
   return (
-    <div id="study-page-card" style={{ marginTop: 10, backgroundColor: '#66f287' }}>
-        {/* <p style={{ textAlign: 'center', fontSize: 13 }}>DEV BUILD:: {activeCard.cardType} CARD, {activeCard.reviewType} REVIEW</p> */}
+    <div id="study-page-card" style={{ paddingTop: 5, backgroundColor: 'primary.light' }}>
+        <DialMenu />
         <CardFront frontValue={activeCard.reviewType === ReviewType.RECALL ? activeCard.card.keyword : activeCard.card.value} />
-        <Box sx={{ width: '100%', typography: 'body1', backgroundColor: '#4f7ce3' }}>
+        <Box sx={{ width: '100%', typography: 'body1', backgroundColor: 'primary.light' }}>
           <TabContext value={activeTab}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList onChange={handleChange} aria-label="study-tabs" sx={{ backgroundColor: '#4f7ce3' }} variant="fullWidth">
-                <Tab label="Answer options" value="1" />
+              <TabList onChange={handleChange} aria-label="study-tabs" sx={{ backgroundColor: 'primary.main' }} variant="fullWidth">
                 <Tab
-                  // icon={showAnswer ? <LockOpenIcon fontSize="small" /> : <LockIcon fontSize="small" />}
+                  label={t('pages.review.view.answerOptionsTab.button')}
+                  value="1"
+                  sx={{
+                    color: 'red'
+                  }}
+                />
+                <Tab
                   iconPosition="start"
-                  label="Details"
+                  label={t('pages.review.view.detailsOptionsTab.button')}
                   value="2"
-                  disabled={true}
-                  // disabled={!showAnswer}
+                  disabled={true} // TODO, add the example senteces etc, for now keep disabled
                 />
               </TabList>
             </Box>
@@ -198,7 +171,7 @@ function Study (): JSX.Element {
                     backgroundColor: '#fcba03'
                   }}
                 >
-                  Next card
+                  {t('pages.review.view.nextCardButton')}
                 </Button>
                 }
               </Container>
@@ -208,17 +181,6 @@ function Study (): JSX.Element {
             </TabPanel>
           </TabContext>
         </Box>
-        <br/>
-        <Button
-          onClick={() => { resetView() }}
-          type="submit"
-          fullWidth
-          color='success'
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          Reset
-        </Button>
     </div>
   )
 }

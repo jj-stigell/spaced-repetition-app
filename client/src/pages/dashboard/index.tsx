@@ -24,7 +24,7 @@ function Dashboard (): JSX.Element {
 
   return (
   <div id="dashboard" style={{ marginTop: 15 }}>
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{ pb: 3 }}>
       <Box sx={{ flexGrow: 1, mt: 4 }}>
         <Grid container spacing={{ xs: 2, md: 2 }} columns={{ xs: 1, sm: 8, md: 8 }}>
             <Grid item xs={2} sm={4} md={4} key={1}>
