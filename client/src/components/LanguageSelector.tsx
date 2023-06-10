@@ -27,13 +27,15 @@ function LanguageSelector ({ callApi = false }: { callApi?: boolean }): JSX.Elem
   const [lang, setLang] = React.useState<string>(language)
 
   React.useEffect(() => {
-    void i18n.changeLanguage(lang)
-    dispatch(setLanguage(lang.toUpperCase()))
-    if (callApi) {
-      void axios.patch(changeSettings, { language: lang })
-      dispatch(resetCards())
-      dispatch(resetDecks())
-      dispatch(resetCategories())
+    if (lang !== language) {
+      void i18n.changeLanguage(lang)
+      dispatch(setLanguage(lang.toUpperCase()))
+      if (callApi) {
+        void axios.patch(changeSettings, { language: lang })
+        dispatch(resetCards())
+        dispatch(resetDecks())
+        dispatch(resetCategories())
+      }
     }
   }, [lang])
 
