@@ -21,8 +21,7 @@ export const redisClient: RedisClientType = REDIS_URL ?
   });
 
 redisClient.on('error', (err: unknown) => {
-  logger.error('Redis Client Error', err);
-  console.log('Redis Client Error', err);
+  console.error('Redis Client Error', err);
 });
 
 export const connectToRedis = async (): Promise<void> => {

@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import { QueryInterface, Transaction } from 'sequelize';
-import logger from '../../configs/winston';
 
 const language: string = fs.readFileSync(
   path.resolve(__dirname, '../../../../dbBaseData/language.sql'), 'utf8'
@@ -50,8 +49,7 @@ export default {
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
-      logger.error(err);
-      console.log(err);
+      console.error(err);
     }
   },
   down: async (queryInterface: QueryInterface): Promise<void> => {
@@ -94,7 +92,7 @@ export default {
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
-      logger.error(err);
+      console.error(err);
     }
   },
 };

@@ -62,7 +62,6 @@ function Form ({ setResetInProcess, setSuccess }: {
           if (errorCode.startsWith('ERR_EMAIL')) {
             setApiError(t(`errors.${errorCode}`))
           } else {
-            // TODO: what if there are multiple errors.
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
           }

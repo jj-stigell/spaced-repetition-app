@@ -66,15 +66,14 @@ export async function categories(req: Request, res: Response): Promise<void> {
     const account: Account = await findAccountById(user.id);
 
     if (account.role !== Role.NON_MEMBER) {
+      // TODO, replace placeholder data with data from DB.
       categories = categories.map((category: Category): Category => {
         return {
           ...category,
           progress: {
-            // TODO implement progress search for member users.
-            // Temporary place holders.
-            new: 3,
+            new: 6,
             learning: 4,
-            mature: 6
+            mature: 2
           }
         };
       });

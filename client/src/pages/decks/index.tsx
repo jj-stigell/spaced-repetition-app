@@ -36,7 +36,6 @@ function Decks (): JSX.Element {
   const deck: DeckState = useAppSelector((state: RootState) => state.deck)
 
   React.useEffect(() => {
-    // TODO make loading view with skeleton
     if (category !== undefined) {
       if (deck.category === undefined || deck.category !== category) {
         axios.get(`${getDecks}?level=${account.jlptLevel}&category=${category}&language=${account.language}`)
@@ -61,8 +60,7 @@ function Decks (): JSX.Element {
           })
       }
     } else {
-      // TODO add category missing error translation.
-      dispatch(setNotification({ message: t('CATEGORY.MISSING'), severity: 'error' }))
+      dispatch(setNotification({ message: t('pages.categories.missing'), severity: 'error' }))
     }
   }, [])
 

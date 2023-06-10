@@ -45,7 +45,6 @@ function App (): JSX.Element {
                 <Route element={<Dashboard />} errorElement={<RouterError />} path={dashboard} />
                 <Route element={<Decks />} errorElement={<RouterError />} path={decks} />
                 <Route element={<Category />} errorElement={<RouterError />} path={category} />
-                {/* <Route element={<Statistics />} errorElement={<RouterError />} path={statistics} /> */}
                 <Route element={<Settings />} errorElement={<RouterError />} path={settings} />
               </Route>
               {/* Do not render main layout when in study mode */}

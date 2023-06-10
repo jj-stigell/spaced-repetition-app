@@ -119,7 +119,8 @@
         "description": "Learn all N{{jlptLevel}} grammar points efficiently, {{amount}} decks available for studying."
       },
       "returnButton": "Back to dashboard",
-      "studyButton": "Study"
+      "studyButton": "Study",
+      "missing": "Category not found"
     },
     "decks": {
       "title": "Available decks",

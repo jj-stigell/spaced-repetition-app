@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { REACT_APP_BACKEND } from '../config/environment'
 
-// TODO: setup proper cache control
+// TODO: setup proper cache control, no-cache for now.
 export default axios.create({
   baseURL: REACT_APP_BACKEND,
   timeout: 10000,

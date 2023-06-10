@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { dashboard } from '../../config/path'
 
-// TODO: set bug report button page bottom.
-
 function ErrorPage ({ children }: { children: JSX.Element }): JSX.Element {
   const { t } = useTranslation()
 

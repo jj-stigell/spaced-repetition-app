@@ -235,9 +235,8 @@ export async function decks(req: Request, res: Response): Promise<void> {
   }
 
   if (decks.length !== 0) {
-    // TODO, use token user information
-    //const user: JwtPayload = req.user as JwtPayload;
-    const account: Account = await findAccountById(230795);
+    const user: JwtPayload = req.user as JwtPayload;
+    const account: Account = await findAccountById(user.id);
 
     if (account.role !== Role.NON_MEMBER) {
       // TODO, replace placeholder data with data from DB.
@@ -246,9 +245,9 @@ export async function decks(req: Request, res: Response): Promise<void> {
           ...deck,
           favorite: true,
           progress: {
-            new: 5,
-            learning: 6,
-            mature: 3
+            new: 6,
+            learning: 4,
+            mature: 2
           }
         };
       });

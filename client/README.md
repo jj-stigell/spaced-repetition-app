@@ -81,9 +81,7 @@ App will run in the localhost port [3000](http://localhost:3000/)
 
 ## TODOs
 
-* Fix inconsistencies in the form behavior (register, reset, confirm)
 * Captcha to prevent bots ([reCAPTCHA](https://www.google.com/recaptcha/about/))
-* [Persist](https://blog.logrocket.com/persist-state-redux-persist-redux-toolkit-react/)
 * Testing, unit, integration, E2E
 * Add client to the docker setup
 * Add password strength indicator in form

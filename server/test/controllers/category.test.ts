@@ -65,8 +65,6 @@ describe(`Test GET ${CATEGORIES_URI} - get available categories`, () => {
       await testEndpoint(adminReadCookies, 3);
       await testEndpoint(adminWriteCookies, 4);
       await testEndpoint(superuserCookies, 5);
-      // TODO test categories in level are correct
-      // TODO how to test cache hit.
     });
 
   it('should response with error if not logged in', async () => {
