@@ -96,7 +96,7 @@ function LevelSelector (): JSX.Element {
           </Typography>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <Button sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N5) }}>JLPT N5</Button>
-            <Button sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N4) }}>JLPT N4</Button>
+            <Button disabled sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N4) }}><LockIcon fontSize="small" />JLPT N4</Button>
             <Button disabled sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N3) }}><LockIcon fontSize="small" />JLPT N3</Button>
             <Button disabled sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N2) }}><LockIcon fontSize="small" />JLPT N2</Button>
             <Button disabled sx={modalButtonStyle} onClick={() => { handleLevelSelection(JlptLevel.N1) }}><LockIcon fontSize="small" />JLPT N1</Button>

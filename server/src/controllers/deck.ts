@@ -11,12 +11,13 @@ import Deck from '../database/models/deck';
 import DeckTranslation from '../database/models/deckTranslation';
 import {
   DeckCategory, DeckData, DeckTranslationData,
-  FormattedDeckData, HttpCode, JlptLevel, JwtPayload, Role
+  FormattedDeckData, HttpCode, JlptLevel, JwtPayload, Role, StudyCard
 } from '../type';
 import { findAccountById } from './utils/account';
 import { idSchema } from './utils/validator';
 import { findDeckById } from './utils/deck';
 import Card from '../database/models/card';
+import CardTranslation from '../database/models/cardTranslation';
 import { ApiError } from '../class';
 
 /**
@@ -65,8 +66,7 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
     throw new ApiError('due only cards is a member feature', HttpCode.Forbidden);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let cards: Array<any> = [];
+  let cards: Array<StudyCard> = [];
 
   if (dueonly) {
     cards = [];
@@ -86,7 +86,12 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
         },
         include: {
           model: Card,
-          required: true
+          required: true,
+          include: [
+            {
+              model: CardTranslation
+            }
+          ]
         },
         order: [['learningOrder', 'ASC']]
       });
@@ -96,8 +101,30 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
         return {
           id: card.cardId,
           learningOrder: card.learningOrder,
+          cardType: card.card.type,
           reviewType: card.reviewType,
-          cardType: card.card.type
+          card: {
+            value: '車',
+            keyword: 'car',
+            answerOptions: [
+              {
+                option: 'car',
+                correct: true
+              },
+              {
+                option: 'airplane',
+                correct: false
+              },
+              {
+                option: 'boat',
+                correct: false
+              },
+              {
+                option: 'bicycle',
+                correct: false
+              }
+            ]
+          }
         };
       });
 
@@ -108,9 +135,6 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
     }
   }
 
-  // Check translation available
-  // Server correct translation if available to the user
-  // Format cards to match client layout
   res.status(HttpCode.Ok).json({
     data: cards
   });

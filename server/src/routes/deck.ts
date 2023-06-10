@@ -76,7 +76,7 @@ export const router: Router = Router();
  *         description: What way the card is studied.
  *       cardType:
  *         type: string
- *         enum: [KANJI, KANA, VOCABULARY, SENTENCE]
+ *         enum: [KANJI, KANA, VOCABULARY, SENTENCE, GRAMMAR]
  *         example: KANJI
  *         description: Type of the card.
  */

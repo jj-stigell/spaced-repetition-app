@@ -7,6 +7,7 @@ import Card from './card';
 import CardList from './cardList';
 import DeckTranslation from './deckTranslation';
 import Deck from './deck';
+import CardTranslation from './cardTranslation';
 
 Account.hasMany(AccountAction, {
   onDelete: 'CASCADE',
@@ -105,12 +106,33 @@ CardList.belongsTo(Card, {
   foreignKey: 'cardId'
 });
 
+Card.hasMany(CardTranslation, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+CardTranslation.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
+});
+
+Language.hasMany(CardTranslation, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
+});
+
+CardTranslation.belongsTo(Language, {
+  targetKey: 'id',
+  foreignKey: 'languageId'
+});
+
 export default {
   Account,
   AccountAction,
   BugReport,
   Card,
   CardList,
+  CardTranslation,
   Deck,
   DeckTranslation,
   Language,

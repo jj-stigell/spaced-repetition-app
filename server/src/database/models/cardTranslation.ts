@@ -1,38 +1,38 @@
+
 import {
   CreationOptional, DataTypes, Model, InferAttributes, InferCreationAttributes, ForeignKey
 } from 'sequelize';
 
 import { sequelize } from '..';
-import { CardType } from '../../type';
 import Language from './language';
+import Card from './card';
 
-export default class Card extends Model<
-  InferAttributes<Card>,
-  InferCreationAttributes<Card>
+export default class CardTranslation extends Model<
+  InferAttributes<CardTranslation>,
+  InferCreationAttributes<CardTranslation>
 > {
   declare id: CreationOptional<number>;
-  declare type: string;
+  declare cardId: ForeignKey<Card['id']>;
   declare languageId: ForeignKey<Language['id']>;
-  declare active: boolean;
+  declare keyword: string;
+  declare options: object;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-Card.init({
+CardTranslation.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
-  type: {
-    type: DataTypes.ENUM(
-      CardType.KANJI,
-      CardType.KANA,
-      CardType.VOCABULARY,
-      CardType.SENTENCE,
-      CardType.GRAMMAR
-    ),
-    allowNull: false
+  cardId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'card',
+      key: 'id'
+    }
   },
   languageId: {
     type: DataTypes.CHAR(2),
@@ -42,10 +42,13 @@ Card.init({
       key: 'id'
     }
   },
-  active: {
-    type: DataTypes.BOOLEAN,
+  keyword: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  options: {
+    type: DataTypes.JSONB,
     allowNull: false,
-    defaultValue: false
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -59,6 +62,5 @@ Card.init({
   },
 }, {
   sequelize,
-  modelName: 'card'
+  modelName: 'card_translation'
 });
-

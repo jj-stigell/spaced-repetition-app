@@ -301,7 +301,8 @@ export default {
             CardType.KANJI,
             CardType.KANA,
             CardType.VOCABULARY,
-            CardType.SENTENCE
+            CardType.SENTENCE,
+            CardType.GRAMMAR
           ),
           allowNull: false
         },
@@ -444,6 +445,47 @@ export default {
           defaultValue: DataTypes.NOW
         }
       }, { transaction });
+      await queryInterface.createTable('card_translation', {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        card_id: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'card',
+            key: 'id'
+          }
+        },
+        language_id: {
+          type: DataTypes.CHAR(2),
+          allowNull: false,
+          references: {
+            model: 'language',
+            key: 'id'
+          }
+        },
+        keyword: {
+          type: DataTypes.STRING,
+          allowNull: false
+        },
+        options: {
+          type: DataTypes.JSONB,
+          allowNull: false,
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        }
+      }, { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
@@ -453,6 +495,7 @@ export default {
   down: async (queryInterface: QueryInterface): Promise<void> => {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
     try {
+      await queryInterface.dropTable('card_translation', { transaction });
       await queryInterface.dropTable('card_list', { transaction });
       await queryInterface.dropTable('bug_report', { transaction });
       await queryInterface.dropTable('card', { transaction });

@@ -115,7 +115,8 @@ export enum CardType {
   KANJI = 'KANJI',
   KANA = 'KANA',
   VOCABULARY = 'VOCABULARY',
-  SENTENCE = 'SENTENCE'
+  SENTENCE = 'SENTENCE',
+  GRAMMAR = 'GRAMMAR'
 }
 
 export type ChangePasswordData = {
@@ -345,3 +346,47 @@ export type ValidationErrors = {
   readonly ERR_LANGUAGE_REQUIRED: string;
   readonly ERR_LANGUAGE_ID_NOT_VALID: string;
 };
+
+export type AnswerOption = {
+  option: string;
+  correct: boolean;
+}
+
+export type KanaCard = {
+  story: string;
+  hint: string;
+}
+
+export type KanjiCard = {
+  story: string;
+  hint: string;
+  onyomi: string;
+  kunyomi: string;
+  onyomiRomaji: string;
+  kunyomiRomaji: string;
+}
+
+export type ExampleSentence = {
+  id: number;
+  sentence: string;
+  translation: string;
+  furigana: string;
+  audio: string;
+}
+
+export type VocabularyCard = {
+  reading: string;
+  readingRomaji: string;
+}
+
+export type StudyCard = {
+  id: number;
+  learningOrder: number;
+  cardType: CardType;
+  reviewType: ReviewType;
+  card: {
+    value: string;
+    keyword: string;
+    answerOptions: Array<AnswerOption>;
+  }
+}
