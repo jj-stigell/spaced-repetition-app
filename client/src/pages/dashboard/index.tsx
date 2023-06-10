@@ -6,16 +6,14 @@ import { useNavigate } from 'react-router-dom'
 
 import LevelSelector from './LevelSelector'
 import { category } from '../../config/path'
+import RadarChart from './RadarChart'
 
 const Item = experimentalStyled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(3),
   textAlign: 'center',
-  color: theme.palette.text.secondary,
-  '&:hover': {
-    backgroundColor: '#ddd'
-  }
+  color: theme.palette.text.secondary
 }))
 
 function Dashboard (): JSX.Element {
@@ -42,7 +40,7 @@ function Dashboard (): JSX.Element {
               </Button>
             </Grid>
             <Grid item xs={12} sm={12} md={12} key={5}>
-              <Item>{t('pages.dashboard.revHistoryTitle')}</Item>
+              <Item><RadarChart /></Item>
             </Grid>
         </Grid>
       </Box>

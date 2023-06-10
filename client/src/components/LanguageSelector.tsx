@@ -11,6 +11,9 @@ import { useDispatch } from 'react-redux'
 import { setLanguage } from '../features/accountSlice'
 import axios from '../lib/axios'
 import { changeSettings } from '../config/api'
+import { resetCards } from '../features/cardSlice'
+import { resetCategories } from '../features/categorySlice'
+import { resetDecks } from '../features/deckSlice'
 
 const languages = [
   { code: 'en', nativeName: 'English', flag: '🇬🇧' },
@@ -28,6 +31,9 @@ function LanguageSelector ({ callApi = false }: { callApi?: boolean }): JSX.Elem
     dispatch(setLanguage(lang.toUpperCase()))
     if (callApi) {
       void axios.patch(changeSettings, { language: lang })
+      dispatch(resetCards())
+      dispatch(resetDecks())
+      dispatch(resetCategories())
     }
   }, [lang])
 

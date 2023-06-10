@@ -7,6 +7,7 @@ import {
   EMAIL_ORIGIN, STMP_HOST, STMP_PORT, STMP_USER, STMP_PASSWORD
 } from '../../../configs/environment';
 import { EmailClientArgs } from '../../../type';
+import logger from '../../../configs/winston';
 
 export async function sendMail<TemplateData>(
   data: EmailClientArgs<TemplateData>
@@ -35,7 +36,7 @@ export async function sendMail<TemplateData>(
     await smtpTransport.sendMail(updatedData);
     return true;
   } catch(error) {
-    console.log(error);
+    logger.error(error);
     return false;
   }
 }

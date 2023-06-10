@@ -70,10 +70,13 @@ function ChangePassword (): JSX.Element {
         })
         .catch(function (error) {
           setIsSubmitted(false)
-          console.log('error encountered', error)
-          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-          if (error?.response?.data?.errors[0].code) {
-            // TODO: what if there are multiple errors.
+          let errorCode: string | null = null
+
+          if (Array.isArray(error?.response?.data?.errors)) {
+            errorCode = error?.response?.data?.errors[0].code
+          }
+
+          if (errorCode != null) {
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             dispatch(setNotification({ message: t(`errors.${error.response.data.errors[0].code}`), severity: 'error' }))
           } else if (error instanceof AxiosError) {

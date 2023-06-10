@@ -34,15 +34,16 @@ function Study (): JSX.Element {
       setIsLoading(true)
       axios.get(`${getCategories}?level=${jlptLevel}`)
         .then(function (response) {
-          console.log('Response for setting categories:', response.data.data)
           dispatch(setCategories({ jlptLevel, categories: response.data.data }))
           setIsLoading(false)
         })
         .catch(function (error) {
           setIsLoading(false)
-          console.log('error encountered', error)
-          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-          const errorCode: string | null = error?.response?.data?.errors ? error?.response?.data?.errors[0]?.code : null
+          let errorCode: string | null = null
+
+          if (Array.isArray(error?.response?.data?.errors)) {
+            errorCode = error?.response?.data?.errors[0].code
+          }
 
           if (errorCode != null) {
             // TODO: what if there are multiple errors.

@@ -39,17 +39,18 @@ function Decks (): JSX.Element {
     // TODO make loading view with skeleton
     if (category !== undefined) {
       if (deck.category === undefined || deck.category !== category) {
-        axios.get(`${getDecks}?level=${account.jlptLevel}&category=${category}`)
+        axios.get(`${getDecks}?level=${account.jlptLevel}&category=${category}&language=${account.language}`)
           .then(function (response) {
             dispatch(setDecks({ category: category as DeckCategory, decks: response.data.data }))
           })
           .catch(function (error) {
-            console.log('error encountered', error)
-            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-            const errorCode: string | null = error?.response?.data?.errors ? error?.response?.data?.errors[0]?.code : null
+            let errorCode: string | null = null
+
+            if (Array.isArray(error?.response?.data?.errors)) {
+              errorCode = error?.response?.data?.errors[0].code
+            }
 
             if (errorCode != null) {
-            // TODO: what if there are multiple errors.
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
               dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
             } else if (error instanceof AxiosError) {

@@ -66,17 +66,16 @@ function Study (): JSX.Element {
           }
         })
         .catch(function (error) {
-          // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-          const errorCode: string | null = error?.response?.data?.errors ? error?.response?.data?.errors[0]?.code : null
+          let errorCode: string | null = null
+
+          if (Array.isArray(error?.response?.data?.errors)) {
+            errorCode = error?.response?.data?.errors[0].code
+          }
 
           if (errorCode != null) {
             dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
           } else if (error instanceof AxiosError) {
-            if (error.request.status === 401) {
-              console.log('Should logout automatically and clear localstorage on http code:', error.request.status)
-            } else {
-              dispatch(setNotification({ message: error.message, severity: 'error' }))
-            }
+            dispatch(setNotification({ message: error.message, severity: 'error' }))
           } else {
             dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
           }

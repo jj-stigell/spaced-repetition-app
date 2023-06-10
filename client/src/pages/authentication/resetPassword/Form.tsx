@@ -78,8 +78,11 @@ function Form (): JSX.Element {
         }, constants.redirectTimeout * 1000)
       }).catch(function (error) {
         setSubmitting(false)
-        console.log('error encountered', error)
-        const errorCode: string | null = error?.response?.data?.errors[0].code
+        let errorCode: string | null = null
+
+        if (Array.isArray(error?.response?.data?.errors)) {
+          errorCode = error?.response?.data?.errors[0].code
+        }
 
         if (errorCode != null) {
           // TODO: what if there are multiple errors.

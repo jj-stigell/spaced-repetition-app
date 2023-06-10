@@ -52,8 +52,11 @@ function Form ({ setResetInProcess, setSuccess }: {
         setIsSubmitted(false)
         setResetInProcess(false)
         setSuccess(false)
-        console.log('error encountered', error)
-        const errorCode: string | null = error?.response?.data?.errors[0].code
+        let errorCode: string | null = null
+
+        if (Array.isArray(error?.response?.data?.errors)) {
+          errorCode = error?.response?.data?.errors[0].code
+        }
 
         if (errorCode != null) {
           if (errorCode.startsWith('ERR_EMAIL')) {

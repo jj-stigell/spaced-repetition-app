@@ -34,17 +34,16 @@ function CardInformation (): JSX.Element {
         setCardData(response.data)
       })
       .catch(function (error) {
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        const errorCode: string | null = error?.response?.data?.errors ? error?.response?.data?.errors[0]?.code : null
+        let errorCode: string | null = null
+
+        if (Array.isArray(error?.response?.data?.errors)) {
+          errorCode = error?.response?.data?.errors[0].code
+        }
 
         if (errorCode != null) {
           setIsError(t(`errors.${errorCode}`))
         } else if (error instanceof AxiosError) {
-          if (error.request.status === 401) {
-            console.log('Should logout automatically and clear localstorage on http code:', error.request.status)
-          } else {
-            setIsError(error.message)
-          }
+          setIsError(error.message)
         } else {
           setIsError(t('errors.ERR_CHECK_CONNECTION'))
         }

@@ -24,7 +24,7 @@ function ReviewFinished (): JSX.Element {
     } else {
       setTimeout(() => {
         setCount(count - 1)
-      }, constants.redirectTimeout)
+      }, 1000)
     }
   }, [count])
 

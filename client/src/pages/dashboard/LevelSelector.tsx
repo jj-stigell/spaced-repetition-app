@@ -57,8 +57,11 @@ function LevelSelector (): JSX.Element {
     axios.patch(changeSettings, {
       jlptLevel: selectedLevel
     }).catch(function (error) {
-      console.log('error encountered', error)
-      const errorCode: string | null = error?.response?.data?.errors[0]?.code
+      let errorCode: string | null = null
+
+      if (Array.isArray(error?.response?.data?.errors)) {
+        errorCode = error?.response?.data?.errors[0].code
+      }
 
       if (errorCode != null) {
         // TODO: what if there are multiple errors.

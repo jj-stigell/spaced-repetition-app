@@ -214,3 +214,30 @@ export const exampleSentences: ExampleSentence[] = [
     audio: 'https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-1.mp3'
   }
 ]
+
+export const mockRadarData = [
+  {
+    label: 'kanji',
+    value: 1
+  },
+  {
+    label: 'kana',
+    value: 2
+  },
+  {
+    label: 'vocabulary',
+    value: 3
+  },
+  {
+    label: 'grammar',
+    value: 4
+  },
+  {
+    label: 'listening',
+    value: 5
+  },
+  {
+    label: 'reading',
+    value: 10
+  }
+]
