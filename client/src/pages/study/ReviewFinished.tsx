@@ -24,7 +24,7 @@ function ReviewFinished (): JSX.Element {
     } else {
       setTimeout(() => {
         setCount(count - 1)
-      }, 1000000)
+      }, constants.redirectTimeout)
     }
   }, [count])
 
@@ -40,7 +40,7 @@ function ReviewFinished (): JSX.Element {
         <Typography variant='h4' sx={{ marginBottom: 3 }}>
           {t('pages.review.reviewFinished.title')}
         </Typography>
-        { role === Role.MEMBER && (
+        { role === Role.NON_MEMBER && (
           <div style={{
             width: '320px',
             height: '250px',
@@ -60,7 +60,7 @@ function ReviewFinished (): JSX.Element {
         <Typography variant='h5' sx={{ marginBottom: 3 }}>
           {t('pages.review.reviewFinished.redirectMessage', { count })}
         </Typography>
-      { role !== Role.NON_MEMBER && (
+      { role === Role.MEMBER && (
         <>
           <p>
             {t('pages.review.reviewFinished.redirectImmediately')}

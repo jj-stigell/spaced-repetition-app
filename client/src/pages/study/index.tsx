@@ -131,13 +131,10 @@ function Study (): JSX.Element {
         <Box sx={{ width: '100%', typography: 'body1', backgroundColor: 'primary.light' }}>
           <TabContext value={activeTab}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList onChange={handleChange} aria-label="study-tabs" sx={{ backgroundColor: 'primary.main' }} variant="fullWidth">
+              <TabList textColor="inherit" onChange={handleChange} aria-label="study-tabs" sx={{ backgroundColor: 'primary.main' }} variant="fullWidth">
                 <Tab
                   label={t('pages.review.view.answerOptionsTab.button')}
                   value="1"
-                  sx={{
-                    color: 'red'
-                  }}
                 />
                 <Tab
                   iconPosition="start"

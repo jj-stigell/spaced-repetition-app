@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
 
 // Third party imports
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
-import LockIcon from '@mui/icons-material/Lock'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
@@ -16,6 +13,8 @@ import { sendBugReport } from '../../config/api'
 import axios from '../../lib/axios'
 import { setNotification } from '../../features/notificationSlice'
 import { useAppDispatch } from '../../app/hooks'
+import TextField from '@mui/material/TextField'
+import MenuItem from '@mui/material/MenuItem'
 
 function BugReportModal (
   { cardId, open, setOpen }:
@@ -24,8 +23,28 @@ function BugReportModal (
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [loading, setLoading] = React.useState<boolean>(false)
+  const [valid, setValid] = React.useState<boolean>(false)
   const [type, setType] = React.useState<string>('TRANSLATION')
   const [bugMessage, setBugMessage] = React.useState<string>('')
+
+  const bugCategory = [
+    {
+      id: 'TRANSLATION',
+      translation: t('modals.bugReport.category.translation')
+    },
+    {
+      id: 'UI',
+      translation: t('modals.bugReport.category.ui')
+    },
+    {
+      id: 'FUNCTIONALITY',
+      translation: t('modals.bugReport.category.functionality')
+    },
+    {
+      id: 'OTHER',
+      translation: t('modals.bugReport.category.other')
+    }
+  ]
 
   const sendReport = (): void => {
     setLoading(true)
@@ -50,11 +69,46 @@ function BugReportModal (
           {t('modals.bugReport.title')}
         </Typography>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-
-          <Button sx={modalButtonStyle} disabled={loading} onClick={() => { sendReport() }}>
+          <TextField
+            id="outlined-multiline-static"
+            label={t('modals.bugReport.description')}
+            disabled={loading}
+            multiline
+            rows={5}
+            onChange={(e) => {
+              setBugMessage(e.target.value)
+              if (bugMessage.length >= 5 && bugMessage.length <= 100) {
+                setValid(true)
+              } else {
+                setValid(false)
+              }
+            }}
+            defaultValue=""
+            sx={{
+              mb: 3
+            }}
+          />
+          <TextField
+            id="select-bug-categorye"
+            label={t('modals.bugReport.category.title')}
+            select
+            disabled={loading}
+            defaultValue={type}
+            onChange={(e) => { setType(e.target.value) }}
+            sx={{
+              mb: 3
+            }}
+          >
+            {bugCategory.map((category) => (
+              <MenuItem key={category.id} value={category.id}>
+                {category.translation}
+              </MenuItem>
+            ))}
+          </TextField>
+          <Button sx={modalButtonStyle} disabled={loading || !valid} onClick={() => { sendReport() }}>
             {t('modals.bugReport.sendButton')}
           </Button>
-          <Button sx={modalButtonStyle} color='error' disabled={loading} onClick={() => { setOpen(false) }}>
+          <Button sx={modalButtonStyle} disabled={loading} onClick={() => { setOpen(false) }}>
             {t('modals.bugReport.closeButton')}
           </Button>
         </div>

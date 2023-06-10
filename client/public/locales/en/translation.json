@@ -190,9 +190,17 @@
     },
     "bugReport": {
       "title": "To send a new bug report, please fill all the fields and click send. Thank you!",
-      "sendSuccess": "Thank you for sending bug report! This will help us to provide better experience!",
+      "sendSuccess": "Thank you for sending bug report! This will help us to provide better experience! You can close this window by clicking close.",
       "sendButton": "Send report",
-      "closeButton": "Cancel"
+      "closeButton": "Close",
+      "description": "Describe the bug",
+      "category": {
+        "title": "Select bug category",
+        "translation": "Invalid translation",
+        "ui": "User interface",
+        "functionality": "Functionality",
+        "other": "Other"
+      }
     }
   },
   "stats": {

@@ -23,7 +23,7 @@ const ProgressBar = (
   const normalizedValue: number = normalize(value, MIN, MAX)
 
   return (
-    <Box sx={{ width: '50%', mr: 1 }}>
+    <Box sx={{ width: '20%' }}>
       <BorderLinearProgress variant="determinate" value={normalizedValue} /> {message}
     </Box>
   )
