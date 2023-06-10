@@ -1,0 +1,1 @@
+INSERT INTO card_translation(card_id,language_id,keyword,created_at,updated_at,options) VALUES (1,'EN','Mouth',NOW(),NOW(),'[{ "option": "car", "correct": true }, { "option": "airplane", "correct": false }, { "option": "boat", "correct": false }, { "option": "bicycle", "correct": false }]');
