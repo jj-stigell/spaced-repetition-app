@@ -10,7 +10,7 @@ export const account: AccountConstants = {
   PASSWORD_MIN_LENGTH: 8,
   EMAIL_MAX_LENGTH: 255,
   CONFIRMATION_EXPIRY_TIME: 86400000, // 24 hours
-  JWT_EXPIRY_TIME: 86400, // 24 hours
+  JWT_EXPIRY_TIME: 86400000 * 31, // 24 hours
   SESSION_LIFETIME: 28 // How long a new session will last in days, same as jwt expiry time
 };
 

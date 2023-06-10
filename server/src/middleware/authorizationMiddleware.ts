@@ -19,7 +19,7 @@ export function authorizationMiddleware(
 ): (req: Request, res: Response, next: NextFunction) => void {
 
   return async function (req: Request, res: Response, next: NextFunction) {
-    const user: JwtPayload = req.user as JwtPayload;
+    const user: JwtPayload | undefined = req.user;
 
     if (!user) {
       throw new ApiError(generalErrors.UNAUTHORIZED, HttpCode.Unauthorized);

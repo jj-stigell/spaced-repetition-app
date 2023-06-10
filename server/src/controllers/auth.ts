@@ -226,8 +226,8 @@ passport.use(
         const account: Account = await findAccountByEmail(email, true);
         const userAgent: string = req?.headers['user-agent'] ?? '';
         const parsedUserAgent: IResult | undefined = UAParser(userAgent);
-
         const match: boolean = await comparePassword(account.password, password);
+
         if (!match) {
           throw new InvalidCredentials();
         }
@@ -261,10 +261,8 @@ passport.use(
   ),
 );
 
-
 const options: StrategyOptions = {
   secretOrKey: JWT_SECRET,
-  //ignoreExpiration: true,
   jwtFromRequest: (req: Request): string | null => {
     return (req && req.cookies) ? req.cookies['jwt'] : null;
   }
@@ -273,19 +271,9 @@ const options: StrategyOptions = {
 passport.use('jwt', new JWTStrategy(options,
   async (jwtPayload: JwtPayload, done: VerifiedCallback): Promise<void> => {
     try {
-      /*
-      console.log('checking JWT');
-      const now: number = Date.now() / 1000;
-      const exp: number = jwtPayload.exp as number;
-      if (exp < now) {
-        console.log('jwt expired');
-        return done(null, false, { message: 'Token expired' });
-      }
-      */
       return done(null, jwtPayload);
     } catch(e) {
       return done(e, false);
     }
   }
-)
-);
+));
