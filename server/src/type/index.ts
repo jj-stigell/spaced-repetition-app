@@ -350,6 +350,7 @@ export type ValidationErrors = {
 export type AnswerOption = {
   option: string;
   correct: boolean;
+  japanese: string;
 }
 
 export type KanaCard = {

@@ -17,8 +17,12 @@ import { findAccountById } from './utils/account';
 import { idSchema } from './utils/validator';
 import { findDeckById } from './utils/deck';
 import Card from '../database/models/card';
-import CardTranslation from '../database/models/cardTranslation';
+import AnswerOption from '../database/models/answerOption';
 import { ApiError } from '../class';
+import Kanji from '../database/models/kanji';
+import Vocabulary from '../database/models/vocabulary';
+import Kana from '../database/models/kana';
+import { CardData, cardFormatter } from './utils/card';
 
 /**
  * Get all cards belonging to a deck.
@@ -51,10 +55,10 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
   const deckId: number = Number(req.params.deckId);
   await idSchema.validate({ id: deckId });
 
-  // Check deck exists.
+  // Check deck exists and is active.
   const deck: Deck = await findDeckById(deckId);
-  const userData: JwtPayload = req.user as JwtPayload;
-  const account: Account = await findAccountById(userData.id, true);
+  // const userData: JwtPayload = req.user as JwtPayload;
+  const account: Account = await findAccountById(230792, true);
 
   if (deck.memberOnly && account.role === Role.NON_MEMBER) {
     // TODO: add proper error code
@@ -69,13 +73,15 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
   let cards: Array<StudyCard> = [];
 
   if (dueonly) {
+    // TODO, do only requires SRS functionality.
     cards = [];
   } else {
     const cache: string | null = await redisClient.get(`deck:${deckId}:lang${languageId}`);
 
-    if (cache) {
+    // eslint-disable-next-line no-constant-condition
+    if (false) {
       logger.info(`Cache hit on cards in redis, language ${languageId}`);
-      cards = JSON.parse(cache);
+      //cards = JSON.parse(cache);
     } else {
       logger.info('No cache hit on cards, querying db');
 
@@ -88,45 +94,16 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
           model: Card,
           required: true,
           include: [
-            {
-              model: CardTranslation
-            }
+            { model: AnswerOption },
+            { model: Kanji },
+            { model: Vocabulary },
+            { model: Kana }
           ]
         },
         order: [['learningOrder', 'ASC']]
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      cards = cardList.map((card: any) => {
-        return {
-          id: card.cardId,
-          learningOrder: card.learningOrder,
-          cardType: card.card.type,
-          reviewType: card.reviewType,
-          card: {
-            value: '車',
-            keyword: 'car',
-            answerOptions: [
-              {
-                option: 'car',
-                correct: true
-              },
-              {
-                option: 'airplane',
-                correct: false
-              },
-              {
-                option: 'boat',
-                correct: false
-              },
-              {
-                option: 'bicycle',
-                correct: false
-              }
-            ]
-          }
-        };
-      });
+      cards = cardFormatter(cardList as unknown as Array<CardData>);
 
       // Set to cache with 10 hour expiry time.
       await redisClient.set(

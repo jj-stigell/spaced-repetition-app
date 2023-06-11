@@ -15,5 +15,8 @@ export async function findDeckById(id: number): Promise<Deck> {
   if (!deck) {
     throw new ApiError(deckErrors.ERR_DECK_NOT_FOUND, HttpCode.NotFound);
   }
+  if (!deck.active) {
+    throw new ApiError('Deck not active', HttpCode.NotFound);
+  }
   return deck;
 }

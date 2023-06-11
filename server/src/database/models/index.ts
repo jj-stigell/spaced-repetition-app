@@ -7,10 +7,10 @@ import Card from './card';
 import CardList from './cardList';
 import DeckTranslation from './deckTranslation';
 import Deck from './deck';
-import AnswerOption from './answerOption';
 import Kanji from './kanji';
 import Vocabulary from './vocabulary';
 import Kana from './kana';
+import AnswerOption from './answerOption';
 
 Account.hasMany(AccountAction, {
   onDelete: 'CASCADE',
