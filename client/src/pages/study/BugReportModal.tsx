@@ -54,6 +54,7 @@ function BugReportModal (
       bugMessage
     }).finally(() => {
       setLoading(false)
+      setBugMessage('')
       dispatch(setNotification({ message: t('modals.bugReport.sendSuccess'), severity: 'success' }))
     })
   }

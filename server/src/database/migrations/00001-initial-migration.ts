@@ -445,7 +445,7 @@ export default {
           defaultValue: DataTypes.NOW
         }
       }, { transaction });
-      await queryInterface.createTable('card_translation', {
+      await queryInterface.createTable('answer_option', {
         id: {
           type: DataTypes.INTEGER,
           primaryKey: true,
@@ -486,6 +486,130 @@ export default {
           defaultValue: DataTypes.NOW
         }
       }, { transaction });
+      await queryInterface.createTable('kanji', {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        card_id: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'card',
+            key: 'id'
+          }
+        },
+        kanji: {
+          type: DataTypes.CHAR(1),
+          unique: true,
+          allowNull: false
+        },
+        jlpt_level: {
+          type: DataTypes.INTEGER,
+        },
+        onyomi: {
+          type: DataTypes.STRING,
+        },
+        onyomi_romaji: {
+          type: DataTypes.STRING,
+        },
+        kunyomi: {
+          type: DataTypes.STRING,
+        },
+        kunyomi_romaji: {
+          type: DataTypes.STRING,
+        },
+        stroke_count: {
+          type: DataTypes.INTEGER,
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        }
+      }, { transaction });
+      await queryInterface.createTable('vocabulary', {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        card_id: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'card',
+            key: 'id'
+          }
+        },
+        word: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          unique: true
+        },
+        furigana: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false
+        },
+        reading: {
+          type: DataTypes.STRING
+        },
+        reading_romaji: {
+          type: DataTypes.STRING,
+        },
+        jlpt_level: {
+          type: DataTypes.INTEGER,
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        }
+      }, { transaction });
+      await queryInterface.createTable('kana', {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        card_id: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'card',
+            key: 'id'
+          }
+        },
+        kana: {
+          type: DataTypes.CHAR(1),
+          unique: true,
+          allowNull: false
+        },
+        romaji: {
+          type: DataTypes.STRING,
+        },
+        stroke_count: {
+          type: DataTypes.INTEGER,
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        }
+      }, { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
@@ -495,7 +619,10 @@ export default {
   down: async (queryInterface: QueryInterface): Promise<void> => {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('card_translation', { transaction });
+      await queryInterface.dropTable('answer_option', { transaction });
+      await queryInterface.dropTable('kanji', { transaction });
+      await queryInterface.dropTable('vocabulary', { transaction });
+      await queryInterface.dropTable('kana', { transaction });
       await queryInterface.dropTable('card_list', { transaction });
       await queryInterface.dropTable('bug_report', { transaction });
       await queryInterface.dropTable('card', { transaction });

@@ -7,7 +7,10 @@ import Card from './card';
 import CardList from './cardList';
 import DeckTranslation from './deckTranslation';
 import Deck from './deck';
-import CardTranslation from './cardTranslation';
+import AnswerOption from './answerOption';
+import Kanji from './kanji';
+import Vocabulary from './vocabulary';
+import Kana from './kana';
 
 Account.hasMany(AccountAction, {
   onDelete: 'CASCADE',
@@ -106,35 +109,70 @@ CardList.belongsTo(Card, {
   foreignKey: 'cardId'
 });
 
-Card.hasMany(CardTranslation, {
+Card.hasMany(AnswerOption, {
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
 });
 
-CardTranslation.belongsTo(Card, {
+AnswerOption.belongsTo(Card, {
   targetKey: 'id',
   foreignKey: 'cardId'
 });
 
-Language.hasMany(CardTranslation, {
+Language.hasMany(AnswerOption, {
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
 });
 
-CardTranslation.belongsTo(Language, {
+AnswerOption.belongsTo(Language, {
   targetKey: 'id',
   foreignKey: 'languageId'
+});
+
+// Kanji & card relation. Kanji belongs to one card but on card delete set null
+Card.hasOne(Kanji, {
+  onDelete: 'SET NULL',
+  onUpdate: 'CASCADE'
+});
+
+Kanji.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
+});
+
+// Word & card relation. Word belongs to one card but on card delete set null
+Card.hasOne(Vocabulary, {
+  onDelete: 'SET NULL',
+  onUpdate: 'CASCADE'
+});
+
+Vocabulary.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
+});
+
+Card.hasOne(Kana, {
+  onDelete: 'SET NULL',
+  onUpdate: 'CASCADE'
+});
+
+Kana.belongsTo(Card, {
+  targetKey: 'id',
+  foreignKey: 'cardId'
 });
 
 export default {
   Account,
   AccountAction,
+  AnswerOption,
   BugReport,
   Card,
   CardList,
-  CardTranslation,
   Deck,
   DeckTranslation,
+  Kana,
+  Kanji,
   Language,
-  Session
+  Session,
+  Vocabulary
 };

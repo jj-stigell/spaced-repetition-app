@@ -1,26 +1,24 @@
-
 import {
   CreationOptional, DataTypes, Model, InferAttributes, InferCreationAttributes, ForeignKey
 } from 'sequelize';
 
 import { sequelize } from '..';
-import Language from './language';
 import Card from './card';
 
-export default class CardTranslation extends Model<
-  InferAttributes<CardTranslation>,
-  InferCreationAttributes<CardTranslation>
+export default class Kana extends Model<
+  InferAttributes<Kana>,
+  InferCreationAttributes<Kana>
 > {
   declare id: CreationOptional<number>;
   declare cardId: ForeignKey<Card['id']>;
-  declare languageId: ForeignKey<Language['id']>;
-  declare keyword: string;
-  declare options: object;
+  declare kana: string;
+  declare romaji: string;
+  declare strokeCount: number;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-CardTranslation.init({
+Kana.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -28,27 +26,21 @@ CardTranslation.init({
   },
   cardId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
     references: {
       model: 'card',
       key: 'id'
     }
   },
-  languageId: {
-    type: DataTypes.CHAR(2),
-    allowNull: false,
-    references: {
-      model: 'language',
-      key: 'id'
-    }
-  },
-  keyword: {
-    type: DataTypes.STRING,
+  kana: {
+    type: DataTypes.CHAR(1),
+    unique: true,
     allowNull: false
   },
-  options: {
-    type: DataTypes.JSONB,
-    allowNull: false,
+  romaji: {
+    type: DataTypes.STRING,
+  },
+  strokeCount: {
+    type: DataTypes.INTEGER,
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -62,5 +54,5 @@ CardTranslation.init({
   },
 }, {
   sequelize,
-  modelName: 'card_translation'
+  modelName: 'kana'
 });

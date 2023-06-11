@@ -15,4 +15,4 @@ INSERT INTO deck (deck_name, member_only, category, jlpt_level, language_id, act
 ('JLPT N5 Katakana Deck 1', false, 'KANA', 5, 'JP', true, NOW(), NOW()),
 ('JLPT N5 Katakana Deck 2', false, 'KANA', 5, 'JP', true, NOW(), NOW()),
 -- N5 Grammar decks
-('JLPT N5 Grammar Deck 1, grammar rules 1 to 20', false, 'GRAMMAR', 5, 'JP', true, NOW(), NOW());
+('JLPT N5 Grammar Deck 1, grammar rules 1 to 20', false, 'GRAMMAR', 5, 'JP', false, NOW(), NOW());

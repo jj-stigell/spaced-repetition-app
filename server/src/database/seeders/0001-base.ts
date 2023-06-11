@@ -30,8 +30,20 @@ const cardList: string = fs.readFileSync(
   path.resolve(__dirname, '../../../../dbBaseData/card_list.sql'), 'utf8'
 );
 
-const cardTranslation: string = fs.readFileSync(
-  path.resolve(__dirname, '../../../../dbBaseData/card_translation_en.sql'), 'utf8'
+const answerOptionEn: string = fs.readFileSync(
+  path.resolve(__dirname, '../../../../dbBaseData/answer_option_en.sql'), 'utf8'
+);
+
+const kanji: string = fs.readFileSync(
+  path.resolve(__dirname, '../../../../dbBaseData/kanji.sql'), 'utf8'
+);
+
+const vocabulary: string = fs.readFileSync(
+  path.resolve(__dirname, '../../../../dbBaseData/vocabulary.sql'), 'utf8'
+);
+
+const kana: string = fs.readFileSync(
+  path.resolve(__dirname, '../../../../dbBaseData/kana.sql'), 'utf8'
 );
 
 export default {
@@ -45,7 +57,10 @@ export default {
       await queryInterface.sequelize.query(deck, { transaction });
       await queryInterface.sequelize.query(deckTranslation, { transaction });
       await queryInterface.sequelize.query(cardList, { transaction });
-      await queryInterface.sequelize.query(cardTranslation, { transaction });
+      await queryInterface.sequelize.query(answerOptionEn, { transaction });
+      await queryInterface.sequelize.query(kanji, { transaction });
+      await queryInterface.sequelize.query(vocabulary, { transaction });
+      await queryInterface.sequelize.query(kana, { transaction });
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
@@ -56,7 +71,10 @@ export default {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.bulkDelete('account_action', {}, { transaction });
-      await queryInterface.bulkDelete('card_translation', {}, { transaction });
+      await queryInterface.bulkDelete('kanji', {}, { transaction });
+      await queryInterface.bulkDelete('vocabulary', {}, { transaction });
+      await queryInterface.bulkDelete('kana', {}, { transaction });
+      await queryInterface.bulkDelete('answer_option', {}, { transaction });
       await queryInterface.bulkDelete('card_list', {}, { transaction });
       await queryInterface.bulkDelete('deck_translation', {}, { transaction });
       await queryInterface.bulkDelete('deck', {}, { transaction });
