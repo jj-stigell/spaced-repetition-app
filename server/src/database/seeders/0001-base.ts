@@ -84,10 +84,6 @@ export default {
       await queryInterface.bulkDelete('language', {}, { transaction });
 
       await queryInterface.sequelize.query(
-        'ALTER SEQUENCE language_id_seq RESTART;', { transaction }
-      );
-
-      await queryInterface.sequelize.query(
         'ALTER SEQUENCE account_id_seq RESTART;', { transaction }
       );
 
@@ -104,7 +100,7 @@ export default {
       );
 
       await queryInterface.sequelize.query(
-        'ALTER SEQUENCE deck_translation_id_seq RESTART;', { transaction }
+        'ALTER SEQUENCE account_id_seq RESTART WITH 230792;', { transaction }
       );
 
       await transaction.commit();
