@@ -35,7 +35,7 @@ describe(`Test GET ${CATEGORIES_URI} - get available categories`, () => {
 
   it('should receive categories, amount of decks and optional data in the response',
     async () => {
-      res = await request.get(CATEGORIES_URI + '?level=1')
+      res = await request.get(CATEGORIES_URI + '?level=5')
         .set('Cookie', nonMemberUserCookies)
         .set('Accept', 'application/json');
 
