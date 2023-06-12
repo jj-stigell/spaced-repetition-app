@@ -8,7 +8,7 @@ Define a PostgreSQL password in the environment variable POSTGRES_PASSWORD, for 
 ```
 $ export POSTGRES_PASSWORD="password"
 ```
-Execute Docker Compose:
+Run docker compose in this directory:
 ```
 $ docker-compose up --abort-on-container-exit --exit-code-from back-end-test
 ```

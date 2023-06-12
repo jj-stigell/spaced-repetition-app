@@ -5,9 +5,10 @@ Backend for a [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetitio
 # Table of Contents
 
 * [Running the app](#running-the-app)
+    * [Running with Docker](#running-with-docker)
     * [Run in production mode](#run-in-production-mode)
     * [Run in development mode](#run-in-development-mode)
-    * [Run tests](#)
+    * [Run tests](#run-tests)
     * [Environment variables](#environment-variables)
 * [Tech stack and libraries](#tech-stack-and-libraries)
 * [TODOs](#todos)
@@ -18,23 +19,37 @@ Backend for a [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetitio
 You can run the backend after building or in development mode, where the backend is restarted automatically everytime
 any file has been edited and saved.
 
+### Running with Docker
+
+Define a PostgreSQL password in the environment variable POSTGRES_PASSWORD, for example:
+```
+$ export POSTGRES_PASSWORD="password"
+```
+Run docker compose in project root:
+```
+$ docker-compose up 
+```
+
 ### Run in production mode
 
 1. Set environment variables accordingly
 2. Run build command `npm run build`
-3. Run start command `npm run start`
-4. Backend will run at localhost on the port you defined in the encironment variables.
+3. Make sure postgres and redis are running.
+4. Run start command `npm run start`
+5. Backend will run at localhost on the port you defined in the encironment variables.
 
 ### Run in development mode
 
 1. Set environment variables accordingly
-2. Run command `npm run dev`
+2. Make sure postgres and redis are running.
+3. Run command `npm run dev`
 4. Backend will run at localhost on the port you defined in the encironment variables.
 
 ### Run tests
 
-1. Set environment variables accordingly
-2. Run test command `npm run test`
+1. Set environment variables accordingly.
+2. Make sure postgres and redis are running.
+3. Run test command `npm run test`.
 
 You can also run tests in container, see readme file in folder "docker-tests".
 
@@ -59,6 +74,7 @@ Running server requires the following environment variables to be set:
 * `FRONTEND_URL`: Hostname of the frontend application that will be accessing this backend server.
 * `REDIS_HOST`: Redis host.
 * `REDIS_PORT`: Redis port.
+* `PEPPER`: Pepper for password.
 
 To set environment variables, you can either export them in your terminal or set them in a .env file.
 

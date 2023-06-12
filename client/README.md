@@ -6,7 +6,7 @@ Frontend for a [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetiti
 
 * [Running the app](#running-the-app)
     * [Environment variables](#environment-variables)
-* [Running with Docker](#running-with-docker)
+    * [Running with Docker](#running-with-docker)
 * [Tech stack and libraries](#tech-stack-and-libraries)
 * [TODOs](#todos)
 * [Deployment](#deployment)
@@ -55,7 +55,7 @@ $ export NODE_ENV=value2
 To set environment variables using a `.env` file, use the example file `.env.example`
 in the root directory of your project and add the environment variables.
 
-## Running with Docker
+### Running with Docker
 
 You can also run the application with Docker.
 
