@@ -241,33 +241,3 @@ export const mockRadarData = [
     value: 10
   }
 ]
-
-/*
-    id: 1,
-    learningOrder: 1,
-    cardType: CardType.KANJI,
-    reviewType: ReviewType.RECOGNISE,
-    card: {
-      value: '車',
-      keyword: 'car',
-      answerOptions: [
-        {
-          option: 'car',
-          correct: true
-        },
-        {
-          option: 'airplane',
-          correct: false
-        },
-        {
-          option: 'boat',
-          correct: false
-        },
-        {
-          option: 'bicycle',
-          correct: false
-        }
-      ]
-    }
-  },
-*/

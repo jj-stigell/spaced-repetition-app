@@ -1,3 +1,4 @@
+/* eslint-disable padded-blocks */
 import React from 'react'
 
 import { AxiosError } from 'axios'
@@ -7,7 +8,6 @@ import { useTranslation } from 'react-i18next'
 import { useParams, useSearchParams } from 'react-router-dom'
 
 import CircularLoader from '../../components/CircularLoader'
-import { mockCards } from '../../mockData'
 import { AnswerOption, Card, ReviewType } from '../../types'
 import axios from '../../lib/axios'
 import { RootState } from '../../app/store'
@@ -55,7 +55,7 @@ function Study (): JSX.Element {
     if ((id !== undefined) && !isNaN(Number(id))) {
       axios.get(`api/v1/deck/${id}/cards`, { params: { language, onlyDue } })
         .then(function (response) {
-          const cards: Card[] = mockCards // response.data.data
+          const cards: Card[] = response.data.data
           if (cards.length > 0) {
             const firstCard: Card = cards.shift() as Card
             dispatch(setCards({ activeCard: firstCard, cards }))
