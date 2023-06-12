@@ -56,83 +56,32 @@ export type CardData = {
       strokeCount: number;
       createdAt: Date;
       updatedAt: Date;
+    },
+    vocabulary: {
+      id: number;
+      cardId: number;
+      word: string;
+      furigana: boolean;
+      reading: string;
+      readingRomaji: string;
+      jlptLevel: number;
+      createdAt: Date;
+      updatedAt: Date;
+    },
+    kana: {
+      id: number;
+      cardId: number;
+      kana: string;
+      romaji: string;
+      strokeCount: number;
+      createdAt: Date;
+      updatedAt: Date;
     }
   }
 }
 
 export function cardFormatter(rawCards: Array<CardData>): Array<StudyCard> {
-
-  /*
-        {
-            deckId: 1,
-            cardId: 1,
-            active: true,
-            learningOrder: 1,
-            reviewType: RECALL,
-            createdAt: Date,
-            updatedAt: Date,
-            DeckId: 1,
-            card: {
-                id: 1,
-                type: KANJI,
-                languageId: JP,
-                active: true,
-                createdAt: Date,
-                updatedAt: Date,
-                answer_options: [
-                    {
-                        id: 1,
-                        cardId: 1,
-                        languageId: EN,
-                        keyword: Mouth,
-                        options: [
-                            {
-                                option: mouth,
-                                correct: true,
-                                japanese: 口
-                            },
-                            {
-                                option: teeth,
-                                correct: false,
-                                japanese: 歯
-                            },
-                            {
-                                option: nose,
-                                correct: false,
-                                japanese: 鼻
-                            },
-                            {
-                                option: eye,
-                                correct: false,
-                                japanese: 目
-                            }
-                        ],
-                        createdAt: Date,
-                        updatedAt: Date,
-                        LanguageId: EN
-                    }
-                ],
-                kanji: {
-                    id: 1,
-                    cardId: 1,
-                    kanji: 口,
-                    jlptLevel: 5,
-                    onyomi: コウ、 ク,
-                    onyomiRomaji: kou, ku,
-                    kunyomi: くち,
-                    kunyomiRomaji: kuchi,
-                    strokeCount: 3,
-                    createdAt: Date,
-                    updatedAt: Date
-                },
-                vocabulary: null,
-                kana: null
-            }
-        },
-  */
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const formattedCards: Array<any> = rawCards.map((card: CardData) => {
+  const formattedCards: Array<StudyCard> = rawCards.map((card: CardData) => {
 
     const formattedCard: any = {
       id: card.cardId,
@@ -147,8 +96,10 @@ export function cardFormatter(rawCards: Array<CardData>): Array<StudyCard> {
       formattedCard.card = formatKanji(card.card, card.reviewType);
       break;
     case CardType.KANA:
+      formattedCard.card = formatKana(card.card, card.reviewType);
       break;
     case CardType.VOCABULARY:
+      formattedCard.card = formatVocab(card.card, card.reviewType);
       break;
     default:
       break;
@@ -185,139 +136,55 @@ function formatKanji(card: CardData['card'], reviewType: ReviewType): any {
   };
 }
 
-/*
-  card: {
-    id: number;
-    type: CardType;
-    languageId: string;
-    active: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-    answer_options: [
-      {
-        id: number;
-        languageId: string;
-        keyword: string;
-        options: Array<AnswerOption>;
-        createdAt: Date;
-        updatedAt: Date;
-      }
-    ],
-    kanji: {
-      id: number;
-      cardId: number;
-      kanji: string;
-      jlptLevel: number;
-      onyomi: string;
-      onyomiRomaji: string;
-      kunyomi: string;
-      kunyomiRomaji: string;
-      strokeCount: number;
-      createdAt: Date;
-      updatedAt: Date;
-    }
+function formatKana(card: CardData['card'], reviewType: ReviewType): any {
+  let answerOptions: any = null;
+
+  if (reviewType === ReviewType.RECOGNISE) {
+    answerOptions = card.answer_options[0].options.map((option: AnswerOption) => {
+      return {
+        option: option.option,
+        correct: option.correct
+      };
+    });
+  } else {
+    answerOptions = card.answer_options[0].options.map((option: AnswerOption) => {
+      return {
+        option: option.japanese,
+        correct: option.correct
+      };
+    });
   }
-*/
 
-
-
-/*
-export type StudyCard = {
-  id: number;
-  learningOrder: number;
-  cardType: CardType;
-  reviewType: ReviewType;
-  card: {
-    value: string;
-    keyword: string;
-    answerOptions: Array<AnswerOption>;
-  }
+  return {
+    value: card.kanji.kanji,
+    keyword: card.answer_options[0].keyword,
+    answerOptions
+  };
 }
 
 
+function formatVocab(card: CardData['card'], reviewType: ReviewType): any {
+  let answerOptions: any = null;
 
+  if (reviewType === ReviewType.RECOGNISE) {
+    answerOptions = card.answer_options[0].options.map((option: AnswerOption) => {
+      return {
+        option: option.option,
+        correct: option.correct
+      };
+    });
+  } else {
+    answerOptions = card.answer_options[0].options.map((option: AnswerOption) => {
+      return {
+        option: option.japanese,
+        correct: option.correct
+      };
+    });
+  }
 
-
-        {
-            deckId: 1,
-            cardId: 1,
-            active: true,
-            learningOrder: 1,
-            reviewType: RECALL,
-            createdAt: Date,
-            updatedAt: Date,
-            DeckId: 1,
-            card: {
-                id: 1,
-                type: KANJI,
-                languageId: JP,
-                active: true,
-                createdAt: Date,
-                updatedAt: Date,
-                answer_options: [
-                    {
-                        id: 1,
-                        cardId: 1,
-                        languageId: EN,
-                        keyword: Mouth,
-                        options: [
-                            {
-                                option: mouth,
-                                correct: true,
-                                japanese: 口
-                            },
-                            {
-                                option: teeth,
-                                correct: false,
-                                japanese: 歯
-                            },
-                            {
-                                option: nose,
-                                correct: false,
-                                japanese: 鼻
-                            },
-                            {
-                                option: eye,
-                                correct: false,
-                                japanese: 目
-                            }
-                        ],
-                        createdAt: Date,
-                        updatedAt: Date,
-                        LanguageId: EN
-                    }
-                ],
-                kanji: {
-                    id: 1,
-                    cardId: 1,
-                    kanji: 口,
-                    jlptLevel: 5,
-                    onyomi: コウ、 ク,
-                    onyomiRomaji: kou, ku,
-                    kunyomi: くち,
-                    kunyomiRomaji: kuchi,
-                    strokeCount: 3,
-                    createdAt: Date,
-                    updatedAt: Date
-                },
-                vocabulary: null,
-                kana: null
-            }
-        },
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  return {
+    value: card.kanji.kanji,
+    keyword: card.answer_options[0].keyword,
+    answerOptions
+  };
+}
