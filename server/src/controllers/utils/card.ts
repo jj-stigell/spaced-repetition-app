@@ -102,7 +102,7 @@ export function cardFormatter(rawCards: Array<CardData>): Array<StudyCard> {
       formattedCard.card = formatVocab(card.card, card.reviewType);
       break;
     default:
-      break;
+      throw new ApiError('card formatter error', HttpCode.InternalServerError);
     }
 
     return formattedCard;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import supertest from 'supertest';
 
 import { app } from '../../src/app';
@@ -61,10 +62,11 @@ describe(`Test GET ${CATEGORIES_URI} - get available categories`, () => {
         expect(res.body.errors).not.toBeDefined();
         expect(res.statusCode).toBe(HttpCode.Ok);
       }
-      await testEndpoint(memberUserCookies, 2);
-      await testEndpoint(adminReadCookies, 3);
-      await testEndpoint(adminWriteCookies, 4);
-      await testEndpoint(superuserCookies, 5);
+      // Only category N5 since not enough material produced for testing N4 to N1
+      //await testEndpoint(memberUserCookies, 2);
+      //await testEndpoint(adminReadCookies, 3);
+      //await testEndpoint(adminWriteCookies, 4);
+      await testEndpoint(memberUserCookies, 5);
     });
 
   it('should response with error if not logged in', async () => {
