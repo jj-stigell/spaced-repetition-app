@@ -17,7 +17,8 @@ import { resetDecks } from '../features/deckSlice'
 
 const languages = [
   { code: 'en', nativeName: 'English', flag: '🇬🇧' },
-  { code: 'fi', nativeName: 'Suomeksi', flag: '🇫🇮' }
+  { code: 'fi', nativeName: 'Suomeksi', flag: '🇫🇮' },
+  { code: 'vn', nativeName: 'Tiếng Việt', flag: '🇻🇳' }
 ]
 
 function LanguageSelector ({ callApi = false }: { callApi?: boolean }): JSX.Element {
