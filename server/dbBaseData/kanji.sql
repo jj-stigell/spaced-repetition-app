@@ -1,103 +1,104 @@
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (1,'口',5,'コウ、 ク','kou, ku','くち','kuchi',3, 1, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (2,'上',5,'ジョウ、 ショウ、 シャン','jou, shou, shan','うえ、 -うえ、 うわ-、 かみ、 あ.げる、 -あ.げる、 あ.がる、 -あ.がる、 あ.がり、 -あ.がり、 のぼ.る、 のぼ.り、 のぼ.せる、 のぼ.す、 たてまつ.る','ue, -ue, uwa-, kami, a.geru, -a.geru, a.garu, -a.garu, a.gari, -a.gari, nobo.ru, nobo.ri, noba.seru, noba.su, tatematsu.ru', 3, 2, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (3,'入',5,'ニュウ、 ジュ','nyuu, ju','い.る、 -い.る、 -い.り、 い.れる、 -い.れ、 はい.る','i.ru, -i.ru, -i.ri, i.reru, -i.re, hai.ru', 2, 3, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (4,'川',5,'セン','sen','かわ','kawa', 3, 4, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (5,'七',5,'シチ','shichi','なな、 なな.つ、 なの','nana, nana.tsu, nano', 2, 5, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (6,'二',5,'ニ、 ジ','ni, ji','ふた、 ふた.つ、 ふたたび','futa, futa.tsu, futatabi', 2, 6, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (7,'三',5,'サン、 ゾウ','san, zou','み、 み.つ、 みっ.つ','mi, mi.tsu, mit.tsu', 3, 7, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (8,'山',5,'サン、 セン','san ,sen','やま','yama', 3, 8, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (9,'女',5,'じょ','-','おんな','-', 3, 9, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (10,'大',5,'たい だい','-','おお','-', 3, 10, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (11,'九',5,'く きゅう','-','ここの','-','2', 11, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (12,'人',5,'にん じん','-','ひと','-','2', 12, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (13,'八',5,'はち','-','やっ よう','-','2', 13, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (14,'一',5,'イチ、 イツ','ichi, itsu','ひと-、 ひと.つ','hito-, hito.tsu','1', 14, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (15,'下',5,'か','-','した さ くだ','-','3', 15, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (16,'十',5,'ジュウ、 ジッ、 ジュッ','juu, ji, ju','とお、 と、 そ','too, to, so','2', 16, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (17,'火',5,'か','-','ひ','-','4', 17, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (18,'左',5,'-','-','ひだり','-','5', 18, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (19,'子',5,'し','-','こ','-','2', 19, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (20,'円',5,'えん','-','まる','-','4', 20, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (21,'四',5,'し','-','よん よっ','-','5', 21, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (22,'中',5,'ちゅう','-','なか','-','4', 22, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (23,'出',5,'しゅつ','-','で だ','-','5', 23, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (24,'本',5,'ほん','-','-','-','5', 24, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (25,'木',5,'ボク、 モク','boku, moku','き、 こ-','ki, ko-','4', 25, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (26,'千',5,'せん','-','ち','-','3', 26, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (27,'右',5,'-','-','みぎ','-','5', 27, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (28,'水',5,'すい','-','みず','-','5', 28, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (29,'白',5,'はく','-','しろ','-','5', 29, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (30,'立',5,'りつ','-','た.つ','-','5', 30, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (31,'小',5,'しょう','-','ちい こ','-','3', 31, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (32,'手',5,'-','-','て','-','4', 32, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (33,'目',5,'モク、 ボク','moku, boku','め、 -め、 ま-','me, -me, ma-','5', 33, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (34,'日',5,'にち に じつ','-','ひ か','-','4', 34, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (35,'月',5,'げつ がつ げっ','-','つき','-','4', 35, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (36,'六',5,'ろく','-','むっ むい','-','4', 36, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (37,'天',5,'てん','-','-','-','4', 37, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (38,'五',5,'ご','-','いつ','-','4', 38, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (39,'土',5,'ど','-','つち','-','3', 39, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (40,'丸',5,'-','-','まる','-','3', 40, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (41,'外',5,'がい','-','そと はず','-','5', 41, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (42,'生',5,'せい しょう','-','い なま う は','-','5', 42, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (43,'少',5,'しょう','-','すこ すく','-','4', 43, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (44,'万',5,'まん ばん','-','-','-','3', 44, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (45,'母',5,'ぼあ','-','はは','-','5', 45, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (46,'父',5,'とう','-','ちち','-','4', 46, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (47,'分',5,'ぶん ふん ぶ','-','わ','-','4', 47, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (48,'友',5,'ゆう','-','-','-','4', 48, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (49,'北',5,'ほく','-','きた','-','5', 49, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (50,'半',5,'はん','-','-','-','5', 50, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (51,'古',5,'コ','ko','ふる.い、 ふる-、 -ふる.す','furu.i, furu-, -furu.su','5', 51, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (52,'今',5,'こん こ','-','いま','-','4', 52, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (53,'午',5,'ご','-','-','-','4', 53, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (54,'足',5,'そく','-','あし た','-',NULL, 54, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (55,'名',5,'めい みょう','-','な','-',NULL, 55, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (56,'先',5,'せん','-','さき まず','-',NULL, 56, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (57,'車',5,'しゃ','-','くるま','-','7', 57, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (58,'花',5,'-','-','はな','-',NULL, 58, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (59,'休',5,'きゅう','-','やす','-',NULL, 59, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (60,'耳',5,'-','-','みみ','-',NULL, 60, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (61,'百',5,'ヒャク、 ビャク','hyaku, byaku','もも','momo','6', 61, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (62,'見',5,'けん','-','み','-',NULL, 62, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (63,'気',5,'き','-','-','-',NULL, 63, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (64,'男',5,'だん','-','おとこ','-',NULL, 64, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (65,'年',5,'ねん','-','とし','-',NULL, 65, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (66,'言',5,'げん','-','い','-',NULL, 66, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (67,'多',5,'た','-','おお','-',NULL, 67, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (68,'学',5,'がく','-','まな','-',NULL, 68, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (69,'行',5,'こう','-','い ゆ おこな','-',NULL, 69, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (70,'西',5,'せい','-','にし','-',NULL, 70, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (71,'雨',5,'-','-','あめ','-',NULL, 71, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (72,'空',5,'くう','-','そら','-',NULL, 72, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (73,'金',5,'きん','-','かね','-',NULL, 73, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (74,'社',5,'しゃ','-','やしろ','-',NULL, 74, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (75,'会',5,'かい','-','あ','-',NULL, 75, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (76,'毎',5,'まい','-','-','-',NULL, 76, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (77,'何',5,'-','-','なに なん','-',NULL, 77, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (78,'来',5,'らい','-','く','-',NULL, 78, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (79,'食',5,'しょく','-','た','-',NULL, 79, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (80,'国',5,'こく','-','くに','-',NULL, 80, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (81,'安',5,'あん','-','-','-',NULL, 81, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (82,'店',5,'てん','-','みせ','-',NULL, 82, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (83,'南',5,'なん','-','みなみ','-',NULL, 83, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (84,'前',5,'ぜん','-','まえ','-',NULL, 84, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (85,'長',5,'ちょう','-','なが','-',NULL, 85, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (86,'東',5,'とう','-','ひがし','-',NULL, 86, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (87,'後',5,'ご','-','うし.ろ あと','-',NULL, 87, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (88,'高',5,'こう','-','たか','-',NULL, 88, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (89,'時',5,'じ','-','とき','-',NULL, 89, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (90,'校',5,'こう','-','-','-',NULL, 90, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (91,'魚',5,'ぎょ','-','さかな','-',NULL, 91, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (92,'週',5,'しゅう','-','-','-',NULL, 92, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (93,'間',5,'かん けん','-','あいだ ま','-',NULL, 93, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (94,'買',5,'ばい','-','か','-',NULL, 94, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (95,'話',5,'わ','-','はな','-',NULL, 95, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (96,'電',5,'でん','-','-','-',NULL, 96, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (97,'新',5,'しん','-','あたら あら','-',NULL, 97, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (98,'読',5,'とう どく','-','よ','-',NULL, 98, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (99,'飲',5,'いん','-','の','-',NULL, 99, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (100,'聞',5,'ぶん','-','き.く','-',NULL, 100, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (101,'語',5,'ご','-','かた.る','-',NULL, 101, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (102,'書',5,'しょ','-','か','-',NULL, 102, NOW(), NOW());
-INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES (103,'駅',5,'えき','-','えき','-',NULL, 103, NOW(), NOW());
+INSERT INTO kanji(id,kanji,jlpt_level,onyomi,onyomi_romaji,kunyomi,kunyomi_romaji,stroke_count, card_id, created_at, updated_at) VALUES
+(1,'口',5,'コウ、 ク','kou, ku','くち','kuchi',3, 1, NOW(), NOW()),
+(2,'上',5,'ジョウ、 ショウ、 シャン','jou, shou, shan','うえ、 -うえ、 うわ-、 かみ、 あ.げる、 -あ.げる、 あ.がる、 -あ.がる、 あ.がり、 -あ.がり、 のぼ.る、 のぼ.り、 のぼ.せる、 のぼ.す、 たてまつ.る','ue, -ue, uwa-, kami, a.geru, -a.geru, a.garu, -a.garu, a.gari, -a.gari, nobo.ru, nobo.ri, noba.seru, noba.su, tatematsu.ru', 3, 2, NOW(), NOW()),
+(3,'入',5,'ニュウ、 ジュ','nyuu, ju','い.る、 -い.る、 -い.り、 い.れる、 -い.れ、 はい.る','i.ru, -i.ru, -i.ri, i.reru, -i.re, hai.ru', 2, 3, NOW(), NOW()),
+(4,'川',5,'セン','sen','かわ','kawa', 3, 4, NOW(), NOW()),
+(5,'七',5,'シチ','shichi','なな、 なな.つ、 なの','nana, nana.tsu, nano', 2, 5, NOW(), NOW()),
+(6,'二',5,'ニ、 ジ','ni, ji','ふた、 ふた.つ、 ふたたび','futa, futa.tsu, futatabi', 2, 6, NOW(), NOW()),
+(7,'三',5,'サン、 ゾウ','san, zou','み、 み.つ、 みっ.つ','mi, mi.tsu, mit.tsu', 3, 7, NOW(), NOW()),
+(8,'山',5,'サン、 セン','san ,sen','やま','yama', 3, 8, NOW(), NOW()),
+(9,'女',5,'じょ','-','おんな','-', 3, 9, NOW(), NOW()),
+(10,'大',5,'たい だい','-','おお','-', 3, 10, NOW(), NOW()),
+(11,'九',5,'く きゅう','-','ここの','-','2', 11, NOW(), NOW()),
+(12,'人',5,'にん じん','-','ひと','-','2', 12, NOW(), NOW()),
+(13,'八',5,'はち','-','やっ よう','-','2', 13, NOW(), NOW()),
+(14,'一',5,'イチ、 イツ','ichi, itsu','ひと-、 ひと.つ','hito-, hito.tsu','1', 14, NOW(), NOW()),
+(15,'下',5,'か','-','した さ くだ','-','3', 15, NOW(), NOW()),
+(16,'十',5,'ジュウ、 ジッ、 ジュッ','juu, ji, ju','とお、 と、 そ','too, to, so','2', 16, NOW(), NOW()),
+(17,'火',5,'か','-','ひ','-','4', 17, NOW(), NOW()),
+(18,'左',5,'-','-','ひだり','-','5', 18, NOW(), NOW()),
+(19,'子',5,'し','-','こ','-','2', 19, NOW(), NOW()),
+(20,'円',5,'えん','-','まる','-','4', 20, NOW(), NOW()),
+(21,'四',5,'し','-','よん よっ','-','5', 21, NOW(), NOW()),
+(22,'中',5,'ちゅう','-','なか','-','4', 22, NOW(), NOW()),
+(23,'出',5,'しゅつ','-','で だ','-','5', 23, NOW(), NOW()),
+(24,'本',5,'ほん','-','-','-','5', 24, NOW(), NOW()),
+(25,'木',5,'ボク、 モク','boku, moku','き、 こ-','ki, ko-','4', 25, NOW(), NOW()),
+(26,'千',5,'せん','-','ち','-','3', 26, NOW(), NOW()),
+(27,'右',5,'-','-','みぎ','-','5', 27, NOW(), NOW()),
+(28,'水',5,'すい','-','みず','-','5', 28, NOW(), NOW()),
+(29,'白',5,'はく','-','しろ','-','5', 29, NOW(), NOW()),
+(30,'立',5,'りつ','-','た.つ','-','5', 30, NOW(), NOW()),
+(31,'小',5,'しょう','-','ちい こ','-','3', 31, NOW(), NOW()),
+(32,'手',5,'-','-','て','-','4', 32, NOW(), NOW()),
+(33,'目',5,'モク、 ボク','moku, boku','め、 -め、 ま-','me, -me, ma-','5', 33, NOW(), NOW()),
+(34,'日',5,'にち に じつ','-','ひ か','-','4', 34, NOW(), NOW()),
+(35,'月',5,'げつ がつ げっ','-','つき','-','4', 35, NOW(), NOW()),
+(36,'六',5,'ろく','-','むっ むい','-','4', 36, NOW(), NOW()),
+(37,'天',5,'てん','-','-','-','4', 37, NOW(), NOW()),
+(38,'五',5,'ご','-','いつ','-','4', 38, NOW(), NOW()),
+(39,'土',5,'ど','-','つち','-','3', 39, NOW(), NOW()),
+(40,'丸',5,'-','-','まる','-','3', 40, NOW(), NOW()),
+(41,'外',5,'がい','-','そと はず','-','5', 41, NOW(), NOW()),
+(42,'生',5,'せい しょう','-','い なま う は','-','5', 42, NOW(), NOW()),
+(43,'少',5,'しょう','-','すこ すく','-','4', 43, NOW(), NOW()),
+(44,'万',5,'まん ばん','-','-','-','3', 44, NOW(), NOW()),
+(45,'母',5,'ぼあ','-','はは','-','5', 45, NOW(), NOW()),
+(46,'父',5,'とう','-','ちち','-','4', 46, NOW(), NOW()),
+(47,'分',5,'ぶん ふん ぶ','-','わ','-','4', 47, NOW(), NOW()),
+(48,'友',5,'ゆう','-','-','-','4', 48, NOW(), NOW()),
+(49,'北',5,'ほく','-','きた','-','5', 49, NOW(), NOW()),
+(50,'半',5,'はん','-','-','-','5', 50, NOW(), NOW()),
+(51,'古',5,'コ','ko','ふる.い、 ふる-、 -ふる.す','furu.i, furu-, -furu.su','5', 51, NOW(), NOW()),
+(52,'今',5,'こん こ','-','いま','-','4', 52, NOW(), NOW()),
+(53,'午',5,'ご','-','-','-','4', 53, NOW(), NOW()),
+(54,'足',5,'そく','-','あし た','-',NULL, 54, NOW(), NOW()),
+(55,'名',5,'めい みょう','-','な','-',NULL, 55, NOW(), NOW()),
+(56,'先',5,'せん','-','さき まず','-',NULL, 56, NOW(), NOW()),
+(57,'車',5,'しゃ','-','くるま','-','7', 57, NOW(), NOW()),
+(58,'花',5,'-','-','はな','-',NULL, 58, NOW(), NOW()),
+(59,'休',5,'きゅう','-','やす','-',NULL, 59, NOW(), NOW()),
+(60,'耳',5,'-','-','みみ','-',NULL, 60, NOW(), NOW()),
+(61,'百',5,'ヒャク、 ビャク','hyaku, byaku','もも','momo','6', 61, NOW(), NOW()),
+(62,'見',5,'けん','-','み','-',NULL, 62, NOW(), NOW()),
+(63,'気',5,'き','-','-','-',NULL, 63, NOW(), NOW()),
+(64,'男',5,'だん','-','おとこ','-',NULL, 64, NOW(), NOW()),
+(65,'年',5,'ねん','-','とし','-',NULL, 65, NOW(), NOW()),
+(66,'言',5,'げん','-','い','-',NULL, 66, NOW(), NOW()),
+(67,'多',5,'た','-','おお','-',NULL, 67, NOW(), NOW()),
+(68,'学',5,'がく','-','まな','-',NULL, 68, NOW(), NOW()),
+(69,'行',5,'こう','-','い ゆ おこな','-',NULL, 69, NOW(), NOW()),
+(70,'西',5,'せい','-','にし','-',NULL, 70, NOW(), NOW()),
+(71,'雨',5,'-','-','あめ','-',NULL, 71, NOW(), NOW()),
+(72,'空',5,'くう','-','そら','-',NULL, 72, NOW(), NOW()),
+(73,'金',5,'きん','-','かね','-',NULL, 73, NOW(), NOW()),
+(74,'社',5,'しゃ','-','やしろ','-',NULL, 74, NOW(), NOW()),
+(75,'会',5,'かい','-','あ','-',NULL, 75, NOW(), NOW()),
+(76,'毎',5,'まい','-','-','-',NULL, 76, NOW(), NOW()),
+(77,'何',5,'-','-','なに なん','-',NULL, 77, NOW(), NOW()),
+(78,'来',5,'らい','-','く','-',NULL, 78, NOW(), NOW()),
+(79,'食',5,'しょく','-','た','-',NULL, 79, NOW(), NOW()),
+(80,'国',5,'こく','-','くに','-',NULL, 80, NOW(), NOW()),
+(81,'安',5,'あん','-','-','-',NULL, 81, NOW(), NOW()),
+(82,'店',5,'てん','-','みせ','-',NULL, 82, NOW(), NOW()),
+(83,'南',5,'なん','-','みなみ','-',NULL, 83, NOW(), NOW()),
+(84,'前',5,'ぜん','-','まえ','-',NULL, 84, NOW(), NOW()),
+(85,'長',5,'ちょう','-','なが','-',NULL, 85, NOW(), NOW()),
+(86,'東',5,'とう','-','ひがし','-',NULL, 86, NOW(), NOW()),
+(87,'後',5,'ご','-','うし.ろ あと','-',NULL, 87, NOW(), NOW()),
+(88,'高',5,'こう','-','たか','-',NULL, 88, NOW(), NOW()),
+(89,'時',5,'じ','-','とき','-',NULL, 89, NOW(), NOW()),
+(90,'校',5,'こう','-','-','-',NULL, 90, NOW(), NOW()),
+(91,'魚',5,'ぎょ','-','さかな','-',NULL, 91, NOW(), NOW()),
+(92,'週',5,'しゅう','-','-','-',NULL, 92, NOW(), NOW()),
+(93,'間',5,'かん けん','-','あいだ ま','-',NULL, 93, NOW(), NOW()),
+(94,'買',5,'ばい','-','か','-',NULL, 94, NOW(), NOW()),
+(95,'話',5,'わ','-','はな','-',NULL, 95, NOW(), NOW()),
+(96,'電',5,'でん','-','-','-',NULL, 96, NOW(), NOW()),
+(97,'新',5,'しん','-','あたら あら','-',NULL, 97, NOW(), NOW()),
+(98,'読',5,'とう どく','-','よ','-',NULL, 98, NOW(), NOW()),
+(99,'飲',5,'いん','-','の','-',NULL, 99, NOW(), NOW()),
+(100,'聞',5,'ぶん','-','き.く','-',NULL, 100, NOW(), NOW()),
+(101,'語',5,'ご','-','かた.る','-',NULL, 101, NOW(), NOW()),
+(102,'書',5,'しょ','-','か','-',NULL, 102, NOW(), NOW()),
+(103,'駅',5,'えき','-','えき','-',NULL, 103, NOW(), NOW());
