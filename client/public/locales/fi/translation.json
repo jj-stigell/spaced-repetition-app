@@ -1,5 +1,5 @@
 {
-  "title": "Yomiko SRS-sovellus japanin opiskeluun",
+  "title": "Yomiko SRS-sovellus japanin kielen oppimiseen",
   "navbar": {
     "dashboard": "Etusivu",
     "study": "Opiskelu",
@@ -10,7 +10,7 @@
     "news": "Uutiset",
     "settings": "Asetukset",
     "account": "Tili",
-    "decks": "Korttipakat",
+    "decks": "Pakat",
     "logout": "Kirjaudu ulos",
     "jlptLevel": "JLPT-taso"
   },
@@ -18,53 +18,54 @@
     "dashboard": {
       "title": "Tämä on etusivu",
       "jlptSelectorButton": "JLPT N{{level}} - Klikkaa vaihtaaksesi",
-      "goToStudyButton": "Siirry opiskeluun"
+      "goToStudyButton": "Siirry opiskelemaan",
+      "revHistoryTitle": "Kertaushistoria ja tulevat kertaukset"
     },
     "login": {
-      "title": "Kirjaudu sisään tilillesi",
+      "title": "Kirjaudu sisään tiliisi",
       "lastLogin": "Viimeisin kirjautuminen",
       "logInButton": "Kirjaudu sisään",
       "welcomeBack": "Tervetuloa takaisin!",
-      "enterCredentials": "Syötä tunnistetietosi jatkaaksesi",
+      "enterCredentials": "Syötä kirjautumistietosi jatkaaksesi",
       "rememberMe": "Muista minut",
-      "resendVerificationLink": "Lähetä vahvistus uudelleen",
+      "resendVerificationLink": "Lähetä uudelleen vahvistuslinkki",
       "linkToLogin": "Palaa kirjautumissivulle, klikkaa tästä.",
-      "emailNotVerifiedMessage": "Sähköpostiosoite ei ole vahvistettu. Tarkista sähköpostisi vahvistuslinkkiä varten, tarkista myös roskapostikansio. Jos et ole saanut linkkiä, voit lähettää vahvistuslinkin uudelleen tästä:"
+      "emailNotVerifiedMessage": "Sähköpostiosoitetta ei ole vahvistettu. Tarkista sähköpostisi vahvistuslinkkiä varten, tarkista myös roskapostikansio. Jos et ole saanut linkkiä, voit lähettää uuden vahvistuslinkin täältä:"
     },
     "register": {
-      "title": "Luo uusi tili ja aloita opiskelu",
+      "title": "Luo uusi tili ja aloita oppiminen",
       "successTitle": "Uusi tili luotu!",
-      "success": "Uusi käyttäjä luotiin onnistuneesti sähköpostiosoitteella {{email}}. Lähetimme sinulle vahvistuslinkin sähköpostitse (tarkista tarvittaessa roskapostikansio), vahvista sähköpostisi ja aloita opiskelu. Uudelleenohjataan kirjautumissivulle {{redirectTimeout}} sekunnin kuluttua.",
+      "success": "Uusi käyttäjä luotiin onnistuneesti sähköpostiosoitteella {{email}}. Lähetimme sinulle vahvistuslinkin sähköpostitse (tarkista tarvittaessa myös roskapostikansio), vahvista sähköpostisi ja aloita oppiminen. Uudelleenohjataan kirjautumissivulle {{redirectTimeout}} sekunnin kuluttua.",
       "registerButton": "Rekisteröidy",
-      "noAccount": "Ei käyttäjätiliä? Luo tili",
+      "noAccount": "Eikö sinulla ole tiliä? Rekisteröidy",
       "haveAccount": "Onko sinulla jo tili?",
-      "enterCreds": "Syötä tunnistetietosi jatkaaksesi",
+      "enterCreds": "Syötä kirjautumistietosi jatkaaksesi",
       "agreeWith": "Olen lukenut ja hyväksyn",
-      "TOS": "palveluehdot",
+      "TOS": "Käyttöehdot",
       "cancelSuccessDisplay": "Jos haluat palata rekisteröintilomakkeeseen, klikkaa tästä"
     },
     "confirm": {
       "title": "Vahvista sähköpostiosoite",
       "successTitle": "Sähköpostiosoite vahvistettu!",
-      "failureTitle": "Sähköpostiosoite vahvistus epäonnistui",
-      "success": "Sähköpostiosoitteen vahvistus onnistui. Uudelleenohjataan kirjautumissivulle {{redirectTimeout}} sekunnin kuluttua.",
+      "failureTitle": "Sähköpostiosoitteen vahvistaminen epäonnistui",
+      "success": "Sähköpostiosoitteesi vahvistus onnistui. Uudelleenohjataan kirjautumissivulle {{redirectTimeout}} sekunnin kuluttua.",
       "resend": {
         "resendConfirmButton": "Lähetä vahvistuskoodi uudelleen",
         "resendConfirmDescription": "Vahvistus epäonnistui, lähetä vahvistuskoodi uudelleen syöttämällä sähköpostiosoitteesi alle.",
-        "resendSuccess": "Uusi vahvistuskoodi lähetetty sähköpostiositteeseen {{email}}. Uudelleenohjataan kirjautumissivulle {{redirectTimeout}} sekunnin kuluttua."
+        "resendSuccess": "Uusi vahvistuskoodi lähetetty sähköpostiosoitteeseen {{email}}. Uudelleenohjataan kirjautumissivulle {{redirectTimeout}} sekunnin kuluttua."
       }
     },
     "password": {
       "forgotPassword": {
-        "title": "Nollaa tilin salasana",
-        "resetDescription": "Nollataksesi tilin salasanan, syötä sähköpostiosoite, jota käytät tililläsi, alla olevaan kenttään.",
-        "successTitle": "Salasanan nollauslinkki lähetetty onnistuneesti. Tarkista sähköpostisi saapuneet-kansiosta.",
-        "failureTitle": "Sähköpostiosoitteen vahvistus epäonnistui",
-        "resetButton": "Lähetä nollauslinkki"
+        "title": "Nollaa tilisi salasana",
+        "resetDescription": "Nollataksesi tilisi salasanan, syötä sähköpostiosoitteesi alla olevaan kenttään.",
+        "successTitle": "Salasanan palautuslinkki lähetetty onnistuneesti. Tarkista sähköpostisi saapuneet-kansiosta.",
+        "failureTitle": "Sähköpostiosoitteen vahvistaminen epäonnistui",
+        "resetButton": "Lähetä palautuslinkki"
       },
       "resetPassword": {
         "title": "Aseta uusi salasana",
-        "resetDescription": "Syötä uusi salasana ja salasanan vahvistus alle ja lähetä vaihtaaksesi salasanan",
+        "resetDescription": "Syötä uusi salasana ja salasanan vahvistus alla oleviin kenttiin ja lähetä muutospyyntö.",
         "successTitle": "Salasana vaihdettu onnistuneesti. Uudelleenohjataan kirjautumissivulle {{redirectTimeout}} sekunnin kuluttua.",
         "failureTitle": "Salasanan päivitys epäonnistui, yritä uudelleen.",
         "resetButton": "Aseta uusi salasana"
@@ -72,53 +73,90 @@
     },
     "notFound": {
       "title":"Hups!",
-      "description":"Valitettavasti sivua, jota yritit avata, ei löytynyt.",
-      "link": "Klikkaa palataksesi pääsivulle"
+      "description":"Valitettavasti yritettyäsi päästä sivulle ei löydy.",
+      "link": "Palaa takaisin pääsivulle"
     },
     "error": {
       "title":"Hups!",
       "description":"Valitettavasti tapahtui odottamaton virhe.",
-      "errorMessage":"Tapahtui virhe: ",
-      "link": "Klikkaa palataksesi pääsivulle",
+      "errorMessage":"Seuraava virhe ilmeni: ",
+      "link": "Palaa takaisin pääsivulle",
       "unknowError": "Tuntematon virhe"
     },
     "settings": {
       "title": "Profiili ja asetukset",
       "accountInformation": {
-        "title": "Tilitiedot",
+        "title": "Tilin tiedot",
         "username": "Käyttäjänimi",
         "email": "Sähköpostiosoite",
         "memberStatus": "Jäsenen tila",
         "active": "Aktiivinen",
         "expired": "Vanhentunut",
-        "languageSelectorTitle": "Valitse käyttöliittymän ja opiskelumateriaalin kieli.",
-        "languageSelectorInfo": "Valittua kieltä käytetään oletus kielenä opiskelussa. Jos opiskelumateriaali ei ole saatavilla valitulla kielellä, käytetään englannin kieltä sen tilalla."
+        "languageSelectorTitle": "Valitse käyttöliittymän ja opiskelukielen",
+        "languageSelectorInfo": "Tätä arvoa käytetään opiskelukielenä oletuksena. Jos opetusmateriaalia ei ole saatavilla valitsemallasi kielellä, oletusopiskelukieli asetetaan englanniksi."
       },
       "changePassword": {
         "title": "Vaihda salasana",
         "button": "Vaihda salasana",
-        "passwordChangeSuccess": "Salasana vaihdettu onnistuneesti"
+        "passwordChangeSuccess": "Salasanan vaihto onnistui"
       }
     },
     "categories": {
-      "CUSTOM": "Omat korttipakat",
-      "returnButton": "Palaa etusivulle"
+      "kanji": {
+        "title": "N{{jlptLevel}} kanji-merkkiä",
+        "description": "Opettele kaikki N{{jlptLevel}} kanji-merkkiä, saatavilla {{amount}} pakkaa opiskelua varten."
+      },
+      "kana": {
+        "title": "N{{jlptLevel}} kana-merkkiä",
+        "description": "Opettele kaikki N{{jlptLevel}} kana-merkkiä, saatavilla {{amount}} pakkaa opiskelua varten."
+      },
+      "vocabulary": {
+        "title": "N{{jlptLevel}} sanastoa",
+        "description": "Opettele kaikki N{{jlptLevel}} sanastoa hauskasti ja helposti, saatavilla {{amount}} pakkaa opiskelua varten."
+      },
+      "grammar": {
+        "title": "N{{jlptLevel}} kielioppia",
+        "description": "Opettele kaikki N{{jlptLevel}} kielioppiasiaa tehokkaasti, saatavilla {{amount}} pakkaa opiskelua varten."
+      },
+      "returnButton": "Palaa etusivulle",
+      "studyButton": "Opiskele",
+      "missing": "Kategoriaa ei löydy"
     },
     "decks": {
-      "title": "Saatavilla olevat korttipakat",
-      "returnButton": "Palaa kategoria-valintaan"
+      "title": "Saatavilla olevat pakat",
+      "deck": {
+        "translationAvailable": "Käännös saatavilla",
+        "translationNotAvailable": "Käännös ei saatavilla, käytetään englantia"
+      },
+      "returnButton": "Palaa kategorian valintaan",
+      "studyButton": "Aloita opiskelu"
     },
     "review": {
-      "loadingMessage": "Ladataan kortteja",
+      "loadingMessage": "Korttien lataus",
+      "view": {
+        "nextCardButton": "Seuraava kortti",
+        "answerOptionsTab": {
+          "button": "Vastausvaihtoehdot"
+        },
+        "detailsOptionsTab": {
+          "button": "Tiedot"
+        },
+        "dialMenu": {
+          "backToDeck": "Palaa pakkojen valintaan",
+          "bugReport": "Lähetä vikailmoitus"
+        }
+      },
       "reviewFinished": {
-        "title": "Kaikki kortit kertausta varten suoritettu, hyvin tehty!",
-        "redirectMessage": "Uudelleenohjataan takaisin korttipakka-sivulle {{count}} sekunnin kuluttua",
-        "redirectImmediately": "Klikkaa alla olevaa linkkiä siirtyäksesi välittömästi:",
-        "redirectLink": "Palaa korttipakkoihin"
+        "title": "Kaikki kortit käyty läpi, hyvin tehty!",
+        "redirectMessage": "Uudelleenohjataan takaisin pakkasivulle {{count}} sekunnin kuluttua",
+        "redirectImmediately": "Klikkaa alla olevaa linkkiä siirtyäksesi heti:",
+        "redirectLink": "Palaa pakkoihin"
+
+
       },
       "buttons": {
         "result": {
-          "again": "Uudelleen",
+          "again": "Uudestaan",
           "hard": "Vaikea",
           "easy": "Helppo"
         }
@@ -135,9 +173,6 @@
         },
         "edit": {
           "title": "Muokkaa"
-        },
-        "bugReport": {
-          "title": "Virheilmoitus"
         }
       }
     }
@@ -147,20 +182,34 @@
       "title": "Valitse JLPT-taso"
     },
     "studySelector": {
-      "title": "Valitse opiskelutyylisi",
-      "studyDueAndNew": "Vain uudet ja kertauksessa olevat kortit",
+      "title": "Valitse opiskelutyyli",
+      "studyDueAndNew": "Vain uudet ja määräaikaan tulleet kortit",
       "studyAll": "Kaikki kortit"
     },
     "tos": {
-      "title": "Palveluehdot (saatavilla vain englanniksi)",
+      "title": "Käyttöehdot (saatavilla vain englanniksi)",
       "lastUpdated": "Viimeksi päivitetty",
       "closeButton": "Sulje"
+    },
+    "bugReport": {
+      "title": "Lähetä uusi vikailmoitus, täytä kaikki kentät ja klikkaa lähetä. Kiitos!",
+      "sendSuccess": "Kiitos vikailmoituksen lähettämisestä! Tämä auttaa meitä tarjoamaan paremman käyttökokemuksen! Voit sulkea tämän ikkunan klikkaamalla sulje.",
+      "sendButton": "Lähetä ilmoitus",
+      "closeButton": "Sulje",
+      "description": "Kuvaile vika",
+      "category": {
+        "title": "Valitse vikakategoria",
+        "translation": "Virheellinen käännös",
+        "ui": "Käyttöliittymä",
+        "functionality": "Toiminnallisuus",
+        "other": "Muu"
+      }
     }
   },
   "stats": {
     "radarChart": {
       "title": "JLPT N{{level}} edistyminen",
-      "studyTip": "Suoriudut heikoimmin kategoriassa {{category}}, harkitse lisäopiskelua.",
+      "studyTip": "Suorituksesi on heikoin kategoriassa {{category}}, harkitse lisäopiskelua.",
       "labels": {
         "kanji": "Kanji",
         "kana": "Kana",
@@ -173,23 +222,23 @@
   },
   "deck": {
     "settings": {
-      "title": "Korttipakan asetukset:",
+      "title": "Pakan asetukset:",
       "dayoff": "Vapaapäivä",
       "settings": "Asetukset",
       "optimize": "Optimoi",
-      "favorite": "Suosikkikorttipakka:",
+      "favorite": "Suosikkipakka:",
       "newCardsPerDay": "Uusia kortteja päivässä:",
-      "reviewInterval": "Enimmäisväli kertauksissa:",
-      "reviewsPerDay": "Enimmäismäärä kertauksia päivässä:",
-      "favoriteInfo": "Jos asetat korttipakan suosikiksi, se näkyy etusivulla, mikä helpottaa pääsyä siihen.",
-      "newCardsPerDayInfo": "Kuinka monta uutta korttia haluat käydä läpi tästä korttipakasta päivittäin? Voit asettaa arvon väliltä {{minNewReviews}} - {{maxNewReviews}}",
-      "reviewIntervalInfo": "Kertausväli on maksimiaika kertausten välillä. Voit asettaa arvon väliltä {{minReviewInterval}} - {{maxReviewInterval}}",
-      "reviewsPerDayInfo": "Kuinka monta kertausta haluat tehdä päivittäin tästä korttipakasta? Voit asettaa arvon väliltä {{minLimitReviews}} - {{maxLimitReviews}}",
+      "reviewInterval": "Enimmäisarvioinnin väli:",
+      "reviewsPerDay": "Enimmäismäärä arviointeja päivässä:",
+      "favoriteInfo": "Jos valitset pakan suosikiksi, se näkyy etusivulla, mikä helpottaa pääsyä siihen.",
+      "newCardsPerDayInfo": "Kuinka monta uutta korttia haluat käydä läpi tästä pakasta päivittäin? Välillä {{minNewReviews}} - {{maxNewReviews}}",
+      "reviewIntervalInfo": "Arviointiväli on maksimiaika arviointien välillä. Välillä {{minReviewInterval}} - {{maxReviewInterval}}",
+      "reviewsPerDayInfo": "Kuinka monta arviointia haluat tehdä tästä pakasta päivittäin? Välillä {{minLimitReviews}} - {{maxLimitReviews}}",
       "settingsChangeSuccess": "Asetukset päivitetty onnistuneesti!",
-      "settingsChangeError": "Virhe asetusten päivittämisessä!"
+      "settingsChangeError": "Virhe päivitettäessä asetuksia!"
     },
-    "dueAndNewCards": "Kortit erääntyneet: {{old}} vanhaa, {{new}} uutta",
-    "onlyNewCards": "Kortit erääntyneet: {{new}} uutta"
+    "dueAndNewCards": "Erääntyneet kortit: {{old}} vanhat, {{new}} uudet",
+    "onlyNewCards": "Erääntyneet kortit: {{new}} uudet"
   },
   "buttonGeneral": {
     "delete": "Poista",
@@ -199,11 +248,11 @@
     "update": "Päivitä"
   },
   "notification": {
-    "success": "Onnistuminen",
+    "success": "Onnistui",
     "error": "Virhe"
   },
   "session": {
-    "id": "Tunnus",
+    "id": "Tunniste",
     "browser": "Selain",
     "os": "Käyttöjärjestelmä",
     "device": "Laite",
@@ -211,12 +260,12 @@
     "expireAt": "Vanhenee",
     "delete": "Poista istunto",
     "current": "nykyinen istunto",
-    "sessionWarning": "Tämä on nykyinen istunto tällä laitteella. Jos poistat tämän, kirjaudut ulos tästä laitteesta."
+    "sessionWarning": "Tämä on nykyinen istunto tällä laitteella. Jos poistat tämän, sinut kirjataan ulos tästä laitteesta."
   },
   "passwordStrength": {
     "poor": "Heikko",
-    "weak": "Vaillinainen",
-    "normal": "Kohtalainen",
+    "weak": "Vaimea",
+    "normal": "Normaali",
     "good": "Hyvä",
     "strong": "Vahva"
   },
@@ -225,64 +274,64 @@
     "email": "Sähköpostiosoite",
     "password": "Salasana",
     "passwordConfirm": "Vahvista salasana",
-    "passwordForgot": "Unohditko salasanan?",
+    "passwordForgot": "Unohtuiko salasana?",
     "currentPassword": "Nykyinen salasana",
     "newPassword": "Uusi salasana",
     "confirmNewPassword": "Vahvista uusi salasana",
     "warning": "Varoitus!",
     "clickHere": "klikkaa tästä",
-    "redirectMessage": "Jos sivu ei ohjaa automaattisesti, "
+    "redirectMessage": "Jos sivu ei uudelleenohjaa automaattisesti, "
   },
   "placeholder": {
     "username": "esim. Käyttäjä23494",
     "email": "Sähköpostisi",
-    "password": "Salasana",
+    "password": "Salasanasi",
     "passwordConfirm": "Salasanan vahvistus"
   },
   "construction": {
-    "title": "Sivusto rakenteilla",
-    "body1": "Kiitos vierailustasi verkkosivuillamme. Olemme tällä hetkellä rakentamassa ja suunnittelemassa uutta verkkosivustoamme ja pahoittelemme mahdollisia häiriöitä.",
-    "body2": "Teemme kovasti töitä tuodaksemme sinulle täysin toimivan ja käyttäjäystävällisen verkkosivuston mahdollisimman pian. Toistaiseksi pyydämme kärsivällisyyttä tässä prosessissa.",
-    "body3": "Tarkista pian uudelleen nähdäksesi valmiin tuotteen."
+    "title": "Sivusto on rakenteilla",
+    "body1": "Kiitos käynnistä verkkosivustollamme. Olemme tällä hetkellä rakentamassa ja suunnittelemassa uutta verkkosivustoamme ja pahoittelemme aiheutuvaa haittaa.",
+    "body2": "Teemme kovasti töitä tuodaksemme teille täysin toimivan ja käyttäjäystävällisen verkkosivuston mahdollisimman pian. Sillä välin pyydämme kärsivällisyyttä, kunnes työ valmistuu.",
+    "body3": "Tarkista pian valmis tuote."
   },
   "errors": {
     "ERR_ACCEPT_TOS_REQUIRED": "Käyttöehtojen hyväksyminen on pakollista.",
     "ERR_CHECK_CONNECTION": "Jotain meni pieleen, tarkista yhteys ja yritä uudelleen.",
     "ERR_CONFIRMATION_CODE_EXPIRED": "Vahvistuskoodi on vanhentunut.",
-    "ERR_CONFIRMATION_CODE_NOT_FOUND": "Vahvistuskoodia ei löydy.",
+    "ERR_CONFIRMATION_CODE_NOT_FOUND": "Vahvistuskoodia ei löytynyt.",
     "ERR_CONFIRMATION_CODE_REQUIRED": "Vahvistuskoodi vaaditaan.",
     "ERR_DATE_REQUIRED": "Päivämäärä vaaditaan",
-    "ERR_DECK_EMPTY": "Pyydetystä korttipakasta ei löytynyt kortteja.",
-    "ERR_DECK_ID_MISSING_OR_INVALID": "Annettu korttipakan tunniste on virheellinen tai puuttuu. Älä yritä käyttää korttipakkoja URL-kentän kautta.",
+    "ERR_DECK_EMPTY": "Pyydetystä pakasta ei löytynyt kortteja.",
+    "ERR_DECK_ID_MISSING_OR_INVALID": "Annettu pakka-tunniste on virheellinen tai puuttuu, älä yritä päästä pakkoihin URL-kentän kautta.",
     "ERR_EMAIL_ALREADY_CONFIRMED": "Sähköpostiosoite on jo vahvistettu.",
     "ERR_EMAIL_IN_USE": "Sähköpostiosoite on jo käytössä, valitse toinen.",
     "ERR_EMAIL_NOT_CONFIRMED": "Sähköpostiosoite ei ole vahvistettu.",
-    "ERR_EMAIL_NOT_FOUND": "Sähköpostia ei löydy.",
+    "ERR_EMAIL_NOT_FOUND": "Sähköpostia ei löytynyt.",
     "ERR_EMAIL_OR_PASSWORD_INCORRECT": "Sähköpostiosoite tai salasana on virheellinen.",
     "ERR_EMAIL_REQUIRED": "Sähköpostiosoite vaaditaan.",
     "ERR_EMAIL_TOO_LONG": "Sähköpostiosoite on liian pitkä.",
     "ERR_FORBIDDEN": "Kielletty.",
-    "ERR_INPUT_TYPE": "Virheellinen syöttötyyppi.",
-    "ERR_INPUT_VALUE_MISSING": "Syöttöarvo puuttuu.",
-    "ERR_INVALID_DATE": "Virheellinen päivämäärä.",
-    "ERR_INVALID_JLPT_LEVEL": "Virheellinen JLPT-taso.",
+    "ERR_INPUT_TYPE": "Virheellinen syötetyyppi.",
+    "ERR_INPUT_VALUE_MISSING": "Syötearvo puuttuu.",
+    "ERR_INVALID_DATE": "Virheellinen päivämääräarvo.",
+    "ERR_INVALID_JLPT_LEVEL": "Annettu JLPT-taso ei ole olemassa.",
     "ERR_INVALID_LANGUAGE_ID": "Valittu kieli ei ole saatavilla.",
-    "ERR_MEMBER_FEATURE": "Tämä toiminto on saatavilla vain jäsenille.",
-    "ERR_NOT_VALID_EMAIL": "Sähköpostiosoite ei ole kelvollinen.",
+    "ERR_MEMBER_FEATURE": "Tämä ominaisuus on saatavilla vain jäsenille.",
+    "ERR_NOT_VALID_EMAIL": "Sähköpostiosoite ei ole validi.",
     "ERR_PASSWORD_CURRENT_AND_NEW_EQUAL": "Nykyinen ja uusi salasana eivät voi olla samat.",
     "ERR_PASSWORD_CURRENT_INCORRECT": "Nykyinen salasana on virheellinen.",
     "ERR_PASSWORD_CONFIRMATION_REQUIRED": "Salasanan vahvistus vaaditaan.",
-    "ERR_PASSWORD_LOWERCASE": "Salasanassa on oltava pieniä kirjaimia.",
+    "ERR_PASSWORD_LOWERCASE": "Salasanassa täytyy olla pieniä kirjaimia.",
     "ERR_PASSWORD_MISMATCH": "Salasana ja vahvistus eivät täsmää.",
-    "ERR_PASSWORD_NUMBER": "Salasanassa on oltava numeroita.",
+    "ERR_PASSWORD_NUMBER": "Salasanassa täytyy olla numeroita",
     "ERR_PASSWORD_REQUIRED": "Salasana vaaditaan.",
     "ERR_PASSWORD_TOO_LONG": "Salasana on liian pitkä.",
     "ERR_PASSWORD_TOO_SHORT": "Salasana on liian lyhyt.",
-    "ERR_PASSWORD_UPPERCASE": "Salasanassa on oltava isoja kirjaimia.",
-    "ERR_RESULT_TYPE_REQUIRED": "Kertauksen tulostyyppi vaaditaan.",
+    "ERR_PASSWORD_UPPERCASE": "Salasanassa täytyy olla isoja kirjaimia.",
+    "ERR_RESULT_TYPE_REQUIRED": "Arvostelun tyyppi vaaditaan.",
     "ERR_TOS_NOT_ACCEPTED": "Käyttöehtoja ei ole hyväksytty.",
     "ERR_UNAUTHORIZED": "Luvaton.",
-    "ERR_UNAUTHENTICATED": "Tunnistamaton.",
+    "ERR_UNAUTHENTICATED": "Todennus epäonnistui.",
     "ERR_USERNAME_IN_USE": "Käyttäjänimi on jo käytössä, valitse toinen.",
     "ERR_USERNAME_REQUIRED": "Käyttäjänimi vaaditaan.",
     "ERR_USERNAME_TOO_LONG": "Käyttäjänimi on liian pitkä.",

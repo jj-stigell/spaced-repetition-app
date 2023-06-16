@@ -107,7 +107,6 @@ INSERT INTO answer_option(card_id,language_id,keyword,created_at,updated_at,opti
 (101,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (102,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (103,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-
 -- NOT OK
 (104,'EN','To meet',NOW(),NOW(),'[{ "option": "to meet", "japanese": "会う", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (105,'EN','Blue (color)',NOW(),NOW(),'[{ "option": "blue (color)", "japanese": "青", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
@@ -129,6 +128,38 @@ INSERT INTO answer_option(card_id,language_id,keyword,created_at,updated_at,opti
 (121,'EN','Warm',NOW(),NOW(),'[{ "option": "warm", "japanese": "暖かい", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (122,'EN','Head',NOW(),NOW(),'[{ "option": "head", "japanese": "頭", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (123,'EN','New',NOW(),NOW(),'[{ "option": "new", "japanese": "新しい", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
+
+
+
+(144,'あれ',NULL,'are',5,NOW(),NOW(),'FALSE'),
+(145,'よい',NULL,'yoi',5,NOW(),NOW(),'FALSE'),
+(146,'いいえ',NULL,'iie',5,NOW(),NOW(),'FALSE'),
+(147,'言う','いう','i.u',5,NOW(),NOW(),'TRUE'),
+(148,'家','いえ','ie',5,NOW(),NOW(),'TRUE'),
+(149,'いかが',NULL,'ikaga',5,NOW(),NOW(),'FALSE'),
+(150,'行く','いく','i.ku',5,NOW(),NOW(),'TRUE'),
+(151,'いくつ',NULL,'ikutsu',5,NOW(),NOW(),'FALSE'),
+(152,'いくら',NULL,'ikura',5,NOW(),NOW(),'FALSE'),
+(153,'池','いけ','ike',5,NOW(),NOW(),'TRUE'),
+(154,'医者','いしゃ','isha',5,NOW(),NOW(),'TRUE'),
+(155,'いす',NULL,'isu',5,NOW(),NOW(),'FALSE'),
+(156,'忙しい','いそがしい','isoka.shii',5,NOW(),NOW(),'TRUE'),
+(157,'痛い','いたい','ita.i',5,NOW(),NOW(),'TRUE'),
+(158,'一','いち','ichi',5,NOW(),NOW(),'TRUE'),
+(159,'一日','いちにち、ついたち','placeholder',5,NOW(),NOW(),'TRUE'),
+(160,'いちばん',NULL,'ichiban',5,NOW(),NOW(),'FALSE'),
+(161,'いつ',NULL,'itsu',5,NOW(),NOW(),'FALSE'),
+(162,'五日','いつか','itsuka',5,NOW(),NOW(),'TRUE'),
+(163,'一緒','いっしょ','issho',5,NOW(),NOW(),'TRUE');
+
+
+
+
+
+
+
+
+
 
 (124,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (125,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
@@ -219,30 +250,30 @@ INSERT INTO answer_option(card_id,language_id,keyword,created_at,updated_at,opti
 (207,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (208,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (209,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
--- NOT OK
-(210,'EN','a',NOW(),NOW(),'[{ "option": "a", "japanese": "ア", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(211,'EN','i',NOW(),NOW(),'[{ "option": "i", "japanese": "イ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(212,'EN','u',NOW(),NOW(),'[{ "option": "u", "japanese": "ウ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(213,'EN','e',NOW(),NOW(),'[{ "option": "e", "japanese": "エ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(214,'EN','o',NOW(),NOW(),'[{ "option": "o", "japanese": "オ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(215,'EN','ka',NOW(),NOW(),'[{ "option": "ka", "japanese": "カ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(216,'EN','ki',NOW(),NOW(),'[{ "option": "ki", "japanese": "キ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(217,'EN','ku',NOW(),NOW(),'[{ "option": "ku", "japanese": "ク", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(218,'EN','ke',NOW(),NOW(),'[{ "option": "ke", "japanese": "ケ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(219,'EN','ko',NOW(),NOW(),'[{ "option": "ko", "japanese": "コ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(220,'EN','sa',NOW(),NOW(),'[{ "option": "sa", "japanese": "サ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(221,'EN','shi',NOW(),NOW(),'[{ "option": "shi", "japanese": "シ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(222,'EN','su',NOW(),NOW(),'[{ "option": "su", "japanese": "ス", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(223,'EN','se',NOW(),NOW(),'[{ "option": "se", "japanese": "セ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(224,'EN','so',NOW(),NOW(),'[{ "option": "so", "japanese": "ソ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(225,'EN','ta',NOW(),NOW(),'[{ "option": "ta", "japanese": "タ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(226,'EN','chi',NOW(),NOW(),'[{ "option": "chi", "japanese": "チ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(227,'EN','tsu',NOW(),NOW(),'[{ "option": "tsu", "japanese": "ツ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(228,'EN','te',NOW(),NOW(),'[{ "option": "te", "japanese": "テ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(229,'EN','to',NOW(),NOW(),'[{ "option": "to", "japanese": "ト", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(230,'EN','na',NOW(),NOW(),'[{ "option": "na", "japanese": "ナ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(231,'EN','ni',NOW(),NOW(),'[{ "option": "ni", "japanese": "ニ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
-(232,'EN','nu',NOW(),NOW(),'[{ "option": "nu", "japanese": "ヌ", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
+-- OK
+(210,'EN','a',NOW(),NOW(),'[{ "option": "a", "japanese": "ア", "correct": true }, { "option": "u", "japanese": "ウ", "correct": false }, { "option": "a", "japanese": "ア", "correct": false }, { "option": "nu", "japanese": "ヌ", "correct": false }]'),
+(211,'EN','i',NOW(),NOW(),'[{ "option": "i", "japanese": "イ", "correct": true }, { "option": "e", "japanese": "エ", "correct": false }, { "option": "ya", "japanese": "ヤ", "correct": false }, { "option": "ne", "japanese": "ネ", "correct": false }]'),
+(212,'EN','u',NOW(),NOW(),'[{ "option": "u", "japanese": "ウ", "correct": true }, { "option": "a", "japanese": "ア", "correct": false }, { "option": "yo", "japanese": "ヨ", "correct": false }, { "option": "u", "japanese": "ウ", "correct": false }]'),
+(213,'EN','e',NOW(),NOW(),'[{ "option": "e", "japanese": "エ", "correct": true }, { "option": "i", "japanese": "イ", "correct": false }, { "option": "wa", "japanese": "ワ", "correct": false }, { "option": "o", "japanese": "オ", "correct": false }]'),
+(214,'EN','o',NOW(),NOW(),'[{ "option": "o", "japanese": "オ", "correct": true }, { "option": "ka", "japanese": "カ", "correct": false }, { "option": "sa", "japanese": "サ", "correct": false }, { "option": "so", "japanese": "ソ", "correct": false }]'),
+(215,'EN','ka',NOW(),NOW(),'[{ "option": "ka", "japanese": "カ", "correct": true }, { "option": "ne", "japanese": "ネ", "correct": false }, { "option": "na", "japanese": "ナ", "correct": false }, { "option": "na", "japanese": "ナ", "correct": false }]'),
+(216,'EN','ki',NOW(),NOW(),'[{ "option": "ki", "japanese": "キ", "correct": true }, { "option": "na", "japanese": "ナ", "correct": false }, { "option": "i", "japanese": "イ", "correct": false }, { "option": "ra", "japanese": "ラ", "correct": false }]'),
+(217,'EN','ku',NOW(),NOW(),'[{ "option": "ku", "japanese": "ク", "correct": true }, { "option": "ha", "japanese": "ハ", "correct": false }, { "option": "u", "japanese": "ウ", "correct": false }, { "option": "yu", "japanese": "ユ", "correct": false }]'),
+(218,'EN','ke',NOW(),NOW(),'[{ "option": "ke", "japanese": "ケ", "correct": true }, { "option": "ma", "japanese": "マ", "correct": false }, { "option": "o", "japanese": "オ", "correct": false }, { "option": "ru", "japanese": "ル", "correct": false }]'),
+(219,'EN','ko',NOW(),NOW(),'[{ "option": "ko", "japanese": "コ", "correct": true }, { "option": "sa", "japanese": "サ", "correct": false }, { "option": "se", "japanese": "セ", "correct": false }, { "option": "ro", "japanese": "ロ", "correct": false }]'),
+(220,'EN','sa',NOW(),NOW(),'[{ "option": "sa", "japanese": "サ", "correct": true }, { "option": "ta", "japanese": "タ", "correct": false }, { "option": "ka", "japanese": "カ", "correct": false }, { "option": "re", "japanese": "レ", "correct": false }]'),
+(221,'EN','shi',NOW(),NOW(),'[{ "option": "shi", "japanese": "シ", "correct": true }, { "option": "u", "japanese": "ウ", "correct": false }, { "option": "ra", "japanese": "ラ", "correct": false }, { "option": "so", "japanese": "ソ", "correct": false }]'),
+(222,'EN','su',NOW(),NOW(),'[{ "option": "su", "japanese": "ス", "correct": true }, { "option": "i", "japanese": "イ", "correct": false }, { "option": "ri", "japanese": "リ", "correct": false }, { "option": "no", "japanese": "ノ", "correct": false }]'),
+(223,'EN','se',NOW(),NOW(),'[{ "option": "se", "japanese": "セ", "correct": true }, { "option": "se", "japanese": "セ", "correct": false }, { "option": "ru", "japanese": "ル", "correct": false }, { "option": "ko", "japanese": "コ", "correct": false }]'),
+(224,'EN','so',NOW(),NOW(),'[{ "option": "so", "japanese": "ソ", "correct": true }, { "option": "wo", "japanese": "ヲ", "correct": false }, { "option": "re", "japanese": "レ", "correct": false }, { "option": "mo", "japanese": "モ", "correct": false }]'),
+(225,'EN','ta',NOW(),NOW(),'[{ "option": "ta", "japanese": "タ", "correct": true }, { "option": "ko", "japanese": "コ", "correct": false }, { "option": "ro", "japanese": "ロ", "correct": false }, { "option": "to", "japanese": "ト", "correct": false }]'),
+(226,'EN','chi',NOW(),NOW(),'[{ "option": "chi", "japanese": "チ", "correct": true }, { "option": "no", "japanese": "ノ", "correct": false }, { "option": "nu", "japanese": "ヌ", "correct": false }, { "option": "no", "japanese": "ノ", "correct": false }]'),
+(227,'EN','tsu',NOW(),NOW(),'[{ "option": "tsu", "japanese": "ツ", "correct": true }, { "option": "mo", "japanese": "モ", "correct": false }, { "option": "no", "japanese": "ノ", "correct": false }, { "option": "se", "japanese": "セ", "correct": false }]'),
+(228,'EN','te',NOW(),NOW(),'[{ "option": "te", "japanese": "テ", "correct": true }, { "option": "so", "japanese": "ソ", "correct": false }, { "option": "so", "japanese": "ソ", "correct": false }, { "option": "mi", "japanese": "ミ", "correct": false }]'),
+(229,'EN','to',NOW(),NOW(),'[{ "option": "to", "japanese": "ト", "correct": true }, { "option": "sa", "japanese": "サ", "correct": false }, { "option": "te", "japanese": "テ", "correct": false }, { "option": "mu", "japanese": "ム", "correct": false }]'),
+(230,'EN','na',NOW(),NOW(),'[{ "option": "na", "japanese": "ナ", "correct": true }, { "option": "u", "japanese": "ウ", "correct": false }, { "option": "to", "japanese": "ト", "correct": false }, { "option": "mo", "japanese": "モ", "correct": false }]'),
+(231,'EN','ni',NOW(),NOW(),'[{ "option": "ni", "japanese": "ニ", "correct": true }, { "option": "o", "japanese": "オ", "correct": false }, { "option": "no", "japanese": "ノ", "correct": false }, { "option": "ma", "japanese": "マ", "correct": false }]'),
+(232,'EN','nu',NOW(),NOW(),'[{ "option": "nu", "japanese": "ヌ", "correct": true }, { "option": "e", "japanese": "エ", "correct": false }, { "option": "chi", "japanese": "チ", "correct": false }, { "option": "mi", "japanese": "ミ", "correct": false }]'),
 
 (233,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (234,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),

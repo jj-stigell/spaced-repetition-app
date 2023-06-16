@@ -34,6 +34,10 @@ const answerOptionEn: string = fs.readFileSync(
   path.resolve(__dirname, '../../../../dbBaseData/answer_option_en.sql'), 'utf8'
 );
 
+const answerOptionFi: string = fs.readFileSync(
+  path.resolve(__dirname, '../../../../dbBaseData/answer_option_fi.sql'), 'utf8'
+);
+
 const kanji: string = fs.readFileSync(
   path.resolve(__dirname, '../../../../dbBaseData/kanji.sql'), 'utf8'
 );
@@ -58,6 +62,7 @@ export default {
       await queryInterface.sequelize.query(deckTranslation, { transaction });
       await queryInterface.sequelize.query(cardList, { transaction });
       await queryInterface.sequelize.query(answerOptionEn, { transaction });
+      await queryInterface.sequelize.query(answerOptionFi, { transaction });
       await queryInterface.sequelize.query(kanji, { transaction });
       await queryInterface.sequelize.query(vocabulary, { transaction });
       await queryInterface.sequelize.query(kana, { transaction });
