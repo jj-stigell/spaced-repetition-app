@@ -102,7 +102,8 @@ export async function register(req: Request, res: Response): Promise<void> {
       allowNewsLetter: allowNewsLetter ?? false,
       tosAccepted: acceptTos,
       languageId: language,
-      role: Role.MEMBER
+      role: Role.MEMBER,
+      emailVerified: NODE_ENV.toLowerCase() === 'development'
     }, { transaction: t });
 
     const confirmation: UserAction = await models.AccountAction.create({
