@@ -51,7 +51,7 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
     req.query, { abortEarly: false }
   );
 
-  const languageId: string = language ?? 'EN';
+  let languageId: string = language ?? 'EN';
   const deckId: number = Number(req.params.deckId);
   await idSchema.validate({ id: deckId });
 
@@ -72,16 +72,26 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
 
   let cards: Array<StudyCard> = [];
 
+  const deckTranslation: DeckTranslation | null = await DeckTranslation.findOne({
+    where: {
+      deckId: deck.id,
+      languageId
+    }
+  });
+
+  if (!deckTranslation || !deckTranslation.active) {
+    languageId = 'EN';
+  }
+
   if (dueonly) {
     // TODO, do only requires SRS functionality.
     cards = [];
   } else {
     const cache: string | null = await redisClient.get(`deck:${deckId}:lang${languageId}`);
 
-    // eslint-disable-next-line no-constant-condition
-    if (false) {
+    if (cache) {
       logger.info(`Cache hit on cards in redis, language ${languageId}`);
-      //cards = JSON.parse(cache);
+      cards = JSON.parse(cache);
     } else {
       logger.info('No cache hit on cards, querying db');
 
@@ -94,7 +104,11 @@ export async function cardsFromDeck(req: Request, res: Response): Promise<void> 
           model: Card,
           required: true,
           include: [
-            { model: AnswerOption },
+            { model: AnswerOption,
+              where: {
+                languageId
+              }
+            },
             { model: Kanji },
             { model: Vocabulary },
             { model: Kana }
@@ -169,7 +183,8 @@ export async function decks(req: Request, res: Response): Promise<void> {
     const decks: Array<DeckData> = await models.Deck.findAll({
       where: {
         jlptLevel: level,
-        category
+        category,
+        active: true
       },
       include: {
         model: DeckTranslation,
