@@ -114,7 +114,7 @@ export async function register(req: Request, res: Response): Promise<void> {
 
     // After succesful commit. Not run if transaction is rolled back.
     t.afterCommit(async () => {
-      if (NODE_ENV !== 'test') {
+      if (NODE_ENV === 'production') {
         await sendEmailConfirmation(
           language, newAccount.username, newAccount.email, confirmation.id
         );
