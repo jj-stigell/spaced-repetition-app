@@ -21,8 +21,8 @@ const theme = createTheme({
   palette: {
     primary: {
       dark: '#353c27',
-      main: '#82945d',
-      light: '#e9ede3'
+      main: '#e60422',
+      light: '#f2f2f2'
     }
   },
   components: {
@@ -30,9 +30,9 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: '#ffffff', // Set the text color to white
-          backgroundColor: '#f49b25', // Set the background color to pink
+          backgroundColor: '#de5063', // Set the background color to pink
           '&:hover': {
-            backgroundColor: '#b45534' // Set the hover background color to a lighter shade of pink
+            backgroundColor: '#e60422' // Set the hover background color to a lighter shade of pink
           }
         }
       }
