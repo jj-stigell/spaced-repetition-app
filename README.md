@@ -35,6 +35,6 @@ Experience the joy of learning Japanese with Yomiko today. Your path to fluency 
 
 # Deployment
 
-Frontend is deployed to https://yomiko-frontend.onrender.com and https://app.yomiko.io
+Frontend is deployed to https://app.yomiko.io
 
 Backend is deployed to https://yomiko-backend.onrender.com
