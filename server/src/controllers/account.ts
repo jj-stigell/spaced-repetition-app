@@ -223,13 +223,13 @@ export async function changePassword(req: Request, res: Response): Promise<void>
 }
 
 /**
- * Change account JLPT level.
+ * Update user personal data (excluding password).
  * @param {Request} req - Express request.
  * @param {Response} res - Express response.
  * @throws {ApiError} - If errors are encountered,
  * function throws an error with a relevant error code.
  */
-export async function changeJlptLevel(req: Request, res: Response): Promise<void> {
+export async function updateUserData(req: Request, res: Response): Promise<void> {
   const requestSchema: yup.AnyObject = yup.object({
     jlptLevel: yup.number()
       .oneOf(

@@ -29,7 +29,7 @@ export default function errorMiddleware(
         }
       ],
     });
-    logger.error(err);
+    logger.error(err.message);
     return;
   }
 
@@ -41,7 +41,7 @@ export default function errorMiddleware(
         };
       })
     });
-    logger.error(err);
+    logger.error(err.errors);
     return;
   }
 

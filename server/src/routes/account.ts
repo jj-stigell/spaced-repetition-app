@@ -3,7 +3,7 @@ import passport from 'passport';
 
 import {
   confirmEmail, resendConfirmEmail, requestResetPassword,
-  resetPassword, changePassword, changeJlptLevel
+  resetPassword, changePassword, updateUserData
 } from '../controllers/account';
 import { requestWrap } from '../util/requestWrap';
 
@@ -283,5 +283,5 @@ router.patch(
 router.patch(
   '/',
   passport.authenticate('jwt', { session: false }),
-  requestWrap(changeJlptLevel)
+  requestWrap(updateUserData)
 );

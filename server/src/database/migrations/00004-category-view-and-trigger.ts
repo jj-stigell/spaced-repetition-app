@@ -6,15 +6,17 @@ export default {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.sequelize.query(
-        `CREATE MATERIALIZED VIEW study_category AS 
-        SELECT 
-          jlpt_level, 
-          category, 
-          COUNT(jlpt_level) AS decks 
-        FROM 
-          deck 
-        GROUP BY 
-          jlpt_level, 
+        `CREATE MATERIALIZED VIEW study_category AS
+        SELECT
+          jlpt_level,
+          category,
+          COUNT(jlpt_level) AS decks
+        FROM
+          deck
+        WHERE
+          active = true
+        GROUP BY
+          jlpt_level,
           category;`, { transaction }
       );
 

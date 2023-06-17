@@ -156,7 +156,7 @@ function formatKana(card: CardData['card'], reviewType: ReviewType): any {
   }
 
   return {
-    value: card.kanji.kanji,
+    value: card.kana.kana,
     keyword: card.answer_options[0].keyword,
     answerOptions
   };
@@ -183,7 +183,7 @@ function formatVocab(card: CardData['card'], reviewType: ReviewType): any {
   }
 
   return {
-    value: card.kanji.kanji,
+    value: card.vocabulary.word,
     keyword: card.answer_options[0].keyword,
     answerOptions
   };

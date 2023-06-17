@@ -103,7 +103,7 @@ export async function register(req: Request, res: Response): Promise<void> {
       tosAccepted: acceptTos,
       languageId: language,
       role: Role.MEMBER,
-      emailVerified: NODE_ENV.toLowerCase() === 'development'
+      emailVerified: NODE_ENV === 'development'
     }, { transaction: t });
 
     const confirmation: UserAction = await models.AccountAction.create({

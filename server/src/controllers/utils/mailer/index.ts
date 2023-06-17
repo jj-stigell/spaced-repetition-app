@@ -19,6 +19,10 @@ export async function sendEmailConfirmation(
     translation = confirmAccountTranslations['FI'];
     subject = confirmAccountTranslations['FI'].subject;
     break;
+  case 'VN':
+    translation = confirmAccountTranslations['VN'];
+    subject = confirmAccountTranslations['VN'].subject;
+    break;
   default:
     translation = confirmAccountTranslations['EN'];
     subject = confirmAccountTranslations['EN'].subject;
@@ -50,6 +54,10 @@ export async function sendPasswordResetLink(
   case 'FI':
     translation = resetPasswordTranslations['FI'];
     subject = resetPasswordTranslations['FI'].subject;
+    break;
+  case 'VN':
+    translation = resetPasswordTranslations['VN'];
+    subject = resetPasswordTranslations['VN'].subject;
     break;
   default:
     translation = resetPasswordTranslations['EN'];

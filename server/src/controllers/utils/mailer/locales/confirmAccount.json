@@ -54,5 +54,33 @@
         "privacyPolicyLinkText": "tietosuojaselosteesta"
       }
     }
+  },
+  "VN": {
+    "languageCode": "vn",
+    "subject": "Yomiko - Xác nhận địa chỉ email của bạn",
+    "header": {
+      "title": "Yomiko - Xác nhận địa chỉ email của bạn"
+    },
+    "body": {
+      "title": "Xác nhận email của bạn",
+      "welcome": "Chào mừng",
+      "creationSuccess": "Tài khoản mới của bạn đã được tạo trên Yomiko.",
+      "loginInformation": "Tìm thông tin đăng nhập của bạn dưới đây:",
+      "email": "Địa chỉ email:",
+      "completeProcess": "Hoàn tất quá trình đăng ký bằng cách xác nhận tính hợp lệ của địa chỉ email của bạn, vui lòng nhấp vào nút dưới đây:",
+      "confirmButton": "Xác nhận email của tôi",
+      "urlProblem": "Nếu bạn gặp vấn đề, bạn cũng có thể dán URL sau vào trình duyệt web của bạn:",
+      "regards": "Trân trọng,",
+      "signature": "Đội ngũ Yomiko",
+      "footer": {
+        "expireWarning": "Liên kết này sẽ hết hạn trong vòng 24 giờ. Nếu liên kết đã hết hạn, bạn có thể gửi lại liên kết từ",
+        "expireWarningLinkText": "đây",
+        "sendOnlyAddress": "Email này được gửi từ một địa chỉ chỉ gửi.",
+        "faqNote": "Để biết thêm chi tiết, bạn có thể đọc",
+        "faqNoteLinkText": "Trang FAQ của chúng tôi",
+        "privacyPolicy": "Chúng tôi rất coi trọng việc xử lý thông tin cá nhân của người dùng để bảo vệ nó một cách phù hợp. Để biết thêm thông tin, vui lòng xem",
+        "privacyPolicyLinkText": "Chính sách bảo mật"
+      }
+    }
   }
 }

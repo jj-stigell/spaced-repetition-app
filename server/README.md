@@ -59,7 +59,7 @@ Running server requires the following environment variables to be set:
 
 * `PORT`: Port number that the application will listen to for incoming requests.
 * `HOST`: Hostname or IP address that the application will be served from.
-* `NODE_ENV`: Environment in which the application is running (e.g. "development", "production", "testing").
+* `NODE_ENV`: Environment in which the application is running (e.g. "development", "production", "test").
 * `POSTGRES_USER`: Username used to authenticate with the Postgres database.
 * `POSTGRES_PASSWORD`: Password used to authenticate with the Postgres database.
 * `POSTGRES_DATABASE`: Name of the Postgres database that the application will connect to.
