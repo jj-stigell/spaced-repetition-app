@@ -23,16 +23,16 @@ any file has been edited and saved.
 ### Migrations and seed
 
 Before running the app, make sure database migrations are run correctly and tables are populated with necessary data.
-You may have to run the command `$ npm run build` before running the following commands.
+You may have to run the command `$ yarn run build` before running the following commands.
 
 Run database migrations with command:
 ```
-$ npm run migration:up
+$ yarn run migration:up
 ```
 
 Run populate database with command:
 ```
-$ npm run seed:up
+$ yarn run seed:up
 ```
 
 ### Running with Docker
@@ -50,23 +50,23 @@ $ docker-compose up
 ### Run in production mode
 
 1. Set environment variables accordingly
-2. Run build command `npm run build`
+2. Run build command `yarn run build`
 3. Make sure postgres and redis are running.
-4. Run start command `npm run start`
+4. Run start command `yarn run start`
 5. Backend will run at localhost on the port you defined in the encironment variables.
 
 ### Run in development mode
 
 1. Set environment variables accordingly
 2. Make sure postgres and redis are running.
-3. Run command `npm run dev`
+3. Run command `yarn run dev`
 4. Backend will run at localhost on the port you defined in the encironment variables.
 
 ### Run tests
 
 1. Set environment variables accordingly.
 2. Make sure postgres and redis are running.
-3. Run test command `npm run test`.
+3. Run test command `yarn run test`.
 
 You can also run tests in container, see readme file in folder "docker-tests".
 

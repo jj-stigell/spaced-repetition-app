@@ -10,7 +10,7 @@ services:
       - database-test
       - redis-test
     ports:
-    - "3000:3000"
+    - "3001:3001"
     tty: true
     container_name: backend-server-test
     environment:
