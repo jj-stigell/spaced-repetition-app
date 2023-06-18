@@ -89,10 +89,10 @@
         "title": "Tilin tiedot",
         "username": "Käyttäjänimi",
         "email": "Sähköpostiosoite",
-        "memberStatus": "Jäsenen tila",
+        "memberStatus": "Jäsenyys",
         "active": "Aktiivinen",
         "expired": "Vanhentunut",
-        "languageSelectorTitle": "Valitse käyttöliittymän ja opiskelukielen",
+        "languageSelectorTitle": "Valitse käyttöliittymä/opiskelukieli",
         "languageSelectorInfo": "Tätä arvoa käytetään opiskelukielenä oletuksena. Jos opetusmateriaalia ei ole saatavilla valitsemallasi kielellä, oletusopiskelukieli asetetaan englanniksi."
       },
       "changePassword": {
@@ -151,8 +151,6 @@
         "redirectMessage": "Uudelleenohjataan takaisin pakkasivulle {{count}} sekunnin kuluttua",
         "redirectImmediately": "Klikkaa alla olevaa linkkiä siirtyäksesi heti:",
         "redirectLink": "Palaa pakkoihin"
-
-
       },
       "buttons": {
         "result": {

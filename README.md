@@ -1,3 +1,10 @@
+# Table of Contents
+
+* [Record of working hours for the Full Stack Open project](#record-of-working-hours-for-the-full-stack-open-project)
+* [Introduction](#introduction)
+* [Deployment](#deployment)
+* [How to use](#how-to-use)
+
 # Record of working hours for the Full Stack Open project
 
 Project's record of working hours is in the file workinghours.md.
@@ -38,3 +45,24 @@ Experience the joy of learning Japanese with Yomiko today. Your path to fluency 
 Frontend is deployed to https://app.yomiko.io
 
 Backend is deployed to https://yomiko-backend.onrender.com
+
+# How to use
+
+App has demo user:
+```
+username: demo@demo.com
+password: Testing123
+```
+
+Workflow:
+
+1. First, you can create your own account. You'll need to verify it using a link sent to your email.
+2. Once verified, log in to see your main dashboard.
+3. Right now, the dashboard shows dummy statistics. 
+4. When you're ready to study, choose a subject category.
+5. Depending on the language you chose, you'll get study materials in that language.
+(Just remember, while the app itself can be in Vietnamese, we don't have study materials in Vietnamese yet).
+6. You can also manage your account from the settings page, including checking your information, changing your password, or logging out.
+7. As of now, we only have materials for the N5 level of the Japanese Language Proficiency Test (JLPT) - translating everything else is taking us a bit longer.
+8. Unfortunately, our Spaced Repetition System (SRS) for studying isn't up and running yet due to time constraints.
+9. If you encounter any glitches while using the app, please let us know through the 'send bug report' option in the study view.
