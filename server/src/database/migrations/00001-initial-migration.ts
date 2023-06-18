@@ -655,6 +655,10 @@ export default {
         'DROP TYPE IF EXISTS enum_deck_category;', { transaction }
       );
 
+      await queryInterface.sequelize.query(
+        'DROP TYPE IF EXISTS enum_card_list_review_type;', { transaction }
+      );
+
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
