@@ -5,6 +5,7 @@ Backend for a [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetitio
 # Table of Contents
 
 * [Running the app](#running-the-app)
+    * [Migrations and seed](#migrations-and-seed)
     * [Running with Docker](#running-with-docker)
     * [Run in production mode](#run-in-production-mode)
     * [Run in development mode](#run-in-development-mode)
@@ -19,15 +20,31 @@ Backend for a [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetitio
 You can run the backend after building or in development mode, where the backend is restarted automatically everytime
 any file has been edited and saved.
 
+### Migrations and seed
+
+Before running the app, make sure database migrations are run correctly and tables are populated with necessary data.
+You may have to run the command `$ npm run build` before running the following commands.
+
+Run database migrations with command:
+```
+$ npm run migration:up
+```
+
+Run populate database with command:
+```
+$ npm run seed:up
+```
+
 ### Running with Docker
 
 Define a PostgreSQL password in the environment variable POSTGRES_PASSWORD, for example:
 ```
 $ export POSTGRES_PASSWORD="password"
 ```
+
 Run docker compose in project root:
 ```
-$ docker-compose up 
+$ docker-compose up
 ```
 
 ### Run in production mode

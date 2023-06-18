@@ -8,12 +8,12 @@ RUN chown -R node:node ./
 
 USER node
 
-RUN npm ci
+RUN yarn install --frozen-lockfile
 
 RUN chown -R node:node ./
 
-RUN npm run build
+RUN yarn run build
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
 
 EXPOSE 3000
