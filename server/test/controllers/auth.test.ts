@@ -189,30 +189,3 @@ describe(`Test POST ${LOGOUT_URI} - logout account`, () => {
   });
 
 });
-
-/*
-describe('Test POST /v1/auth/login and expiry', () => {
-  it('should expire the session after a set time', async () => {
-    // Use the agent for cookie persistence
-    const agent: SuperAgentTest = supertest.agent(app);
-    const realDate: Date = new Date();
-    await agent.post('/v1/auth/login')
-      .withCredentials(true)
-      .send({ email: 'sysadmin@aalto.fi', password: 'grades' })
-      .expect('Content-Type', /json/)
-      .expect(HttpCode.Ok);
-    await agent.get('/v1/auth/self-info').withCredentials(true).expect(HttpCode.Ok);
-    const jwt: Cookie | undefined = agent.jar.getCookie('jwt', CookieAccessInfo.All);
-    if (!jwt) {
-      throw new Error('jwt not available');
-    }
-    // Simulate situtation where the browser does not properly expire the cookie
-    mockdate.set(realDate.setMilliseconds(realDate.getMilliseconds() + JWT_COOKIE_EXPIRY_MS + 1));
-    jwt.expiration_date = realDate.setSeconds(realDate.getSeconds() + JWT_EXPIRY_SECONDS * 2);
-    agent.jar.setCookie(jwt);
-    await agent.get('/v1/auth/self-info').withCredentials(true).expect(HttpCode.Ok);
-    mockdate.set(realDate.setSeconds(realDate.getSeconds() + JWT_EXPIRY_SECONDS + 1));
-    await agent.get('/v1/auth/self-info').withCredentials(true).expect(HttpCode.Unauthorized);
-  });
-});
-*/

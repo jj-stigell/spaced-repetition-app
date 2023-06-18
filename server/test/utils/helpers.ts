@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import fs from 'fs';
 import path from 'path';
 import { QueryInterface } from 'sequelize';
@@ -22,11 +21,6 @@ const bugReport: string = fs.readFileSync(
   path.resolve(__dirname, '../../dbBaseData/bug_report.sql'), 'utf8'
 );
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const card: string = fs.readFileSync(
-  path.resolve(__dirname, '../../dbBaseData/card.sql'), 'utf8'
-);
-
 const queryInterface: QueryInterface = sequelize.getQueryInterface();
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let res: supertest.Response;
@@ -39,11 +33,9 @@ export async function resetDatabase(): Promise<void> {
     );
     await queryInterface.sequelize.query('ALTER SEQUENCE account_id_seq RESTART WITH 230792;');
     await queryInterface.sequelize.query('ALTER SEQUENCE bug_report_id_seq RESTART;');
-    //await queryInterface.sequelize.query('ALTER SEQUENCE card_id_seq RESTART;');
 
     // Load data to db.
     await queryInterface.sequelize.query(account);
-    //await queryInterface.sequelize.query(card);
     await queryInterface.sequelize.query(bugReport);
   } catch (err) {
     logger.error(err);

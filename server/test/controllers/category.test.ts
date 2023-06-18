@@ -63,9 +63,6 @@ describe(`Test GET ${CATEGORIES_URI} - get available categories`, () => {
         expect(res.statusCode).toBe(HttpCode.Ok);
       }
       // Only category N5 since not enough material produced for testing N4 to N1
-      //await testEndpoint(memberUserCookies, 2);
-      //await testEndpoint(adminReadCookies, 3);
-      //await testEndpoint(adminWriteCookies, 4);
       await testEndpoint(memberUserCookies, 5);
     });
 
