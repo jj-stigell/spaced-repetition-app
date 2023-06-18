@@ -59,7 +59,7 @@ in the root directory of your project and add the environment variables.
 
 You can also run the application with Docker.
 
-To build the Docker image run command in the project root:
+To build the Docker image run command in the project root (might take a while, be patient):
 ```
 $ docker build . -t srs-app-client
 ```

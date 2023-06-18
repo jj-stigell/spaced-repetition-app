@@ -44,7 +44,17 @@ $ export POSTGRES_PASSWORD="password"
 
 Run docker compose in project root:
 ```
-$ docker-compose up
+$ docker-compose up --build
+```
+
+**NOTE**
+
+If you run tests on Apple silicon (M1, M2, etc.) the argon2 package in server `package.json` must be updated to
+argon2 version 0.29.0. Version 0.27.2 does not seem to work properly at the moment.
+
+After updating the `package.json`, run command:
+```
+$ yarn install
 ```
 
 ### Run in production mode

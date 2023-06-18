@@ -10,7 +10,7 @@ services:
       - database-test
       - redis-test
     ports:
-    - "3001:3001"
+    - 3001:3001
     tty: true
     container_name: backend-server-test
     environment:
@@ -28,6 +28,8 @@ services:
   database-test:
     image: postgres
     restart: always
+    ports:
+      - 5432:5432
     environment:
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     networks:
