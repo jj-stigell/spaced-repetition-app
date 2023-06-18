@@ -15,22 +15,22 @@ Frontend for a [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetiti
 
 Install the necessary modules at the project root:
 ```
-$ npm install
+$ yarn install
 ```
 
-Start the app on local machine, this will expose the app to localhost port [3000](http://localhost:3000/):
+Start the app on local machine (make sure necessary ENV are set), this will expose the app to localhost port [3000](http://localhost:3000/):
 ```
-$ npm run start
+$ yarn run start
 ```
 
 Create a production optimized build from the project:
 ```
-$ npm run build
+$ yarn run build
 ```
 
 Tests can be run with the command:
 ```
-$ npm run test
+$ yarn run test
 ```
 
 ### Environment variables
@@ -38,7 +38,7 @@ $ npm run test
 Running frontend requires the following environment variables to be set:
 
 * `REACT_APP_BACKEND`: API server url.
-* `NODE_ENV`: The environment in which the application is running (e.g. `development`, `production`, `testing`).
+* `NODE_ENV`: The environment in which the application is running (e.g. `development`, `production`, `test`).
 
 To set environment variables, you can either export them in your terminal or set them in a .env file.
 
@@ -77,14 +77,13 @@ App will run in the localhost port [3000](http://localhost:3000/)
 - Forms with [Formik](https://github.com/jaredpalmer/formik) and [Yup](https://github.com/jquense/yup) for validation
 - Stylized components with [MUI](https://github.com/mui/material-ui)
 - State management with [React Redux](https://react-redux.js.org/)
-- Localization with [i18next](https://www.i18next.com/). [MIT License](https://github.com/i18next/i18next/blob/master/LICENSE)
+- Localization with [i18next](https://www.i18next.com/).
 
 ## TODOs
 
-* Captcha to prevent bots ([reCAPTCHA](https://www.google.com/recaptcha/about/))
-* Testing, unit, integration, E2E
-* Add client to the docker setup
-* Add password strength indicator in form
+* Captcha to prevent bots, [reCAPTCHA](https://www.google.com/recaptcha/about/).
+* Testing, unit, integration, E2E.
+* Add password strength indicator in form.
 
 ## Deployment
 
