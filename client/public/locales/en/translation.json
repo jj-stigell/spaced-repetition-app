@@ -134,6 +134,7 @@
     "review": {
       "loadingMessage": "Loading Cards",
       "view": {
+        "cancelNextCardButton": "Next card in {{count}}, click to cancel",
         "nextCardButton": "Next card",
         "answerOptionsTab": {
           "button": "Answer options"

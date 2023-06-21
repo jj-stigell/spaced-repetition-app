@@ -33,9 +33,11 @@ function Study (): JSX.Element {
   const [showAnswer, setShowAnswer] = React.useState<boolean>(false)
   const [correctAnswer, setCorrectAnswer] = React.useState<boolean>(false)
   const [reviewsFinished, setReviewsFinished] = React.useState<boolean>(false)
+  const [autoNextCard, setAutoNextCard] = React.useState<boolean>(true)
   const [isError, setIsError] = React.useState<string | null>(null)
   const [pressedButton, setPressedButton] = React.useState<string>('')
   const [activeTab, setActiveTab] = React.useState('1')
+  const [count, setCount] = React.useState<number>(4)
 
   const language: string = useAppSelector((state: RootState) => state.account.account.language)
   const activeCard: Card | null = useAppSelector((state: RootState) => state.card.activeCard)
@@ -50,6 +52,18 @@ function Study (): JSX.Element {
     setShowAnswer(false)
     setActiveTab('1')
   }
+
+  React.useEffect(() => {
+    if (showAnswer) {
+      if (count === 0 && autoNextCard) {
+        showNextCard()
+      } else {
+        setTimeout(() => {
+          setCount(count - 1)
+        }, 1000)
+      }
+    }
+  }, [count, showAnswer])
 
   React.useEffect(() => {
     if ((id !== undefined) && !isNaN(Number(id))) {
@@ -89,6 +103,7 @@ function Study (): JSX.Element {
     setCorrectAnswer(option.correct)
     setPressedButton(option.option)
     setShowAnswer(true)
+    setCount(4)
   }
 
   function showNextCard (): void {
@@ -137,7 +152,7 @@ function Study (): JSX.Element {
                   iconPosition="start"
                   label={t('pages.review.view.detailsOptionsTab.button')}
                   value="2"
-                  disabled={showAnswer}
+                  disabled={!showAnswer}
                 />
               </TabList>
             </Box>
@@ -148,7 +163,14 @@ function Study (): JSX.Element {
                 }
                 { showAnswer &&
                 <Button
-                  onClick={() => { showNextCard() }}
+                  onClick={() => {
+                    if (autoNextCard) {
+                      setAutoNextCard(false)
+                    } else {
+                      showNextCard()
+                      setAutoNextCard(true)
+                    }
+                  }}
                   color="success"
                   type="button"
                   fullWidth
@@ -157,15 +179,15 @@ function Study (): JSX.Element {
                     mt: 0,
                     mb: 2,
                     boxShadow: 3,
-                    padding: 1,
-                    fontSize: 30,
+                    padding: 2,
+                    fontSize: 20,
                     '&:hover': {
                       backgroundColor: '#e8ad09'
                     },
                     backgroundColor: '#fcba03'
                   }}
                 >
-                  {t('pages.review.view.nextCardButton')}
+                  { autoNextCard ? t('pages.review.view.cancelNextCardButton', { count }) : t('pages.review.view.nextCardButton')}
                 </Button>
                 }
               </Container>

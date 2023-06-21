@@ -5,15 +5,16 @@ import React, { useState } from 'react'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
 import StopCircleIcon from '@mui/icons-material/StopCircle'
 import AudioButton from './AudioButton'
+import Box from '@mui/material/Box'
 
 function ExampleSentence ({ sentence }: { sentence: any }): JSX.Element {
 
   return (
-    <div>
+    <Box sx={{ border: 1, p: 2, pt: 3 }}>
       {sentence.sentence}
       <br/>
       {sentence.translation} <AudioButton src={sentence.audio} />
-    </div>
+    </Box>
   )
 }
 
