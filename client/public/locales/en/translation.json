@@ -149,7 +149,8 @@
         },
         "dialMenu": {
           "backToDeck": "Back to deck select",
-          "bugReport": "Send a bug Report"
+          "bugReport": "Send a bug Report",
+          "settings": "Study settings"
         }
       },
       "reviewFinished": {
@@ -208,6 +209,12 @@
         "functionality": "Functionality",
         "other": "Other"
       }
+    },
+    "settings": {
+      "title": "Check and edit study settings",
+      "sendSuccess": "Settings updated! You can close this window by clicking close.",
+      "sendButton": "Update settings",
+      "closeButton": "Close"
     }
   },
   "stats": {

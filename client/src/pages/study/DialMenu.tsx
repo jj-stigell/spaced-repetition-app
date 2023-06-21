@@ -7,12 +7,14 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon'
 import SpeedDialAction from '@mui/material/SpeedDialAction'
 import BugReportIcon from '@mui/icons-material/BugReport'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
+import SettingsIcon from '@mui/icons-material/Settings'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { RootState } from '../../app/store'
 import { useAppSelector } from '../../app/hooks'
 import BugReportModal from './BugReportModal'
+import SettingsModal from './SettingsModal'
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: 'absolute',
@@ -30,7 +32,8 @@ function DialMenu (): JSX.Element {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
-  const [showModal, setShowModal] = React.useState<boolean>(false)
+  const [showBugModal, setShowBugModal] = React.useState<boolean>(false)
+  const [showSettingsModal, setShowSettingsModal] = React.useState<boolean>(false)
 
   const category: string = useAppSelector((state: RootState) => state.deck.category)?.toLowerCase() as string
   const cardId: number | undefined = useAppSelector((state: RootState) => state.card.activeCard?.id)
@@ -44,18 +47,24 @@ function DialMenu (): JSX.Element {
           direction="down"
         >
           <SpeedDialAction
-            icon={<ExitToAppIcon />}
-            tooltipTitle={t('pages.review.view.dialMenu.backToDeck')}
-            onClick={() => { navigate(`/study/decks/${category}`) }}
+            icon={<SettingsIcon />}
+            tooltipTitle={t('pages.review.view.dialMenu.settings')}
+            onClick={() => { setShowSettingsModal(true) }}
           />
           <SpeedDialAction
             icon={<BugReportIcon />}
             tooltipTitle={t('pages.review.view.dialMenu.bugReport')}
-            onClick={() => { setShowModal(true) }}
+            onClick={() => { setShowBugModal(true) }}
+          />
+          <SpeedDialAction
+            icon={<ExitToAppIcon />}
+            tooltipTitle={t('pages.review.view.dialMenu.backToDeck')}
+            onClick={() => { navigate(`/study/decks/${category}`) }}
           />
         </StyledSpeedDial>
       </Box>
-      <BugReportModal cardId={cardId} open={showModal} setOpen={setShowModal} />
+      <BugReportModal cardId={cardId} open={showBugModal} setOpen={setShowBugModal} />
+      <SettingsModal open={showSettingsModal} setOpen={setShowSettingsModal} />
     </Box>
   )
 }
