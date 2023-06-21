@@ -1,3 +1,4 @@
+/* eslint-disable no-multiple-empty-lines */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
 
@@ -9,8 +10,9 @@ import CircularLoader from '../../components/CircularLoader'
 import axios from '../../lib/axios'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
-import { Card, ExampleSentence } from '../../types'
+import { Card, ExampleSentence as ExampleSentenceType } from '../../types'
 import { exampleSentences as examples } from '../../mockData'
+import ExampleSentence from './ExampleSentence'
 
 export interface Examples {
   id: number
@@ -26,10 +28,10 @@ function CardInformation (): JSX.Element {
   const activeCard: Card = useAppSelector((state: RootState) => state.card.activeCard) as Card
   const language: string = useAppSelector((state: RootState) => state.account.account.language)
 
-  const [exampleSentences, setExampleSentences] = React.useState<ExampleSentence[] | null>(null)
+  const [exampleSentences, setExampleSentences] = React.useState<ExampleSentenceType[] | null>(null)
 
   React.useEffect(() => {
-    axios.get(`api/v1/card/${activeCard.id}/examples`, { params: { language } })
+    axios.get(`api/v1/card/${activeCard.id}/details`, { params: { language } })
       .then(function (response) {
         setCardData(response.data)
       })
@@ -70,8 +72,60 @@ function CardInformation (): JSX.Element {
 
   return (
     <>
-      <p style={{ fontSize: 55, textAlign: 'center', marginBottom: 30 }}>Examples</p>
+      <p style={{ fontSize: 55, textAlign: 'center', marginBottom: 30 }}>Information</p>
       <ul>
+      { exampleSentences?.map((sentence: ExampleSentenceType) => <ExampleSentence key={sentence.id} sentence={sentence} />
+      )}
+      </ul>
+    </>
+  )
+}
+
+export default CardInformation
+
+/*
+export const textDetailedData = {
+  id: 2,
+  cardType: CardType.KANJI,
+  data: {
+    kanji: '車',
+    keyword: 'car',
+    story: 'looks like a vehicle from birds eye view',
+    hint: 'pictograph',
+    onyomi: 'しゃ',
+    kunyomi: 'くるま',
+    onyomiRomaji: 'sha',
+    kunyomiRomaji: 'kuruma',
+    exampleSentences: [
+      {
+        id: 354,
+        sentence: '昨日は車で学校に行きました。',
+        translation: 'Yesterday I went to school by car.',
+        furigana: 'きのうはくるまでがっこうにいきました。',
+        audio: 'https://dl.sndup.net/mjm2/194544434378608.mp3'
+      },
+      {
+        id: 287,
+        sentence: '車のタイヤがパンクされた。',
+        translation: 'Cars tire was blown.',
+        furigana: 'くるまのたいやがぱんくされた。',
+        audio: 'https://dl.sndup.net/pb7r/194544434378718.mp3'
+      },
+      {
+        id: 186,
+        sentence: 'あの車は日産です。',
+        translation: 'That car is Nissan.',
+        furigana: 'あのくるまはにっさんです。',
+        audio: 'https://dl.sndup.net/rtr8/194544434378829.mp3'
+      }
+    ]
+  },
+  personalData: {
+    reviewCount: 23,
+    mature: true
+  }
+}
+
       { exampleSentences?.map((sentence: ExampleSentence) => {
         return (
           <li key={sentence.id}>
@@ -80,9 +134,4 @@ function CardInformation (): JSX.Element {
         )
       })
       }
-      </ul>
-    </>
-  )
-}
-
-export default CardInformation
+*/

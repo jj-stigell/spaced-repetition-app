@@ -137,7 +137,7 @@ function Study (): JSX.Element {
                   iconPosition="start"
                   label={t('pages.review.view.detailsOptionsTab.button')}
                   value="2"
-                  disabled={true} // TODO add the example senteces etc, for now keep disabled
+                  disabled={showAnswer}
                 />
               </TabList>
             </Box>
