@@ -197,21 +197,21 @@ export const exampleSentences: ExampleSentence[] = [
     sentence: '昨日は車で学校に行きました。',
     translation: 'Yesterday I went to school by car.',
     furigana: 'きのうはくるまでがっこうにいきました。',
-    audio: 'https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-1.mp3'
+    audio: 'https://dl.sndup.net/mjm2/194544434378608.mp3'
   },
   {
     id: 287,
     sentence: '車のタイヤがパンクされた。',
     translation: 'Cars tire was blown.',
     furigana: 'くるまのたいやがぱんくされた。',
-    audio: 'https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-1.mp3'
+    audio: 'https://dl.sndup.net/pb7r/194544434378718.mp3'
   },
   {
     id: 186,
     sentence: 'あの車は日産です。',
     translation: 'That car is Nissan.',
     furigana: 'あのくるまはにっさんです。',
-    audio: 'https://audio-samples.github.io/samples/mp3/blizzard_unconditional/sample-1.mp3'
+    audio: 'https://dl.sndup.net/rtr8/194544434378829.mp3'
   }
 ]
 

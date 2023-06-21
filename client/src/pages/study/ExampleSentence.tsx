@@ -10,7 +10,9 @@ function ExampleSentence ({ sentence }: { sentence: any }): JSX.Element {
 
   return (
     <div>
-      {sentence.sentence}: {sentence.translation} <AudioButton src={sentence.audio} />
+      {sentence.sentence}
+      <br/>
+      {sentence.translation} <AudioButton src={sentence.audio} />
     </div>
   )
 }

@@ -3,7 +3,7 @@
 import React from 'react'
 
 import { AxiosError } from 'axios'
-import { Box, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import CircularLoader from '../../components/CircularLoader'
@@ -72,11 +72,30 @@ function CardInformation (): JSX.Element {
 
   return (
     <>
-      <p style={{ fontSize: 55, textAlign: 'center', marginBottom: 30 }}>Information</p>
-      <ul>
-      { exampleSentences?.map((sentence: ExampleSentenceType) => <ExampleSentence key={sentence.id} sentence={sentence} />
-      )}
-      </ul>
+      {/* <p style={{ fontSize: 30, textAlign: 'center', marginBottom: 30 }}>Information</p> */}
+
+
+
+
+
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 8 }}>
+            <Grid item xs={2} sm={4} md={4}>
+              Example sentences
+              <ul>
+                { exampleSentences?.map((sentence: ExampleSentenceType) => <ExampleSentence key={sentence.id} sentence={sentence} />)}
+              </ul>
+            </Grid>
+            <Grid item xs={2} sm={4} md={4}>
+              Kanji data:
+            </Grid>
+        </Grid>
+      </Box>
+
+
+
+
+
     </>
   )
 }
