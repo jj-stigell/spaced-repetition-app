@@ -140,7 +140,12 @@
           "button": "Answer options"
         },
         "detailsOptionsTab": {
-          "button": "Details"
+          "button": "Details",
+          "exampleSentence": {
+            "playButton": "Click to play example",
+            "stopButton": "Stop playing",
+            "playButtonDisabled": "Example audio is a member feature"
+          }
         },
         "dialMenu": {
           "backToDeck": "Back to deck select",

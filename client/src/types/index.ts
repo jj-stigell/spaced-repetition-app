@@ -95,9 +95,10 @@ export interface KanjiCard {
   kunyomiRomaji: string
 }
 
-export interface ExampleSentence {
+export interface Example {
   id: number
-  sentence: string
+  type: string | undefined
+  example: string
   translation: string
   furigana: string
   audio: string

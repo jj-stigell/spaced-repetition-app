@@ -1,4 +1,4 @@
-import { CardType, ReviewType, Card, ExampleSentence } from './types'
+import { CardType, ReviewType, Card } from './types'
 
 export const mockCards: Card[] = [
   {
@@ -191,6 +191,7 @@ export const mockCards: Card[] = [
   }
 ]
 
+/*
 export const exampleSentences: ExampleSentence[] = [
   {
     id: 354,
@@ -214,6 +215,7 @@ export const exampleSentences: ExampleSentence[] = [
     audio: 'https://dl.sndup.net/rtr8/194544434378829.mp3'
   }
 ]
+*/
 
 export const mockRadarData = [
   {
@@ -254,24 +256,71 @@ export const textDetailedData = {
     kunyomi: 'くるま',
     onyomiRomaji: 'sha',
     kunyomiRomaji: 'kuruma',
+    strokeCount: 7,
+    radicals: [
+      {
+        radical: '⾞',
+        translation: 'car',
+        position: null
+      },
+      {
+        radical: '⼇',
+        translation: 'lid',
+        position: 'top'
+      }
+    ],
+    exampleWords: [
+      {
+        id: 276,
+        type: 'kunyomi',
+        example: '車椅子',
+        translation: 'wheelchair',
+        furigana: 'くるまいす',
+        audio: 'https://dl.sndup.net/kpfp/194544434412958.mp3'
+      },
+      {
+        id: 967,
+        type: 'kunyomi',
+        example: '火の車',
+        translation: 'fiery chariot',
+        furigana: 'ひのくるま',
+        audio: 'https://dl.sndup.net/j3hy/194544434413002.mp3'
+      },
+      {
+        id: 764,
+        type: 'onyomi',
+        example: '車検',
+        translation: 'vehicle inspection',
+        furigana: 'しゃけん',
+        audio: 'https://dl.sndup.net/b65q/194544434413043.mp3'
+      },
+      {
+        id: 456,
+        type: 'onyomi',
+        example: '自動車',
+        translation: 'automobile',
+        furigana: 'じどうしゃ',
+        audio: 'https://dl.sndup.net/sk7p/194758734413112.mp3'
+      }
+    ],
     exampleSentences: [
       {
         id: 354,
-        sentence: '昨日は車で学校に行きました。',
+        example: '昨日は車で学校に行きました。',
         translation: 'Yesterday I went to school by car.',
         furigana: 'きのうはくるまでがっこうにいきました。',
         audio: 'https://dl.sndup.net/mjm2/194544434378608.mp3'
       },
       {
         id: 287,
-        sentence: '車のタイヤがパンクされた。',
+        example: '車のタイヤがパンクされた。',
         translation: 'Cars tire was blown.',
         furigana: 'くるまのたいやがぱんくされた。',
         audio: 'https://dl.sndup.net/pb7r/194544434378718.mp3'
       },
       {
         id: 186,
-        sentence: 'あの車は日産です。',
+        example: 'あの車は日産です。',
         translation: 'That car is Nissan.',
         furigana: 'あのくるまはにっさんです。',
         audio: 'https://dl.sndup.net/rtr8/194544434378829.mp3'

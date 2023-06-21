@@ -44,6 +44,7 @@ function Study (): JSX.Element {
   const otherCards: Card[] = useAppSelector((state: RootState) => state.card.cards)
 
   const handleChange = (event: React.SyntheticEvent, newValue: string): void => {
+    setAutoNextCard(false)
     setActiveTab(newValue)
   }
 

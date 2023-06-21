@@ -1,5 +1,3 @@
-/* eslint-disable no-multiple-empty-lines */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react'
 
 import { AxiosError } from 'axios'
@@ -10,25 +8,22 @@ import CircularLoader from '../../components/CircularLoader'
 import axios from '../../lib/axios'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
-import { Card, ExampleSentence as ExampleSentenceType } from '../../types'
-import { exampleSentences as examples } from '../../mockData'
-import ExampleSentence from './ExampleSentence'
+import { Card, Example as ExampleType } from '../../types'
+import Example from './Example'
+import CardDetail from './CardDetail'
 
-export interface Examples {
-  id: number
-}
+// temporary
+import { textDetailedData as examples } from '../../mockData'
 
 function CardInformation (): JSX.Element {
   const { t } = useTranslation()
 
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
-  const [cardData, setCardData] = React.useState<any>(null)
   const [isError, setIsError] = React.useState<string | null>(null)
+  const [cardData, setCardData] = React.useState<any | null>(null)
 
   const activeCard: Card = useAppSelector((state: RootState) => state.card.activeCard) as Card
   const language: string = useAppSelector((state: RootState) => state.account.account.language)
-
-  const [exampleSentences, setExampleSentences] = React.useState<ExampleSentenceType[] | null>(null)
 
   React.useEffect(() => {
     axios.get(`api/v1/card/${activeCard.id}/details`, { params: { language } })
@@ -52,7 +47,7 @@ function CardInformation (): JSX.Element {
       }).finally(() => {
         setIsLoading(false)
         setIsError(null)
-        setExampleSentences(examples)
+        setCardData(examples)
       })
   }, [])
 
@@ -72,30 +67,26 @@ function CardInformation (): JSX.Element {
 
   return (
     <>
-      {/* <p style={{ fontSize: 30, textAlign: 'center', marginBottom: 30 }}>Information</p> */}
-
-
-
-
-
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 2, sm: 8, md: 8 }}>
-            <Grid item xs={2} sm={4} md={4}>
-              Example sentences
-              <ul>
-                { exampleSentences?.map((sentence: ExampleSentenceType) => <ExampleSentence key={sentence.id} sentence={sentence} />)}
-              </ul>
-            </Grid>
-            <Grid item xs={2} sm={4} md={4}>
-              Kanji data:
-            </Grid>
+          <Grid item xs={2} sm={4} md={4}>
+            Card data:
+            <CardDetail data={examples.data} cardType={examples.cardType} />
+          </Grid>
+          <Grid item xs={2} sm={4} md={4}>
+            Example sentences:
+            <ul>
+              { cardData?.data.exampleSentences.map((sentence: ExampleType) => <Example key={sentence.id} sentence={sentence} />)}
+            </ul>
+          </Grid>
+          <Grid item xs={2} sm={4} md={4}>
+            Example words:
+            <ul>
+              { cardData?.data.exampleWords.map((sentence: ExampleType) => <Example key={sentence.id} sentence={sentence} />)}
+            </ul>
+          </Grid>
         </Grid>
       </Box>
-
-
-
-
-
     </>
   )
 }
@@ -115,24 +106,66 @@ export const textDetailedData = {
     kunyomi: 'くるま',
     onyomiRomaji: 'sha',
     kunyomiRomaji: 'kuruma',
+    strokeCount: 7,
+    radicals: [
+      {
+        radical: '⾞',
+        translation: 'car',
+        position: null
+      }
+    ],
+    exampleWords: {
+      kunyomi: [
+        {
+          id: 276,
+          example: '車椅子',
+          translation: 'wheelchair',
+          furigana: 'くるまいす',
+          audio: 'https://dl.sndup.net/mjm2/194544434378608.mp3'
+        },
+        {
+          id: 967,
+          example: '車椅子',
+          translation: 'wheelchair',
+          furigana: 'くるまいす',
+          audio: 'https://dl.sndup.net/mjm2/194544434378608.mp3'
+        }
+      ],
+      onyomi: [
+        {
+          id: 764,
+          example: '車検',
+          translation: 'vehicle inspection',
+          furigana: 'しゃけん',
+          audio: 'https://dl.sndup.net/mjm2/194544434378608.mp3'
+        },
+        {
+          id: 456,
+          example: '自動車',
+          translation: 'automobile',
+          furigana: 'じどうしゃ',
+          audio: 'https://dl.sndup.net/mjm2/194544434378608.mp3'
+        }
+      ]
+    },
     exampleSentences: [
       {
         id: 354,
-        sentence: '昨日は車で学校に行きました。',
+        example: '昨日は車で学校に行きました。',
         translation: 'Yesterday I went to school by car.',
         furigana: 'きのうはくるまでがっこうにいきました。',
         audio: 'https://dl.sndup.net/mjm2/194544434378608.mp3'
       },
       {
         id: 287,
-        sentence: '車のタイヤがパンクされた。',
+        example: '車のタイヤがパンクされた。',
         translation: 'Cars tire was blown.',
         furigana: 'くるまのたいやがぱんくされた。',
         audio: 'https://dl.sndup.net/pb7r/194544434378718.mp3'
       },
       {
         id: 186,
-        sentence: 'あの車は日産です。',
+        example: 'あの車は日産です。',
         translation: 'That car is Nissan.',
         furigana: 'あのくるまはにっさんです。',
         audio: 'https://dl.sndup.net/rtr8/194544434378829.mp3'
@@ -144,13 +177,4 @@ export const textDetailedData = {
     mature: true
   }
 }
-
-      { exampleSentences?.map((sentence: ExampleSentence) => {
-        return (
-          <li key={sentence.id}>
-            {sentence.sentence} = {sentence.translation}
-          </li>
-        )
-      })
-      }
 */
