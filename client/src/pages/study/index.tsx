@@ -29,22 +29,22 @@ function Study (): JSX.Element {
 
   const onlyDue: string | null = searchParams.get('onlydue')
 
+  const { autoNextCard, nextCardtimer, language } = useAppSelector((state: RootState) => state.account.account)
+  const activeCard: Card | null = useAppSelector((state: RootState) => state.card.activeCard)
+  const otherCards: Card[] = useAppSelector((state: RootState) => state.card.cards)
+
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const [showAnswer, setShowAnswer] = React.useState<boolean>(false)
   const [correctAnswer, setCorrectAnswer] = React.useState<boolean>(false)
   const [reviewsFinished, setReviewsFinished] = React.useState<boolean>(false)
-  const [autoNextCard, setAutoNextCard] = React.useState<boolean>(true)
   const [isError, setIsError] = React.useState<string | null>(null)
   const [pressedButton, setPressedButton] = React.useState<string>('')
   const [activeTab, setActiveTab] = React.useState('1')
-  const [count, setCount] = React.useState<number>(4)
+  const [autoNext, setAutoNext] = React.useState<boolean>(autoNextCard)
+  const [count, setCount] = React.useState<number>(nextCardtimer)
 
-  const language: string = useAppSelector((state: RootState) => state.account.account.language)
-  const activeCard: Card | null = useAppSelector((state: RootState) => state.card.activeCard)
-  const otherCards: Card[] = useAppSelector((state: RootState) => state.card.cards)
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string): void => {
-    setAutoNextCard(false)
+  function handleChange (event: React.SyntheticEvent, newValue: string): void {
+    setAutoNext(false)
     setActiveTab(newValue)
   }
 
@@ -56,9 +56,9 @@ function Study (): JSX.Element {
 
   React.useEffect(() => {
     if (showAnswer) {
-      if (count === 0 && autoNextCard) {
+      if (count === 0 && autoNext) {
         showNextCard()
-      } else {
+      } else if (count > 0) {
         setTimeout(() => {
           setCount(count - 1)
         }, 1000)
@@ -104,7 +104,7 @@ function Study (): JSX.Element {
     setCorrectAnswer(option.correct)
     setPressedButton(option.option)
     setShowAnswer(true)
-    setCount(4)
+    setCount(nextCardtimer)
   }
 
   function showNextCard (): void {
@@ -165,11 +165,11 @@ function Study (): JSX.Element {
                 { showAnswer &&
                 <Button
                   onClick={() => {
-                    if (autoNextCard) {
-                      setAutoNextCard(false)
+                    if (autoNext) {
+                      setAutoNext(false)
                     } else {
                       showNextCard()
-                      setAutoNextCard(true)
+                      setAutoNext(autoNextCard)
                     }
                   }}
                   color="success"
@@ -188,7 +188,7 @@ function Study (): JSX.Element {
                     backgroundColor: '#fcba03'
                   }}
                 >
-                  { autoNextCard ? t('pages.review.view.cancelNextCardButton', { count }) : t('pages.review.view.nextCardButton')}
+                  { autoNext ? t('pages.review.view.cancelNextCardButton', { count }) : t('pages.review.view.nextCardButton')}
                 </Button>
                 }
               </Container>

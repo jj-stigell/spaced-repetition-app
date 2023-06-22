@@ -13,11 +13,14 @@ import { modalButtonStyle, modalStyle } from '../dashboard/LevelSelector'
 import { sendBugReport } from '../../config/api'
 import axios from '../../lib/axios'
 import { setNotification } from '../../features/notificationSlice'
-import { useAppDispatch } from '../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import TextField from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
 import Checkbox from '@mui/material/Checkbox'
 import { FormGroup, FormControlLabel } from '@mui/material'
+import { RootState } from '../../app/store'
+import { CategoryState } from '../../features/categorySlice'
+import { updateStudySettings } from '../../features/accountSlice'
 
 function SettingsModal (
   { open, setOpen }:
@@ -26,46 +29,35 @@ function SettingsModal (
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [loading, setLoading] = React.useState<boolean>(false)
-  const [valid, setValid] = React.useState<boolean>(false)
-  const [type, setType] = React.useState<string>('TRANSLATION')
-  const [bugMessage, setBugMessage] = React.useState<string>('')
 
-  const bugCategory = [
-    {
-      id: 'TRANSLATION',
-      translation: t('modals.bugReport.category.translation')
-    },
-    {
-      id: 'UI',
-      translation: t('modals.bugReport.category.ui')
-    },
-    {
-      id: 'FUNCTIONALITY',
-      translation: t('modals.bugReport.category.functionality')
-    },
-    {
-      id: 'OTHER',
-      translation: t('modals.bugReport.category.other')
-    }
-  ]
+  const { autoNextCard, nextCardtimer, autoPlayAudio } = useAppSelector((state: RootState) => state.account.account)
+  const [checked, setChecked] = React.useState(autoNextCard)
+  const [autoPlay, setAutoplay] = React.useState(autoPlayAudio)
+  const [timer, setTimer] = React.useState<any>(nextCardtimer)
 
-  const sendReport = (): void => {
+  function closeModal (): void {
+    setChecked(autoNextCard)
+    setTimer(nextCardtimer)
+    setOpen(false)
+  }
+
+  function updateSettings (): void {
     setLoading(true)
+    // TODO connect to backend
+    /*
     axios.post(sendBugReport, {
       type,
       bugMessage
     }).finally(() => {
       setLoading(false)
-      setBugMessage('')
       dispatch(setNotification({ message: t('modals.settings.sendSuccess'), severity: 'success' }))
     })
-  }
-
-  const [checked, setChecked] = React.useState(true)
-  const [timer, setTimer] = React.useState<any>(5)
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setChecked(event.target.checked)
+    */
+    setTimeout(() => {
+      setLoading(false)
+      dispatch(updateStudySettings({ autoNextCard: checked, nextCardtimer: timer, autoPlayAudio: autoPlay }))
+      dispatch(setNotification({ message: t('modals.settings.sendSuccess'), severity: 'success' }))
+    }, 2000)
   }
 
   return (
@@ -81,11 +73,21 @@ function SettingsModal (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
         <FormGroup>
           <FormControlLabel
+            label="Play audio automatically on correct answer"
+            control={
+              <Checkbox
+                checked={autoPlay}
+                onChange={() => { setAutoplay(!autoPlay) }}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            }
+          />
+          <FormControlLabel
             label="Navigate automatically to next card with timer"
             control={
               <Checkbox
                 checked={checked}
-                onChange={handleChange}
+                onChange={() => { setChecked(!checked) }}
                 inputProps={{ 'aria-label': 'controlled' }}
               />
             }
@@ -96,17 +98,19 @@ function SettingsModal (
           label="Next card timer"
           disabled={!checked}
           error={isNaN(timer)}
-          helperText={isNaN(timer) ? 'Timer must be number' : ''}
+          helperText={isNaN(timer) ? 'Time must be number in seconds' : ''}
           sx={{ mt: 2, mb: 3 }}
           value={timer}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setTimer(event.target.value)
           }}
         />
-          <Button sx={modalButtonStyle} disabled={loading || !valid} onClick={() => { sendReport() }}>
+          <Button sx={modalButtonStyle} disabled={loading || isNaN(timer) || (
+            autoNextCard === checked && nextCardtimer === timer && autoPlayAudio === autoPlay
+          )} onClick={() => { updateSettings() }}>
             {t('modals.settings.sendButton')}
           </Button>
-          <Button sx={modalButtonStyle} disabled={loading} onClick={() => { setOpen(false) }}>
+          <Button sx={modalButtonStyle} disabled={loading} onClick={closeModal}>
             {t('modals.settings.closeButton')}
           </Button>
         </div>
@@ -114,14 +118,5 @@ function SettingsModal (
     </Modal>
   )
 }
-/*
-    "settings": {
-      "title": "Check and edit study settings",
-      "sendSuccess": "Settings updated! You can close this window by clicking close.",
-      "sendButton": "Update settings",
-      "closeButton": "Close"
-    }
-  },
-*/
 
 export default SettingsModal

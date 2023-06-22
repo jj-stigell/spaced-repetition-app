@@ -63,7 +63,15 @@ function LoginForm (): JSX.Element {
       }).then(function (response) {
         const accountInformation: Account = response.data.data
         void i18n.changeLanguage(accountInformation.language.toLocaleLowerCase())
-        dispatch(setAccount({ isLoggedIn: true, account: accountInformation }))
+        // TODO, get nextcard and timer from backend
+        dispatch(setAccount({
+          isLoggedIn: true,
+          account: {
+            ...accountInformation,
+            autoNextCard: true,
+            nextCardtimer: 5
+          }
+        }))
 
         // Store remember me if selected, otherwise clear.
         if (rememberMe) {

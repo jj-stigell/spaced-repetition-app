@@ -8,6 +8,9 @@ export interface Account {
   allowNewsLetter: boolean
   language: string
   jlptLevel: JlptLevel
+  autoNextCard: boolean
+  nextCardtimer: number
+  autoPlayAudio: boolean
 }
 
 export interface AccountState {
@@ -23,7 +26,10 @@ export const initialState: AccountState = {
     role: Role.NON_MEMBER,
     allowNewsLetter: false,
     language: 'EN',
-    jlptLevel: JlptLevel.N5
+    jlptLevel: JlptLevel.N5,
+    autoNextCard: true,
+    nextCardtimer: 5,
+    autoPlayAudio: true
   }
 }
 
@@ -60,10 +66,21 @@ const accountSlice = createSlice({
           language: action.payload
         }
       }
+    },
+    updateStudySettings (state, action: PayloadAction<{ autoNextCard?: boolean, nextCardtimer?: number, autoPlayAudio?: boolean }>) {
+      return {
+        ...state,
+        account: {
+          ...state.account,
+          autoNextCard: action.payload?.autoNextCard ?? state.account.autoNextCard,
+          nextCardtimer: action.payload.nextCardtimer ?? state.account.nextCardtimer,
+          autoPlayAudio: action.payload.autoPlayAudio ?? state.account.autoPlayAudio
+        }
+      }
     }
   }
 })
 
-export const { setJlptLevel, setAccount, resetAccount, setLanguage } = accountSlice.actions
+export const { setJlptLevel, setAccount, resetAccount, setLanguage, updateStudySettings } = accountSlice.actions
 
 export default accountSlice.reducer
