@@ -13,7 +13,8 @@ function Footer (): JSX.Element {
       sx={{
         backgroundColor: 'primary.main',
         padding: 1,
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: 'auto'
       }}
     >
       <Copyright />
