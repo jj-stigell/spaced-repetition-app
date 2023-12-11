@@ -66,3 +66,40 @@ Workflow:
 7. As of now, we only have materials for the N5 level of the Japanese Language Proficiency Test (JLPT) - translating everything else is taking us a bit longer.
 8. Unfortunately, our Spaced Repetition System (SRS) for studying isn't up and running yet due to time constraints.
 9. If you encounter any glitches while using the app, please let us know through the 'send bug report' option in the study view.
+
+
+TODO:
+
+General
+- [ ] update all packages
+- [ ] Share types between front and back
+- [ ] E2E testing
+- [ ] 
+
+Frontend
+- [ ] Details page for each car
+- [ ] JLPT practice cards
+- [ ] Admin panel
+- [ ] Centralize theme colors
+- [ ] Admin preview card
+- [ ] Admin list decks
+- [ ] Admin list cards
+- [ ] Admin edit card
+- [ ] Admin list bugs
+- [ ] Admin update bugs
+- [ ] Rearrange directories
+- [ ] component testing
+- [ ] API refactor
+- [ ] Errors to its own handler
+- [ ] Sticky footer
+- [ ] sign in with google, facebook
+
+Backend
+- [ ] Admin all decks
+- [ ] Admin all cards
+- [ ] Admin edit card
+- [ ] Admin get card all data
+- [ ] Store data to AWS S3
+- [ ] Fetch data from S3
+- [ ] OpenAI integration
+- [ ] 

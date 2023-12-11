@@ -14,6 +14,7 @@
     "lint:fix": "npx eslint `find . -name '*.ts' -not -path './node_modules/*'` --fix",
     "migration:up": "npx sequelize-cli db:migrate",
     "migration:down": "npx sequelize-cli db:migrate:undo",
+    "migration:down:all": "npx sequelize-cli db:migrate:undo:all",
     "seed:up": "npx sequelize-cli db:seed:all",
     "seed:down": "npx sequelize-cli db:seed:undo",
     "copy-locales": "cp -R ./src/controllers/utils/mailer/locales/ ./build/src/controllers/utils/mailer/locales/",

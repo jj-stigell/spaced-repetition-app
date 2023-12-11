@@ -58,13 +58,60 @@ export interface Category extends Progress {
   readonly decks: number
 }
 
-export interface Deck extends Progress {
+/*
+export interface DeckAdmin extends Deck, Pick<Deck, 'id' | 'memberOnly' | 'cards'> {
+  active: boolean
+  category: DeckCategory
+  deckName: string
+  jlptLevel: JlptLevel
+  languageId: string
+  updatedAt: Date
+  createdAt: Date
+}
+
+  declare id: CreationOptional<number>;
+  declare accountId: ForeignKey<Account['id']>;
+  declare cardId: CreationOptional<ForeignKey<Card['id']>>;
+  declare type: string;
+  declare bugMessage: string;
+  declare solvedMessage: CreationOptional<string>;
+  declare solved: CreationOptional<boolean>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+*/
+
+export interface BugReport {
   id: number
-  memberOnly: boolean
+  accountId: number
+  cardId: number
+  type: string
+  bugMessage: string
+  solvedMessage: string
+  solved: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface DeckAdmin {
+  id: number //
+  memberOnly: boolean //
+  active: boolean
+  category: DeckCategory
+  deckName: string
+  jlptLevel: JlptLevel
+  languageId: string
+  cards: number //
+  updatedAt: Date
+  createdAt: Date
+}
+
+export interface Deck extends Progress {
+  id: number //
+  memberOnly: boolean //
   translationAvailable: boolean
   title: string
   description: string
-  cards: number
+  cards: number //
   favorite?: boolean
 }
 

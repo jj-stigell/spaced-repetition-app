@@ -8,4 +8,4 @@ export const setPassword: string = '/api/v1/account/password' // PATCH for setti
 export const changeSettings: string = '/api/v1/account' // PATCH for updating
 export const getCategories: string = '/api/v1/category' // GET for fetching categories
 export const getDecks: string = '/api/v1/deck' // GET for fetching decks
-export const sendBugReport: string = '/api/v1/bug' // POST to send new bug report
+export const bugReport: string = '/api/v1/bug' // POST to send new bug report, GET to fetch all bug reports

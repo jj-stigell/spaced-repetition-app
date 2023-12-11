@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography'
 
 // Project imports
 import { modalButtonStyle, modalStyle } from '../dashboard/LevelSelector'
-import { sendBugReport } from '../../config/api'
+import { bugReport } from '../../config/api'
 import axios from '../../lib/axios'
 import { setNotification } from '../../features/notificationSlice'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
@@ -45,7 +45,7 @@ function SettingsModal (
     setLoading(true)
     // TODO connect to backend
     /*
-    axios.post(sendBugReport, {
+    axios.post(bugReport, {
       type,
       bugMessage
     }).finally(() => {

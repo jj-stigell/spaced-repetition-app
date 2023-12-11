@@ -16,11 +16,15 @@ import { useNavigate } from 'react-router-dom'
 
 // Project imports
 import { constants } from '../config/constants'
-import { category, dashboard, settings } from '../config/path'
+import { category, dashboard, settings, admin } from '../config/path'
+import { useAppSelector } from '../app/hooks'
+import { RootState } from '../app/store'
+import { Role } from '../types'
 
 function TopAppBar (): JSX.Element {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { role } = useAppSelector((state: RootState) => state.account.account)
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>): void => {
@@ -104,6 +108,14 @@ function TopAppBar (): JSX.Element {
                   {t('navbar.settings')}
                 </Typography>
               </MenuItem>
+              <MenuItem key='admin' onClick={() => {
+                handleCloseNavMenu()
+                navigate(admin)
+              }}>
+                <Typography textAlign="center" color="inherit">
+                  {t('navbar.admin')}
+                </Typography>
+              </MenuItem>
             </Menu>
           </Box>
           <Typography
@@ -154,6 +166,18 @@ function TopAppBar (): JSX.Element {
             >
               {t('navbar.settings')}
             </Button>
+            {(role === Role.READ_RIGHT || role === Role.WRITE_RIGHT || role === Role.SUPERUSER) && (
+              <Button
+                key='admin'
+                onClick={() => {
+                  handleCloseNavMenu()
+                  navigate(admin)
+                }}
+                sx={{ my: 2, backgroundColor: 'primary.main', display: 'block' }}
+              >
+                {t('navbar.admin')}
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>

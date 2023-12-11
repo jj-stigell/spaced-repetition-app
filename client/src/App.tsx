@@ -8,6 +8,8 @@ import { useTheme } from '@mui/material'
 import Login from './pages/authentication/login'
 import AuthGuard from './utils/routeGuard/AuthGuard'
 import NotFound from './pages/notFound'
+import AdminDashBoard from './pages/admin'
+import AdminGuard from './utils/routeGuard/AdminGuard'
 import GuestGuard from './utils/routeGuard/GuestGuard'
 import Settings from './pages/settings'
 import MainLayout from './layout/MainLayout'
@@ -25,8 +27,10 @@ import RouterError from './pages/error/RouterError'
 import {
   category, dashboard, decks, emailConfirm,
   login, register, requestEmailConfirm, requestResetPassword, resetPassword,
-  settings, studyDeck
+  settings, studyDeck, admin, adminDeckInfo, adminBugReports
 } from './config/path'
+import DeckInfo from './pages/admin/DeckInfo'
+import BugReports from './pages/admin/BugReports'
 
 function App (): JSX.Element {
   const theme = useTheme()
@@ -46,6 +50,12 @@ function App (): JSX.Element {
                 <Route element={<Decks />} errorElement={<RouterError />} path={decks} />
                 <Route element={<Category />} errorElement={<RouterError />} path={category} />
                 <Route element={<Settings />} errorElement={<RouterError />} path={settings} />
+                <Route element={<AdminGuard />}>
+                  {/* Admin routes */}
+                  <Route element={<AdminDashBoard />} errorElement={<RouterError />} path={admin} />
+                  <Route element={<DeckInfo />} errorElement={<RouterError />} path={adminDeckInfo} />
+                  <Route element={<BugReports />} errorElement={<RouterError />} path={adminBugReports} />
+                </Route>
               </Route>
               {/* Do not render main layout when in study mode */}
               <Route element={<Study />} errorElement={<RouterError />} path={studyDeck} />
