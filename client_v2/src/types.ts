@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
 export enum CardType {
   KANJI = 'KANJI',
   HIRAGANA = 'HIRAGANA',
@@ -53,7 +54,23 @@ export type Card = {
   card: {
     value: string
     keyword: string // English translation of the value.
-    answerOptions: AnswerOption[],
+    answerOptions: AnswerOption[]
     jlptLevel: number
   } & (KanjiCard | VocabularyCard | KanaCard)
+}
+
+export enum JlptLevel {
+  N1 = 1,
+  N2,
+  N3,
+  N4,
+  N5,
+}
+
+export enum Role {
+  NON_MEMBER = 'NON_MEMBER',
+  MEMBER = 'MEMBER',
+  READ_RIGHT = 'READ_RIGHT',
+  WRITE_RIGHT = 'WRITE_RIGHT',
+  SUPERUSER = 'SUPERUSER'
 }
