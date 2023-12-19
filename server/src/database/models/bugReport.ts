@@ -1,6 +1,5 @@
-import {
-  CreationOptional, DataTypes, Model, InferAttributes, InferCreationAttributes, ForeignKey
-} from 'sequelize';
+import { CreationOptional, DataTypes, Model, ForeignKey, Optional } from 'sequelize';
+import { BugReport } from '@common/types';
 
 import { sequelize } from '..';
 import { bugs } from '../../configs/constants';
@@ -8,9 +7,9 @@ import { BugType } from '../../type';
 import Account from './account';
 import Card from './card';
 
-export default class BugReport extends Model<
-  InferAttributes<BugReport>,
-  InferCreationAttributes<BugReport>
+export default class BugReportModel extends Model<
+  BugReport,
+  Optional<BugReport, 'id' | 'createdAt' | 'updatedAt' | 'solvedMessage' | 'solved' | 'cardId'>
 > {
   declare id: CreationOptional<number>;
   declare accountId: ForeignKey<Account['id']>;
@@ -23,7 +22,7 @@ export default class BugReport extends Model<
   declare updatedAt: CreationOptional<Date>;
 }
 
-BugReport.init({
+BugReportModel.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

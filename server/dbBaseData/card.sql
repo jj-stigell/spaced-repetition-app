@@ -273,4 +273,12 @@ INSERT INTO card (type, language_id, active, created_at, updated_at) VALUES
 ('GRAMMAR', 'JP', true, NOW(), NOW()),
 ('GRAMMAR', 'JP', true, NOW(), NOW()),
 ('GRAMMAR', 'JP', true, NOW(), NOW()),
-('GRAMMAR', 'JP', true, NOW(), NOW());
+('GRAMMAR', 'JP', true, NOW(), NOW()),
+('RECALL_KANJI_SENTENCE', 'JP', true, NOW(), NOW()),
+('RECALL_KANJI_SENTENCE', 'JP', true, NOW(), NOW()),
+('RECALL_KANJI_SENTENCE', 'JP', true, NOW(), NOW()),
+('RECALL_KANJI_SENTENCE', 'JP', true, NOW(), NOW()),
+('RECOGNIZE_KANJI_SENTENCE', 'JP', true, NOW(), NOW()),
+('RECOGNIZE_KANJI_SENTENCE', 'JP', true, NOW(), NOW()),
+('RECOGNIZE_KANJI_SENTENCE', 'JP', true, NOW(), NOW()),
+('RECOGNIZE_KANJI_SENTENCE', 'JP', true, NOW(), NOW());

@@ -201,7 +201,7 @@ Contents of the card:
 ```javascript
 {
   id: 12,
-  sentenceBlank: 'この ___ _★_ ___ ___ とき　べんりです。',
+  sentenceBlank: 'この ___ _⭑_ ___ ___ とき　べんりです。',
   sentence: 'このかばんは　かるくて　じょうぶだから　りょこうのとき　べんりです',
   furigana: '',
   audio_man: '9328440932.mp3',
@@ -383,3 +383,23 @@ Contents of the card:
 ```
 
 
+
+
+Learn grammar
+
+
+
+
+Teaching card
+
+Introduces new grammar points etc.
+
+
+
+
+review types
+
+recall,
+recognise,
+writeout
+none

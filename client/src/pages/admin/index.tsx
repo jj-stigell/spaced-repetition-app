@@ -14,6 +14,7 @@ import { dashboard } from '../../config/path'
 import DataTable from './components/DataTable'
 import CircularLoader from '../../components/CircularLoader'
 import { DeckAdmin } from '../../types'
+import { Furigana } from '../../components/Furigana'
 
 function AdminDashBoard (): JSX.Element {
   const navigate = useNavigate()
@@ -63,6 +64,9 @@ function AdminDashBoard (): JSX.Element {
           {t('pages.categories.returnButton')}
         </Button>
         <Typography variant='h3'>All Decks</Typography>
+        <Furigana sentence="今日は浅野くんと公園に行った。" reading="1-2:きょう;4-5:あさの;9-10:こうえん;12:い" />
+        <Typography>Im underlined! his is some <u>mispeled</u> text.</Typography>
+        his is some <u>mispeled</u> text.
         <Box sx={{ flexGrow: 1 }}>
           {/* Data table for decks */}
           { isLoading ? <CircularLoader /> : <DataTable data={decks} onClick={(id) => { navigate(`deck/${String(id)}`) }} /> }

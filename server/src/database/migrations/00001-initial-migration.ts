@@ -302,7 +302,9 @@ export default {
             CardType.KANA,
             CardType.VOCABULARY,
             CardType.SENTENCE,
-            CardType.GRAMMAR
+            CardType.GRAMMAR,
+            CardType.RECALL_KANJI_SENTENCE,
+            CardType.RECOGNIZE_KANJI_SENTENCE
           ),
           allowNull: false
         },
@@ -575,6 +577,19 @@ export default {
           defaultValue: DataTypes.NOW
         }
       }, { transaction });
+
+
+
+
+
+
+
+
+
+
+
+
+
       await queryInterface.createTable('kana', {
         id: {
           type: DataTypes.INTEGER,
@@ -610,11 +625,111 @@ export default {
           defaultValue: DataTypes.NOW
         }
       }, { transaction });
+
+
+      await queryInterface.createTable('kanji_sentence', {
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        card_id: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'card',
+            key: 'id'
+          }
+        },
+        kana: {
+          type: DataTypes.CHAR(1),
+          unique: true,
+          allowNull: false
+        },
+        romaji: {
+          type: DataTypes.STRING,
+        },
+        stroke_count: {
+          type: DataTypes.INTEGER,
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+        updated_at: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        }
+      }, { transaction });
+
+
+      /*
+      KanjiSentence.init({
+        id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        cardId: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'card',
+            key: 'id'
+          }
+        },
+        sentenceWithKanji: {
+          type: DataTypes.STRING,
+          unique: true,
+          allowNull: false
+        },
+        sentenceWithHiragana: {
+          type: DataTypes.STRING,
+          unique: true,
+          allowNull: false
+        },
+        jlptLevel: {
+          type: DataTypes.INTEGER,
+        },
+        createdAt: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+        updatedAt: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: DataTypes.NOW
+        },
+      }, {
+        sequelize,
+        modelName: 'kanji_sentence'
+      });
+      */
+
+
+
+
+
+
+
+
+
+
       await transaction.commit();
     } catch (err) {
       await transaction.rollback();
       logger.error(err);
     }
+
+
+
+
+
+
+
+
+
   },
   down: async (queryInterface: QueryInterface): Promise<void> => {
     const transaction: Transaction = await queryInterface.sequelize.transaction();

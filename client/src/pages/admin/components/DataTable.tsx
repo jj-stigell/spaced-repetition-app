@@ -25,7 +25,6 @@ export default function DataTable (props: Props): React.JSX.Element {
   }
 
   const columns = Object.keys(props.data[0])
-  // const type = typeof props.data[0]
 
   function handleChangePage (event: unknown, newPage: number): void {
     setPage(newPage)
@@ -81,14 +80,12 @@ export default function DataTable (props: Props): React.JSX.Element {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id} /* style={{ backgroundColor: row.active ? '#b8f296' : 'none' }} */>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     {columns.map((column: string) => {
                       let value
                       if (isDeckAdmin(row)) {
-                        // Now TypeScript knows row is a DeckAdmin
                         value = row[column as keyof DeckAdmin]
                       } else if (isBugReport(row)) {
-                        // Now TypeScript knows row is a BugReport
                         value = row[column as keyof BugReport]
                       }
                       return (
@@ -115,3 +112,22 @@ export default function DataTable (props: Props): React.JSX.Element {
     </Paper>
   )
 }
+
+/*
+    <Box sx={{ height: 400, width: '100%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 5,
+            },
+          },
+        }}
+        pageSizeOptions={[5]}
+        checkboxSelection
+        disableRowSelectionOnClick
+      />
+    </Box>
+*/

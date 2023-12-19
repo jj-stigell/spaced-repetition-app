@@ -265,3 +265,23 @@ INSERT INTO answer_option(card_id,language_id,keyword,created_at,updated_at,opti
 (252,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (253,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]'),
 (254,'EN','Woman',NOW(),NOW(),'[{ "option": "woman", "japanese": "女", "correct": true }, { "option": "man", "japanese": "口", "correct": false }, { "option": "home", "japanese": "家", "correct": false }, { "option": "bird", "japanese": "鳥", "correct": false }]');
+
+
+
+
+
+
+(14,276,1,NOW(),NOW(), 'RECALL', true),
+(14,277,2,NOW(),NOW(), 'RECALL', true),
+(14,278,3,NOW(),NOW(), 'RECALL', true),
+(14,279,4,NOW(),NOW(), 'RECALL', true),
+(14,280,5,NOW(),NOW(), 'RECALL', true),
+(14,281,6,NOW(),NOW(), 'RECALL', true),
+(14,282,7,NOW(),NOW(), 'RECALL', true),
+(14,283,8,NOW(),NOW(), 'RECALL', true);
+
+
+
+
+
+
