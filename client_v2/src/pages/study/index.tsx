@@ -4,11 +4,11 @@ import DialMenu from './DialMenu'
 import CardFront from './CardFront'
 import CardBack from './CardBack'
 
-export default function Study ({ deckId }) {
+export default function Study ({ deckId }: any): React.JSX.Element {
   const [showCardBack, setShowCardBack] = useState(false)
   const [currentCardIndex, setCurrentCardIndex] = useState(0)
 
-  const handleNextCard = () => {
+  const handleNextCard = (): void => {
     setShowCardBack(false)
     setCurrentCardIndex((prevIndex) => (prevIndex + 1) % kanjiCards.length)
   }

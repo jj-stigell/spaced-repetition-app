@@ -1,36 +1,37 @@
-import React from 'react';
-import KanjiCardRecognise from '../components/KanjiCardRecognise';
-import { useState } from 'react';
-import { kanjiCards } from '../data/mockdata';
-import Modal from '../components/Modal';
-import HoverPopover from '../components/HoverPopover';
-import SpeedDial from '../components/SpeedDial';
+
+/*
+import React, { useState } from 'react'
+import KanjiCardRecognise from '../../components/KanjiCardRecognise'
+import { kanjiCards } from '../../data/mockdata'
+import Modal from '../../components/Modal'
+import HoverPopover from '../../components/HoverPopover'
+import SpeedDial from '../../components/SpeedDial'
 
 const KanjiLearningSession = () => {
-    const [currentCardIndex, setCurrentCardIndex] = useState(0);
-    const [showModal, setShowModal] = useState(false);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0)
+  const [showModal, setShowModal] = useState(false)
 
-    const handleNextCard = () => {
-        setCurrentCardIndex((prevIndex) => (prevIndex + 1) % kanjiCards.length);
-    };
+  const handleNextCard = () => {
+    setCurrentCardIndex((prevIndex) => (prevIndex + 1) % kanjiCards.length)
+  }
 
-    return (
+  return (
         <div className="p-6 bg-blue-100">
             <SpeedDial/>
-            <KanjiCardRecognise 
-                cardData={kanjiCards[currentCardIndex]} 
+            <KanjiCardRecognise
+                cardData={kanjiCards[currentCardIndex]}
                 handleNextCard={handleNextCard}
             />
-            <button onClick={() => setShowModal(true)} class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+            <button onClick={() => setShowModal(true)} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                 Toggle modal
             </button>
             <Modal setShowModal={setShowModal} showModal={showModal} />
             <HoverPopover/>
         </div>
-    );
-};
+  )
+}
 
-export default KanjiLearningSession;
+export default KanjiLearningSession
 
 /*
                 <div className="text-center w-56">

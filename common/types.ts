@@ -19,8 +19,21 @@ export type BugReport = {
   updatedAt: Date;
 };
 
+export enum JlptLevel {
+  N1 = 1,
+  N2,
+  N3,
+  N4,
+  N5,
+}
 
-
+export enum Role {
+  NON_MEMBER = 'NON_MEMBER',
+  MEMBER = 'MEMBER',
+  READ_RIGHT = 'READ_RIGHT',
+  WRITE_RIGHT = 'WRITE_RIGHT',
+  SUPERUSER = 'SUPERUSER'
+}
 
 
 
@@ -41,22 +54,6 @@ export interface ChangePasswordData {
   currentPassword: string
   newPassword: string
   newPasswordConfirmation: string
-}
-
-export enum JlptLevel {
-  N1 = 1,
-  N2,
-  N3,
-  N4,
-  N5,
-}
-
-export enum Role {
-  NON_MEMBER = 'NON_MEMBER',
-  MEMBER = 'MEMBER',
-  READ_RIGHT = 'READ_RIGHT',
-  WRITE_RIGHT = 'WRITE_RIGHT',
-  SUPERUSER = 'SUPERUSER'
 }
 
 export enum DeckCategory {

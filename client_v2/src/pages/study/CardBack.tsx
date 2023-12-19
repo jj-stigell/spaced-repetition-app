@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Furigana from './Furigana';
-import AudioPlayer from './AudioPlayer';
+import React from 'react'
 
-export default function CardBack ({ data, handleNextCard }) {
-
-
-
-
-    return (
-      <>
+export default function CardBack ({ data, handleNextCard }: any): React.JSX.Element {
+  return (
+    <>
         <button onClick={handleNextCard} className="bg-blue-500 mt-4 text-white px-4 py-2 w-3/4 rounded">Next Card</button>
-        </>
-    );
+    </>
+  )
 };
-
 
 /*
     return (

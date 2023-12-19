@@ -4,10 +4,11 @@ import React from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
 
 // Project imports
+import { Role } from '@common/types'
+
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
 import { dashboard } from '../../config/path'
-import { Role } from '../../types'
 
 /**
  * AuthGuard is a route guard that prevents unauthenticated users from accessing

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-import Footer from '../components/Footer';
+import Footer from '../components/Footer'
 
-const HomePage = () => {
+export default function HomePage (): React.JSX.Element {
   return (
     <>
       <div className="p-8">
@@ -16,7 +16,7 @@ const HomePage = () => {
             <li className="mb-2"><Link to="/keyboard" className="text-blue-700 hover:text-blue-900">keyboard</Link></li>
           </ul>
         </div>
-        
+
         <div className="mb-8 p-6 rounded border border-gray-200 bg-green-100">
           <h2 className="font-bold text-2xl mb-4">Kana</h2>
           <ul>
@@ -46,7 +46,5 @@ const HomePage = () => {
       </div>
       <Footer />
     </>
-  );
-};
-
-export default HomePage;
+  )
+}

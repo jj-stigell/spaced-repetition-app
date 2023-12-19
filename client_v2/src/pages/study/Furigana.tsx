@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import React, { useState } from 'react'
 
 const wrapperStyle = {
@@ -88,7 +90,7 @@ interface Props {
   reading: string
 }
 
-export default function Furigana ({ sentence, reading }: Props) {
+export default function Furigana ({ sentence, reading }: Props): React.JSX.Element {
   const [showFurigana, setShowFurigana] = useState(false)
   const grouped = groupFurigana(sentence, reading)
 

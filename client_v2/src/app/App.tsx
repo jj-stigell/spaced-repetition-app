@@ -1,12 +1,12 @@
-import React from 'react';
+import React from 'react'
 
-import HomePage from '../view/HomePage'
-import NotFound from '../view/NotFound'
-import Keyboard from '../components/Keyboard'
-import Dashboard from '../view/DashBoard'
-import Login from '../view/Login'
-import Proto from '../components/proto'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+
+import HomePage from '../pages/HomePage'
+import NotFound from '../pages/notFound'
+import Dashboard from '../pages/dashboard'
+import Login from '../pages/login'
+import Proto from '../pages/study'
 
 function App (): React.JSX.Element {
   return (
@@ -14,7 +14,6 @@ function App (): React.JSX.Element {
       <Routes>
         <Route index element={<HomePage />} />
         <Route path="/kanji/recognise" element={<Proto />} />
-        <Route path="/keyboard" element={<Keyboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />

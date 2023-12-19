@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function DialMenu () {
+export default function DialMenu (): React.JSX.Element {
   const navigate = useNavigate()
 
   return (
@@ -34,7 +34,9 @@ export default function DialMenu () {
             <div className="absolute top-[53px] left-[-4px] hidden w-max flex-col items-center gap-1 p-0.5 group-hover:flex ">
               <div data-projection-id="87">
                 <button
-                  onClick={() => navigate('/')}
+                  onClick={() => {
+                    navigate('/')
+                  }}
                   className="m-0.5 flex h-16 min-h-[48px] w-16 min-w-[48px] flex-col items-center justify-center gap-1 rounded-full border border-blue-gray-50 bg-white p-1 font-normal transition-transform duration-300 ease-in-out hover:scale-110 focus:scale-110 active:scale-100"
                 >
                   <svg

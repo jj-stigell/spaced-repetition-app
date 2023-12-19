@@ -1,11 +1,9 @@
-import React from 'react';
+import React from 'react'
 
-const AudioPlayer = ({ audioUrl }) => {
+export default function AudioPlayer ({ audioUrl }: any): React.JSX.Element {
   return (
     <audio controls src={audioUrl} preload="none"className="w-full">
       Your browser does not support the audio element.
     </audio>
-  );
+  )
 };
-
-export default AudioPlayer;

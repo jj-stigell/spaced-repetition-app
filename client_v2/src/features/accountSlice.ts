@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { JlptLevel, Role } from '../types'
+import { JlptLevel, Role } from '@common/types'
 
 export interface Account {
   username: string
