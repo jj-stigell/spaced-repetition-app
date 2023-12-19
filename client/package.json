@@ -42,7 +42,6 @@
     "url": "git+https://github.com/jj-stigell/srs-client.git"
   },
   "author": "JS",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jj-stigell/srs-client/issues"
   },
