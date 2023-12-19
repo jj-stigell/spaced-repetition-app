@@ -1,0 +1,367 @@
+{
+  "title": "Yomiko SRS-app for learning Japanese",
+  "navbar": {
+    "dashboard": "Dashboard",
+    "study": "Study",
+    "achievements": "Achievements",
+    "statistics": "Statistics",
+    "reviews": "Reviews",
+    "kanji": "Kanji",
+    "news": "News",
+    "settings": "Settings",
+    "account": "Account",
+    "decks": "Decks",
+    "logout": "Logout",
+    "jlptLevel": "JLPT Level"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "this is the dashboard page",
+      "jlptSelectorButton": "JLPT N{{level}} - Click to change",
+      "goToStudyButton": "Go to study",
+      "revHistoryTitle": "Review history, and coming reviews"
+    },
+
+
+
+
+    "login": {
+      "title": "Sign in to your account",
+      "lastLogin": "Latest login at",
+      "logInButton": "Sign in",
+      "or": "or",
+      "welcomeBack": "Welcome back!",
+      "enterCredentials": "Enter your credentials to continue",
+      "rememberMe": "Remember me",
+      "googleLogin": "Sign in with Google",
+      "facebookLogin": "Sign in with Facebook",
+      "resendVerificationLink": "Resend verification",
+      "linkToLogin": "Go back to login page, click here.",
+      "emailNotVerifiedMessage": "Email address is not verified. Please check your email for the verification link, check spam folder also. If you have not received the link, you can resend the verification link from here:"
+    },
+
+    "register": {
+      "title": "Create a new account and start learning",
+      "successTitle": "New account created!",
+      "success": "New user created successfully with email address {{email}}. We sent you a confirm link by email (just in case check spam folder), please confirm your email and start learning. Redirecting to login page in {{redirectTimeout}} seconds.",
+      "registerButton": "Register",
+      "noAccount": "Don't have an account? Sign Up",
+      "haveAccount": "Have an account?",
+      "enterCreds": "Enter your credentials to continue",
+      "agreeWith": "I have read and agree to the",
+      "TOS": "Terms of Service",
+      "cancelSuccessDisplay": "If you want to return to the register form, click here"
+    },
+
+
+
+
+
+
+    "confirm": {
+      "title": "Confirming email address",
+      "successTitle": "Email address confirmed!",
+      "failureTitle": "Email address confirmation failed",
+      "success": "Your email address confirmation was successful. Redirecting to login page in {{redirectTimeout}} seconds.",
+      "resend": {
+        "resendConfirmButton": "Resend confirmation code",
+        "resendConfirmDescription": "Confirmation failed, please resend the confirmation by entering your email address below.",
+        "resendSuccess": "New confirmation code sent to email address {{email}}. Redirecting to login page in {{redirectTimeout}} seconds."
+      }
+    },
+    "password": {
+      "forgotPassword": {
+        "title": "Reset account password",
+        "resetDescription": "To reset account password, enter the email address you use for the account in the field below.",
+        "successTitle": "Password reset link sent succesfully. Please check your email inbox.",
+        "failureTitle": "Email address verification failed",
+        "resetButton": "Send reset link"
+      },
+      "resetPassword": {
+        "title": "Set new password",
+        "resetDescription": "Input the new password and password confirmation below and submit to change the password",
+        "successTitle": "Password changed succesfully. Redirecting to login page in {{redirectTimeout}} seconds.",
+        "failureTitle": "Password update failed, please try again.",
+        "resetButton": "Set new password"
+      }
+    },
+    "notFound": {
+      "title":"Oops!",
+      "description":"Sorry, page you tried to access not found.",
+      "link": "Click to return to the main page"
+    },
+    "error": {
+      "title":"Oops!",
+      "description":"Sorry, an unexpected error has occurred.",
+      "errorMessage":"Following error encountered: ",
+      "link": "Click to return to the main page",
+      "unknowError": "Error unknown"
+    },
+    "settings": {
+      "title": "Profile and settings",
+      "accountInformation": {
+        "title": "Account information",
+        "username": "Username",
+        "email": "Email address",
+        "memberStatus": "Member status",
+        "active": "Active",
+        "expired": "Expired",
+        "languageSelectorTitle": "Select UI & study language",
+        "languageSelectorInfo": "This value will be used as a default language for studying. If study material is not available in your language, the default study language will be set to English."
+      },
+      "changePassword": {
+        "title": "Change password",
+        "button": "Change password",
+        "passwordChangeSuccess": "Password changed succesfully"
+      }
+    },
+    "categories": {
+      "kanji": {
+        "title": "N{{jlptLevel}} kanji characters",
+        "description": "Learn all N{{jlptLevel}} Kanji characters, {{amount}} decks available for studying."
+      },
+      "kana": {
+        "title": "N{{jlptLevel}} kana characters",
+        "description": "Learn all N{{jlptLevel}} Kana characters, {{amount}} decks available for studying."
+      },
+      "vocabulary": {
+        "title": "N{{jlptLevel}} vocabulary",
+        "description": "Learn all N{{jlptLevel}} vocabulary fun and easy, {{amount}} decks available for studying."
+      },
+      "grammar": {
+        "title": "N{{jlptLevel}} grammar",
+        "description": "Learn all N{{jlptLevel}} grammar points efficiently, {{amount}} decks available for studying."
+      },
+      "returnButton": "Back to dashboard",
+      "studyButton": "Study",
+      "missing": "Category not found"
+    },
+    "decks": {
+      "title": "Available decks",
+      "deck": {
+        "translationAvailable": "Translation available",
+        "translationNotAvailable": "Translation not available, using english"
+      },
+      "returnButton": "Back to category select",
+      "studyButton": "Start studying"
+    },
+    "review": {
+      "loadingMessage": "Loading Cards",
+      "view": {
+        "cancelNextCardButton": "Next card in {{count}}, click to cancel",
+        "nextCardButton": "Next card",
+        "answerOptionsTab": {
+          "button": "Answer options"
+        },
+        "detailsOptionsTab": {
+          "button": "Details",
+          "exampleSentence": {
+            "playButton": "Click to play example",
+            "stopButton": "Stop playing",
+            "playButtonDisabled": "Example audio is a member feature"
+          }
+        },
+        "dialMenu": {
+          "backToDeck": "Back to deck select",
+          "bugReport": "Send a bug Report",
+          "settings": "Study settings"
+        }
+      },
+      "reviewFinished": {
+        "title": "All cards reviewed, good work!",
+        "redirectMessage": "Redirecting back to deck page in {{count}} seconds",
+        "redirectImmediately": "Click link below to go immediately:",
+        "redirectLink": "Go back to decks"
+      },
+      "buttons": {
+        "result": {
+          "again": "Again",
+          "hard": "Hard",
+          "easy": "Easy"
+        }
+      },
+      "help": {
+        "showHint": "Show hint"
+      },
+      "tabs": {
+        "grammar": {
+          "title": "Grammar"
+        },
+        "examples": {
+          "title": "Examples"
+        },
+        "edit": {
+          "title": "Edit"
+        }
+      }
+    }
+  },
+  "modals": {
+    "jlptSelector": {
+      "title": "Select JLPT Level"
+    },
+    "studySelector": {
+      "title": "Select study style",
+      "studyDueAndNew": "Only new and due cards",
+      "studyAll": "All cards"
+    },
+    "tos": {
+      "title": "Terms of Service (available only in english)",
+      "lastUpdated": "Last updated",
+      "closeButton": "Close"
+    },
+    "bugReport": {
+      "title": "To send a new bug report, please fill all the fields and click send. Thank you!",
+      "sendSuccess": "Thank you for sending bug report! This will help us to provide better experience! You can close this window by clicking close.",
+      "sendButton": "Send report",
+      "closeButton": "Close",
+      "description": "Describe the bug",
+      "category": {
+        "title": "Select bug category",
+        "translation": "Invalid translation",
+        "ui": "User interface",
+        "functionality": "Functionality",
+        "other": "Other"
+      }
+    },
+    "settings": {
+      "title": "Check and edit study settings",
+      "sendSuccess": "Settings updated! You can close this window by clicking close.",
+      "sendButton": "Update settings",
+      "closeButton": "Close"
+    }
+  },
+  "stats": {
+    "radarChart": {
+      "title": "JLPT N{{level}} progress",
+      "studyTip": "You are least performing in {{category}} category, consider doing some extra study.",
+      "labels": {
+        "kanji": "Kanji",
+        "kana": "Kana",
+        "vocabulary": "Vocabulary",
+        "grammar": "Grammar",
+        "listening": "Listening",
+        "reading": "Reading"
+      }
+    }
+  },
+  "deck": {
+    "settings": {
+      "title": "Settings for deck:",
+      "dayoff": "Day off",
+      "settings": "Settings",
+      "optimize": "Optimize",
+      "favorite": "Favorite deck:",
+      "newCardsPerDay": "New cards every day:",
+      "reviewInterval": "Maximimum review interval:",
+      "reviewsPerDay": "Maximum reviews per day:",
+      "favoriteInfo": "If you set deck as your favorite, it will be shown on the front page, making access to it faster.",
+      "newCardsPerDayInfo": "How many new cards do you want to review from this deck every day? Can be set between {{minNewReviews}} - {{maxNewReviews}}",
+      "reviewIntervalInfo": "Review interval is the maximum time between reviews. Can be set between {{minReviewInterval}} - {{maxReviewInterval}}",
+      "reviewsPerDayInfo": "How many reviews you want to do every day from this deck? Can be set between {{minLimitReviews}} - {{maxLimitReviews}}",
+      "settingsChangeSuccess": "Settings updated succesfully!",
+      "settingsChangeError": "Error occured while updating settings!"
+    },
+    "dueAndNewCards": "Cards due: {{old}} old, {{new}} new",
+    "onlyNewCards": "Cards due: {{new}} new"
+  },
+  "buttonGeneral": {
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "logout": "Logout",
+    "close": "Close",
+    "update": "Update"
+  },
+  "notification": {
+    "success": "Success",
+    "error": "Error"
+  },
+  "session": {
+    "id": "Id",
+    "browser": "Browser",
+    "os": "Operating system",
+    "device": "Device",
+    "createdAt": "Created at",
+    "expireAt": "Expires at",
+    "delete": "Delete session",
+    "current": "current session",
+    "sessionWarning": "This is the current session on this device. If you delete this one, you will be logged out from this device."
+  },
+  "passwordStrength": {
+    "poor": "Poor",
+    "weak": "Weak",
+    "normal": "Normal",
+    "good": "Good",
+    "strong": "Strong"
+  },
+  "misc": {
+    "username": "Username",
+    "email": "Email address",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "passwordForgot": "Forgot Password?",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "warning": "Warning!",
+    "clickHere": "click here",
+    "redirectMessage": "If page does not redirect automatically, "
+  },
+  "placeholder": {
+    "username": "e.g. User23494",
+    "email": "Your email",
+    "password": "Your password",
+    "passwordConfirm": "Password confirmation"
+  },
+  "construction": {
+    "title": "Site Under Construction",
+    "body1": "Thank you for visiting our website. We are currently in the process of building and designing our new website, and apologize for any inconvenience this may cause.",
+    "body2": "We are working hard to bring you a fully functional and user-friendly website as soon as possible. In the meantime, please bear with us as we complete this process.",
+    "body3": "Please check back soon to see the finished product."
+  },
+  "errors": {
+    "ERR_ACCEPT_TOS_REQUIRED": "Terms of service must be accecpted.",
+    "ERR_CHECK_CONNECTION": "Something went wrong, check your connection and try again.",
+    "ERR_CONFIRMATION_CODE_EXPIRED": "Verification code expired.",
+    "ERR_CONFIRMATION_CODE_NOT_FOUND": "Verification code not found.",
+    "ERR_CONFIRMATION_CODE_REQUIRED": "Confirmation code required.",
+    "ERR_DATE_REQUIRED": "Date required",
+    "ERR_DECK_EMPTY": "No cards were available in the requested deck.",
+    "ERR_DECK_ID_MISSING_OR_INVALID": "Provided deck id invalid or missing, please do not try to access decks via URL field.",
+    "ERR_EMAIL_ALREADY_CONFIRMED": "Email address is already verified.",
+    "ERR_EMAIL_IN_USE": "Email address is already in use, select another one.",
+    "ERR_EMAIL_NOT_CONFIRMED": "Email address is not verified.",
+    "ERR_EMAIL_NOT_FOUND": "Email not found.",
+    "ERR_EMAIL_OR_PASSWORD_INCORRECT": "Email address or password incorrect.",
+    "ERR_EMAIL_REQUIRED": "Email address required.",
+    "ERR_EMAIL_TOO_LONG": "Email address too long.",
+    "ERR_FORBIDDEN": "Forbidden.",
+    "ERR_INPUT_TYPE": "Input type incorrect.",
+    "ERR_INPUT_VALUE_MISSING": "Input value is missing.",
+    "ERR_INVALID_DATE": "Invalid date value.",
+    "ERR_INVALID_JLPT_LEVEL": "Non-existing JLPT level provided.",
+    "ERR_INVALID_LANGUAGE_ID": "Selected language not available.",
+    "ERR_MEMBER_FEATURE": "This feature is available only to members.",
+    "ERR_NOT_VALID_EMAIL": "Email address not valid.",
+    "ERR_PASSWORD_CURRENT_AND_NEW_EQUAL": "Current and new password cannot be the same.",
+    "ERR_PASSWORD_CURRENT_INCORRECT": "Current password is incorrect.",
+    "ERR_PASSWORD_CONFIRMATION_REQUIRED": "Password confirmation required.",
+    "ERR_PASSWORD_LOWERCASE": "Password must include lowercase character(s).",
+    "ERR_PASSWORD_MISMATCH": "Password and confirmation do not match.",
+    "ERR_PASSWORD_NUMBER": "Password must include number(s)",
+    "ERR_PASSWORD_REQUIRED": "Password required.",
+    "ERR_PASSWORD_TOO_LONG": "Password too long.",
+    "ERR_PASSWORD_TOO_SHORT": "Password too short.",
+    "ERR_PASSWORD_UPPERCASE": "Password must include uppercase character(s).",
+    "ERR_RESULT_TYPE_REQUIRED": "Review result type required.",
+    "ERR_TOS_NOT_ACCEPTED": "Terms of service not accepted.",
+    "ERR_UNAUTHORIZED": "Unauthorized.",
+    "ERR_UNAUTHENTICATED": "Unauthenticated.",
+    "ERR_USERNAME_IN_USE": "Username is already in use, select another one.",
+    "ERR_USERNAME_REQUIRED": "Username required.",
+    "ERR_USERNAME_TOO_LONG": "Username too long.",
+    "ERR_USERNAME_TOO_SHORT": "Username too short.",
+    "ERR_ZERO_OR_NEGATIVE_NUMBER": "Value cannot be zero or negative.",
+    "INTERNAL_SERVER_ERROR": "Internal server error."
+  }
+}

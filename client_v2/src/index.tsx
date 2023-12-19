@@ -1,15 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-
-// Third party imports
-import { PersistGate } from 'redux-persist/integration/react'
-import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
-import { Provider } from 'react-redux'
-
-// Project imports
 import reportWebVitals from './reportWebVitals'
-import { store, persistor } from './app/store'
-import App from './App'
+import App from './app/App'
 import './index.css'
 import './i18n'
 
@@ -19,14 +11,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-      </PersistGate>
-    </Provider>
+    <App />
   </React.StrictMode>
 )
 
