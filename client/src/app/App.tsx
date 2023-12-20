@@ -6,24 +6,45 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 
-import HomePage from '../pages/HomePage'
 import NotFound from '../pages/notFound'
 import Dashboard from '../pages/dashboard'
-import Login from '../pages/login'
+import Login from '../pages/authentication/login'
+import Register from '../pages/authentication/register'
 import Proto from '../pages/study'
 import { persistor, store } from './store'
+import Notification from '../components/Notification'
+import { injectStore } from 'src/lib/axios'
+import RouterError from 'src/pages/error/RouterError'
+import Settings from 'src/pages/settings'
+import GuestGuard from 'src/utils/routeGuard/GuestGuard'
+import Authentication from 'src/pages/authentication'
+import AuthGuard from 'src/utils/routeGuard/AuthGuard'
+import MainLayout from 'src/layout/MainLayout'
+
+// For dispatching notifications via axios interceptor.
+injectStore(store)
 
 function App (): React.JSX.Element {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        <Notification />
         <Router>
           <Routes>
-            <Route index element={<HomePage />} />
-            <Route path="/kanji/recognise" element={<Proto />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<NotFound />} />
+            <Route element={<AuthGuard />}>
+              <Route element={<MainLayout />}>
+                <Route path="/" errorElement={<RouterError />} element={<Dashboard />} />
+                <Route path="/settings" errorElement={<RouterError />} element={<Settings />} />
+                <Route path="/kanji/recognise" errorElement={<RouterError />} element={<Proto />} />
+              </Route>
+            </Route>
+            <Route element={<GuestGuard />}>
+              <Route element={<Authentication />}>
+                <Route path="/auth/login" errorElement={<RouterError />} element={<Login />} />
+                <Route path="/auth/register" errorElement={<RouterError />} element={<Register />} />
+              </Route>
+            </Route>
+            <Route path="*" errorElement={<RouterError />} element={<NotFound />} />
           </Routes>
         </Router>
       </PersistGate>
@@ -57,8 +78,6 @@ export default App
                   <Route element={<BugReports />} errorElement={<RouterError />} path={adminBugReports} />
                 </Route>
               </Route>
-
-
               <Route element={<Study />} errorElement={<RouterError />} path={studyDeck} />
             </Route>
 

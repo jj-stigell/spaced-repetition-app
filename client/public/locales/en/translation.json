@@ -32,6 +32,7 @@
       "or": "or",
       "welcomeBack": "Welcome back!",
       "enterCredentials": "Enter your credentials to continue",
+      "signingIn": "Signin in...",
       "rememberMe": "Remember me",
       "googleLogin": "Sign in with Google",
       "facebookLogin": "Sign in with Facebook",
@@ -46,11 +47,14 @@
       "success": "New user created successfully with email address {{email}}. We sent you a confirm link by email (just in case check spam folder), please confirm your email and start learning. Redirecting to login page in {{redirectTimeout}} seconds.",
       "registerButton": "Register",
       "noAccount": "Don't have an account? Sign Up",
-      "haveAccount": "Have an account?",
+      "haveAccount": "Have an account? Sign In",
       "enterCreds": "Enter your credentials to continue",
       "agreeWith": "I have read and agree to the",
       "TOS": "Terms of Service",
-      "cancelSuccessDisplay": "If you want to return to the register form, click here"
+      "cancelSuccessDisplay": "If you want to return to the register form, click here",
+      "googleRegister": "Register with Google",
+      "facebookRegister": "Register with Facebook",
+      "registering": "Registering..."
     },
 
 

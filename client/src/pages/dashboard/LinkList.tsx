@@ -1,9 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import Footer from '../components/Footer'
-
-export default function HomePage (): React.JSX.Element {
+export default function LinkList (): React.JSX.Element {
   return (
     <>
       <div className="p-8">
@@ -44,7 +42,6 @@ export default function HomePage (): React.JSX.Element {
           </ul>
         </div>
       </div>
-      <Footer />
     </>
   )
 }

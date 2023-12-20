@@ -1,10 +1,41 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React from 'react'
 
-export default function Modal ({ setShowModal, showModal }: any): React.JSX.Element {
+interface Props {
+  setShowModal: (showModal: boolean) => void
+  showModal: boolean
+  children: React.ReactNode
+}
+
+export default function Modal ({ setShowModal, showModal, children }: Props): React.JSX.Element {
   return (
         <div
-            onClick={() => setShowModal(false)}
+            onClick={() => { setShowModal(false) }}
+            className={`
+            fixed inset-0 flex justify-center items-center transition-colors
+            ${showModal ? 'visible bg-black/20' : 'invisible'}
+            `}
+        >
+            <div
+                onClick={(e) => { e.stopPropagation() }}
+                className={`
+                bg-white rounded-xl shadow transition-all
+                ${showModal ? 'scale-100 opacity-100' : 'scale-125 opacity-0'}
+                `}
+            >
+                <div className="relative p-4 w-full max-w-lg max-h-full">
+                    {children}
+                </div>
+            </div>
+        </div>
+  )
+}
+
+/*
+export default function Modal ({ setShowModal, showModal }: Props): React.JSX.Element {
+  return (
+        <div
+            onClick={() => { setShowModal(false) }}
             className={`
             fixed inset-0 flex justify-center items-center transition-colors
             ${showModal ? 'visible bg-black/20' : 'invisible'}
@@ -23,7 +54,7 @@ export default function Modal ({ setShowModal, showModal }: any): React.JSX.Elem
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                                 Create New Product
                             </h3>
-                            <button onClick={() => setShowModal(false)} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+                            <button onClick={() => { setShowModal(false) }} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
                                 <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                 </svg>
@@ -64,3 +95,5 @@ export default function Modal ({ setShowModal, showModal }: any): React.JSX.Elem
         </div>
   )
 }
+
+*/

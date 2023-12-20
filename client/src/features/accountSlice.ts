@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { JlptLevel, Role } from 'src/types'
 
-export interface Account {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type Account = {
   username: string
   email: string
   role: Role
@@ -13,7 +14,7 @@ export interface Account {
   autoPlayAudio: boolean
 }
 
-export interface AccountState {
+export type AccountState = {
   isLoggedIn: boolean
   username: string
   email: string
@@ -24,7 +25,7 @@ export interface AccountState {
   autoNextCard: boolean
   nextCardtimer: number
   autoPlayAudio: boolean
-}
+} & Account
 
 export const initialState: AccountState = {
   isLoggedIn: false,

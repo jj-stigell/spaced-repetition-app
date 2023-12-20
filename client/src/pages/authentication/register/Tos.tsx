@@ -1,48 +1,15 @@
 import * as React from 'react'
 
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
 import { useTranslation } from 'react-i18next'
 
-function TosDialog (
-  { show, setShow }:
-  { show: boolean, setShow: React.Dispatch<React.SetStateAction<boolean>> }
-): JSX.Element {
+export default function Tos (): JSX.Element {
   const { t } = useTranslation()
-  const descriptionElementRef = React.useRef<HTMLElement>(null)
-
-  React.useEffect(() => {
-    if (show) {
-      const { current: descriptionElement } = descriptionElementRef
-      if (descriptionElement !== null) {
-        descriptionElement.focus()
-      }
-    }
-  }, [show])
-
-  const handleClose = (): void => {
-    setShow(false)
-  }
 
   return (
-    <Dialog
-      open={show}
-      onClose={handleClose}
-      scroll='paper'
-      aria-labelledby="scroll-dialog-title"
-      aria-describedby="scroll-dialog-description"
-    >
-      <DialogTitle id="scroll-dialog-title">{t('modals.tos.title')}</DialogTitle>
-      <DialogContent dividers={true}>
-        <DialogContentText
-          id="scroll-dialog-description"
-          ref={descriptionElementRef}
-          tabIndex={-1}
-        >
+    <div>
+      <h1 id="scroll-dialog-title">{t('modals.tos.title')}</h1>
+
+        <div>
           <p>This is a legal agreement between users of this service (&quot;you&quot; or &quot;your&quot;) and Yomiko. This agreement governs your usage of Yomiko.io (&quot;the service&quot;).</p>
           <p>In this document, &quot;we&quot; and &quot;our&quot; refers to Yomiko, its staff, and trusted third-party contractors.</p>
 
@@ -94,13 +61,8 @@ function TosDialog (
           <p>TO THE EXTENT NOT PROHIBITED BY LAW, IN NO EVENT SHALL WE BE LIABLE FOR ANY GENERAL, SPECIAL, CONSEQUENTIAL, INCIDENTAL OR OTHER DAMAGES, INCLUDING, WITHOUT LIMITATION, LOSS OF DATA, INCORRECT DATA, BUSINESS INTERRUPTION, OR ANY OTHER DAMAGES OR LOSSES INCURRED BY YOUR USE OF, OR INABILITY TO USE THIS SERVICE, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, AND REGARDLESS OF THE THEORY OF LIABILITY.</p>
 
           <p style={{ color: '#888888' }}>{t('modals.tos.lastUpdated')} 2023-06-10</p>
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>{t('modals.tos.closeButton')}</Button>
-      </DialogActions>
-    </Dialog>
+        </div>
+        <button onClick={() => { console.log('dskljflksdjfklsdjklfj') }}>{t('modals.tos.closeButton')}</button>
+    </div>
   )
 }
-
-export default TosDialog

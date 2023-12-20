@@ -1,20 +1,33 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import React, { useState } from 'react'
+import React from 'react'
 
 import * as yup from 'yup'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
+import { Link } from 'react-router-dom'
 
-import { constants } from '../../config/constants'
+import { useAppDispatch, useAppSelector } from 'src/app/hooks'
+import { RootState } from 'src/app/store'
+import { RememberMe, setRememberMe as SetRememberMe, resetRememberMe } from 'src/features/rememberMeSlice'
+import { constants } from 'src/config/constants'
+import axios from 'src/lib/axios'
+import { login } from 'src/config/api'
+import i18n from 'src/i18n'
+import { Account, setAccount } from 'src/features/accountSlice'
+import Spinner from 'src/components/Spinner'
+import routes from 'src/config/routes'
 
 export default function Login (): React.JSX.Element {
   const { t } = useTranslation()
-  const [remeberMe, setRememberMe] = useState(false)
+  const dispatch = useAppDispatch()
+  const [loggingIn, setLoggingIn] = React.useState<boolean>(false)
+  const { rememberEmail, rememberPassword }: RememberMe = useAppSelector((state: RootState) => state.remember)
+  const [rememberMe, setRememberMe] = React.useState<boolean>(rememberEmail != null && rememberPassword != null)
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: ''
+      email: rememberEmail ?? '',
+      password: rememberPassword ?? ''
     },
     validationSchema: yup.object({
       email: yup
@@ -38,7 +51,32 @@ export default function Login (): React.JSX.Element {
         .required(t('errors.ERR_PASSWORD_REQUIRED'))
     }),
     onSubmit: (values: any) => {
-      alert(JSON.stringify(values, null, 2))
+      setLoggingIn(true)
+
+      axios.post(login, {
+        email: values.email,
+        password: values.password
+      }).then(function (response) {
+        const accountInformation: Account = response.data.data
+        void i18n.changeLanguage(accountInformation.language.toLocaleLowerCase())
+        // TODO, get nextcard and timer from backend
+        dispatch(setAccount({
+          isLoggedIn: true,
+          ...accountInformation,
+          autoNextCard: true,
+          nextCardtimer: 5
+        }))
+
+        // Store remember me if selected, otherwise clear.
+        if (rememberMe) {
+          dispatch(SetRememberMe({ rememberEmail: values.email, rememberPassword: values.password }))
+        } else {
+          dispatch(resetRememberMe({}))
+        }
+        setLoggingIn(false)
+      }).catch(function () {
+        setLoggingIn(false)
+      })
     }
   })
 
@@ -51,7 +89,7 @@ export default function Login (): React.JSX.Element {
         >
           Yomiko
         </a>
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 shadow-lg">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               {t('pages.login.title')}
@@ -60,7 +98,7 @@ export default function Login (): React.JSX.Element {
               className="space-y-4 md:space-y-6"
               onSubmit={formik.handleSubmit}
             >
-              {/* Password field */}
+              {/* Email field */}
               <div>
                 <label
                   htmlFor="email"
@@ -125,8 +163,8 @@ export default function Login (): React.JSX.Element {
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
                     <input
-                      onClick={() => { setRememberMe(!remeberMe) }}
-                      checked={remeberMe}
+                      onClick={() => { setRememberMe(!rememberMe) }}
+                      checked={rememberMe}
                       id="remember"
                       aria-describedby="remember"
                       type="checkbox"
@@ -150,19 +188,19 @@ export default function Login (): React.JSX.Element {
                 </a>
               </div>
               <button
-                disabled={false}
+                disabled={loggingIn}
                 type="submit"
-                className="w-full text-white bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="w-full text-white bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700"
               >
-                {t('pages.login.logInButton')}
+                {loggingIn ? (<Spinner text={t('pages.login.signingIn')} />) : t('pages.login.logInButton')}
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                <a
-                  href="/register"
+                <Link
+                  to={routes.register}
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   {t('pages.register.noAccount')}
-                </a>
+                </Link>
               </p>
             </form>
             {/* 3rd party auth */}
@@ -171,7 +209,7 @@ export default function Login (): React.JSX.Element {
               <p className="mx-4 text-grey-600">{t('pages.login.or')}</p>
               <hr className="h-0 border-b border-solid border-grey-500 grow" />
             </div>
-            <button className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105">
+            <button className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
               <img
                 className="h-5 mr-2"
                 src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/motion-tailwind/img/logos/logo-google.png"
@@ -179,7 +217,7 @@ export default function Login (): React.JSX.Element {
               />
               {t('pages.login.googleLogin')}
             </button>
-            <button className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105">
+            <button className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
               <img
                 className="h-5 mr-2"
                 src="https://cdn.iconscout.com/icon/free/png-256/free-facebook-logo-2019-1597680-1350125.png"

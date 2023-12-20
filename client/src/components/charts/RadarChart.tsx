@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -6,9 +6,9 @@ import {
   LineElement,
   Filler,
   Tooltip,
-  Legend,
-} from 'chart.js';
-import { Radar } from 'react-chartjs-2';
+  Legend
+} from 'chart.js'
+import { Radar } from 'react-chartjs-2'
 
 ChartJS.register(
   RadialLinearScale,
@@ -17,7 +17,7 @@ ChartJS.register(
   Filler,
   Tooltip,
   Legend
-);
+)
 
 export const data = {
   labels: ['Kanji', 'Vocabulary', 'Grammar', 'Listening', 'Kana', 'Reading'],
@@ -27,20 +27,20 @@ export const data = {
       data: [7, 10, 7, 6, 9, 4],
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgba(255, 99, 132, 1)',
-      borderWidth: 1,
+      borderWidth: 1
     },
     {
       label: 'JLPT N5 Ready Goal',
       data: [9, 9, 8, 7, 10, 7],
       backgroundColor: 'rgba(25, 239, 45, 0.2)',
       borderColor: 'rgba(25, 239, 45, 1)',
-      borderWidth: 1,
-    },
-  ],
-};
+      borderWidth: 1
+    }
+  ]
+}
 
-export default function RadarChart() {
+export default function RadarChart (): React.JSX.Element {
   return (
     <Radar data={data} />
-  );
+  )
 }

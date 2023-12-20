@@ -2,7 +2,7 @@ import React from 'react'
 
 import ErrorPage from '.'
 
-function ReviewError ({ errorMessage }: { errorMessage: string }): JSX.Element {
+export default function ReviewError ({ errorMessage }: { errorMessage: string }): JSX.Element {
   return (
     <ErrorPage>
       <>
@@ -11,5 +11,3 @@ function ReviewError ({ errorMessage }: { errorMessage: string }): JSX.Element {
     </ErrorPage>
   )
 }
-
-export default ReviewError

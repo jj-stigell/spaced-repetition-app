@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React from 'react'
 
+// HINT
 export default function UserInteractionPanel ({ onReadingSubmit, onShowHint, inputValue, onInputChange }: any): React.JSX.Element {
   const buttonClass = inputValue ? 'bg-blue-500 hover:bg-blue-600' : 'bg-blue-200'
 

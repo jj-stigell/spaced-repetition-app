@@ -2,9 +2,14 @@ import React from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { dashboard } from '../../config/path'
+import routes from '../../config/routes'
 
-function ErrorPage ({ children }: { children: JSX.Element }): JSX.Element {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type Props = {
+  children: JSX.Element
+}
+
+export default function ErrorPage ({ children }: Props): JSX.Element {
   const { t } = useTranslation()
 
   return (
@@ -15,11 +20,9 @@ function ErrorPage ({ children }: { children: JSX.Element }): JSX.Element {
       <p>{t('pages.error.errorMessage')}</p>
       <p>{children}</p>
       <br/>
-      <Link to={dashboard}>
+      <Link to={routes.dashboard}>
         {t('pages.error.link')}
       </Link>
     </div>
   )
 }
-
-export default ErrorPage

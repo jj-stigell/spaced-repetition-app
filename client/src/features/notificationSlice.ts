@@ -1,46 +1,46 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface Notification {
-  showNotification: boolean
+  showNotification?: boolean
   message: string
-  autoHideDuration: number
-  severity: 'success' | 'error' | 'warning' | 'info'
-  anchorOrigin: {
-    vertical: 'bottom' | 'top'
-    horizontal: 'center' | 'left' | 'right'
-  }
+  autoHideDuration?: number
+  severity: 'success' | 'error' | 'warning'
 }
 
 const initialState: Notification = {
   showNotification: false,
   message: 'default notification message',
   autoHideDuration: 5000,
-  severity: 'success',
-  anchorOrigin: {
-    vertical: 'top',
-    horizontal: 'center'
-  }
+  severity: 'success'
 }
 
 const notificationSlice = createSlice({
   name: 'notification',
   initialState,
   reducers: {
-    setNotification (state, action) {
+    set (state, action) {
       return {
         showNotification: true,
         message: action.payload?.message ?? initialState.message,
         autoHideDuration: action.payload?.autoHideDuration ?? initialState.autoHideDuration,
-        severity: action.payload?.severity ?? initialState.severity,
-        anchorOrigin: {
-          vertical: action.payload?.anchorOrigin?.vertical ?? initialState.anchorOrigin.vertical,
-          horizontal: action.payload?.anchorOrigin?.horizontal ?? initialState.anchorOrigin.horizontal
-        }
+        severity: action.payload?.severity ?? initialState.severity
       }
+    },
+    clear (action) {
+      return initialState
     }
   }
 })
 
-export const { setNotification } = notificationSlice.actions
+export const setNotification = (payload: Notification) => {
+  return async (dispatch: any) => {
+    dispatch(set(payload))
+    setTimeout(() => {
+      dispatch(clear())
+    }, payload.autoHideDuration ?? initialState.autoHideDuration)
+  }
+}
+
+export const { set, clear } = notificationSlice.actions
 
 export default notificationSlice.reducer

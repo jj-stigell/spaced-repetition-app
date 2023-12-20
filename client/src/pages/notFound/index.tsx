@@ -2,6 +2,7 @@ import React from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import routes from 'src/config/routes'
 
 export default function NotFound (): React.JSX.Element {
   const { t } = useTranslation()
@@ -11,7 +12,7 @@ export default function NotFound (): React.JSX.Element {
             <p className="text-7xl md:text-8xl lg:text-9xl font-bold tracking-wider text-gray-300">404</p>
             <p className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-wider text-gray-300 mt-2">{t('pages.notFound.title')}</p>
             <p className="text-lg md:text-xl lg:text-2xl text-gray-500 my-12">{t('pages.notFound.description')}</p>
-            <Link to="/" className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded transition duration-150">{t('pages.notFound.link')}</Link>
+            <Link to={routes.dashboard} className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-gray-100 px-4 py-2 rounded transition duration-150">{t('pages.notFound.link')}</Link>
         </div>
     </div>
   )

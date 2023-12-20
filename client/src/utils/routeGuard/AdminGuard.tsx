@@ -8,7 +8,7 @@ import { Role } from '@common/types'
 
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
-import { dashboard } from '../../config/path'
+import routes from '../../config/routes'
 
 /**
  * AuthGuard is a route guard that prevents unauthenticated users from accessing
@@ -20,7 +20,7 @@ function AuthGuard (): JSX.Element {
 
   if (role === Role.READ_RIGHT || role === Role.WRITE_RIGHT || role === Role.SUPERUSER) return <Outlet/>
 
-  return <Navigate to={dashboard}/>
+  return <Navigate to={routes.dashboard}/>
 }
 
 export default AuthGuard

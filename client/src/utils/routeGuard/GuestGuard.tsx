@@ -6,7 +6,7 @@ import { Outlet, Navigate } from 'react-router-dom'
 // Project imports
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store'
-import { dashboard } from '../../config/path'
+import routes from '../../config/routes'
 
 /**
  * GuestGuard is a route guard that prevents logged in users from accessing
@@ -17,7 +17,7 @@ function GuestGuard (): JSX.Element {
 
   if (!isLoggedIn) return <Outlet/>
 
-  return <Navigate to={dashboard}/>
+  return <Navigate to={routes.dashboard}/>
 }
 
 export default GuestGuard
