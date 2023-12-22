@@ -133,6 +133,14 @@ export type ConfirmEmailPayload = {
   readonly url: string;
 };
 
+export type DeleteAccountPayload = {
+  readonly translation: object;
+  readonly email: string;
+  readonly username: string;
+  readonly date: string;
+  readonly url: string;
+};
+
 export enum DeckCategory {
   KANJI = 'KANJI',
   KANA = 'KANA',
@@ -204,6 +212,7 @@ export type GeneralErrors = {
 export enum HttpCode {
   Ok = 200,
   Created = 201,
+  Accepted = 202,
   BadRequest = 400,
   Unauthorized = 401,
   Forbidden = 403,

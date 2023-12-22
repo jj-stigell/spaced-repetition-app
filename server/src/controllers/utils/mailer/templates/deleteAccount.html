@@ -49,25 +49,17 @@
 <body>
     <div class="container">
         <h1 class="text-colored">{{translation.body.title}}</h1>
-        <div>{{translation.body.welcome}} <b class="text-colored">{{username}}</b>!</div>
-        <p>
-            {{translation.body.creationSuccess}}
-            <br/><br/>
-            {{translation.body.loginInformation}}
-            <br/><br/>
-            <span style="font-size: 14px; font-weight: bold">{{translation.body.email}} <span class="text-colored">{{email}}</span></span>
-            <br/><br/>
-            {{translation.body.completeProcess}}
-        </p>
-        <p><a class="link" href="{{url}}" target="_blank">{{translation.body.confirmButton}}</a></p>
+        <div>{{translation.body.greeting}} <b class="text-colored">{{username}}</b>!</div>
+        <p>{{translation.body.content}}</p>
+        <p>{{date}}</p>
+        <p>{{translation.body.cancel}}</p>
+        <p><a class="link" href="{{url}}" target="_blank">{{translation.body.loginButton}}</a></p>
         <p>{{translation.body.urlProblem}} <a href="{{url}}" target="_blank">{{url}}</a></p>
         <p>{{translation.body.regards}}<br /><em>{{translation.body.signature}}</em></p>
         <br>
         <hr>
         <footer>
             <ul>
-                <li>{{translation.body.footer.expireWarning}}<a href="https://www.app.yomiko.io/auth/confirm-email" target="_blank">{{translation.body.footer.expireWarningLinkText}}</a>.</li>
-                <li>{{translation.body.footer.sendOnlyAddress}}</li>
                 <li>{{translation.body.footer.faqNote}}<a href="https://www.yomiko.io/faq" target="_blank">{{translation.body.footer.faqNoteLinkText}}</a>.</li>
                 <li>{{translation.body.footer.privacyPolicy}}<a href="https://www.yomiko.io/privacy" target="_blank">{{translation.body.footer.privacyPolicyLinkText}}</a>.</li>
             </ul>

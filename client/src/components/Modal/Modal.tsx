@@ -1,13 +1,19 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import React from 'react'
+import React, { ComponentProps } from 'react'
 
-interface Props {
+export interface ModalProps extends Omit<ComponentProps<'div'>, 'ref' | 'style'> {
+  /**
+   * Function for toggling the showstate of the modal.
+   */
   setShowModal: (showModal: boolean) => void
+  /**
+   * If `true`, modal is and its children are dislpayed.
+   * @default false
+   */
   showModal: boolean
-  children: React.ReactNode
 }
 
-export default function Modal ({ setShowModal, showModal, children }: Props): React.JSX.Element {
+export default function Modal ({ setShowModal, showModal = false, children }: ModalProps): React.JSX.Element {
   return (
         <div
             onClick={() => { setShowModal(false) }}

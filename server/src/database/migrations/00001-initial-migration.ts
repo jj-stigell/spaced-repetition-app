@@ -109,7 +109,12 @@ export default {
           defaultValue: DataTypes.NOW
         },
         created_at: DataTypes.DATE,
-        updated_at: DataTypes.DATE
+        updated_at: DataTypes.DATE,
+        delete_account: {
+          type: DataTypes.DATE,
+          allowNull: true,
+          defaultValue: null
+        },
       }, { transaction });
       await queryInterface.createTable('deck', {
         id: {
@@ -577,19 +582,6 @@ export default {
           defaultValue: DataTypes.NOW
         }
       }, { transaction });
-
-
-
-
-
-
-
-
-
-
-
-
-
       await queryInterface.createTable('kana', {
         id: {
           type: DataTypes.INTEGER,
@@ -734,6 +726,7 @@ export default {
   down: async (queryInterface: QueryInterface): Promise<void> => {
     const transaction: Transaction = await queryInterface.sequelize.transaction();
     try {
+      await queryInterface.dropTable('kanji_sentence', { transaction });
       await queryInterface.dropTable('answer_option', { transaction });
       await queryInterface.dropTable('kanji', { transaction });
       await queryInterface.dropTable('vocabulary', { transaction });

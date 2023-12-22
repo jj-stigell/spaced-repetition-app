@@ -100,9 +100,15 @@
       "errorMessage":"Following error encountered: ",
       "link": "Click to return to the main page",
       "unknowError": "Error unknown"
+
     },
+
+
+
+
     "settings": {
       "title": "Profile and settings",
+      "manageTitle": "Manage Account",
       "accountInformation": {
         "title": "Account information",
         "username": "Username",
@@ -117,8 +123,40 @@
         "title": "Change password",
         "button": "Change password",
         "passwordChangeSuccess": "Password changed succesfully"
+      },
+      "deleteAccount": {
+        "title": "Delete account",
+        "caution": "Proceed with caution",
+        "note": "Make sure you have taken backup of your account in case you ever need to get access to your data. We will completely wipe your data. There is no way to access your account after this action is executed.",
+        "deleteButton": "Delete account",
+        "continueButton": "Continue with deletion",
+        "warning": "Warning! This action is irreversible, all your data will be deleted. If you want to continue, enter your password below and click delete.",
+        "deleteProsessing": "Deleting account...",
+        "modalWarningUpper": "After submitting successfully, you will be logged out. Account will be deleted after 30 days of no logging in activity. You can cancel the delete process anytime by logging in to your account before the 30 days is up.",
+        "modalWarningLower": "You will receive email confirmation after submitting the form.",
+        "deleteSuccess": "Account deletetion process finished successfully. Account will be deleted {{date}}. Login to your account before that to cancel the process."
+      },
+      "logout": {
+        "title": "Logout from account",
+        "description": "Logout current session. Remember to clear cache if you are using public computer or network to access Yomiko"
       }
     },
+    "construction": {
+      "title": "Site Under Construction",
+      "body1": "We are currently in the process of building and designing our new website, and apologize for any inconvenience this may cause.",
+      "body2": "We are working hard to bring you a fully functional and user-friendly website as soon as possible. In the meantime, please bear with us as we complete this process.",
+      "body3": "Please check back soon to see the finished product.",
+      "link": "Click to return to the main page"
+    },
+
+
+
+
+
+
+
+
+
     "categories": {
       "kanji": {
         "title": "N{{jlptLevel}} kanji characters",
@@ -316,12 +354,6 @@
     "email": "Your email",
     "password": "Your password",
     "passwordConfirm": "Password confirmation"
-  },
-  "construction": {
-    "title": "Site Under Construction",
-    "body1": "Thank you for visiting our website. We are currently in the process of building and designing our new website, and apologize for any inconvenience this may cause.",
-    "body2": "We are working hard to bring you a fully functional and user-friendly website as soon as possible. In the meantime, please bear with us as we complete this process.",
-    "body3": "Please check back soon to see the finished product."
   },
   "errors": {
     "ERR_ACCEPT_TOS_REQUIRED": "Terms of service must be accecpted.",

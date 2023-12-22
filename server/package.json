@@ -17,8 +17,8 @@
     "migration:down:all": "npx sequelize-cli db:migrate:undo:all",
     "seed:up": "npx sequelize-cli db:seed:all",
     "seed:down": "npx sequelize-cli db:seed:undo",
-    "copy-locales": "cp -R ./src/controllers/utils/mailer/locales/ ./build/src/controllers/utils/mailer/locales/",
-    "copy-templates": "cp -R ./src/controllers/utils/mailer/templates/ ./build/src/controllers/utils/mailer/templates/"
+    "copy-locales": "cp -R ./src/controllers/utils/mailer/locales/ ./build/server/src/controllers/utils/mailer/locales/",
+    "copy-templates": "cp -R ./src/controllers/utils/mailer/templates/ ./build/server/src/controllers/utils/mailer/templates/"
   },
   "dependencies": {
     "@types/express": "^4.17.14",

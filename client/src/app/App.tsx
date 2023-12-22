@@ -12,7 +12,7 @@ import Login from '../pages/authentication/login'
 import Register from '../pages/authentication/register'
 import Proto from '../pages/study'
 import { persistor, store } from './store'
-import Notification from '../components/Notification'
+import Notification from '../components/Notification/index'
 import { injectStore } from 'src/lib/axios'
 import RouterError from 'src/pages/error/RouterError'
 import Settings from 'src/pages/settings'
@@ -20,6 +20,7 @@ import GuestGuard from 'src/utils/routeGuard/GuestGuard'
 import Authentication from 'src/pages/authentication'
 import AuthGuard from 'src/utils/routeGuard/AuthGuard'
 import MainLayout from 'src/layout/MainLayout'
+import UnderConstruction from 'src/pages/underConstruction'
 
 // For dispatching notifications via axios interceptor.
 injectStore(store)
@@ -35,6 +36,9 @@ function App (): React.JSX.Element {
               <Route element={<MainLayout />}>
                 <Route path="/" errorElement={<RouterError />} element={<Dashboard />} />
                 <Route path="/settings" errorElement={<RouterError />} element={<Settings />} />
+                <Route path="/statistics" errorElement={<RouterError />} element={<UnderConstruction />} />
+                <Route path="/study" errorElement={<RouterError />} element={<UnderConstruction />} />
+                <Route path="/exam" errorElement={<RouterError />} element={<UnderConstruction />} />
                 <Route path="/kanji/recognise" errorElement={<RouterError />} element={<Proto />} />
               </Route>
             </Route>

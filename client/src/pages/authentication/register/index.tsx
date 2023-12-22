@@ -13,9 +13,9 @@ import axios from 'src/lib/axios'
 import { register } from 'src/config/api'
 import { setNotification } from 'src/features/notificationSlice'
 import Spinner from 'src/components/Spinner'
-import Modal from 'src/components/Modal'
 import Tos from './Tos'
 import routes from 'src/config/routes'
+import Modal from 'src/components/Modal'
 
 export default function Register (): React.JSX.Element {
   const { t } = useTranslation()

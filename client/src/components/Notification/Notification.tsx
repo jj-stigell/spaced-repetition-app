@@ -1,4 +1,5 @@
 import * as React from 'react'
+import './styles.css'
 
 import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { RootState } from 'src/app/store'
@@ -42,7 +43,7 @@ export default function Notification (): React.JSX.Element {
   return (
     <div
       id="toast"
-      className="fixed left-1/2 top-0 z-40 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 animate-slideIn"
+      className="fixed left-1/2 top-0 z-50 flex items-center w-full max-w-sm p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 animate-slideIn"
       role="alert"
     >
       { notification.severity === 'success' && success() }
