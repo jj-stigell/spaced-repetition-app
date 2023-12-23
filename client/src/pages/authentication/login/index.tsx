@@ -14,8 +14,8 @@ import axios from 'src/lib/axios'
 import { login } from 'src/config/api'
 import i18n from 'src/i18n'
 import { Account, setAccount } from 'src/features/accountSlice'
-import Spinner from 'src/components/Spinner'
 import routes from 'src/config/routes'
+import Button from 'src/components/Button'
 
 export default function Login (): React.JSX.Element {
   const { t } = useTranslation()
@@ -187,13 +187,13 @@ export default function Login (): React.JSX.Element {
                   {t('misc.passwordForgot')}
                 </a>
               </div>
-              <button
+              <Button
+                type='submit'
+                loading={loggingIn}
                 disabled={loggingIn}
-                type="submit"
-                className="w-full text-white bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700"
-              >
-                {loggingIn ? (<Spinner text={t('pages.login.signingIn')} />) : t('pages.login.logInButton')}
-              </button>
+                loadingText={t('pages.login.signingIn')}
+                buttonText={t('pages.login.logInButton')}
+              />
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 <Link
                   to={routes.register}

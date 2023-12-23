@@ -12,6 +12,7 @@ import axios from 'src/lib/axios'
 import { constants } from 'src/config/constants'
 import Spinner from 'src/components/Spinner'
 import { setNotification } from 'src/features/notificationSlice'
+import Button from 'src/components/Button'
 
 export default function Manage (): JSX.Element {
   const dispatch = useAppDispatch()
@@ -197,13 +198,12 @@ export default function Manage (): JSX.Element {
           {t('pages.settings.logout.title')}
         </p>
         <p className="mt-1">{t('pages.settings.logout.description')}</p>
-        <button
+        <Button
+          loading={loggingOut}
           disabled={loggingOut}
-          onClick={handleLogout}
-          className="mt-2 mb-8 rounded-lg bg-blue-600 hover:bg-blue-800 px-4 py-2 text-white"
-        >
-          {t('buttonGeneral.logout')}
-        </button>
+          handleClick={handleLogout}
+          buttonText={t('buttonGeneral.logout')}
+        />
         <p className="py-2 text-xl font-semibold">
           {t('pages.settings.deleteAccount.title')}
         </p>

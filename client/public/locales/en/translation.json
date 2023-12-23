@@ -122,7 +122,10 @@
       "changePassword": {
         "title": "Change password",
         "button": "Change password",
-        "passwordChangeSuccess": "Password changed succesfully"
+        "processing": "Updating password...",
+        "passwordChangeSuccess": "Password changed succesfully",
+        "forgotPassword": "Can't remember your current password?",
+        "resetPasswordButton": "Reset password."
       },
       "deleteAccount": {
         "title": "Delete account",

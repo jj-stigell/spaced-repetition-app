@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { ComponentProps } from 'react'
 
-export interface ModalProps extends Omit<ComponentProps<'div'>, 'ref' | 'style'> {
+interface ModalProps extends Omit<ComponentProps<'div'>, 'ref' | 'style'> {
   /**
    * Function for toggling the showstate of the modal.
    */

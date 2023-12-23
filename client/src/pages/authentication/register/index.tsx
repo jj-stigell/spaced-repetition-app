@@ -12,10 +12,10 @@ import { constants } from 'src/config/constants'
 import axios from 'src/lib/axios'
 import { register } from 'src/config/api'
 import { setNotification } from 'src/features/notificationSlice'
-import Spinner from 'src/components/Spinner'
 import Tos from './Tos'
 import routes from 'src/config/routes'
 import Modal from 'src/components/Modal'
+import Button from 'src/components/Button'
 
 export default function Register (): React.JSX.Element {
   const { t } = useTranslation()
@@ -255,13 +255,13 @@ export default function Register (): React.JSX.Element {
                   </div>
                 </div>
               </div>
-              <button
+              <Button
+                type='submit'
+                loading={registering}
                 disabled={registering}
-                type="submit"
-                className="w-full text-white bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700"
-              >
-                {registering ? (<Spinner text={t('pages.register.registering')} />) : t('pages.register.registerButton')}
-              </button>
+                loadingText={t('pages.register.registering')}
+                buttonText={t('pages.register.registerButton')}
+              />
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 <Link
                   to={routes.login}
