@@ -93,6 +93,7 @@ export default function ChangePassword (): JSX.Element {
               severity: 'success'
             })
           )
+          setUpdating(false)
         })
         .catch(function () {
           setUpdating(false)

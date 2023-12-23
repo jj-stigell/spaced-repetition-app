@@ -10,7 +10,6 @@ import { account, logout } from 'src/config/api'
 import { resetAccount } from 'src/features/accountSlice'
 import axios from 'src/lib/axios'
 import { constants } from 'src/config/constants'
-import Spinner from 'src/components/Spinner'
 import { setNotification } from 'src/features/notificationSlice'
 import Button from 'src/components/Button'
 
@@ -158,34 +157,21 @@ export default function Manage (): JSX.Element {
                 )
               : null}
           </div>
-          <button
+          <Button
+            type='submit'
             disabled={deleting}
-            type="submit"
-            className={`w-full text-white bg-red-500 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 ${
-              deleting ? 'cursor-not-allowed' : ''
-            }`}
-          >
-            {deleting
-              ? (
-              <Spinner
-                text={t('pages.settings.deleteAccount.deleteProsessing')}
-              />
-                )
-              : (
-                  t('pages.settings.deleteAccount.deleteButton')
-                )}
-          </button>
+            loading={deleting}
+            loadingText={t('pages.settings.deleteAccount.deleteProsessing')}
+            buttonText={t('pages.settings.deleteAccount.deleteButton')}
+          />
         </form>
-        <button
+        <div className="my-4"/>
+        <Button
+          type='button'
+          handleClick={() => { setShowModal(false) }}
           disabled={deleting}
-          onClick={() => {
-            setShowModal(false)
-          }}
-          type="submit"
-          className={`mt-4 w-full text-white bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 ${deleting ? 'cursor-not-allowed' : ''}`}
-        >
-          {t('buttonGeneral.cancel')}
-        </button>
+          buttonText={t('buttonGeneral.cancel')}
+        />
       </Modal>
       <div className="pt-4">
         <h1 className="py-2 text-2xl font-semibold">
@@ -198,13 +184,15 @@ export default function Manage (): JSX.Element {
           {t('pages.settings.logout.title')}
         </p>
         <p className="mt-1">{t('pages.settings.logout.description')}</p>
+        <div className="my-4"/>
         <Button
           loading={loggingOut}
           disabled={loggingOut}
           handleClick={handleLogout}
           buttonText={t('buttonGeneral.logout')}
         />
-        <p className="py-2 text-xl font-semibold">
+        <hr className="my-4" />
+        <p className="mb-4 text-xl font-semibold">
           {t('pages.settings.deleteAccount.title')}
         </p>
         <p className="inline-flex items-center rounded-full bg-rose-100 px-4 py-1 text-rose-600">

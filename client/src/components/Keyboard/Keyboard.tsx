@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 
 // Includes dakuten and handakuten.
-const hiraganaKeys = [
+export const hiraganaKeys = [
   ['あ', 'か', 'さ', 'た', 'な', 'は', 'ま', 'や', 'ら', 'わ', '゛'],
   ['い', 'き', 'し', 'ち', 'に', 'ひ', 'み', '', 'り', '', '゜'],
   ['う', 'く', 'す', 'つ', 'ぬ', 'ふ', 'む', 'ゆ', 'る', 'を', 'っ'],
@@ -10,13 +10,13 @@ const hiraganaKeys = [
   ['お', 'こ', 'そ', 'と', 'の', 'ほ', 'も', 'よ', 'ろ', 'ん', '']
 ]
 
-const hiraganaKeysYoon = [
+export const hiraganaKeysYoon = [
   ['きゃ', 'しゃ', 'ちゃ', 'にゃ', 'ひゃ', 'みゃ', 'りゃ', 'ぎゃ', 'じゃ', 'ぢゃ', 'びゃ', 'ぴゃ'],
   ['きゅ', 'しゅ', 'ちゅ', 'にゅ', 'ひゅ', 'みゅ', 'りゅ', 'ぎゅ', 'じゅ', 'ぢゅ', 'びゅ', 'ぴゅ'],
   ['きょ', 'しょ', 'ちょ', 'にょ', 'ひょ', 'みょ', 'りょ', 'ぎょ', 'じょ', 'ぢょ', 'びょ', 'ぴょ']
 ]
 
-function mapKeys (keys: string[][], handleKeyPress: (char: string) => void): React.JSX.Element {
+export function mapKeys (keys: string[][], handleKeyPress: (char: string) => void): React.JSX.Element {
   return (
     <>
       {keys.map((row, rowIndex) => (
@@ -37,11 +37,11 @@ function mapKeys (keys: string[][], handleKeyPress: (char: string) => void): Rea
   )
 }
 
-interface Props {
+interface IKeyboard {
   addCharFromKeyboard: (value: string) => void
 }
 
-export default function Keyboard ({ addCharFromKeyboard }: Props): React.JSX.Element {
+export default function Keyboard ({ addCharFromKeyboard }: IKeyboard): React.JSX.Element {
   const [activeTab, setActiveTab] = useState('hiragana')
 
   const getTabClass = (tabName: string): string => {

@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { useAppSelector } from 'src/app/hooks'
 import { RootState } from 'src/app/store'
 import ChangePassword from './ChangePassword'
+import ResetPassword from './ResetPassword'
 
 export default function Account (): JSX.Element {
   const { t } = useTranslation()
-  const { username, email, role } = useAppSelector(
-    (state: RootState) => state.account
-  )
+  const { username, email, role } = useAppSelector((state: RootState) => state.account)
 
   return (
     <>
@@ -57,12 +56,7 @@ export default function Account (): JSX.Element {
       </div>
       <hr className="my-4" />
       <ChangePassword />
-      <p className="my-2">
-        {t('pages.settings.changePassword.forgotPassword')} {' '}
-        <button className="inline-flex font-semibold text-blue-600 underline decoration-2">
-        {t('pages.settings.changePassword.resetPasswordButton')}
-        </button>
-      </p>
+      <ResetPassword />
     </>
   )
 }

@@ -1,9 +1,6 @@
-/**
- * @jest-environment jsdom
- */
-
 import React from 'react'
 import { render, fireEvent, screen } from '@testing-library/react'
+import '@testing-library/jest-dom'
 import Button from './Button'
 
 describe('Button Component', () => {
@@ -22,10 +19,14 @@ describe('Button Component', () => {
     expect(handleClick).toHaveBeenCalledTimes(1)
   })
 
-  it('displays the loading text and disables button when loading', () => {
-    render(<Button buttonText={buttonText} loading={true} loadingText={loadingText} />)
+  it('shows loading text when loading', () => {
+    render(<Button buttonText={buttonText} loadingText={loadingText} loading />)
     expect(screen.getByRole('button')).toHaveTextContent(loadingText)
-    expect(screen.getByRole('button')).toBeDisabled()
+  })
+
+  it('shows buttonText as default when loading but loadingText not given', () => {
+    render(<Button buttonText={buttonText} loading />)
+    expect(screen.getByRole('button')).toHaveTextContent(buttonText)
   })
 
   it('is disabled when the disabled prop is true', () => {

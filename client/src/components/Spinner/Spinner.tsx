@@ -1,11 +1,10 @@
 import React from 'react'
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-type Props = {
+interface ISpinner {
   text: string
 }
 
-export default function Spinner ({ text }: Props): React.JSX.Element {
+export default function Spinner ({ text }: ISpinner): React.JSX.Element {
   return (
     <div className="ml-20 flex items-center" role="status">
       <svg
