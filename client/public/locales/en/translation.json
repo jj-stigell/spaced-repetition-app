@@ -82,7 +82,7 @@
         "title": "Reset account password",
         "content": "Forgot your password? No worries, we can send you a reset link to your email address. We will send the link to following email address:",
         "resetDescription": "To reset account password, enter the email address you use for the account in the field below.",
-        "successTitle": "Password reset link sent succesfully. Please check your email inbox.",
+        "successTitle": "Password reset link sent succesfully. Please check your email inbox. Check spam folder also incase the filter marked the email as spam.",
         "failureTitle": "Email address verification failed",
         "resetButton": "Send reset link",
         "processing": "Sending reset link..."

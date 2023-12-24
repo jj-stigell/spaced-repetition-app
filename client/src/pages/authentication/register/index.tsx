@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React from 'react'
 
 import * as yup from 'yup'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
-
 import { Link } from 'react-router-dom'
 
 import { useAppDispatch } from 'src/app/hooks'
@@ -16,6 +14,7 @@ import Tos from './Tos'
 import routes from 'src/config/routes'
 import Modal from 'src/components/Modal'
 import Button from 'src/components/Button'
+import InputField from 'src/components/InputField'
 
 export default function Register (): React.JSX.Element {
   const { t } = useTranslation()
@@ -87,215 +86,141 @@ export default function Register (): React.JSX.Element {
 
   return (
     <>
-    <Modal showModal={showTos} toggleModal={toggleModal}>
-      <Tos />
-    </Modal>
-    <div className="bg-blue-100">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a href="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">{constants.appName}</a>
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 shadow-lg">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              {t('pages.register.title')}
-            </h1>
-            <form
-              className="space-y-4 md:space-y-6"
-              onSubmit={formik.handleSubmit}
-            >
-              {/* Email field */}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  {t('misc.email')}
-                </label>
-                <input
-                  className={`${
-                    formik.touched.email && formik.errors.email
-                      ? 'bg-red-300 border-red-500 text-red-700'
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="yomiko@yahoo.com"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+      <Modal showModal={showTos} toggleModal={toggleModal}>
+        <Tos handleClick={toggleModal} />
+      </Modal>
+      <div className="bg-blue-100">
+        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+          <a href="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">{constants.appName}</a>
+          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                {t('pages.register.title')}
+              </h1>
+              <form
+                className="space-y-4 md:space-y-6"
+                onSubmit={formik.handleSubmit}
+              >
+                {/* Email field */}
+                <InputField
+                  id='email'
+                  type='email'
+                  name='email'
+                  label={t('misc.email')}
+                  placeholder='••••••••'
                   value={formik.values.email}
-                />
-                {formik.touched.email && formik.errors.email
-                  ? (
-                  <div className="text-xs font-medium text-red-700 mt-1">
-                    {formik.errors.email as string}
-                  </div>
-                    )
-                  : null}
-              </div>
-              {/* Username field */}
-              <div>
-                <label
-                  htmlFor="username"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  {t('misc.username')}
-                </label>
-                <input
-                  className={`${
-                    formik.touched.username && formik.errors.username
-                      ? 'bg-red-300 border-red-500 text-red-700'
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  id="username"
-                  name="username"
-                  type="text"
-                  placeholder="tanaka-kun"
+                  errors={formik.errors.email}
+                  fieldTouched={formik.touched.email}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                />
+                {/* Username field */}
+                <InputField
+                  id='username'
+                  type='text'
+                  name='username'
+                  label={t('misc.username')}
+                  placeholder='tanaka-kun'
                   value={formik.values.username}
-                />
-                {formik.touched.username && formik.errors.username
-                  ? (
-                  <div className="text-xs font-medium text-red-700 mt-1">
-                    {formik.errors.username as string}
-                  </div>
-                    )
-                  : null}
-              </div>
-              {/* Password field */}
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  {t('misc.password')}
-                </label>
-                <input
-                  className={`${
-                    formik.touched.password && formik.errors.password
-                      ? 'bg-red-300 border-red-500 text-red-700'
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
+                  errors={formik.errors.username}
+                  fieldTouched={formik.touched.username}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                />
+                {/* Password field */}
+                <InputField
+                  id='password'
+                  type='password'
+                  name='password'
+                  label={t('misc.password')}
+                  placeholder='••••••••'
                   value={formik.values.password}
-                />
-                {formik.touched.password && formik.errors.password
-                  ? (
-                  <div className="text-xs font-medium text-red-700 mt-1">
-                    {formik.errors.password as string}
-                  </div>
-                    )
-                  : null}
-              </div>
-              {/* Confirm password field */}
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  {t('misc.passwordConfirm')}
-                </label>
-                <input
-                  className={`${
-                    formik.touched.passwordConfirmation && formik.errors.passwordConfirmation
-                      ? 'bg-red-300 border-red-500 text-red-700'
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  id="passwordConfirmation"
-                  name="passwordConfirmation"
-                  type="password"
-                  placeholder="••••••••"
+                  errors={formik.errors.password}
+                  fieldTouched={formik.touched.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.passwordConfirmation}
                 />
-                {formik.touched.passwordConfirmation && formik.errors.passwordConfirmation
-                  ? (
-                  <div className="text-xs font-medium text-red-700 mt-1">
-                    {formik.errors.passwordConfirmation as string}
-                  </div>
-                    )
-                  : null}
-              </div>
-              {/* Remember me and login button */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      onClick={() => {
-                        setTosAccepted(!tosAccepted)
-                        setTosError(false)
-                      }}
-                      checked={tosAccepted}
-                      id="remember"
-                      aria-describedby="remember"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label
-                      htmlFor="remember"
-                      className={`${tosError ? 'text-red-600' : 'text-gray-500'} dark:text-gray-300`}
-                    >
-                      {t('pages.register.agreeWith')} {' '}
-                    </label>
-                      <button className={`${tosError ? 'text-red-600' : ''} font-bold dark:text-gray-300 hover:underline`} onClick={(e) => {
-                        e.preventDefault()
-                        setShowTos(true)
-                      }}>
-                      {t('pages.register.TOS')}
-                      </button>
+                {/* Confirm password field */}
+                <InputField
+                  id='passwordConfirmation'
+                  type='password'
+                  name='passwordConfirmation'
+                  label={t('misc.passwordConfirm')}
+                  placeholder='••••••••'
+                  value={formik.values.passwordConfirmation}
+                  errors={formik.errors.passwordConfirmation}
+                  fieldTouched={formik.touched.passwordConfirmation}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {/* Remember me and login button */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-start">
+                    <div className="flex items-center h-5">
+                      <input
+                        onClick={() => {
+                          setTosAccepted(!tosAccepted)
+                          setTosError(false)
+                        }}
+                        checked={tosAccepted}
+                        id="remember"
+                        aria-describedby="remember"
+                        type="checkbox"
+                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label htmlFor="remember" className={`${tosError ? 'text-red-600' : 'text-gray-500'} dark:text-gray-300`}>
+                        {t('pages.register.agreeWith')} {' '}
+                      </label>
+                        <button className={`${tosError ? 'text-red-600' : ''} font-bold dark:text-gray-300 hover:underline`} onClick={(e) => {
+                          e.preventDefault()
+                          setShowTos(true)
+                        }}>
+                          {t('pages.register.TOS')}
+                        </button>
+                    </div>
                   </div>
                 </div>
+                <Button
+                  type='submit'
+                  loading={registering}
+                  disabled={registering}
+                  loadingText={t('pages.register.registering')}
+                  buttonText={t('pages.register.registerButton')}
+                />
+                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  <Link to={routes.login} className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                    {t('pages.register.haveAccount')}
+                  </Link>
+                </p>
+              </form>
+              {/* 3rd party auth */}
+              <div className="flex items-center mb-3">
+                <hr className="h-0 border-b border-solid border-grey-500 grow" />
+                <p className="mx-4 text-grey-600">{t('pages.login.or')}</p>
+                <hr className="h-0 border-b border-solid border-grey-500 grow" />
               </div>
-              <Button
-                type='submit'
-                loading={registering}
-                disabled={registering}
-                loadingText={t('pages.register.registering')}
-                buttonText={t('pages.register.registerButton')}
-              />
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                <Link
-                  to={routes.login}
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  {t('pages.register.haveAccount')}
-                </Link>
-              </p>
-            </form>
-            {/* 3rd party auth */}
-            <div className="flex items-center mb-3">
-              <hr className="h-0 border-b border-solid border-grey-500 grow" />
-              <p className="mx-4 text-grey-600">{t('pages.login.or')}</p>
-              <hr className="h-0 border-b border-solid border-grey-500 grow" />
+              <button disabled={showTos || registering} className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
+                <img
+                  className="h-5 mr-2"
+                  src="https://tailus.io/sources/blocks/social/preview/images/google.svg"
+                  alt="google-logo"
+                />
+                {t('pages.register.googleRegister')}
+              </button>
+              <button disabled={showTos || registering} className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
+                <img
+                  className="h-5 mr-2"
+                  src="https://upload.wikimedia.org/wikipedia/en/0/04/Facebook_f_logo_%282021%29.svg"
+                  alt="facebook-logo"
+                />
+                {t('pages.register.facebookRegister')}
+              </button>
             </div>
-            <button disabled={showTos || registering} className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
-              <img
-                className="h-5 mr-2"
-                src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/motion-tailwind/img/logos/logo-google.png"
-                alt=""
-              />
-              {t('pages.register.googleRegister')}
-            </button>
-            <button disabled={showTos || registering} className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
-              <img
-                className="h-5 mr-2"
-                src="https://cdn.iconscout.com/icon/free/png-256/free-facebook-logo-2019-1597680-1350125.png"
-                alt=""
-              />
-              {t('pages.register.facebookRegister')}
-            </button>
           </div>
         </div>
       </div>
-    </div>
     </>
   )
 }

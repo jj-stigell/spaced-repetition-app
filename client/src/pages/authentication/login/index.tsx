@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React from 'react'
 
 import * as yup from 'yup'
@@ -173,16 +172,16 @@ export default function Login (): React.JSX.Element {
             <button className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
               <img
                 className="h-5 mr-2"
-                src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/motion-tailwind/img/logos/logo-google.png"
-                alt=""
+                src="https://tailus.io/sources/blocks/social/preview/images/google.svg"
+                alt="google-logo"
               />
               {t('pages.login.googleLogin')}
             </button>
             <button className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
               <img
                 className="h-5 mr-2"
-                src="https://cdn.iconscout.com/icon/free/png-256/free-facebook-logo-2019-1597680-1350125.png"
-                alt=""
+                src="https://upload.wikimedia.org/wikipedia/en/0/04/Facebook_f_logo_%282021%29.svg"
+                alt="facebook-logo"
               />
               {t('pages.login.facebookLogin')}
             </button>
@@ -192,78 +191,3 @@ export default function Login (): React.JSX.Element {
     </div>
   )
 }
-
-/*
-
-              <InputField
-                id='email'
-                type='email'
-                name='email'
-                label={t('misc.email')}
-                value={formik.values.email}
-                errorMessage={formik.errors.email}
-                fieldTouched={formik.touched.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  {t('misc.email')}
-                </label>
-                <input
-                  className={`${
-                    formik.touched.email && formik.errors.email
-                      ? 'bg-red-300 border-red-500 text-red-700'
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="yomiko@yahoo.com"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
-                />
-                {formik.touched.email && formik.errors.email
-                  ? (
-                  <div className="text-xs font-medium text-red-700 mt-1">
-                    {formik.errors.email as string}
-                  </div>
-                    )
-                  : null}
-              </div>
-
-                            <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  {t('misc.password')}
-                </label>
-                <input
-                  className={`${
-                    formik.touched.password && formik.errors.password
-                      ? 'bg-red-300 border-red-500 text-red-700'
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.password}
-                />
-                {formik.touched.password && formik.errors.password
-                  ? (
-                  <div className="text-xs font-medium text-red-700 mt-1">
-                    {formik.errors.password }
-                  </div>
-                    )
-                  : null}
-              </div>
-*/

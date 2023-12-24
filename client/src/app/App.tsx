@@ -21,6 +21,7 @@ import Authentication from 'src/pages/authentication'
 import AuthGuard from 'src/utils/routeGuard/AuthGuard'
 import MainLayout from 'src/layout/MainLayout'
 import UnderConstruction from 'src/pages/underConstruction'
+import ForgotPassword from 'src/pages/authentication/forgotPassword'
 
 // For dispatching notifications via axios interceptor.
 injectStore(store)
@@ -46,6 +47,7 @@ function App (): React.JSX.Element {
               <Route element={<Authentication />}>
                 <Route path="/auth/login" errorElement={<RouterError />} element={<Login />} />
                 <Route path="/auth/register" errorElement={<RouterError />} element={<Register />} />
+                <Route path="/auth/reset-password" errorElement={<RouterError />} element={<ForgotPassword />} />
               </Route>
             </Route>
             <Route path="*" errorElement={<RouterError />} element={<NotFound />} />

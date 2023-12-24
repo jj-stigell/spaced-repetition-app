@@ -20,7 +20,7 @@ export default function Modal ({ toggleModal, showModal = false, children }: IMo
             id="modal-background"
             data-testid="modal-background"
             className={`
-            fixed inset-0 flex justify-center items-center transition-colors
+            fixed inset-0 flex justify-center items-center transition-colors                   overflow-y-auto overflow-x-hidden
             ${showModal ? 'visible bg-black/20' : 'invisible'}
             `}
         >
