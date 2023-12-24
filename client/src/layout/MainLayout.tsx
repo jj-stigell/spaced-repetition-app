@@ -4,7 +4,7 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 
 // Project imports
-import SideMenu from './SideMenu'
+import SideMenu from './Navigation'
 
 function MainLayout (): JSX.Element {
   return (

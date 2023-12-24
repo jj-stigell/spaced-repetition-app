@@ -34,7 +34,7 @@ describe('Keyboard Component', () => {
   it('renders keys correctly', () => {
     render(<Keyboard addCharFromKeyboard={addCharFromKeyboard} />)
 
-    // Check if keys are rendered
+    // Check that all keys are rendered
     hiraganaKeys.flat().forEach((char) => {
       if (char.length > 0) {
         expect(screen.getByText(char)).toBeInTheDocument()

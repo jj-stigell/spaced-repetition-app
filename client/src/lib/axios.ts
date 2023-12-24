@@ -1,10 +1,11 @@
 import axios, { AxiosError } from 'axios'
+
 import { REACT_APP_BACKEND } from 'src/config/environment'
 import { constants } from 'src/config/constants'
 import { setNotification } from 'src/features/notificationSlice'
 import i18n from 'src/i18n'
 
-// TODO: setup proper cache control, no-cache for now.
+// TODO: setup proper cache-control, no-cache for now.
 const axiosInstance = axios.create({
   baseURL: REACT_APP_BACKEND,
   timeout: constants.timeout,

@@ -1,18 +1,16 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import Account from './Account'
 import Manage from './Manage'
 import Study from './Study'
 
-const activeTabStyle =
-  'inline-block p-4 text-black bg-red-200 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500'
-const inactiveTabStyle =
-  'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-red-100 dark:hover:bg-gray-800 dark:hover:text-gray-300'
+const activeTabStyle = 'inline-block p-4 text-black bg-red-200 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500'
+const inactiveTabStyle = 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-red-100 dark:hover:bg-gray-800 dark:hover:text-gray-300'
 
 export default function Settings (): JSX.Element {
-  const [activeTab, setActiveTab] = useState<'account' | 'study' | 'manage'>(
-    'account'
-  )
+  const { t } = useTranslation()
+  const [activeTab, setActiveTab] = useState<'account' | 'study' | 'manage'>('account')
 
   const renderContent = (): React.JSX.Element => {
     switch (activeTab) {
@@ -29,40 +27,18 @@ export default function Settings (): JSX.Element {
     <div className="min-h-screen max-w-screen-xl">
       <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
         <li className="me-4">
-          <a
-            onClick={() => {
-              setActiveTab('account')
-            }}
-            aria-current="page"
-            className={
-              activeTab === 'account' ? activeTabStyle : inactiveTabStyle
-            }
-          >
-            Account
+          <a onClick={() => { setActiveTab('account') }} className={activeTab === 'account' ? activeTabStyle : inactiveTabStyle}>
+            {t('pages.settings.tabs.account')}
           </a>
         </li>
         <li className="me-4">
-          <a
-            onClick={() => {
-              setActiveTab('study')
-            }}
-            className={
-              activeTab === 'study' ? activeTabStyle : inactiveTabStyle
-            }
-          >
-            Study
+          <a onClick={() => { setActiveTab('study') }} className={activeTab === 'study' ? activeTabStyle : inactiveTabStyle}>
+            {t('pages.settings.tabs.study')}
           </a>
         </li>
         <li className="me-4">
-          <a
-            onClick={() => {
-              setActiveTab('manage')
-            }}
-            className={
-              activeTab === 'manage' ? activeTabStyle : inactiveTabStyle
-            }
-          >
-            Manage
+          <a onClick={() => { setActiveTab('manage') }} className={activeTab === 'manage' ? activeTabStyle : inactiveTabStyle}>
+            {t('pages.settings.tabs.manage')}
           </a>
         </li>
       </ul>

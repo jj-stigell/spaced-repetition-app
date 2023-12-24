@@ -16,6 +16,12 @@ import i18n from 'src/i18n'
 import { Account, setAccount } from 'src/features/accountSlice'
 import routes from 'src/config/routes'
 import Button from 'src/components/Button'
+import InputField from 'src/components/InputField'
+
+interface IFormValues {
+  email: string
+  password: string
+}
 
 export default function Login (): React.JSX.Element {
   const { t } = useTranslation()
@@ -50,7 +56,7 @@ export default function Login (): React.JSX.Element {
         )
         .required(t('errors.ERR_PASSWORD_REQUIRED'))
     }),
-    onSubmit: (values: any) => {
+    onSubmit: (values: IFormValues) => {
       setLoggingIn(true)
 
       axios.post(login, {
@@ -83,12 +89,7 @@ export default function Login (): React.JSX.Element {
   return (
     <div className="bg-blue-100">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a
-          href="/"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-        >
-          Yomiko
-        </a>
+        <a href="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">{constants.appName}</a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 shadow-lg">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -99,65 +100,31 @@ export default function Login (): React.JSX.Element {
               onSubmit={formik.handleSubmit}
             >
               {/* Email field */}
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  {t('misc.email')}
-                </label>
-                <input
-                  className={`${
-                    formik.touched.email && formik.errors.email
-                      ? 'bg-red-300 border-red-500 text-red-700'
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="yomiko@yahoo.com"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
-                />
-                {formik.touched.email && formik.errors.email
-                  ? (
-                  <div className="text-xs font-medium text-red-700 mt-1">
-                    {formik.errors.email as string}
-                  </div>
-                    )
-                  : null}
-              </div>
+              <InputField
+                id='email'
+                type='email'
+                name='email'
+                label={t('misc.email')}
+                placeholder='example@yomiko.io'
+                value={formik.values.email}
+                errors={formik.errors.email}
+                fieldTouched={formik.touched.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
               {/* Password field */}
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  {t('misc.password')}
-                </label>
-                <input
-                  className={`${
-                    formik.touched.password && formik.errors.password
-                      ? 'bg-red-300 border-red-500 text-red-700'
-                      : 'bg-gray-50 border-gray-300 text-gray-900'
-                  } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.password}
-                />
-                {formik.touched.password && formik.errors.password
-                  ? (
-                  <div className="text-xs font-medium text-red-700 mt-1">
-                    {formik.errors.password as string}
-                  </div>
-                    )
-                  : null}
-              </div>
+              <InputField
+                id='password'
+                type='password'
+                name='password'
+                label={t('misc.password')}
+                placeholder='••••••••'
+                value={formik.values.password}
+                errors={formik.errors.password}
+                fieldTouched={formik.touched.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
               {/* Remember me and login button */}
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
@@ -172,18 +139,12 @@ export default function Login (): React.JSX.Element {
                     />
                   </div>
                   <div className="ml-3 text-sm">
-                    <label
-                      htmlFor="remember"
-                      className="text-gray-500 dark:text-gray-300"
-                    >
+                    <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">
                       {t('pages.login.rememberMe')}
                     </label>
                   </div>
                 </div>
-                <a
-                  href="reset-password"
-                  className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
+                <a href="reset-password" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
                   {t('misc.passwordForgot')}
                 </a>
               </div>
@@ -231,3 +192,78 @@ export default function Login (): React.JSX.Element {
     </div>
   )
 }
+
+/*
+
+              <InputField
+                id='email'
+                type='email'
+                name='email'
+                label={t('misc.email')}
+                value={formik.values.email}
+                errorMessage={formik.errors.email}
+                fieldTouched={formik.touched.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  {t('misc.email')}
+                </label>
+                <input
+                  className={`${
+                    formik.touched.email && formik.errors.email
+                      ? 'bg-red-300 border-red-500 text-red-700'
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="yomiko@yahoo.com"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email}
+                />
+                {formik.touched.email && formik.errors.email
+                  ? (
+                  <div className="text-xs font-medium text-red-700 mt-1">
+                    {formik.errors.email as string}
+                  </div>
+                    )
+                  : null}
+              </div>
+
+                            <div>
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  {t('misc.password')}
+                </label>
+                <input
+                  className={`${
+                    formik.touched.password && formik.errors.password
+                      ? 'bg-red-300 border-red-500 text-red-700'
+                      : 'bg-gray-50 border-gray-300 text-gray-900'
+                  } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.password}
+                />
+                {formik.touched.password && formik.errors.password
+                  ? (
+                  <div className="text-xs font-medium text-red-700 mt-1">
+                    {formik.errors.password }
+                  </div>
+                    )
+                  : null}
+              </div>
+*/

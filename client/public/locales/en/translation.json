@@ -1,19 +1,23 @@
 {
   "title": "Yomiko SRS-app for learning Japanese",
-  "navbar": {
+  "betaDisclaimer": "Yomiko is still in beta development, things can break, small and big changes can happen over night. Thank you for your patience and participation in the beta phase.",
+  "navigation": {
     "dashboard": "Dashboard",
     "study": "Study",
-    "achievements": "Achievements",
+    "mockExam": "Mock Exam",
     "statistics": "Statistics",
-    "reviews": "Reviews",
-    "kanji": "Kanji",
-    "news": "News",
     "settings": "Settings",
-    "account": "Account",
-    "decks": "Decks",
-    "logout": "Logout",
-    "jlptLevel": "JLPT Level"
+    "jlptLevel": "JLPT Level",
+    "achievements": "Achievements",
+    "showMenu": "Open side menu"
   },
+  "footer": {
+    "about": "About",
+    "privacyPolicy": "Privacy Policy",
+    "contact": "Contact"
+  },
+
+
   "pages": {
     "dashboard": {
       "title": "this is the dashboard page",
@@ -110,6 +114,11 @@
 
     "settings": {
       "title": "Profile and settings",
+      "tabs": {
+        "account": "Account",
+        "study": "Study",
+        "manage": "Manage"
+      },
       "manageTitle": "Manage Account",
       "accountInformation": {
         "title": "Account information",

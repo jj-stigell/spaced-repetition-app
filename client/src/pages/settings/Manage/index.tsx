@@ -50,38 +50,40 @@ export default function Manage (): JSX.Element {
     }),
     onSubmit: async (values: any, { resetForm }) => {
       setDeleting(true)
-      axios
-        .delete(account, {
-          data: {
-            password: values.password
-          }
-        })
-        .then(async function (data) {
-          // Set notification and log out after that.
-          const date: Date = new Date(data.data.data.deletionDate)
-          await dispatch(
-            setNotification({
-              message: t('pages.settings.deleteAccount.deleteSuccess', { date: date.toLocaleDateString() }),
-              severity: 'warning',
-              autoHideDuration: 30000
-            })
-          )
-          setDeleting(false)
-          setTimeout(() => {
-            resetForm()
-            handleLogout()
-          }, 1000)
-        })
-        .catch(function () {
+      axios.delete(account, {
+        data: {
+          password: values.password
+        }
+      }).then(async function (data) {
+        // Set notification and log out after that.
+        const date: Date = new Date(data.data.data.deletionDate)
+        await dispatch(
+          setNotification({
+            message: t('pages.settings.deleteAccount.deleteSuccess', { date: date.toLocaleDateString() }),
+            severity: 'warning',
+            autoHideDuration: 30000
+          })
+        )
+        setDeleting(false)
+        setTimeout(() => {
           resetForm()
-          setDeleting(false)
-        })
+          handleLogout()
+        }, 1000)
+      }).catch(function () {
+        resetForm()
+        setDeleting(false)
+      })
     }
   })
 
+  const toggleModal = (): void => {
+    formik.resetForm()
+    setShowModal(!showModal)
+  }
+
   return (
     <>
-      <Modal setShowModal={setShowModal} showModal={showModal}>
+      <Modal toggleModal={toggleModal} showModal={showModal}>
         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
           {t('pages.settings.deleteAccount.title')}
         </h1>
@@ -161,6 +163,7 @@ export default function Manage (): JSX.Element {
             type='submit'
             disabled={deleting}
             loading={deleting}
+            color='red'
             loadingText={t('pages.settings.deleteAccount.deleteProsessing')}
             buttonText={t('pages.settings.deleteAccount.deleteButton')}
           />
@@ -168,7 +171,7 @@ export default function Manage (): JSX.Element {
         <div className="my-4"/>
         <Button
           type='button'
-          handleClick={() => { setShowModal(false) }}
+          onClick={toggleModal}
           disabled={deleting}
           buttonText={t('buttonGeneral.cancel')}
         />
@@ -188,7 +191,7 @@ export default function Manage (): JSX.Element {
         <Button
           loading={loggingOut}
           disabled={loggingOut}
-          handleClick={handleLogout}
+          onClick={handleLogout}
           buttonText={t('buttonGeneral.logout')}
         />
         <hr className="my-4" />
@@ -212,7 +215,7 @@ export default function Manage (): JSX.Element {
         </p>
         <p className="mt-2">{t('pages.settings.deleteAccount.note')}</p>
         <button
-          onClick={() => { setShowModal(!showModal) }}
+          onClick={toggleModal}
           className="ml-auto text-sm font-semibold text-rose-600 underline decoration-2 hover:text-rose-800"
         >
           {t('pages.settings.deleteAccount.continueButton')}

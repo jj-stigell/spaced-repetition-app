@@ -5,51 +5,42 @@ interface IButton extends Omit<ComponentProps<'button'>, 'ref' | 'style'> {
    * The text to be displayed on the button.
    */
   buttonText: string
-
-  /**
-   * Optional click event handler for the button.
-   */
-  handleClick?: () => void
-
   /**
    * Text to display when the button is in a loading state.
    * @default undefined
    */
   loadingText?: string
-
-  /**
-   * If `true`, the button is disabled.
-   * @default false
-   */
-  disabled?: boolean
-
   /**
    * If `true`, the button is in a loading state.
    * @default false
    */
   loading?: boolean
-
   /**
-   * The type of the button, can be 'button', 'submit', or 'reset'.
-   * @default 'button'
+   * Button background color.
+   * @default 'blue'
    */
-  type?: 'button' | 'submit' | 'reset'
+  color?: 'blue' | 'red' | 'green' | 'orange' | 'gray'
 }
 
 export default function Button ({
   buttonText,
-  handleClick,
+  onClick,
   loadingText = buttonText,
   disabled,
   loading = false,
-  type = 'button'
+  color = 'blue',
+  type = 'button',
+  ...rest
 }: IButton): React.JSX.Element {
+  const colorClass = `bg-${color}-600 hover:bg-${color}-700`
+
   return (
     <button
       type={type}
       disabled={disabled}
-      onClick={handleClick}
-      className={`flex justify-center items-center w-full text-white bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 ${(disabled ?? false) ? 'cursor-not-allowed' : ''}`}
+      onClick={onClick}
+      className={`flex justify-center items-center w-full text-white ${colorClass} font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 ${(disabled ?? false) ? 'cursor-not-allowed' : ''}`}
+      {...rest}
     >
       {loading
         ? (

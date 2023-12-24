@@ -5,7 +5,7 @@ interface IModal extends Omit<ComponentProps<'div'>, 'ref' | 'style'> {
   /**
    * Function for toggling the showstate of the modal.
    */
-  setShowModal: (showModal: boolean) => void
+  toggleModal: () => void
   /**
    * If `true`, modal is and its children are dislpayed.
    * @default false
@@ -13,10 +13,10 @@ interface IModal extends Omit<ComponentProps<'div'>, 'ref' | 'style'> {
   showModal: boolean
 }
 
-export default function Modal ({ setShowModal, showModal = false, children }: IModal): React.JSX.Element {
+export default function Modal ({ toggleModal, showModal = false, children }: IModal): React.JSX.Element {
   return (
         <div
-            onClick={() => { setShowModal(false) }}
+            onClick={() => { toggleModal() }}
             id="modal-background"
             data-testid="modal-background"
             className={`

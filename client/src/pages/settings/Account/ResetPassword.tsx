@@ -16,6 +16,10 @@ export default function ResetPassword (): JSX.Element {
   const [resetting, setResetting] = React.useState(false)
   const { email } = useAppSelector((state: RootState) => state.account)
 
+  const toggleModal = (): void => {
+    setShowModal(!showModal)
+  }
+
   const handleClick = (): void => {
     setResetting(true)
     axios.post(resetPassword, {
@@ -30,13 +34,13 @@ export default function ResetPassword (): JSX.Element {
 
   return (
     <>
-      <Modal setShowModal={setShowModal} showModal={showModal}>
+      <Modal toggleModal={toggleModal} showModal={showModal}>
         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">{t('pages.password.forgotPassword.title')}</h1>
         <p className="my-4">{t('pages.password.forgotPassword.content')}</p>
         <p className="mb-6 text-center font-bold">{email}</p>
         <Button
           type='button'
-          handleClick={handleClick}
+          onClick={handleClick}
           loading={resetting}
           disabled={resetting}
           loadingText={t('pages.password.forgotPassword.processing')}
@@ -45,14 +49,14 @@ export default function ResetPassword (): JSX.Element {
         <div className="my-4"/>
         <Button
           type='button'
-          handleClick={() => { setShowModal(false) }}
+          onClick={toggleModal}
           disabled={resetting}
           buttonText={t('buttonGeneral.cancel')}
         />
       </Modal>
       <p className="my-4">
         {t('pages.settings.changePassword.forgotPassword')} {' '}
-        <button onClick={() => { setShowModal(true) }} className="inline-flex font-semibold text-blue-600 underline decoration-2">
+        <button onClick={toggleModal} className="inline-flex font-semibold text-blue-600 underline decoration-2">
           {t('pages.settings.changePassword.resetPasswordButton')}
         </button>
       </p>
