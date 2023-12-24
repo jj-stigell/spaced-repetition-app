@@ -1,3 +1,6 @@
+
+// https://i.ibb.co/D4cQhYS/Happy-customer.gif
+
 import * as React from 'react'
 
 // Third party imports
