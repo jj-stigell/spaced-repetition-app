@@ -143,9 +143,9 @@ export default function Login (): React.JSX.Element {
                     </label>
                   </div>
                 </div>
-                <a href="reset-password" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
+                <Link to={routes.requestResetPassword} className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
                   {t('misc.passwordForgot')}
-                </a>
+                </Link>
               </div>
               <Button
                 type='submit'

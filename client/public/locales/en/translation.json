@@ -92,7 +92,8 @@
         "resetDescription": "Input the new password and password confirmation below and submit to change the password",
         "successTitle": "Password changed succesfully. Redirecting to login page in {{redirectTimeout}} seconds.",
         "failureTitle": "Password update failed, please try again.",
-        "resetButton": "Set new password"
+        "resetButton": "Set new password",
+        "processing": "Updating password..."
       }
     },
     "notFound": {
@@ -136,7 +137,8 @@
         "processing": "Updating password...",
         "passwordChangeSuccess": "Password changed succesfully",
         "forgotPassword": "Can't remember your current password?",
-        "resetPasswordButton": "Reset password."
+        "resetPasswordButton": "Reset password",
+        "resetPasswordButtonProcessing": "Sending reset link..."
       },
       "deleteAccount": {
         "title": "Delete account",
