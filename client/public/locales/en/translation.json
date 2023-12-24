@@ -73,6 +73,7 @@
       "success": "Your email address confirmation was successful. Redirecting to login page in {{redirectTimeout}} seconds.",
       "resend": {
         "resendConfirmButton": "Resend confirmation code",
+        "processing": "Resending confirmation code...",
         "resendConfirmDescription": "Confirmation failed, please resend the confirmation by entering your email address below.",
         "resendSuccess": "New confirmation code sent to email address {{email}}. Redirecting to login page in {{redirectTimeout}} seconds."
       }

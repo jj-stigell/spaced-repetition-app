@@ -17,6 +17,7 @@
       "footer": {
         "faqNote": "For more details you can read our",
         "faqNoteLinkText": "FAQ site",
+        "sendOnlyAddress": "This email was sent from a send-only address.",
         "privacyPolicy": "We take great care in handling our users personal information in order to protect it appropriately. For more information, please see the",
         "privacyPolicyLinkText": "Privacy Policy"
       }
