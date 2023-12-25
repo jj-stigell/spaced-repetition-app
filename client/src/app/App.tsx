@@ -24,6 +24,7 @@ import UnderConstruction from 'src/pages/underConstruction'
 import ForgotPassword from 'src/pages/authentication/forgotPassword'
 import routes from 'src/config/routes'
 import ResetPassword from 'src/pages/authentication/resetPassword'
+import Confirm from 'src/pages/authentication/confirm'
 
 // For dispatching notifications via axios interceptor.
 injectStore(store)
@@ -51,6 +52,10 @@ function App (): React.JSX.Element {
                 <Route path="/auth/register" errorElement={<RouterError />} element={<Register />} />
                 <Route path={routes.requestResetPassword} errorElement={<RouterError />} element={<ForgotPassword />} />
                 <Route path={routes.resetPassword} errorElement={<RouterError />} element={<ResetPassword />} />
+
+                <Route path={routes.emailConfirm} errorElement={<RouterError />} element={<Confirm />} />
+                <Route path={routes.requestEmailConfirm} errorElement={<RouterError />} element={<Confirm />} />
+
               </Route>
             </Route>
             <Route path="*" errorElement={<RouterError />} element={<NotFound />} />

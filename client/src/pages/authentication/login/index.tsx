@@ -86,108 +86,101 @@ export default function Login (): React.JSX.Element {
   })
 
   return (
-    <div className="bg-blue-100">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a href="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">{constants.appName}</a>
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 shadow-lg">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              {t('pages.login.title')}
-            </h1>
-            <form
-              className="space-y-4 md:space-y-6"
-              onSubmit={formik.handleSubmit}
-            >
-              {/* Email field */}
-              <InputField
-                id='email'
-                type='email'
-                name='email'
-                label={t('misc.email')}
-                placeholder='example@yomiko.io'
-                value={formik.values.email}
-                errors={formik.errors.email}
-                fieldTouched={formik.touched.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
+    <>
+      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+        {t('pages.login.title')}
+      </h1>
+      <form
+        className="space-y-4 md:space-y-6"
+        onSubmit={formik.handleSubmit}
+      >
+        {/* Email field */}
+        <InputField
+          id='email'
+          type='email'
+          name='email'
+          label={t('misc.email')}
+          placeholder='example@yomiko.io'
+          value={formik.values.email}
+          errors={formik.errors.email}
+          fieldTouched={formik.touched.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        {/* Password field */}
+        <InputField
+          id='password'
+          type='password'
+          name='password'
+          label={t('misc.password')}
+          placeholder='••••••••'
+          value={formik.values.password}
+          errors={formik.errors.password}
+          fieldTouched={formik.touched.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        {/* Remember me and login button */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-start">
+            <div className="flex items-center h-5">
+              <input
+                onClick={() => { setRememberMe(!rememberMe) }}
+                checked={rememberMe}
+                id="remember"
+                aria-describedby="remember"
+                type="checkbox"
+                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
               />
-              {/* Password field */}
-              <InputField
-                id='password'
-                type='password'
-                name='password'
-                label={t('misc.password')}
-                placeholder='••••••••'
-                value={formik.values.password}
-                errors={formik.errors.password}
-                fieldTouched={formik.touched.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {/* Remember me and login button */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      onClick={() => { setRememberMe(!rememberMe) }}
-                      checked={rememberMe}
-                      id="remember"
-                      aria-describedby="remember"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">
-                      {t('pages.login.rememberMe')}
-                    </label>
-                  </div>
-                </div>
-                <Link to={routes.requestResetPassword} className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
-                  {t('misc.passwordForgot')}
-                </Link>
-              </div>
-              <Button
-                type='submit'
-                loading={loggingIn}
-                disabled={loggingIn}
-                loadingText={t('pages.login.signingIn')}
-                buttonText={t('pages.login.logInButton')}
-              />
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                <Link
-                  to={routes.register}
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >
-                  {t('pages.register.noAccount')}
-                </Link>
-              </p>
-            </form>
-            {/* 3rd party auth */}
-            <div className="flex items-center mb-3">
-              <hr className="h-0 border-b border-solid border-grey-500 grow" />
-              <p className="mx-4 text-grey-600">{t('pages.login.or')}</p>
-              <hr className="h-0 border-b border-solid border-grey-500 grow" />
             </div>
-            <button className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
-              <img
-                className="h-5 mr-2"
-                src="https://tailus.io/sources/blocks/social/preview/images/google.svg"
-                alt="google-logo"
-              />
-              {t('pages.login.googleLogin')}
-            </button>
-            <button className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
-              <img
-                className="h-5 mr-2"
-                src="https://upload.wikimedia.org/wikipedia/en/0/04/Facebook_f_logo_%282021%29.svg"
-                alt="facebook-logo"
-              />
-              {t('pages.login.facebookLogin')}
-            </button>
+            <div className="ml-3 text-sm">
+              <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">
+                {t('pages.login.rememberMe')}
+              </label>
+            </div>
           </div>
+          <Link to={routes.requestResetPassword} className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
+            {t('misc.passwordForgot')}
+          </Link>
         </div>
+        <Button
+          type='submit'
+          loading={loggingIn}
+          disabled={loggingIn}
+          loadingText={t('pages.login.signingIn')}
+          buttonText={t('pages.login.logInButton')}
+        />
+        <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+          <Link
+            to={routes.register}
+            className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+          >
+            {t('pages.register.noAccount')}
+          </Link>
+        </p>
+      </form>
+      {/* 3rd party auth */}
+      <div className="flex items-center mb-3">
+        <hr className="h-0 border-b border-solid border-grey-500 grow" />
+        <p className="mx-4 text-grey-600">{t('pages.login.or')}</p>
+        <hr className="h-0 border-b border-solid border-grey-500 grow" />
       </div>
-    </div>
+      <button className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
+        <img
+          className="h-5 mr-2"
+          src="https://tailus.io/sources/blocks/social/preview/images/google.svg"
+          alt="google-logo"
+        />
+        {t('pages.login.googleLogin')}
+      </button>
+      <button className="flex items-center justify-center w-full py-4 mb-6 text-sm font-medium transition duration-300 rounded-2xl text-grey-900 bg-gray-200 hover:bg-gray-300 hover:scale-105 transform active:scale-95 transition-transform">
+        <img
+          className="h-5 mr-2"
+          src="https://upload.wikimedia.org/wikipedia/en/0/04/Facebook_f_logo_%282021%29.svg"
+          alt="facebook-logo"
+        />
+        {t('pages.login.facebookLogin')}
+      </button>
+    </>
   )
 }

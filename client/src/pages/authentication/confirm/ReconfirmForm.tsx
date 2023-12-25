@@ -47,6 +47,8 @@ function ReconfirmForm ({ setSuccess }: IForm): JSX.Element {
         }, constants.redirectTimeout * 1000)
       }).catch(function () {
         setSuccess(false)
+      }).finally(function () {
+        setProcessing(false)
       })
     }
   })
