@@ -1,3 +1,13 @@
+# DEMO
+
+Demo running at https://app.yomiko.io
+
+Demo user:
+```
+username: demo@demo.com
+password: Testing123
+```
+
 # Table of Contents
 
 * [Record of working hours for the Full Stack Open project](#record-of-working-hours-for-the-full-stack-open-project)

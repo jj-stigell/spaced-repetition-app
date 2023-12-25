@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+
 import routes from 'src/config/routes'
 
 export default function Footer (): React.JSX.Element {
