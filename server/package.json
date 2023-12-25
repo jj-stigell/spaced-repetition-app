@@ -7,7 +7,7 @@
   "main": "",
   "scripts": {
     "build": "npx tsc && yarn run copy-locales && yarn run copy-templates",
-    "start": "node build/src/index.js",
+    "start": "node build/server/src/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "test": "NODE_ENV=test jest --verbose --detectOpenHandles --coverage --forceExit",
     "lint": "npx eslint `find . -name '*.ts' -not -path './node_modules/*'`",
