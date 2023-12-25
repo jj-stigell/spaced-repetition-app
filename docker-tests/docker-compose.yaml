@@ -1,8 +1,10 @@
+---
+
 version: "3.7"
 
 services:
   back-end-test:
-    build: 
+    build:
       context: ../server/
       args:
         SERVER_SKIP_CI: ${SERVER_SKIP_CI}
@@ -10,7 +12,7 @@ services:
       - database-test
       - redis-test
     ports:
-    - 3001:3001
+      - 3001:3001
     tty: true
     container_name: backend-server-test
     environment:

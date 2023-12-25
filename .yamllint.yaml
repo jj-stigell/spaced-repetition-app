@@ -36,5 +36,5 @@ rules:
   truthy:
     level: warning
   line-length:
-    max: 100
+    max: 150
     level: error

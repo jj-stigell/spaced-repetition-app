@@ -1,3 +1,5 @@
+---
+
 version: "3.7"
 
 services:
@@ -11,7 +13,7 @@ services:
       - database
       - redis
     ports:
-    - 3001:3001
+      - 3001:3001
     container_name: backend-server
     environment:
       POSTGRES_HOST: "database"
