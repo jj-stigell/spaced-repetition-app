@@ -6,7 +6,7 @@ import { RootState } from 'src/app/store'
 import ChangePassword from './ChangePassword'
 import ResetPassword from './ResetPassword'
 
-export default function Account (): JSX.Element {
+export default function Account (): React.JSX.Element {
   const { t } = useTranslation()
   const { username, email, role } = useAppSelector((state: RootState) => state.account)
 
@@ -23,10 +23,10 @@ export default function Account (): JSX.Element {
       </p>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <p className="text-gray-600">
-          Your email address is <strong>{email}</strong>
+          {t('pages.settings.accountInformation.emailInfo')} <strong>{email}</strong>
         </p>
-        <button className="inline-flex text-sm font-semibold text-blue-600 underline decoration-2">
-          Change
+        <button onClick={() => { alert('not implemented') }} className="inline-flex text-sm font-semibold text-blue-600 underline decoration-2">
+          {t('pages.settings.accountInformation.changeButton')}
         </button>
       </div>
       <p className="pt-8 pb-2 text-xl font-semibold">
@@ -34,10 +34,10 @@ export default function Account (): JSX.Element {
       </p>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <p className="text-gray-600">
-          Your username is <strong>{username}</strong>
+          {t('pages.settings.accountInformation.usernameInfo')} <strong>{username}</strong>
         </p>
-        <button className="inline-flex text-sm font-semibold text-blue-600 underline decoration-2">
-          Change
+        <button onClick={() => { alert('not implemented') }} className="inline-flex text-sm font-semibold text-blue-600 underline decoration-2">
+          {t('pages.settings.accountInformation.changeButton')}
         </button>
       </div>
       <p className="pt-8 pb-2 text-xl font-semibold">
@@ -48,10 +48,10 @@ export default function Account (): JSX.Element {
           {role === 'NON_MEMBER'
             ? t('pages.settings.accountInformation.expired') + ' 😅'
             : t('pages.settings.accountInformation.active') +
-              ', Expiry: 23-12-2025'}
+              ', Expiry: 31-12-2030'}
         </p>
-        <button className="inline-flex text-sm font-semibold text-blue-600 underline decoration-2">
-          Manage membership
+        <button onClick={() => { alert('not implemented') }} className="inline-flex text-sm font-semibold text-blue-600 underline decoration-2">
+          {t('pages.settings.accountInformation.manageMembershipButton')}
         </button>
       </div>
       <hr className="my-4" />

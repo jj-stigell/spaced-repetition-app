@@ -1,81 +1,78 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
-export default function Study (): JSX.Element {
+import { useAppDispatch } from 'src/app/hooks'
+import { RootState } from 'src/app/store'
+import { updateStudySettings } from 'src/features/accountSlice'
+
+export default function Study (): React.JSX.Element {
+  const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+
+  const { autoNextCard, nextCardtimer, autoPlayAudio } = useSelector((state: RootState) => state.account)
+
+  const increment = (): void => {
+    dispatch(updateStudySettings({ nextCardtimer: Math.min(nextCardtimer + 1, 999) }))
+  }
+
+  const decrement = (): void => {
+    dispatch(updateStudySettings({ nextCardtimer: Math.max(nextCardtimer - 1, 1) }))
+  }
+
   return (
     <>
       <div className="pt-4">
-        <h1 className="py-2 text-2xl font-semibold">Study Settings</h1>
+        <h1 className="py-2 text-2xl font-semibold">{t('pages.settings.study.title')}</h1>
       </div>
       <hr className="mt-4 mb-8" />
-      <p className="py-2 text-xl font-semibold">Email Address</p>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-gray-600">
-          Your email address is <strong>john.doe@company.com</strong>
-        </p>
-        <button className="inline-flex text-sm font-semibold text-blue-600 underline decoration-2">
-          Change
-        </button>
+      <p className="mt-2 mb-4 text-xl font-semibold">{t('pages.settings.study.reviewSettings')}</p>
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-gray-600">{t('pages.settings.study.autoplayAudio')}</p>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" className="sr-only peer" checked={autoPlayAudio} onClick={() => { dispatch(updateStudySettings({ autoPlayAudio: !autoPlayAudio })) }} />
+          <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
+        </label>
       </div>
-      <hr className="mt-4 mb-8" />
-      <p className="py-2 text-xl font-semibold">Password</p>
-      <div className="flex items-center">
-        <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-3">
-          <label htmlFor="login-password">
-            <span className="text-sm text-gray-500">Current Password</span>
-            <div className="relative flex overflow-hidden rounded-md border-2 transition focus-within:border-blue-600">
-              <input
-                type="password"
-                id="login-password"
-                className="w-full flex-shrink appearance-none border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
-                placeholder="***********"
-              />
-            </div>
-          </label>
-          <label htmlFor="login-password">
-            <span className="text-sm text-gray-500">New Password</span>
-            <div className="relative flex overflow-hidden rounded-md border-2 transition focus-within:border-blue-600">
-              <input
-                type="password"
-                id="login-password"
-                className="w-full flex-shrink appearance-none border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
-                placeholder="***********"
-              />
-            </div>
-          </label>
-          <label htmlFor="login-password">
-            <span className="text-sm text-gray-500">New Password</span>
-            <div className="relative flex overflow-hidden rounded-md border-2 transition focus-within:border-blue-600">
-              <input
-                type="password"
-                id="login-password"
-                className="w-full flex-shrink appearance-none border-gray-300 bg-white py-2 px-4 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
-                placeholder="***********"
-              />
-            </div>
-          </label>
-        </div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="mt-5 ml-2 h-6 w-6 cursor-pointer text-sm font-semibold text-gray-600 underline decoration-2"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
-          />
-        </svg>
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-gray-600">{t('pages.settings.study.showNextCardAutomatically')}</p>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" className="sr-only peer" checked={autoNextCard} onClick={() => { dispatch(updateStudySettings({ autoNextCard: !autoNextCard })) }} />
+          <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
+        </label>
       </div>
-      <p className="mt-4">
-        Can&apos;t remember your current password? Logout and request password
-        resetting from signin view
-      </p>
-      <button className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white">
-        Save Password
-      </button>
+      {autoNextCard && (
+        <>
+          <label htmlFor="quantity-input" className="block mb-2 text-sm font-medium text-gray-600 dark:text-white">{t('pages.settings.study.setTimerForShowingNewCard')}</label>
+          <div className="relative flex items-center max-w-[8rem]">
+            <button type="button" id="decrement-button" onClick={() => { decrement() }} className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h16"/>
+                </svg>
+            </button>
+            <input type="text" id="quantity-input" data-input-counter aria-describedby="helper-text-explanation" className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={nextCardtimer} />
+            <button type="button" id="increment-button" onClick={() => { increment() }} className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                <svg className="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 1v16M1 9h16"/>
+                </svg>
+            </button>
+          </div>
+        </>
+      )}
+      <hr className="my-8" />
+      <p className="mt-2 mb-4 text-xl font-semibold">{t('pages.settings.study.languageSettings')}</p>
+      <div className="mb-8">
+        <p className="text-gray-600 mb-4">{t('pages.settings.study.studyLanguage')}</p>
+        <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option>English</option>
+        </select>
+      </div>
+      <div className="mb-8">
+        <p className="text-gray-600 mb-4">{t('pages.settings.study.uiLanguage')}</p>
+        <select id="countries" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option>English</option>
+        </select>
+      </div>
     </>
   )
 }

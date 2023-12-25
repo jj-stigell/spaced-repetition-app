@@ -130,6 +130,10 @@
         "memberStatus": "Member status",
         "active": "Active",
         "expired": "Expired",
+        "emailInfo": "Your email address is",
+        "usernameInfo": "Your username is",
+        "changeButton": "Change",
+        "manageMembershipButton": "Manage membership",
         "languageSelectorTitle": "Select UI & study language",
         "languageSelectorInfo": "This value will be used as a default language for studying. If study material is not available in your language, the default study language will be set to English."
       },
@@ -157,6 +161,16 @@
       "logout": {
         "title": "Logout from account",
         "description": "Logout current session. Remember to clear cache if you are using public computer or network to access Yomiko"
+      },
+      "study": {
+        "title": "Study Settings",
+        "reviewSettings": "Review settings",
+        "autoplayAudio": "Autoplay audio after answering a question",
+        "showNextCardAutomatically": "Show next card automatically",
+        "setTimerForShowingNewCard": "Set timer (seconds) for showing new card:",
+        "languageSettings": "Language settings",
+        "studyLanguage": "Study language",
+        "uiLanguage": "UI language"
       }
     },
     "construction": {

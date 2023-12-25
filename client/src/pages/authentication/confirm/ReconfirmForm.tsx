@@ -44,7 +44,7 @@ function ReconfirmForm ({ setSuccess }: IForm): JSX.Element {
 
         setTimeout(() => {
           navigate(routes.login)
-        }, constants.redirectTimeout * 1000)
+        }, constants.redirectTimeout)
       }).catch(function () {
         setSuccess(false)
       }).finally(function () {

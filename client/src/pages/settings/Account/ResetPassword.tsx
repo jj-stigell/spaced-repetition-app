@@ -9,7 +9,7 @@ import { RootState } from 'src/app/store'
 import Button from 'src/components/Button'
 import { setNotification } from 'src/features/notificationSlice'
 
-export default function ResetPassword (): JSX.Element {
+export default function ResetPassword (): React.JSX.Element {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [showModal, setShowModal] = React.useState(false)

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { useFormik } from 'formik'
 import React, { useState } from 'react'
 import * as yup from 'yup'
@@ -12,8 +11,9 @@ import axios from 'src/lib/axios'
 import { constants } from 'src/config/constants'
 import { setNotification } from 'src/features/notificationSlice'
 import Button from 'src/components/Button'
+import InputField from 'src/components/InputField'
 
-export default function Manage (): JSX.Element {
+export default function Manage (): React.JSX.Element {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const [loggingOut, setLoggingOut] = useState(false)
@@ -34,17 +34,10 @@ export default function Manage (): JSX.Element {
       passwordConfirmation: ''
     },
     validationSchema: yup.object({
-      password: yup
-        .string()
-        .max(
-          constants.account.passwordMaxLength,
-          t('errors.ERR_PASSWORD_TOO_LONG', {
-            length: constants.account.passwordMaxLength
-          })
-        )
+      password: yup.string()
+        .max(constants.account.passwordMaxLength, t('errors.ERR_PASSWORD_TOO_LONG', { length: constants.account.passwordMaxLength }))
         .required(t('errors.ERR_PASSWORD_REQUIRED')),
-      passwordConfirmation: yup
-        .string()
+      passwordConfirmation: yup.string()
         .oneOf([yup.ref('password'), ''], t('errors.ERR_PASSWORD_MISMATCH'))
         .required(t('errors.ERR_PASSWORD_CONFIRMATION_REQUIRED'))
     }),
@@ -98,67 +91,31 @@ export default function Manage (): JSX.Element {
           onSubmit={formik.handleSubmit}
         >
           {/* Password field */}
-          <div>
-            <label
-              htmlFor="password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              {t('misc.password')}
-            </label>
-            <input
-              className={`${
-                formik.touched.password && formik.errors.password
-                  ? 'bg-red-300 border-red-500 text-red-700'
-                  : 'bg-gray-50 border-gray-300 text-gray-900'
-              } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-              id="password"
-              name="password"
-              type="password"
-              placeholder="••••••••"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password}
-            />
-            {formik.touched.password && formik.errors.password
-              ? (
-              <div className="text-xs font-medium text-red-700 mt-1">
-                {formik.errors.password as string}
-              </div>
-                )
-              : null}
-          </div>
+          <InputField
+            id='password'
+            type='password'
+            name='password'
+            label={t('misc.password')}
+            placeholder='••••••••'
+            value={formik.values.password}
+            errors={formik.errors.password}
+            fieldTouched={formik.touched.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
           {/* Confirm password field */}
-          <div>
-            <label
-              htmlFor="password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              {t('misc.passwordConfirm')}
-            </label>
-            <input
-              className={`${
-                formik.touched.passwordConfirmation &&
-                formik.errors.passwordConfirmation
-                  ? 'bg-red-300 border-red-500 text-red-700'
-                  : 'bg-gray-50 border-gray-300 text-gray-900'
-              } border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-              id="passwordConfirmation"
-              name="passwordConfirmation"
-              type="password"
-              placeholder="••••••••"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.passwordConfirmation}
-            />
-            {formik.touched.passwordConfirmation &&
-            formik.errors.passwordConfirmation
-              ? (
-              <div className="text-xs font-medium text-red-700 mt-1">
-                {formik.errors.passwordConfirmation as string}
-              </div>
-                )
-              : null}
-          </div>
+          <InputField
+            id='passwordConfirmation'
+            type='password'
+            name='passwordConfirmation'
+            label={t('misc.passwordConfirm')}
+            placeholder='••••••••'
+            value={formik.values.passwordConfirmation}
+            errors={formik.errors.passwordConfirmation}
+            fieldTouched={formik.touched.passwordConfirmation}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
           <Button
             type='submit'
             disabled={deleting}
@@ -183,9 +140,7 @@ export default function Manage (): JSX.Element {
       </div>
       <hr className="mt-4 mb-8" />
       <div className="mb-10">
-        <p className="py-2 text-xl font-semibold">
-          {t('pages.settings.logout.title')}
-        </p>
+        <p className="py-2 text-xl font-semibold">{t('pages.settings.logout.title')}</p>
         <p className="mt-1">{t('pages.settings.logout.description')}</p>
         <div className="my-4"/>
         <Button
@@ -195,9 +150,7 @@ export default function Manage (): JSX.Element {
           buttonText={t('buttonGeneral.logout')}
         />
         <hr className="my-4" />
-        <p className="mb-4 text-xl font-semibold">
-          {t('pages.settings.deleteAccount.title')}
-        </p>
+        <p className="mb-4 text-xl font-semibold">{t('pages.settings.deleteAccount.title')}</p>
         <p className="inline-flex items-center rounded-full bg-rose-100 px-4 py-1 text-rose-600">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -214,10 +167,7 @@ export default function Manage (): JSX.Element {
           {t('pages.settings.deleteAccount.caution')}
         </p>
         <p className="mt-2">{t('pages.settings.deleteAccount.note')}</p>
-        <button
-          onClick={toggleModal}
-          className="ml-auto text-sm font-semibold text-rose-600 underline decoration-2 hover:text-rose-800"
-        >
+        <button onClick={toggleModal} className="ml-auto text-sm font-semibold text-rose-600 underline decoration-2 hover:text-rose-800">
           {t('pages.settings.deleteAccount.continueButton')}
         </button>
       </div>

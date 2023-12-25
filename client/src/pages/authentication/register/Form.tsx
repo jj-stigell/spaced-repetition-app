@@ -116,7 +116,7 @@ export default function Register ({ setRegisteredEmail }: IRegister): React.JSX.
               type='email'
               name='email'
               label={t('misc.email')}
-              placeholder='••••••••'
+              placeholder='example@yomiko.io'
               value={formik.values.email}
               errors={formik.errors.email}
               fieldTouched={formik.touched.email}

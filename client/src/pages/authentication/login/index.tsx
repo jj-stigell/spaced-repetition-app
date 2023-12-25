@@ -1,5 +1,4 @@
 import React from 'react'
-
 import * as yup from 'yup'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
@@ -35,24 +34,12 @@ export default function Login (): React.JSX.Element {
       password: rememberPassword ?? ''
     },
     validationSchema: yup.object({
-      email: yup
-        .string()
+      email: yup.string()
         .email(t('errors.ERR_NOT_VALID_EMAIL'))
-        .max(
-          constants.account.emailMaxLength,
-          t('errors.ERR_EMAIL_TOO_LONG', {
-            length: constants.account.emailMaxLength
-          })
-        )
+        .max(constants.account.emailMaxLength, t('errors.ERR_EMAIL_TOO_LONG', { length: constants.account.emailMaxLength }))
         .required(t('errors.ERR_EMAIL_REQUIRED')),
-      password: yup
-        .string()
-        .max(
-          constants.account.passwordMaxLength,
-          t('errors.ERR_PASSWORD_TOO_LONG', {
-            length: constants.account.passwordMaxLength
-          })
-        )
+      password: yup.string()
+        .max(constants.account.passwordMaxLength, t('errors.ERR_PASSWORD_TOO_LONG', { length: constants.account.passwordMaxLength }))
         .required(t('errors.ERR_PASSWORD_REQUIRED'))
     }),
     onSubmit: (values: IFormValues) => {
@@ -64,7 +51,7 @@ export default function Login (): React.JSX.Element {
       }).then(function (response) {
         const accountInformation: Account = response.data.data
         void i18n.changeLanguage(accountInformation.language.toLocaleLowerCase())
-        // TODO, get nextcard and timer from backend
+        // TODO, get study settings from backend
         dispatch(setAccount({
           isLoggedIn: true,
           ...accountInformation,
@@ -87,9 +74,7 @@ export default function Login (): React.JSX.Element {
 
   return (
     <>
-      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-        {t('pages.login.title')}
-      </h1>
+      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">{t('pages.login.title')}</h1>
       <form
         className="space-y-4 md:space-y-6"
         onSubmit={formik.handleSubmit}
@@ -134,9 +119,7 @@ export default function Login (): React.JSX.Element {
               />
             </div>
             <div className="ml-3 text-sm">
-              <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">
-                {t('pages.login.rememberMe')}
-              </label>
+              <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">{t('pages.login.rememberMe')}</label>
             </div>
           </div>
           <Link to={routes.requestResetPassword} className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
@@ -151,12 +134,7 @@ export default function Login (): React.JSX.Element {
           buttonText={t('pages.login.logInButton')}
         />
         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-          <Link
-            to={routes.register}
-            className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-          >
-            {t('pages.register.noAccount')}
-          </Link>
+          <Link to={routes.register} className="font-medium text-primary-600 hover:underline dark:text-primary-500">{t('pages.register.noAccount')}</Link>
         </p>
       </form>
       {/* 3rd party auth */}

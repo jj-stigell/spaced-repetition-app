@@ -35,9 +35,9 @@ export const initialState: AccountState = {
   allowNewsLetter: false,
   language: 'EN',
   jlptLevel: JlptLevel.N5,
-  autoNextCard: true,
+  autoNextCard: false,
   nextCardtimer: 5,
-  autoPlayAudio: true
+  autoPlayAudio: false
 }
 
 const accountSlice = createSlice({
