@@ -1,19 +1,23 @@
 {
   "title": "Yomiko SRS-app for learning Japanese",
-  "navbar": {
+  "betaDisclaimer": "Yomiko is still in beta development, things can break, small and big changes can happen over night. Thank you for your patience and participation in the beta phase.",
+  "navigation": {
     "dashboard": "Dashboard",
     "study": "Study",
-    "achievements": "Achievements",
+    "mockExam": "Mock Exam",
     "statistics": "Statistics",
-    "reviews": "Reviews",
-    "kanji": "Kanji",
-    "news": "News",
     "settings": "Settings",
-    "account": "Account",
-    "decks": "Decks",
-    "logout": "Logout",
-    "jlptLevel": "JLPT Level"
+    "jlptLevel": "JLPT Level",
+    "achievements": "Achievements",
+    "showMenu": "Open side menu"
   },
+  "footer": {
+    "about": "About",
+    "privacyPolicy": "Privacy Policy",
+    "contact": "Contact"
+  },
+
+
   "pages": {
     "dashboard": {
       "title": "this is the dashboard page",
@@ -21,36 +25,56 @@
       "goToStudyButton": "Go to study",
       "revHistoryTitle": "Review history, and coming reviews"
     },
+
+
+
+
     "login": {
       "title": "Sign in to your account",
       "lastLogin": "Latest login at",
       "logInButton": "Sign in",
+      "or": "or",
       "welcomeBack": "Welcome back!",
       "enterCredentials": "Enter your credentials to continue",
+      "signingIn": "Signin in...",
       "rememberMe": "Remember me",
+      "googleLogin": "Sign in with Google",
+      "facebookLogin": "Sign in with Facebook",
       "resendVerificationLink": "Resend verification",
       "linkToLogin": "Go back to login page, click here.",
       "emailNotVerifiedMessage": "Email address is not verified. Please check your email for the verification link, check spam folder also. If you have not received the link, you can resend the verification link from here:"
     },
+
     "register": {
       "title": "Create a new account and start learning",
       "successTitle": "New account created!",
       "success": "New user created successfully with email address {{email}}. We sent you a confirm link by email (just in case check spam folder), please confirm your email and start learning. Redirecting to login page in {{redirectTimeout}} seconds.",
       "registerButton": "Register",
       "noAccount": "Don't have an account? Sign Up",
-      "haveAccount": "Have an account?",
+      "haveAccount": "Have an account? Sign In",
       "enterCreds": "Enter your credentials to continue",
       "agreeWith": "I have read and agree to the",
       "TOS": "Terms of Service",
-      "cancelSuccessDisplay": "If you want to return to the register form, click here"
+      "cancelSuccessDisplay": "If you want to return to the register form, click here",
+      "googleRegister": "Register with Google",
+      "facebookRegister": "Register with Facebook",
+      "registering": "Registering..."
     },
+
+
+
+
+
+
     "confirm": {
       "title": "Confirming email address",
       "successTitle": "Email address confirmed!",
       "failureTitle": "Email address confirmation failed",
       "success": "Your email address confirmation was successful. Redirecting to login page in {{redirectTimeout}} seconds.",
       "resend": {
+        "title": "Resend confirmation code",
         "resendConfirmButton": "Resend confirmation code",
+        "processing": "Resending confirmation code...",
         "resendConfirmDescription": "Confirmation failed, please resend the confirmation by entering your email address below.",
         "resendSuccess": "New confirmation code sent to email address {{email}}. Redirecting to login page in {{redirectTimeout}} seconds."
       }
@@ -58,17 +82,20 @@
     "password": {
       "forgotPassword": {
         "title": "Reset account password",
+        "content": "Forgot your password? No worries, we can send you a reset link to your email address. We will send the link to following email address:",
         "resetDescription": "To reset account password, enter the email address you use for the account in the field below.",
-        "successTitle": "Password reset link sent succesfully. Please check your email inbox.",
+        "successTitle": "Password reset link sent succesfully. Please check your email inbox. Check spam folder also incase the filter marked the email as spam.",
         "failureTitle": "Email address verification failed",
-        "resetButton": "Send reset link"
+        "resetButton": "Send reset link",
+        "processing": "Sending reset link..."
       },
       "resetPassword": {
         "title": "Set new password",
         "resetDescription": "Input the new password and password confirmation below and submit to change the password",
         "successTitle": "Password changed succesfully. Redirecting to login page in {{redirectTimeout}} seconds.",
         "failureTitle": "Password update failed, please try again.",
-        "resetButton": "Set new password"
+        "resetButton": "Set new password",
+        "processing": "Updating password..."
       }
     },
     "notFound": {
@@ -82,9 +109,20 @@
       "errorMessage":"Following error encountered: ",
       "link": "Click to return to the main page",
       "unknowError": "Error unknown"
+
     },
+
+
+
+
     "settings": {
       "title": "Profile and settings",
+      "tabs": {
+        "account": "Account",
+        "study": "Study",
+        "manage": "Manage"
+      },
+      "manageTitle": "Manage Account",
       "accountInformation": {
         "title": "Account information",
         "username": "Username",
@@ -92,15 +130,65 @@
         "memberStatus": "Member status",
         "active": "Active",
         "expired": "Expired",
+        "emailInfo": "Your email address is",
+        "usernameInfo": "Your username is",
+        "changeButton": "Change",
+        "manageMembershipButton": "Manage membership",
         "languageSelectorTitle": "Select UI & study language",
         "languageSelectorInfo": "This value will be used as a default language for studying. If study material is not available in your language, the default study language will be set to English."
       },
       "changePassword": {
         "title": "Change password",
         "button": "Change password",
-        "passwordChangeSuccess": "Password changed succesfully"
+        "processing": "Updating password...",
+        "passwordChangeSuccess": "Password changed succesfully",
+        "forgotPassword": "Can't remember your current password?",
+        "resetPasswordButton": "Reset password",
+        "resetPasswordButtonProcessing": "Sending reset link..."
+      },
+      "deleteAccount": {
+        "title": "Delete account",
+        "caution": "Proceed with caution",
+        "note": "Make sure you have taken backup of your account in case you ever need to get access to your data. We will completely wipe your data. There is no way to access your account after this action is executed.",
+        "deleteButton": "Delete account",
+        "continueButton": "Continue with deletion",
+        "warning": "Warning! This action is irreversible, all your data will be deleted. If you want to continue, enter your password below and click delete.",
+        "deleteProsessing": "Deleting account...",
+        "modalWarningUpper": "After submitting successfully, you will be logged out. Account will be deleted after 30 days of no logging in activity. You can cancel the delete process anytime by logging in to your account before the 30 days is up.",
+        "modalWarningLower": "You will receive email confirmation after submitting the form.",
+        "deleteSuccess": "Account deletetion process finished successfully. Account will be deleted {{date}}. Login to your account before that to cancel the process."
+      },
+      "logout": {
+        "title": "Logout from account",
+        "description": "Logout current session. Remember to clear cache if you are using public computer or network to access Yomiko"
+      },
+      "study": {
+        "title": "Study Settings",
+        "reviewSettings": "Review settings",
+        "autoplayAudio": "Autoplay audio after answering a question",
+        "showNextCardAutomatically": "Show next card automatically",
+        "setTimerForShowingNewCard": "Set timer (seconds) for showing new card:",
+        "languageSettings": "Language settings",
+        "studyLanguage": "Study language",
+        "uiLanguage": "UI language"
       }
     },
+    "construction": {
+      "title": "Site Under Construction",
+      "body1": "We are currently in the process of building and designing our new website, and apologize for any inconvenience this may cause.",
+      "body2": "We are working hard to bring you a fully functional and user-friendly website as soon as possible. In the meantime, please bear with us as we complete this process.",
+      "body3": "Please check back soon to see the finished product.",
+      "link": "Click to return to the main page"
+    },
+
+
+
+
+
+
+
+
+
     "categories": {
       "kanji": {
         "title": "N{{jlptLevel}} kanji characters",
@@ -134,16 +222,23 @@
     "review": {
       "loadingMessage": "Loading Cards",
       "view": {
+        "cancelNextCardButton": "Next card in {{count}}, click to cancel",
         "nextCardButton": "Next card",
         "answerOptionsTab": {
           "button": "Answer options"
         },
         "detailsOptionsTab": {
-          "button": "Details"
+          "button": "Details",
+          "exampleSentence": {
+            "playButton": "Click to play example",
+            "stopButton": "Stop playing",
+            "playButtonDisabled": "Example audio is a member feature"
+          }
         },
         "dialMenu": {
           "backToDeck": "Back to deck select",
-          "bugReport": "Send a bug Report"
+          "bugReport": "Send a bug Report",
+          "settings": "Study settings"
         }
       },
       "reviewFinished": {
@@ -202,6 +297,12 @@
         "functionality": "Functionality",
         "other": "Other"
       }
+    },
+    "settings": {
+      "title": "Check and edit study settings",
+      "sendSuccess": "Settings updated! You can close this window by clicking close.",
+      "sendButton": "Update settings",
+      "closeButton": "Close"
     }
   },
   "stats": {
@@ -285,12 +386,6 @@
     "email": "Your email",
     "password": "Your password",
     "passwordConfirm": "Password confirmation"
-  },
-  "construction": {
-    "title": "Site Under Construction",
-    "body1": "Thank you for visiting our website. We are currently in the process of building and designing our new website, and apologize for any inconvenience this may cause.",
-    "body2": "We are working hard to bring you a fully functional and user-friendly website as soon as possible. In the meantime, please bear with us as we complete this process.",
-    "body3": "Please check back soon to see the finished product."
   },
   "errors": {
     "ERR_ACCEPT_TOS_REQUIRED": "Terms of service must be accecpted.",

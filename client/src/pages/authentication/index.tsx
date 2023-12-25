@@ -1,35 +1,21 @@
 import * as React from 'react'
 
-// Third party imports
-import { Container, Box } from '@mui/material'
 import { Outlet } from 'react-router-dom'
 
-// Project imports
-import Copyright from '../../components/Copyright'
-import Logo from '../../components/Logo'
+import Logo from 'src/components/Logo'
 
 function Authentication (): JSX.Element {
   return (
-      <Container component="main" maxWidth="xs" sx={{ pt: 3, pb: 2 }}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            border: 2,
-            borderRadius: 3,
-            padding: 5,
-            paddingTop: 2,
-            borderColor: 'primary.dark'
-          }}
-        >
-          <Box sx={{ mb: 3 }}>
-            <Logo fontSize={50}/>
-          </Box>
-          <Outlet/>
-        </Box>
-        <Copyright sx={{ mt: 4 }} />
-      </Container>
+    <div className="bg-blue-100">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <Logo/>
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 shadow-lg">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <Outlet/>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 

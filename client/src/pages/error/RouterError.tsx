@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { useRouteError, isRouteErrorResponse } from 'react-router-dom'
 import ErrorPage from '.'
 
-function RouterError (): JSX.Element {
+export default function RouterError (): JSX.Element {
   const { t } = useTranslation()
   const error = useRouteError()
 
@@ -20,5 +19,3 @@ function RouterError (): JSX.Element {
     </ErrorPage>
   )
 }
-
-export default RouterError

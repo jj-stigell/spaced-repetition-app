@@ -1,3 +1,4 @@
+/*
 import * as React from 'react'
 
 import Box from '@mui/material/Box'
@@ -60,3 +61,4 @@ function LanguageSelector ({ callApi = false }: { callApi?: boolean }): JSX.Elem
 }
 
 export default LanguageSelector
+*/

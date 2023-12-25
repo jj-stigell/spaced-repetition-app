@@ -12,7 +12,7 @@ import { accountErrors, validationErrors } from '../configs/errorCodes';
 import { ApiError } from '../class';
 import { findAccountById, findAccountByEmail } from './utils/account';
 import { findAccountActionById } from './utils/accountAction';
-import { sendEmailConfirmation, sendPasswordResetLink } from './utils/mailer';
+import { sendDeletionNotice, sendEmailConfirmation, sendPasswordResetLink } from './utils/mailer';
 import { JwtPayload } from 'jsonwebtoken';
 import {
   ActionType, HttpCode, ResetPasswordData, ChangePasswordData, JlptLevel
@@ -262,4 +262,56 @@ export async function updateUserData(req: Request, res: Response): Promise<void>
 
   await account.save();
   res.status(HttpCode.Ok).json();
+}
+
+/**
+ * Mark account for deletion. The account will be deleted after 28 days.
+ * If the account is already marked for deletion, the function will update
+ * the deletion date to 28 days from the current date. Logging in route will
+ * reset the deletion date to null.
+ * @param {Request} req - Express request.
+ * @param {Response} res - Express response.
+ * @throws {ApiError} - If there is an error during the deletion process,
+ * the function throws an ApiError with the corresponding HTTP status code.
+*/
+export async function deleteAccount(req: Request, res: Response): Promise<void> {
+  const requestSchema: yup.ObjectSchema<{ password: string }> = yup.object({
+    password: yup.string()
+      .max(accountConstants.PASSWORD_MAX_LENGTH, validationErrors.ERR_PASSWORD_TOO_LONG)
+      .typeError(validationErrors.ERR_INPUT_TYPE)
+      .required(validationErrors.ERR_PASSWORD_REQUIRED),
+  });
+
+  await requestSchema.validate(req.body, { abortEarly: false });
+  const { password }: { password: string } = req.body;
+
+  const user: JwtPayload = req.user as JwtPayload;
+  const account: Account = await findAccountById(user.id);
+
+  const match: boolean = await comparePassword(account.password, password);
+
+  if (!match) {
+    throw new ApiError(accountErrors.ERR_PASSWORD_CURRENT_INCORRECT, HttpCode.Forbidden);
+  }
+
+  const deleteDate: Date = new Date();
+  deleteDate.setDate(deleteDate.getDate() + 30);
+
+  account.update({
+    deleteAccount: deleteDate
+  });
+
+  await account.save();
+
+  if (NODE_ENV !== 'test') {
+    await sendDeletionNotice(
+      account.languageId, account.username, account.email, deleteDate.toDateString()
+    );
+  }
+
+  res.status(HttpCode.Accepted).json({
+    data: {
+      deletionDate: deleteDate
+    }
+  });
 }

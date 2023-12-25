@@ -26,6 +26,7 @@ export default class Account extends Model<
   declare lastLogin: CreationOptional<Date>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+  declare deleteAccount: CreationOptional<Date | null>;
 }
 
 Account.init(
@@ -116,6 +117,11 @@ Account.init(
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
+    deleteAccount: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null
+    }
   },
   {
     sequelize,

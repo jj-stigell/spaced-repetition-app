@@ -1,107 +1,83 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import * as React from 'react'
 
-// Third party imports
-import { AxiosError } from 'axios'
 import { useFormik } from 'formik'
-import { Box, TextField, CircularProgress } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
-// Project imports
 import { constants } from '../../../config/constants'
 import { resendConfirmation } from '../../../config/api'
 import axios from '../../../lib/axios'
-import { useAppDispatch } from '../../../app/hooks'
-import { setNotification } from '../../../features/notificationSlice'
-import { login } from '../../../config/path'
-import SubmitButton from '../../../components/SubmitButton'
+import InputField from 'src/components/InputField'
+import Button from 'src/components/Button'
+import routes from 'src/config/routes'
 
-function ReconfirmForm (): JSX.Element {
+interface IFormValues {
+  email: string
+}
+
+interface IForm {
+  setSuccess: (value: boolean) => void
+}
+
+function ReconfirmForm ({ setSuccess }: IForm): JSX.Element {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-
-  const [isSubmitted, setIsSubmitted] = React.useState<boolean>(false)
-
-  const validationSchema: yup.AnySchema = yup.object({
-    email: yup.string()
-      .email(t('errors.ERR_NOT_VALID_EMAIL') as string)
-      .max(constants.account.emailMaxLength, t('errors.ERR_EMAIL_TOO_LONG', { length: constants.account.emailMaxLength }) as string)
-      .required(t('errors.ERR_EMAIL_REQUIRED') as string)
-  })
+  const [processing, setProcessing] = React.useState<boolean>(false)
 
   const formik = useFormik({
     initialValues: {
       email: ''
     },
-    validationSchema,
-    onSubmit: (values): void => {
-      setIsSubmitted(true)
+    validationSchema: yup.object({
+      email: yup.string()
+        .email(t('errors.ERR_NOT_VALID_EMAIL'))
+        .max(constants.account.emailMaxLength, t('errors.ERR_EMAIL_TOO_LONG', { length: constants.account.emailMaxLength }))
+        .required(t('errors.ERR_EMAIL_REQUIRED'))
+    }),
+    onSubmit: (values: IFormValues) => {
+      setProcessing(true)
       axios.post(resendConfirmation, {
         email: values.email
+      }).then(function () {
+        setSuccess(true)
+
+        setTimeout(() => {
+          navigate(routes.login)
+        }, constants.redirectTimeout)
+      }).catch(function () {
+        setSuccess(false)
+      }).finally(function () {
+        setProcessing(false)
       })
-        .then(function () {
-          setIsSubmitted(false)
-          dispatch(setNotification(
-            { message: t('pages.confirm.resend.resendSuccess', { email: values.email, redirectTimeout: constants.redirectTimeout }), severity: 'success' }
-          ))
-
-          setTimeout(() => {
-            navigate(login)
-          }, constants.redirectTimeout * 1000)
-        })
-        .catch(function (error) {
-          setIsSubmitted(false)
-          let errorCode: string | null = null
-
-          if (Array.isArray(error?.response?.data?.errors)) {
-            errorCode = error?.response?.data?.errors[0].code
-          }
-
-          if (errorCode != null) {
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
-          } else if (error instanceof AxiosError) {
-            dispatch(setNotification({ message: error.message, severity: 'error' }))
-          } else {
-            dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
-          }
-        })
     }
   })
 
   return (
-    <>
-      <Box sx={{ mt: 4, textAlign: 'center' }}>
-        {t('pages.confirm.resend.resendConfirmDescription', { redirectTimeout: constants.redirectTimeout })}
-      </Box>
-      <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
-        <TextField
-          sx={{ p: 1 }}
-          disabled={isSubmitted}
-          margin="normal"
-          fullWidth
-          id="email"
-          label={t('misc.email')}
-          name="email"
-          type="text"
-          autoComplete="email"
-          autoFocus
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          error={(formik.touched.email === true) && Boolean(formik.errors.email)}
-          helperText={(formik.touched.email === true) && formik.errors.email}
-        />
-        { isSubmitted &&
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <CircularProgress color='inherit' />
-          </Box>
-        }
-        <SubmitButton buttonText={t('pages.confirm.resend.resendConfirmButton')} disabled={isSubmitted} />
-      </Box>
-    </>
+    <form className="space-y-4 md:space-y-6" onSubmit={formik.handleSubmit}>
+      <InputField
+        id='email'
+        type='email'
+        name='email'
+        label={t('misc.email')}
+        placeholder='example@yomiko.io'
+        value={formik.values.email}
+        errors={formik.errors.email}
+        fieldTouched={formik.touched.email}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+      <Button
+        type='submit'
+        loading={processing}
+        disabled={processing}
+        loadingText={t('pages.confirm.resend.processing')}
+        buttonText={t('pages.confirm.resend.resendConfirmButton')}
+      />
+      <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+        <Link to={routes.login} className="font-medium text-primary-600 hover:underline dark:text-primary-500">{t('pages.login.linkToLogin')}</Link>
+      </p>
+    </form>
   )
 }
 

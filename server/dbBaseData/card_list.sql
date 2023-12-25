@@ -286,4 +286,12 @@ INSERT INTO card_list(deck_id, card_id, learning_order, created_at, updated_at, 
 (13,272,169,NOW(),NOW(), 'RECALL', true),
 (13,273,170,NOW(),NOW(), 'RECALL', true),
 (13,274,171,NOW(),NOW(), 'RECALL', true),
-(13,275,172,NOW(),NOW(), 'RECALL', true);
+(13,275,172,NOW(),NOW(), 'RECALL', true),
+(14,276,1,NOW(),NOW(), 'RECALL', true),
+(14,277,2,NOW(),NOW(), 'RECALL', true),
+(14,278,3,NOW(),NOW(), 'RECALL', true),
+(14,279,4,NOW(),NOW(), 'RECALL', true),
+(14,280,5,NOW(),NOW(), 'RECALL', true),
+(14,281,6,NOW(),NOW(), 'RECALL', true),
+(14,282,7,NOW(),NOW(), 'RECALL', true),
+(14,283,8,NOW(),NOW(), 'RECALL', true);

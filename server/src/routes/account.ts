@@ -3,7 +3,7 @@ import passport from 'passport';
 
 import {
   confirmEmail, resendConfirmEmail, requestResetPassword,
-  resetPassword, changePassword, updateUserData
+  resetPassword, changePassword, updateUserData, deleteAccount
 } from '../controllers/account';
 import { requestWrap } from '../util/requestWrap';
 
@@ -48,6 +48,60 @@ export const router: Router = Router();
 router.post(
   '/confirmation',
   requestWrap(confirmEmail)
+);
+
+/**
+ * @swagger
+ * /api/v1/account:
+ *   delete:
+ *     tags: [Account]
+ *     description: Mark account for deletion. Deletetion happens after 30 days.
+ *     requestBody:
+ *       description: Account password to confirm account deletion.
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 example: my-password-123
+ *                 description: Account password.
+ *                 required: true
+ *     responses:
+ *       202:
+ *         description: User marked for deletion.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     deletionDate:
+ *                       type: string
+ *                       example: 24.12.2023
+ *                       description: Date when the account will be deleted.
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         $ref: '#/components/responses/ForbiddenError'
+ *       404:
+ *         description: The account is not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Failure'
+ *     security:
+ *       - cookieAuth: []
+ */
+router.delete(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  requestWrap(deleteAccount)
 );
 
 /**

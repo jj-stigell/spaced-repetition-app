@@ -233,6 +233,14 @@ passport.use(
           throw new InvalidCredentials();
         }
 
+        // If account has been marked for deletion, remove the mark.
+        if (account.deleteAccount !== null) {
+          account.update({
+            deleteAccount: null
+          });
+          await account.save();
+        }
+
         const session: Session = await Session.create({
           accountId: account.id,
           expireAt: new Date(Date.now() + accountConstants.JWT_EXPIRY_TIME),

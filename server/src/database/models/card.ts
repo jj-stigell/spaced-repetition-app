@@ -30,7 +30,9 @@ Card.init({
       CardType.KANA,
       CardType.VOCABULARY,
       CardType.SENTENCE,
-      CardType.GRAMMAR
+      CardType.GRAMMAR,
+      CardType.RECALL_KANJI_SENTENCE,
+      CardType.RECOGNIZE_KANJI_SENTENCE
     ),
     allowNull: false
   },

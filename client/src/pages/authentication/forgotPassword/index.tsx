@@ -1,50 +1,30 @@
-import * as React from 'react'
+import React from 'react'
 
-// Third party imports
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { Box } from '@mui/system'
-import DoneOutlineOutlinedIcon from '@mui/icons-material/DoneOutlineOutlined'
-import { Grid, Typography } from '@mui/material'
 
-// Project imports
-import ResetForm from './Form'
-import { login } from '../../../config/path'
+import Form from './Form'
+import routes from 'src/config/routes'
 
-function ForgotPassword (): JSX.Element {
+export default function ForgotPassword (): React.JSX.Element {
   const { t } = useTranslation()
-
-  const [resetInProcess, setResetInProcess] = React.useState<boolean>(false)
   const [success, setSuccess] = React.useState<boolean>(false)
 
   return (
     <>
-      <Typography component="h1" variant="h5" sx={{ marginTop: 2, marginBottom: 5, textAlign: 'center' }}>
+      <h1 className="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
         {t('pages.password.forgotPassword.title')}
-      </Typography>
+      </h1>
       { success
-        ? <Box sx={{ textAlign: 'center' }}>
-          <DoneOutlineOutlinedIcon sx={{ color: 'green', fontSize: 50 }}/>
-          <Typography component="h4" variant="h5" sx={{ marginTop: 2, marginBottom: 5 }}>
+        ? <div className="flex flex-col items-center justify-center text-lg font-medium mt-1 text-center">
+            <img alt="email succesfully sent" src="https://i.ibb.co/C6kfLm4/Email-file.gif" width="90" />
             {t('pages.password.forgotPassword.successTitle')}
-          </Typography>
-          <Link to={login}>
-            {t('pages.login.linkToLogin')}
-          </Link>
-        </Box>
-        : <Box sx={{ opacity: resetInProcess ? 0.2 : 1.0 }}>
-          <ResetForm setResetInProcess={setResetInProcess} setSuccess={setSuccess}/>
-          <Grid container>
-            <Grid item>
-              <Link to={login}>
-                {t('pages.login.linkToLogin')}
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
+            <p className="text-base mt-4 font-light text-gray-500 dark:text-gray-400">
+              <Link to={routes.login} className="font-medium text-primary-600 hover:underline dark:text-primary-500">{t('pages.login.linkToLogin')}</Link>
+            </p>
+          </div>
+        : <Form setSuccess={setSuccess} />
       }
     </>
   )
 }
-
-export default ForgotPassword

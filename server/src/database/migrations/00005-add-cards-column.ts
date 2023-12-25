@@ -11,7 +11,7 @@ export default {
         INTEGER DEFAULT 0;`, { transaction }
       );
 
-      // Function for updating card count column in deck table.
+      // Function for updating card count column in deck table. Triggered when card_list is changed.
       // https://www.postgresql.org/docs/current/sql-refreshmaterializedview.html
       await queryInterface.sequelize.query(
         `CREATE OR REPLACE FUNCTION update_deck_cards_count() RETURNS TRIGGER AS $$

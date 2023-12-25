@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface RememberMe {
-  rememberMeEmail?: string
-  rememberMePassword?: string
+  rememberEmail?: string
+  rememberPassword?: string
 }
 
 const initialState: RememberMe = {
-  rememberMeEmail: undefined,
-  rememberMePassword: undefined
+  rememberEmail: undefined,
+  rememberPassword: undefined
 }
 
 const rememberSlice = createSlice({

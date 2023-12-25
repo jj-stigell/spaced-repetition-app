@@ -1,3 +1,5 @@
+---
+
 name: Deploy workflow
 
 run-name: ${{ github.actor }} commit and deploy
@@ -61,3 +63,13 @@ jobs:
           BRANCH: frontend-production
           FOLDER: client
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+  lint_yaml_files:
+    name: Lint project YAML files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install yamllint
+        run: pip install yamllint
+      - name: Lint YAML files
+        run: yamllint .

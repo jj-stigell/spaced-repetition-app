@@ -1,173 +1,110 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import * as React from 'react'
 
-// Third party imports
-import { AxiosError } from 'axios'
-import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
-import {
-  Box, FormControl, FormHelperText,
-  IconButton, InputAdornment, InputLabel,
-  OutlinedInput
-} from '@mui/material'
-import { useFormik } from 'formik'
+import React from 'react'
+
 import * as yup from 'yup'
+import { useTranslation } from 'react-i18next'
+import { useFormik } from 'formik'
+import { Link, useParams } from 'react-router-dom'
 
-// Project imports
-import SubmitButton from '../../../components/SubmitButton'
-import { constants } from '../../../config/constants'
-import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { login } from '../../../config/path'
-import { setNotification } from '../../../features/notificationSlice'
-import { useAppDispatch } from '../../../app/hooks'
-import { resetPassword } from '../../../config/api'
-import axios from '../../../lib/axios'
+import { constants } from 'src/config/constants'
+import axios from 'src/lib/axios'
+import { resetPassword } from 'src/config/api'
+import routes from 'src/config/routes'
+import Button from 'src/components/Button'
+import InputField from 'src/components/InputField'
 
-function Form (): JSX.Element {
+interface IFormValues {
+  password: string
+  passwordConfirmation: string
+}
+
+interface IForm {
+  setSuccess: (value: boolean) => void
+}
+
+export default function Form ({ setSuccess }: IForm): React.JSX.Element {
   const { t } = useTranslation()
   const { confirmationId } = useParams()
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-
-  const [submitting, setSubmitting] = React.useState<boolean>(false)
-  const [showPassword, setShowPassword] = React.useState<boolean>(false)
-  const [showPasswordConfirm, setShowPasswordConfirm] = React.useState<boolean>(false)
-
-  const handleClickShowPassword = (): void => { setShowPassword(!showPassword) }
-  const handleClickShowPasswordConfirm = (): void => { setShowPasswordConfirm(!showPasswordConfirm) }
-
-  const validationSchema: yup.AnySchema = yup.object({
-    password: yup.string()
-      .max(constants.account.passwordMaxLength, t('errors.ERR_PASSWORD_TOO_LONG', { length: constants.account.passwordMaxLength }) as string)
-      .min(constants.account.passwordMinLength, t('errors.ERR_PASSWORD_TOO_SHORT', { length: constants.account.passwordMinLength }) as string)
-      .matches(constants.regex.lowercaseRegex, t('errors.ERR_PASSWORD_LOWERCASE') as string)
-      .matches(constants.regex.uppercaseRegex, t('errors.ERR_PASSWORD_UPPERCASE') as string)
-      .matches(constants.regex.numberRegex, t('errors.ERR_PASSWORD_NUMBER') as string)
-      .required(t('errors.ERR_PASSWORD_REQUIRED') as string),
-    passwordConfirmation: yup.string()
-      .max(constants.account.passwordMaxLength, t('errors.ERR_PASSWORD_TOO_LONG', { length: constants.account.passwordMaxLength }) as string)
-      .min(constants.account.passwordMinLength, t('errors.ERR_PASSWORD_TOO_SHORT', { length: constants.account.passwordMinLength }) as string)
-      .matches(constants.regex.lowercaseRegex, t('errors.ERR_PASSWORD_LOWERCASE') as string)
-      .matches(constants.regex.uppercaseRegex, t('errors.ERR_PASSWORD_UPPERCASE') as string)
-      .matches(constants.regex.numberRegex, t('errors.ERR_PASSWORD_NUMBER') as string)
-      .oneOf([yup.ref('password'), null], t('errors.ERR_PASSWORD_MISMATCH') as string)
-      .required(t('errors.ERR_PASSWORD_CONFIRMATION_REQUIRED') as string)
-  })
+  const [processing, setProcessing] = React.useState<boolean>(false)
 
   const formik = useFormik({
     initialValues: {
       password: '',
       passwordConfirmation: ''
     },
-    validationSchema,
-    onSubmit: (values, { resetForm }): void => {
-      setSubmitting(true)
-
+    validationSchema: yup.object({
+      password: yup.string()
+        .max(constants.account.passwordMaxLength, t('errors.ERR_PASSWORD_TOO_LONG', { length: constants.account.passwordMaxLength }))
+        .min(constants.account.passwordMinLength, t('errors.ERR_PASSWORD_TOO_SHORT', { length: constants.account.passwordMinLength }))
+        .matches(constants.regex.lowercaseRegex, t('errors.ERR_PASSWORD_LOWERCASE'))
+        .matches(constants.regex.uppercaseRegex, t('errors.ERR_PASSWORD_UPPERCASE'))
+        .matches(constants.regex.numberRegex, t('errors.ERR_PASSWORD_NUMBER'))
+        .required(t('errors.ERR_PASSWORD_REQUIRED')),
+      passwordConfirmation: yup.string()
+        .max(constants.account.passwordMaxLength, t('errors.ERR_PASSWORD_TOO_LONG', { length: constants.account.passwordMaxLength }))
+        .min(constants.account.passwordMinLength, t('errors.ERR_PASSWORD_TOO_SHORT', { length: constants.account.passwordMinLength }))
+        .matches(constants.regex.lowercaseRegex, t('errors.ERR_PASSWORD_LOWERCASE'))
+        .matches(constants.regex.uppercaseRegex, t('errors.ERR_PASSWORD_UPPERCASE'))
+        .matches(constants.regex.numberRegex, t('errors.ERR_PASSWORD_NUMBER'))
+        .oneOf([yup.ref('password'), ''], t('errors.ERR_PASSWORD_MISMATCH'))
+        .required(t('errors.ERR_PASSWORD_CONFIRMATION_REQUIRED'))
+    }),
+    onSubmit: (values: IFormValues) => {
+      setProcessing(true)
       axios.patch(resetPassword, {
         password: values.password,
         confirmationId
       }).then(function () {
-        setSubmitting(false)
-        resetForm()
-        dispatch(setNotification(
-          { message: t('pages.password.resetPassword.successTitle', { redirectTimeout: constants.redirectTimeout }), severity: 'success' }
-        ))
-
-        setTimeout(() => {
-          navigate(login)
-        }, constants.redirectTimeout * 1000)
+        setSuccess(true)
       }).catch(function (error) {
-        setSubmitting(false)
-        let errorCode: string | null = null
-
-        if (Array.isArray(error?.response?.data?.errors)) {
-          errorCode = error?.response?.data?.errors[0].code
-        }
-
-        if (errorCode != null) {
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          dispatch(setNotification({ message: t(`errors.${errorCode}`), severity: 'error' }))
-        } else if (error instanceof AxiosError) {
-          dispatch(setNotification({ message: error.message, severity: 'error' }))
-        } else {
-          dispatch(setNotification({ message: t('errors.ERR_CHECK_CONNECTION'), severity: 'error' }))
-        }
+        console.log(error)
+      }).finally(function () {
+        setProcessing(false)
       })
     }
   })
 
   return (
     <>
-      <Box sx={{ mt: 4, textAlign: 'center' }}>
-        {t('pages.password.resetPassword.resetDescription', { redirectTimeout: constants.redirectTimeout })}
-      </Box>
-      <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1 }}>
-      <FormControl sx={{ width: '100%' }} variant="outlined">
-        <InputLabel sx={{ mt: 2 }} htmlFor="outlined-adornment-password">{t('misc.password')}</InputLabel>
-        <OutlinedInput
-          sx={{ mt: 2 }}
-          id="password"
-          label={t('misc.password')}
-          name="password"
-          autoFocus
-          disabled={submitting}
-          type={showPassword ? 'text' : 'password'}
+      <div className="my-4">
+        {t('pages.password.forgotPassword.resetDescription', { redirectTimeout: constants.redirectTimeout })}
+      </div>
+      <form className="space-y-4 md:space-y-6" onSubmit={formik.handleSubmit}>
+        <InputField
+          id='password'
+          type='password'
+          name='password'
+          label={t('misc.newPassword')}
+          placeholder='••••••••'
           value={formik.values.password}
+          errors={formik.errors.password}
+          fieldTouched={formik.touched.password}
           onChange={formik.handleChange}
-          error={(formik.touched.password === true) && Boolean(formik.errors.password)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                edge="end"
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
+          onBlur={formik.handleBlur}
         />
-        {Boolean(formik.errors.password) && (formik.touched.password === true) && (
-          <FormHelperText error id="password-error">
-            {formik.errors.password}
-          </FormHelperText>
-        )}
-      </FormControl>
-      <FormControl sx={{ width: '100%' }} variant="outlined">
-        <InputLabel sx={{ mt: 2 }} htmlFor="outlined-adornment-passwordConfirmation">{t('misc.passwordConfirm')}</InputLabel>
-        <OutlinedInput
-          sx={{ mt: 2 }}
-          id="passwordConfirmation"
-          label={t('misc.passwordConfirm')}
-          name="passwordConfirmation"
-          autoFocus
-          disabled={submitting}
-          type={showPasswordConfirm ? 'text' : 'password'}
+        <InputField
+          id='passwordConfirmation'
+          type='password'
+          name='passwordConfirmation'
+          label={t('misc.confirmNewPassword')}
+          placeholder='••••••••'
           value={formik.values.passwordConfirmation}
+          errors={formik.errors.passwordConfirmation}
+          fieldTouched={formik.touched.passwordConfirmation}
           onChange={formik.handleChange}
-          error={(formik.touched.passwordConfirmation === true) && Boolean(formik.errors.passwordConfirmation)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPasswordConfirm}
-                edge="end"
-              >
-                {showPasswordConfirm ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
+          onBlur={formik.handleBlur}
         />
-        {Boolean(formik.errors.passwordConfirmation) && (formik.touched.passwordConfirmation === true) && (
-          <FormHelperText error id="passwordConfirm-error">
-            {formik.errors.passwordConfirmation}
-          </FormHelperText>
-        )}
-      </FormControl>
-        <SubmitButton buttonText={t('pages.password.resetPassword.resetButton')} />
-      </Box>
+        <Button
+          type='submit'
+          loading={processing}
+          disabled={processing}
+          loadingText={t('pages.password.resetPassword.processing')}
+          buttonText={t('pages.password.resetPassword.resetButton')}
+        />
+        <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+          <Link to={routes.login} className="font-medium text-primary-600 hover:underline dark:text-primary-500">{t('pages.login.linkToLogin')}</Link>
+        </p>
+      </form>
     </>
   )
 }
-
-export default Form

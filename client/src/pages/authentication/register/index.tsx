@@ -1,31 +1,39 @@
-import * as React from 'react'
+import React, { useEffect } from 'react'
 
-// Third party imports
 import { useTranslation } from 'react-i18next'
-import { Typography } from '@mui/material'
+import { Link, redirect } from 'react-router-dom'
 
-// Project imports
-import RegisterSuccess from './RegisterSuccess'
-import RegisterForm from './RegisterForm'
+import routes from 'src/config/routes'
+import Form from './Form'
+import { constants } from 'src/config/constants'
 
-function Register (): JSX.Element {
+export default function Register (): React.JSX.Element {
   const { t } = useTranslation()
-
   const [registeredEmail, setRegisteredEmail] = React.useState<string | null>(null)
+
+  useEffect(() => {
+    if (registeredEmail != null) {
+      setTimeout(() => {
+        return redirect(routes.login)
+      }, constants.redirectTimeout)
+    }
+  }, [registeredEmail])
 
   return (
     <>
-      <Typography component="h1" variant="h5" textAlign='center'>
-        { (registeredEmail != null) ? t('pages.register.successTitle') : t('pages.register.title')}
-      </Typography>
+      <h1 className="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+        { (registeredEmail != null) ? t('pages.register.successTitle') : t('pages.register.title') }
+      </h1>
       { (registeredEmail != null)
-        ? <RegisterSuccess email={registeredEmail}/>
-        : <RegisterForm
-            setRegisteredEmail={setRegisteredEmail}
-          />
+        ? <div className="flex flex-col items-center justify-center text-lg font-medium mt-1 text-center">
+            <img alt="email succesfully sent" src="https://i.ibb.co/0yy4Jpn/Confetti.gif" width="90" />
+              <div className='mt-4'>{t('pages.register.success', { email: registeredEmail, redirectTimeout: constants.redirectTimeout })}</div>
+            <p className="text-base mt-4 font-light text-gray-500 dark:text-gray-400">
+              <Link to={routes.login} className="font-medium text-primary-600 hover:underline dark:text-primary-500">{t('pages.login.linkToLogin')}</Link>
+            </p>
+          </div>
+        : <Form setRegisteredEmail={setRegisteredEmail} />
       }
     </>
   )
 }
-
-export default Register

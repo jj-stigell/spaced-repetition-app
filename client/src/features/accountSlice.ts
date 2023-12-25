@@ -1,30 +1,43 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { JlptLevel, Role } from '../types'
+import { JlptLevel, Role } from 'src/types'
 
-export interface Account {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type Account = {
   username: string
   email: string
   role: Role
   allowNewsLetter: boolean
   language: string
   jlptLevel: JlptLevel
+  autoNextCard: boolean
+  nextCardtimer: number
+  autoPlayAudio: boolean
 }
 
-export interface AccountState {
+export type AccountState = {
   isLoggedIn: boolean
-  account: Account
-}
+  username: string
+  email: string
+  role: Role
+  allowNewsLetter: boolean
+  language: string
+  jlptLevel: JlptLevel
+  autoNextCard: boolean
+  nextCardtimer: number
+  autoPlayAudio: boolean
+} & Account
 
 export const initialState: AccountState = {
   isLoggedIn: false,
-  account: {
-    username: '',
-    email: '',
-    role: Role.NON_MEMBER,
-    allowNewsLetter: false,
-    language: 'EN',
-    jlptLevel: JlptLevel.N5
-  }
+  username: '',
+  email: '',
+  role: Role.NON_MEMBER,
+  allowNewsLetter: false,
+  language: 'EN',
+  jlptLevel: JlptLevel.N5,
+  autoNextCard: false,
+  nextCardtimer: 5,
+  autoPlayAudio: false
 }
 
 const accountSlice = createSlice({
@@ -35,35 +48,31 @@ const accountSlice = createSlice({
       return action.payload
     },
     resetAccount (state) {
-      return {
-        isLoggedIn: false,
-        account: {
-          ...initialState.account,
-          language: state.account.language
-        }
-      }
+      return initialState
     },
     setJlptLevel (state, action: PayloadAction<JlptLevel>) {
       return {
         ...state,
-        account: {
-          ...state.account,
-          jlptLevel: action.payload
-        }
+        jlptLevel: action.payload
       }
     },
     setLanguage (state, action: PayloadAction<string>) {
       return {
         ...state,
-        account: {
-          ...state.account,
-          language: action.payload
-        }
+        language: action.payload
+      }
+    },
+    updateStudySettings (state, action: PayloadAction<{ autoNextCard?: boolean, nextCardtimer?: number, autoPlayAudio?: boolean }>) {
+      return {
+        ...state,
+        autoNextCard: action.payload?.autoNextCard ?? state.autoNextCard,
+        nextCardtimer: action.payload.nextCardtimer ?? state.nextCardtimer,
+        autoPlayAudio: action.payload.autoPlayAudio ?? state.autoPlayAudio
       }
     }
   }
 })
 
-export const { setJlptLevel, setAccount, resetAccount, setLanguage } = accountSlice.actions
+export const { setJlptLevel, setAccount, resetAccount, setLanguage, updateStudySettings } = accountSlice.actions
 
 export default accountSlice.reducer

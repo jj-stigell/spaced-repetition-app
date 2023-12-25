@@ -61,5 +61,6 @@ export const constants = {
   },
   homePage: 'https://www.yomiko.io/',
   appName: 'Yomiko',
-  redirectTimeout: 5
+  redirectTimeout: 5,
+  timeout: 10000
 }

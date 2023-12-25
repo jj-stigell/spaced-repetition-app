@@ -116,7 +116,9 @@ export enum CardType {
   KANA = 'KANA',
   VOCABULARY = 'VOCABULARY',
   SENTENCE = 'SENTENCE',
-  GRAMMAR = 'GRAMMAR'
+  GRAMMAR = 'GRAMMAR',
+  RECALL_KANJI_SENTENCE = 'RECALL_KANJI_SENTENCE',
+  RECOGNIZE_KANJI_SENTENCE = 'RECOGNIZE_KANJI_SENTENCE'
 }
 
 export type ChangePasswordData = {
@@ -128,6 +130,14 @@ export type ConfirmEmailPayload = {
   readonly translation: object;
   readonly email: string;
   readonly username: string;
+  readonly url: string;
+};
+
+export type DeleteAccountPayload = {
+  readonly translation: object;
+  readonly email: string;
+  readonly username: string;
+  readonly date: string;
   readonly url: string;
 };
 
@@ -202,6 +212,7 @@ export type GeneralErrors = {
 export enum HttpCode {
   Ok = 200,
   Created = 201,
+  Accepted = 202,
   BadRequest = 400,
   Unauthorized = 401,
   Forbidden = 403,

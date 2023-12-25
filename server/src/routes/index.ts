@@ -9,6 +9,7 @@ import { definition } from '../configs/swagger';
 import { NODE_ENV } from '../configs/environment';
 
 // Routes
+import { router as adminRouter } from './admin';
 import { router as authRouter } from './auth';
 import { router as accountRouter } from './account';
 import { router as bugReportRouter } from './bugReport';
@@ -25,6 +26,7 @@ const openapiSpecification: object = swaggerJsdoc(options);
 export const router: Router = Router();
 
 router.use(cookieParser());
+router.use('/admin/', adminRouter);
 router.use('/auth/', authRouter);
 router.use('/account/', accountRouter);
 router.use('/bug/', bugReportRouter);
