@@ -26,7 +26,7 @@ import routes from 'src/config/routes'
 import ResetPassword from 'src/pages/authentication/resetPassword'
 import Confirm from 'src/pages/authentication/confirm'
 
-// For dispatching notifications via axios interceptor.
+// For dispatching notifications with axios interceptor.
 injectStore(store)
 
 function App (): React.JSX.Element {
@@ -38,24 +38,22 @@ function App (): React.JSX.Element {
           <Routes>
             <Route element={<AuthGuard />}>
               <Route element={<MainLayout />}>
-                <Route path="/" errorElement={<RouterError />} element={<Dashboard />} />
-                <Route path="/settings" errorElement={<RouterError />} element={<Settings />} />
-                <Route path="/statistics" errorElement={<RouterError />} element={<UnderConstruction />} />
-                <Route path="/study" errorElement={<RouterError />} element={<UnderConstruction />} />
-                <Route path="/exam" errorElement={<RouterError />} element={<UnderConstruction />} />
+                <Route path={routes.dashboard} errorElement={<RouterError />} element={<Dashboard />} />
+                <Route path={routes.settings} errorElement={<RouterError />} element={<Settings />} />
+                <Route path={routes.statistics} errorElement={<RouterError />} element={<UnderConstruction />} />
+                <Route path={routes.study} errorElement={<RouterError />} element={<UnderConstruction />} />
+                <Route path={routes.exam} errorElement={<RouterError />} element={<UnderConstruction />} />
                 <Route path="/kanji/recognise" errorElement={<RouterError />} element={<Proto />} />
               </Route>
             </Route>
             <Route element={<GuestGuard />}>
               <Route element={<Authentication />}>
-                <Route path="/auth/login" errorElement={<RouterError />} element={<Login />} />
-                <Route path="/auth/register" errorElement={<RouterError />} element={<Register />} />
+                <Route path={routes.login} errorElement={<RouterError />} element={<Login />} />
+                <Route path={routes.register} errorElement={<RouterError />} element={<Register />} />
                 <Route path={routes.requestResetPassword} errorElement={<RouterError />} element={<ForgotPassword />} />
                 <Route path={routes.resetPassword} errorElement={<RouterError />} element={<ResetPassword />} />
-
                 <Route path={routes.emailConfirm} errorElement={<RouterError />} element={<Confirm />} />
                 <Route path={routes.requestEmailConfirm} errorElement={<RouterError />} element={<Confirm />} />
-
               </Route>
             </Route>
             <Route path="*" errorElement={<RouterError />} element={<NotFound />} />
@@ -67,49 +65,3 @@ function App (): React.JSX.Element {
 }
 
 export default App
-
-/*
-    <div style={{
-      backgroundColor: theme.palette.primary.light,
-      minHeight: '100vh'
-    }}>
-      <Notification />
-        <Router>
-          <Routes>
-
-          
-            <Route element={<AuthGuard />}>
-              <Route element={<MainLayout />}>
-                <Route element={<Dashboard />} errorElement={<RouterError />} path={dashboard} />
-                <Route element={<Decks />} errorElement={<RouterError />} path={decks} />
-                <Route element={<Category />} errorElement={<RouterError />} path={category} />
-                <Route element={<Settings />} errorElement={<RouterError />} path={settings} />
-                <Route element={<AdminGuard />}>
-
-                
-                  <Route element={<AdminDashBoard />} errorElement={<RouterError />} path={admin} />
-                  <Route element={<DeckInfo />} errorElement={<RouterError />} path={adminDeckInfo} />
-                  <Route element={<BugReports />} errorElement={<RouterError />} path={adminBugReports} />
-                </Route>
-              </Route>
-              <Route element={<Study />} errorElement={<RouterError />} path={studyDeck} />
-            </Route>
-
-
-            <Route element={<GuestGuard />}>
-              <Route element={<Authentication />}>
-                <Route element={<Login />} errorElement={<RouterError />} path={login} />
-                <Route element={<Register />} errorElement={<RouterError />} path={register} />
-                <Route element={<Confirm />} errorElement={<RouterError />} path={emailConfirm} />
-                <Route element={<Confirm />} errorElement={<RouterError />} path={requestEmailConfirm} />
-                <Route element={<ResetPassword />} errorElement={<RouterError />} path={resetPassword} />
-                <Route element={<ForgotPassword />} errorElement={<RouterError />} path={requestResetPassword} />
-              </Route>
-            </Route>
-
-
-            <Route path="*" element={<NotFound />} errorElement={<RouterError />}/>
-          </Routes>
-      </Router>
-    </div>
-*/
