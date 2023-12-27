@@ -16,9 +16,9 @@ export default function Study ({ deckId }: any): React.JSX.Element {
   return (
     <div className="p-6 bg-blue-100">
         <div className="p-4 border rounded bg-white">
-            <DialMenu />
-            <CardFront data={kanjiCards[currentCardIndex]} showCardBack={showCardBack} setShowCardBack={setShowCardBack} />
-            {showCardBack && <CardBack data={kanjiCards[currentCardIndex]} handleNextCard={handleNextCard} />}
+          <DialMenu />
+          <CardFront data={kanjiCards[currentCardIndex]} showCardBack={showCardBack} setShowCardBack={setShowCardBack} />
+          {showCardBack && <CardBack data={kanjiCards[currentCardIndex]} handleNextCard={handleNextCard} />}
         </div>
     </div>
   )

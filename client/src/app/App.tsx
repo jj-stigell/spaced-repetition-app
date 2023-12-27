@@ -44,8 +44,8 @@ function App (): React.JSX.Element {
                 <Route path={routes.statistics} errorElement={<RouterError />} element={<UnderConstruction />} />
                 <Route path={routes.study} errorElement={<RouterError />} element={<StudyMain />} />
                 <Route path={routes.exam} errorElement={<RouterError />} element={<UnderConstruction />} />
-                <Route path="/kanji/recognise" errorElement={<RouterError />} element={<Proto />} />
               </Route>
+              <Route path="/kanji/recognise" errorElement={<RouterError />} element={<Proto />} />
             </Route>
             <Route element={<GuestGuard />}>
               <Route element={<Authentication />}>
