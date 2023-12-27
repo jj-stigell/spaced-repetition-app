@@ -4,9 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import routes from 'src/config/routes'
 import { constants } from 'src/config/constants'
+import { RootState } from 'src/app/store'
+import { useAppSelector } from 'src/app/hooks'
+import { Role } from 'src/types'
 
 export default function Navigation (): React.JSX.Element {
   const { t } = useTranslation()
+  const { role } = useAppSelector((state: RootState) => state.account)
   const [showMenu, setShowMenu] = useState(false)
 
   return (
@@ -24,6 +28,7 @@ export default function Navigation (): React.JSX.Element {
                   <Link to={routes.dashboard} className="flex ms-2 md:me-24">
                     <img src="https://i.ibb.co/5MtN9Yc/logo.jpg" className="h-10 me-3" alt="logo" />
                     <span className="self-center text-white text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">{constants.appName}</span>
+                    <span className="bg-blue-100 text-blue-800 text-sm font-semibold m-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">{role === Role.NON_MEMBER ? 'FREE' : 'PRO'}</span>
                   </Link>
                 </div>
               </div>

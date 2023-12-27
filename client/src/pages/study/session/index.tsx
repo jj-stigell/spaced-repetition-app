@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { kanjiCards } from '../../data/mockdata'
+import { kanjiCards } from '../../../data/mockdata'
 import DialMenu from './DialMenu'
 import CardFront from './CardFront'
 import CardBack from './CardBack'

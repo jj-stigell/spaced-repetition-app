@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useState, useEffect } from 'react'
 import Furigana from './Furigana'
-import { Card, AnswerOption, CardType, ReviewType, VocabularyCard } from '../../types'
-import Keyboard from '../../components/Keyboard'
+import { Card, AnswerOption, CardType, ReviewType, VocabularyCard } from '../../../types'
+import Keyboard from '../../../components/Keyboard'
 
 interface Props {
   data: Card

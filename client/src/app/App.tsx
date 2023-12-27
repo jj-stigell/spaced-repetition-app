@@ -10,7 +10,7 @@ import NotFound from '../pages/notFound'
 import Dashboard from '../pages/dashboard'
 import Login from '../pages/authentication/login'
 import Register from '../pages/authentication/register'
-import Proto from '../pages/study'
+import Proto from '../pages/study/session'
 import { persistor, store } from './store'
 import Notification from '../components/Notification/index'
 import { injectStore } from 'src/lib/axios'
@@ -25,6 +25,7 @@ import ForgotPassword from 'src/pages/authentication/forgotPassword'
 import routes from 'src/config/routes'
 import ResetPassword from 'src/pages/authentication/resetPassword'
 import Confirm from 'src/pages/authentication/confirm'
+import StudyMain from 'src/pages/study/main'
 
 // For dispatching notifications with axios interceptor.
 injectStore(store)
@@ -41,7 +42,7 @@ function App (): React.JSX.Element {
                 <Route path={routes.dashboard} errorElement={<RouterError />} element={<Dashboard />} />
                 <Route path={routes.settings} errorElement={<RouterError />} element={<Settings />} />
                 <Route path={routes.statistics} errorElement={<RouterError />} element={<UnderConstruction />} />
-                <Route path={routes.study} errorElement={<RouterError />} element={<UnderConstruction />} />
+                <Route path={routes.study} errorElement={<RouterError />} element={<StudyMain />} />
                 <Route path={routes.exam} errorElement={<RouterError />} element={<UnderConstruction />} />
                 <Route path="/kanji/recognise" errorElement={<RouterError />} element={<Proto />} />
               </Route>

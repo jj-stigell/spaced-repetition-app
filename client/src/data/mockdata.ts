@@ -118,6 +118,224 @@ export const kanjiCards: Card[] = [
 ]
 
 /*
+    return {
+      id: deck.id,
+      memberOnly: deck.memberOnly,
+      translationAvailable: translation ? true : false,
+      title: translation?.title ?? defaultTranslation.title,
+      description: translation?.description ?? defaultTranslation.description,
+      cards: deck.cards,
+    };
+
+export enum DeckCategory {
+  KANJI = 'KANJI',
+  KANA = 'KANA',
+  VOCABULARY = 'VOCABULARY',
+  GRAMMAR = 'GRAMMAR'
+}
+*/
+
+// export const mockDecks = []
+
+export const mockDecks = [
+  {
+    category: 'KANJI',
+    decks: [
+      {
+        id: 1,
+        category: 'KANJI',
+        memberOnly: false,
+        translationAvailable: true,
+        title: 'N5 Kanji',
+        description: 'Kanji for JLPT N5',
+        cards: 20
+      },
+      {
+        id: 2,
+        category: 'KANJI',
+        memberOnly: true,
+        translationAvailable: true,
+        title: 'N4 Kanji',
+        description: 'Kanji for JLPT N4',
+        cards: 30
+      },
+      {
+        id: 3,
+        category: 'KANJI',
+        memberOnly: false,
+        translationAvailable: true,
+        title: 'N3 Kanji',
+        description: 'Kanji for JLPT N3',
+        cards: 40
+      },
+      {
+        id: 4,
+        category: 'KANJI',
+        memberOnly: true,
+        translationAvailable: true,
+        title: 'N2 Kanji',
+        description: 'Kanji for JLPT N2',
+        cards: 50
+      },
+      {
+        id: 5,
+        category: 'KANJI',
+        memberOnly: false,
+        translationAvailable: true,
+        title: 'N1 Kanji',
+        description: 'Kanji for JLPT N1',
+        cards: 60
+      }
+    ]
+  },
+  {
+    category: 'VOCABULARY',
+    decks: [
+      {
+        id: 6,
+        category: 'VOCABULARY',
+        memberOnly: true,
+        translationAvailable: true,
+        title: 'N5 Vocabulary',
+        description: 'Essential vocabulary for JLPT N5',
+        cards: 100
+      },
+      {
+        id: 7,
+        category: 'VOCABULARY',
+        memberOnly: false,
+        translationAvailable: true,
+        title: 'N4 Vocabulary',
+        description: 'Essential vocabulary for JLPT N4',
+        cards: 120
+      },
+      {
+        id: 8,
+        category: 'VOCABULARY',
+        memberOnly: true,
+        translationAvailable: true,
+        title: 'N3 Vocabulary',
+        description: 'Essential vocabulary for JLPT N3',
+        cards: 140
+      },
+      {
+        id: 9,
+        category: 'VOCABULARY',
+        memberOnly: false,
+        translationAvailable: true,
+        title: 'N2 Vocabulary',
+        description: 'Essential vocabulary for JLPT N2',
+        cards: 160
+      },
+      {
+        id: 10,
+        category: 'VOCABULARY',
+        memberOnly: true,
+        translationAvailable: true,
+        title: 'N1 Vocabulary',
+        description: 'Essential vocabulary for JLPT N1',
+        cards: 180
+      }
+    ]
+  },
+  {
+    category: 'GRAMMAR',
+    decks: [
+      {
+        id: 11,
+        category: 'GRAMMAR',
+        memberOnly: false,
+        translationAvailable: true,
+        title: 'N5 Grammar',
+        description: 'Basic grammar points for JLPT N5',
+        cards: 50
+      },
+      {
+        id: 12,
+        category: 'GRAMMAR',
+        memberOnly: true,
+        translationAvailable: true,
+        title: 'N4 Grammar',
+        description: 'Intermediate grammar points for JLPT N4',
+        cards: 60
+      },
+      {
+        id: 13,
+        category: 'GRAMMAR',
+        memberOnly: false,
+        translationAvailable: true,
+        title: 'N3 Grammar',
+        description: 'Advanced grammar points for JLPT N3',
+        cards: 70
+      },
+      {
+        id: 14,
+        category: 'GRAMMAR',
+        memberOnly: true,
+        translationAvailable: true,
+        title: 'N2 Grammar',
+        description: 'Expert grammar points for JLPT N2',
+        cards: 80
+      },
+      {
+        id: 15,
+        category: 'GRAMMAR',
+        memberOnly: false,
+        translationAvailable: true,
+        title: 'N1 Grammar',
+        description: 'Master-level grammar points for JLPT N1',
+        cards: 90
+      },
+      {
+        id: 16,
+        category: 'GRAMMAR',
+        memberOnly: true,
+        translationAvailable: true,
+        title: 'N5 Reading Practice',
+        description: 'Reading exercises for JLPT N5',
+        cards: 25
+      },
+      {
+        id: 17,
+        category: 'GRAMMAR',
+        memberOnly: false,
+        translationAvailable: true,
+        title: 'N4 Reading Practice',
+        description: 'Reading exercises for JLPT N4',
+        cards: 30
+      },
+      {
+        id: 18,
+        category: 'GRAMMAR',
+        memberOnly: true,
+        translationAvailable: true,
+        title: 'N3 Reading Practice',
+        description: 'Reading exercises for JLPT N3',
+        cards: 35
+      },
+      {
+        id: 19,
+        category: 'GRAMMAR',
+        memberOnly: false,
+        translationAvailable: true,
+        title: 'N2 Reading Practice',
+        description: 'Reading exercises for JLPT N2',
+        cards: 40
+      },
+      {
+        id: 20,
+        category: 'GRAMMAR',
+        memberOnly: true,
+        translationAvailable: true,
+        title: 'N1 Reading Practice',
+        description: 'Reading exercises for JLPT N1',
+        cards: 45
+      }
+    ]
+  }
+]
+
+/*
 export const kanjiCards: Card[] = [
   {
       id: 12,

@@ -1,3 +1,4 @@
+import { CardType, DeckCategory } from '@common/types';
 import { FindOptions } from 'sequelize';
 
 declare module 'morgan';
@@ -111,16 +112,6 @@ export type CardErrors = {
   readonly ERR_INVALID_CARD_TYPE: string;
 };
 
-export enum CardType {
-  KANJI = 'KANJI',
-  KANA = 'KANA',
-  VOCABULARY = 'VOCABULARY',
-  SENTENCE = 'SENTENCE',
-  GRAMMAR = 'GRAMMAR',
-  RECALL_KANJI_SENTENCE = 'RECALL_KANJI_SENTENCE',
-  RECOGNIZE_KANJI_SENTENCE = 'RECOGNIZE_KANJI_SENTENCE'
-}
-
 export type ChangePasswordData = {
   readonly currentPassword: string;
   readonly newPassword: string;
@@ -140,13 +131,6 @@ export type DeleteAccountPayload = {
   readonly date: string;
   readonly url: string;
 };
-
-export enum DeckCategory {
-  KANJI = 'KANJI',
-  KANA = 'KANA',
-  VOCABULARY = 'VOCABULARY',
-  GRAMMAR = 'GRAMMAR'
-}
 
 export type DeckErrors = {
   readonly ERR_NO_DECKS_FOUND: string;

@@ -64,7 +64,8 @@ export const getCategories: string = '/api/v1/category'
 /**
  * Endpoint for fetching decks.
  * Method: GET
- * This endpoint provides a list of decks. Decks might refer to collections or sets of items, depending on the application context.
+ * This endpoint provides a list of decks. Decks refers to a collection of cards that are used for studying.
+ * Filtering possible with url query params: category, jlptLevel, language.
  */
 export const getDecks: string = '/api/v1/deck'
 

@@ -35,7 +35,22 @@ export enum Role {
   SUPERUSER = 'SUPERUSER'
 }
 
+export enum CardType {
+  KANJI = 'KANJI',
+  KANA = 'KANA',
+  VOCABULARY = 'VOCABULARY',
+  SENTENCE = 'SENTENCE',
+  GRAMMAR = 'GRAMMAR',
+  RECALL_KANJI_SENTENCE = 'RECALL_KANJI_SENTENCE',
+  RECOGNIZE_KANJI_SENTENCE = 'RECOGNIZE_KANJI_SENTENCE'
+}
 
+export enum DeckCategory {
+  KANJI = 'KANJI',
+  KANA = 'KANA',
+  VOCABULARY = 'VOCABULARY',
+  GRAMMAR = 'GRAMMAR'
+}
 
 /*
 export interface LoginData {
