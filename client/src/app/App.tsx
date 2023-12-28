@@ -6,11 +6,11 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 
-import NotFound from '../pages/notFound'
+import NotFound from '../pages/404'
 import Dashboard from '../pages/dashboard'
 import Login from '../pages/authentication/login'
 import Register from '../pages/authentication/register'
-import Proto from '../pages/study/session'
+import Proto from '../pages/study'
 import { persistor, store } from './store'
 import Notification from '../components/Notification/index'
 import { injectStore } from 'src/lib/axios'
@@ -20,12 +20,12 @@ import GuestGuard from 'src/utils/routeGuard/GuestGuard'
 import Authentication from 'src/pages/authentication'
 import AuthGuard from 'src/utils/routeGuard/AuthGuard'
 import MainLayout from 'src/layout/MainLayout'
-import UnderConstruction from 'src/pages/underConstruction'
+import UnderConstruction from 'src/pages/construction'
 import ForgotPassword from 'src/pages/authentication/forgotPassword'
 import routes from 'src/config/routes'
 import ResetPassword from 'src/pages/authentication/resetPassword'
 import Confirm from 'src/pages/authentication/confirm'
-import StudyMain from 'src/pages/study/main'
+import StudyMain from 'src/pages/decks'
 
 // For dispatching notifications with axios interceptor.
 injectStore(store)
@@ -45,7 +45,7 @@ function App (): React.JSX.Element {
                 <Route path={routes.study} errorElement={<RouterError />} element={<StudyMain />} />
                 <Route path={routes.exam} errorElement={<RouterError />} element={<UnderConstruction />} />
               </Route>
-              <Route path="/kanji/recognise" errorElement={<RouterError />} element={<Proto />} />
+              <Route path={routes.studyDeck} errorElement={<RouterError />} element={<Proto />} />
             </Route>
             <Route element={<GuestGuard />}>
               <Route element={<Authentication />}>

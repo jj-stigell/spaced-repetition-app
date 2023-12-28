@@ -41,16 +41,16 @@ export default function Manage (): React.JSX.Element {
         .oneOf([yup.ref('password'), ''], t('errors.ERR_PASSWORD_MISMATCH'))
         .required(t('errors.ERR_PASSWORD_CONFIRMATION_REQUIRED'))
     }),
-    onSubmit: async (values: any, { resetForm }) => {
+    onSubmit: (values: any, { resetForm }) => {
       setDeleting(true)
       axios.delete(account, {
         data: {
           password: values.password
         }
-      }).then(async function (data) {
+      }).then(function (data) {
         // Set notification and log out after that.
         const date: Date = new Date(data.data.data.deletionDate)
-        await dispatch(
+        void dispatch(
           setNotification({
             message: t('pages.settings.deleteAccount.deleteSuccess', { date: date.toLocaleDateString() }),
             severity: 'warning',

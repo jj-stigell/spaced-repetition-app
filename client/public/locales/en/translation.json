@@ -295,7 +295,7 @@
     },
     "bugReport": {
       "title": "To send a new bug report, please fill all the fields and click send. Thank you!",
-      "sendSuccess": "Thank you for sending bug report! This will help us to provide better experience! You can close this window by clicking close.",
+      "sendSuccess": "Thank you for sending bug report! This will help us to provide better experience!",
       "sendButton": "Send report",
       "closeButton": "Close",
       "description": "Describe the bug",

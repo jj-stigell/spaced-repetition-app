@@ -42,14 +42,14 @@ export default function ChangePassword (): React.JSX.Element {
         .oneOf([yup.ref('newPassword'), ''], t('errors.ERR_PASSWORD_MISMATCH'))
         .required(t('errors.ERR_PASSWORD_CONFIRMATION_REQUIRED'))
     }),
-    onSubmit: async (values: any, { resetForm }) => {
+    onSubmit: (values: any, { resetForm }) => {
       setUpdating(true)
       axios.patch(setPassword, {
         currentPassword: values.currentPassword,
         newPassword: values.newPassword
-      }).then(async function () {
+      }).then(function () {
         resetForm()
-        await dispatch(setNotification({ message: t('pages.settings.changePassword.passwordChangeSuccess'), severity: 'success' }))
+        void dispatch(setNotification({ message: t('pages.settings.changePassword.passwordChangeSuccess'), severity: 'success' }))
         setUpdating(false)
       }).catch(function () {
         setUpdating(false)

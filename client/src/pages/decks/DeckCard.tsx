@@ -1,5 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+
 import { Role } from 'src/types'
 
 interface IDeckCard {
@@ -33,9 +35,14 @@ function getImage (category: string): string {
 
 export default function DeckCard ({ id, title, description, cards, memberOnly, translationAvailable, category }: IDeckCard): React.JSX.Element {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const image = getImage(category)
   const role = Role.NON_MEMBER
   const disabled = memberOnly && role === Role.NON_MEMBER
+
+  const handleClick = (): void => {
+    navigate(`/study/deck/${id}`)
+  }
 
   return (
     <div className={`flex-none w-60 p-2 rounded-xl ${disabled ? 'bg-gray-300' : 'bg-white transform transition-all hover:-translate-y-2 duration-200 shadow-lg hover:shadow-2xl'}`}>
@@ -46,7 +53,7 @@ export default function DeckCard ({ id, title, description, cards, memberOnly, t
         <p className="text-sm text-gray-600">{cards} cards</p>
       </div>
       <div className="m-2">
-        <button disabled={disabled} onClick={() => { console.log('stuudydydydy') }} className={`px-3 py-1 rounded-md text-white ${disabled ? 'bg-gray-600' : ' bg-purple-600 hover:bg-purple-700'}`}>
+        <button disabled={disabled} onClick={handleClick} className={`px-3 py-1 rounded-md text-white ${disabled ? 'bg-gray-600' : ' bg-purple-600 hover:bg-purple-700'}`}>
           {t(disabled ? 'memberOnly' : 'study')}
         </button>
       </div>

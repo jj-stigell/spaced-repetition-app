@@ -75,7 +75,7 @@ export default function Register ({ setRegisteredEmail }: IRegister): React.JSX.
         .oneOf([yup.ref('password'), ''], t('errors.ERR_PASSWORD_MISMATCH'))
         .required(t('errors.ERR_PASSWORD_CONFIRMATION_REQUIRED'))
     }),
-    onSubmit: async (values: IFormValues, { resetForm }) => {
+    onSubmit: (values: IFormValues, { resetForm }) => {
       setRegistering(true)
 
       if (tosAccepted) {
@@ -93,7 +93,7 @@ export default function Register ({ setRegisteredEmail }: IRegister): React.JSX.
         })
       } else {
         setTosError(true)
-        await dispatch(setNotification({ message: t('errors.ERR_ACCEPT_TOS_REQUIRED'), severity: 'error' }))
+        void dispatch(setNotification({ message: t('errors.ERR_ACCEPT_TOS_REQUIRED'), severity: 'error' }))
       }
       setRegistering(false)
     }

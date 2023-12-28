@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, FormEventHandler } from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { useAppDispatch } from 'src/app/hooks'
@@ -51,17 +51,18 @@ export default function BugReportForm ({ closeForm, cardId }: IBugReportForm): J
     }
   ]
 
-  const handleSubmit = (): void => {
+  const handleSubmit = (event: any): void => {
+    event.preventDefault()
     setProcessing(true)
     axios.post(bugReport, {
       cardId,
       type,
       bugMessage
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    }).finally(async () => {
+    }).finally(() => {
       setProcessing(false)
       setBugMessage('')
-      await dispatch(setNotification({ message: t('modals.bugReport.sendSuccess'), severity: 'success' }))
+      void dispatch(setNotification({ message: t('modals.bugReport.sendSuccess'), severity: 'success' }))
+      closeForm()
     })
   }
 

@@ -9,7 +9,7 @@ import { getDecks } from 'src/config/api'
 import { mockDecks } from 'src/data/mockdata'
 import DeckCardSkeleton from './DeckCardSkeleton'
 
-export default function StudyMain (): React.JSX.Element {
+export default function Decks (): React.JSX.Element {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()

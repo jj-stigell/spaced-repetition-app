@@ -24,9 +24,9 @@ export default function ResetPassword (): React.JSX.Element {
     setResetting(true)
     axios.post(resetPassword, {
       email
-    }).then(async function () {
+    }).then(function () {
       setResetting(false)
-      await dispatch(setNotification({ message: t('pages.password.forgotPassword.successTitle'), severity: 'success' }))
+      void dispatch(setNotification({ message: t('pages.password.forgotPassword.successTitle'), severity: 'success' }))
       setShowModal(false)
     }).catch(function () {
     })
