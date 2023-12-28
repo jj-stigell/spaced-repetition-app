@@ -5,6 +5,9 @@
   "license": "UNLICENSED",
   "description": "Backend for the Yomiko app",
   "main": "",
+  "workspaces": [
+    "../common"
+  ],
   "scripts": {
     "build": "npx tsc && yarn run copy-locales && yarn run copy-templates",
     "start": "node build/server/src/index.js",

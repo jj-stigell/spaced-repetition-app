@@ -189,6 +189,9 @@
 
 
 
+
+
+
     "categories": {
       "kanji": {
         "title": "N{{jlptLevel}} kanji characters",
@@ -273,6 +276,12 @@
   "modals": {
     "jlptSelector": {
       "title": "Select JLPT Level"
+    },
+    "exit": {
+      "title": "Exit study session",
+      "description": "Are you sure you want to exit the study session?",
+      "exitButton": "Exit to deck selection",
+      "continueButton": "Continue studying"
     },
     "studySelector": {
       "title": "Select study style",

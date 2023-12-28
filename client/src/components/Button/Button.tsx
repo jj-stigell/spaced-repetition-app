@@ -30,6 +30,7 @@ export default function Button ({
   loading = false,
   color = 'blue',
   type = 'button',
+  className,
   ...rest
 }: IButton): React.JSX.Element {
   const colorClass = `bg-${color}-600 hover:bg-${color}-700`
@@ -39,7 +40,7 @@ export default function Button ({
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`flex justify-center items-center w-full text-white ${colorClass} font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 ${(disabled ?? false) ? 'cursor-not-allowed' : ''}`}
+      className={`${className ?? ''} flex justify-center items-center w-full text-white ${colorClass} font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 ${(disabled ?? false) ? 'cursor-not-allowed' : ''}`}
       {...rest}
     >
       {loading

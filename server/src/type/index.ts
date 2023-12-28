@@ -1,7 +1,44 @@
-import { CardType, DeckCategory } from '@common/types';
 import { FindOptions } from 'sequelize';
 
 declare module 'morgan';
+
+export type AccountAction = {
+  id: number,
+  accountId: number;
+  type: string;
+  expireAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type BugReport = {
+  id: number;
+  accountId: number;
+  cardId: number;
+  type: string;
+  bugMessage: string;
+  solvedMessage: string;
+  solved: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export enum CardType {
+  KANJI = 'KANJI',
+  KANA = 'KANA',
+  VOCABULARY = 'VOCABULARY',
+  SENTENCE = 'SENTENCE',
+  GRAMMAR = 'GRAMMAR',
+  RECALL_KANJI_SENTENCE = 'RECALL_KANJI_SENTENCE',
+  RECOGNIZE_KANJI_SENTENCE = 'RECOGNIZE_KANJI_SENTENCE'
+}
+
+export enum DeckCategory {
+  KANJI = 'KANJI',
+  KANA = 'KANA',
+  VOCABULARY = 'VOCABULARY',
+  GRAMMAR = 'GRAMMAR'
+}
 
 export type AccountErrors = {
   readonly ERR_ACCOUNT_NOT_FOUND: string;

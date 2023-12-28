@@ -10,7 +10,8 @@ import Account from '../database/models/account';
 import Deck from '../database/models/deck';
 import DeckTranslation from '../database/models/deckTranslation';
 import {
-  DeckCategory, DeckData, DeckTranslationData,
+  DeckCategory,
+  DeckData, DeckTranslationData,
   FormattedDeckData, HttpCode, JlptLevel, JwtPayload, Role, StudyCard
 } from '../type';
 import { findAccountById } from './utils/account';

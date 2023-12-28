@@ -1,25 +1,31 @@
 import React, { useState } from 'react'
 import Modal from 'src/components/Modal'
-import BugReportForm from './BugReportForm'
+import BugReportForm from './modals/BugReportForm'
+import ReviewSettings from 'src/pages/settings/Study/ReviewSettings'
+import ExitWarning from './modals/ExitWarning'
 
 export default function DialMenu (): React.JSX.Element {
-  const [showStudySettings, setShowStudySettings] = useState<boolean>(false)
+  const [showReviewSettings, setShowReviewSettings] = useState<boolean>(false)
   const [showBugForm, setShowBugForm] = useState<boolean>(false)
   const [showExitModal, setShowExitModal] = useState<boolean>(false)
 
   return (
     <>
-      <Modal toggleModal={() => { setShowStudySettings(!showStudySettings) }} showModal={showStudySettings}>stuuudydyydydydy</Modal>
+      <Modal toggleModal={() => { setShowReviewSettings(!showReviewSettings) }} showModal={showReviewSettings}>
+        <ReviewSettings closeForm={() => { setShowReviewSettings(!showReviewSettings) }} />
+      </Modal>
       <Modal toggleModal={() => { setShowBugForm(!showBugForm) }} showModal={showBugForm}>
         <BugReportForm closeForm={() => { setShowBugForm(!showBugForm) }}/>
       </Modal>
-      <Modal toggleModal={() => { setShowExitModal(!showExitModal) }} showModal={showExitModal}>you want to exit??</Modal>
+      <Modal toggleModal={() => { setShowExitModal(!showExitModal) }} showModal={showExitModal}>
+        <ExitWarning closeForm={() => { setShowExitModal(!showExitModal) }} />
+      </Modal>
       <div className="grid min-h-[10px] w-full place-items-center overflow-x-scroll rounded-lg p-2 lg:overflow-visible">
         <div className="relative h-2 w-full">
           <div className="absolute top-0 left-0">
             <div className="group">
               <button
-                disabled={showBugForm || showStudySettings || showExitModal}
+                disabled={showBugForm || showReviewSettings || showExitModal}
                 className="relative h-12 max-h-[48px] w-12 max-w-[48px] select-none rounded-full bg-gray-900 text-center align-middle font-sans text-sm font-medium uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 type="button"
               >
@@ -41,7 +47,7 @@ export default function DialMenu (): React.JSX.Element {
                   </svg>
                 </span>
               </button>
-            {showBugForm || showStudySettings || showExitModal
+            {showBugForm || showReviewSettings || showExitModal
               ? null
               : (
                 <div className="absolute top-[53px] left-[-4px] hidden w-max flex-col items-center gap-1 p-0.5 group-hover:flex ">
@@ -69,7 +75,7 @@ export default function DialMenu (): React.JSX.Element {
                     </button>
                   </div>
                   <div data-projection-id="88">
-                    <button onClick={() => { setShowStudySettings(!showStudySettings) }} className="m-0.5 flex h-16 min-h-[48px] w-16 min-w-[48px] flex-col items-center justify-center gap-1 rounded-full border border-blue-gray-50 bg-white p-1 font-normal transition-transform duration-300 ease-in-out hover:scale-110 focus:scale-110 active:scale-100">
+                    <button onClick={() => { setShowReviewSettings(!showReviewSettings) }} className="m-0.5 flex h-16 min-h-[48px] w-16 min-w-[48px] flex-col items-center justify-center gap-1 rounded-full border border-blue-gray-50 bg-white p-1 font-normal transition-transform duration-300 ease-in-out hover:scale-110 focus:scale-110 active:scale-100">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
