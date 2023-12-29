@@ -1,6 +1,7 @@
 {
   "title": "Yomiko SRS-app for learning Japanese",
-  "betaDisclaimer": "Yomiko is still in beta development, things can break, small and big changes can happen over night. Thank you for your patience and participation in the beta phase.",
+  "betaDisclaimer1": "Yomiko is still in beta development, things can break, small and big changes can happen over night. Thank you for your patience and participation in the beta phase.",
+  "betaDisclaimer2": "Especially darkmode and mobile support are still in development, so expect some bugs and glitches.",
   "navigation": {
     "dashboard": "Dashboard",
     "study": "Study",
@@ -291,7 +292,7 @@
     "tos": {
       "title": "Terms of Service (available only in english)",
       "lastUpdated": "Last updated",
-      "closeButton": "Close"
+      "closeButton": "Go back"
     },
     "bugReport": {
       "title": "To send a new bug report, please fill all the fields and click send. Thank you!",

@@ -1,5 +1,3 @@
-/* eslint-disable no-multiple-empty-lines */
-/* eslint-disable no-trailing-spaces */
 import React from 'react'
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
@@ -7,7 +5,6 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { Provider } from 'react-redux'
 
 import NotFound from '../pages/404'
-import Dashboard from '../pages/dashboard'
 import Login from '../pages/authentication/login'
 import Register from '../pages/authentication/register'
 import Proto from '../pages/study'
@@ -25,7 +22,8 @@ import ForgotPassword from 'src/pages/authentication/forgotPassword'
 import routes from 'src/config/routes'
 import ResetPassword from 'src/pages/authentication/resetPassword'
 import Confirm from 'src/pages/authentication/confirm'
-import StudyMain from 'src/pages/decks'
+import Decks from 'src/pages/decks'
+import Tos from 'src/pages/tos'
 
 // For dispatching notifications with axios interceptor.
 injectStore(store)
@@ -39,10 +37,10 @@ function App (): React.JSX.Element {
           <Routes>
             <Route element={<AuthGuard />}>
               <Route element={<MainLayout />}>
-                <Route path={routes.dashboard} errorElement={<RouterError />} element={<Dashboard />} />
+                <Route path={routes.dashboard} errorElement={<RouterError />} element={<UnderConstruction />} />
                 <Route path={routes.settings} errorElement={<RouterError />} element={<Settings />} />
                 <Route path={routes.statistics} errorElement={<RouterError />} element={<UnderConstruction />} />
-                <Route path={routes.study} errorElement={<RouterError />} element={<StudyMain />} />
+                <Route path={routes.study} errorElement={<RouterError />} element={<Decks />} />
                 <Route path={routes.exam} errorElement={<RouterError />} element={<UnderConstruction />} />
               </Route>
               <Route path={routes.studyDeck} errorElement={<RouterError />} element={<Proto />} />
@@ -57,6 +55,7 @@ function App (): React.JSX.Element {
                 <Route path={routes.requestEmailConfirm} errorElement={<RouterError />} element={<Confirm />} />
               </Route>
             </Route>
+            <Route path={routes.tos} errorElement={<RouterError />} element={<Tos />} />
             <Route path="*" errorElement={<RouterError />} element={<NotFound />} />
           </Routes>
         </Router>

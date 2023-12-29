@@ -85,9 +85,8 @@ export default function Navigation (): React.JSX.Element {
                 <div className="flex items-center mb-3">
                   <span className="bg-orange-100 text-orange-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-orange-200 dark:text-orange-900">Beta</span>
                 </div>
-                <p className="mb-3 text-sm text-blue-800 dark:text-blue-400">
-                {t('betaDisclaimer')}
-                </p>
+                <p className="mb-3 text-sm text-blue-800 dark:text-blue-400">{t('betaDisclaimer1')}</p>
+                <p className="mb-3 text-sm text-blue-800 dark:text-blue-400">{t('betaDisclaimer2')}</p>
               </div>
           </div>
         </aside>

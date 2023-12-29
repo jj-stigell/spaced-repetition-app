@@ -10,6 +10,7 @@ const routes = {
   admin: '/admin',
   about: '/about',
   privacy: '/privacy',
+  tos: '/tos',
   contact: '/contact',
   adminBugReports: '/admin/reports',
   adminDeckInfo: '/admin/deck/:id',

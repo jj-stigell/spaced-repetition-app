@@ -137,7 +137,8 @@ export default function Login (): React.JSX.Element {
           <Link to={routes.register} className="font-medium text-primary-600 hover:underline dark:text-primary-500">{t('pages.register.noAccount')}</Link>
         </p>
       </form>
-      {/* 3rd party auth */}
+      {/* 3rd party auth, disabled currently */}
+      {/*
       <div className="flex items-center mb-3">
         <hr className="h-0 border-b border-solid border-grey-500 grow" />
         <p className="mx-4 text-grey-600">{t('pages.login.or')}</p>
@@ -159,6 +160,7 @@ export default function Login (): React.JSX.Element {
         />
         {t('pages.login.facebookLogin')}
       </button>
+      */}
     </>
   )
 }
