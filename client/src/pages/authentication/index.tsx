@@ -4,9 +4,9 @@ import { Outlet } from 'react-router-dom'
 
 import Logo from 'src/components/Logo'
 
-function Authentication (): JSX.Element {
+export default function Authentication (): JSX.Element {
   return (
-    <div className="bg-blue-100">
+    <div className="min-h-screen bg-blue-100">
       <div className="flex flex-col items-center justify-center px-6 mx-auto md:h-screen">
         <Logo/>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 shadow-lg">
@@ -18,5 +18,3 @@ function Authentication (): JSX.Element {
     </div>
   )
 }
-
-export default Authentication

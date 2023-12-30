@@ -33,22 +33,22 @@ export default function Tos (): JSX.Element {
         <p>As Yomiko is a free service, we need to periodically delete unused account data to keep costs down. Non-paying accounts are deleted if they are not accessed for 12 months or longer.</p>
 
         <h3 className="mt-4 mb-2 text-2xl text-black font-extrabold dark:text-white">Appropriate Content</h3>
-        <p>When you upload or input any material onto our website, you affirm that it does not contain:</p>
+        <p className="mb-4">When you upload or input any material onto our website, you affirm that it does not contain:</p>
         <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
           <li>Any content that infringes intellectual property rights, including copyright, trademark, patent, or other forms of protection. While your local jurisdiction may allow the use of protected content under fair use provisions, you are not permitted to share this with others.</li>
           <li>Any content specifically created to disrupt the proper functioning of software or hardware, like viruses or code exploits.</li>
           <li>Any content that is considered illegal in European Union, the United States, or your own country of residence.</li>
         </ul>
-        <p>In case you decide to make your material publicly accessible, please ensure:</p>
+        <p className="my-4">In case you decide to make your material publicly accessible, please ensure:</p>
         <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
           <li>It does not include content that could be offensive to others, such as pornography, hate speech, or defamation.</li>
           <li>It does not attempt to alter or substitute the functionality, content, or branding of our website.</li>
         </ul>
 
-        <h3>Using the Service</h3>
+        <h3 className="mt-4 mb-2 text-2xl text-black font-extrabold dark:text-white">Using the Service</h3>
         <p>You can use Yomiko straight from your browser. This service is currently free of charge. However, we hold the right to suspend or terminate your access to the service according to our sole discretion.</p>
 
-        <h3>Breach of Terms &amp; Legal Consequences</h3>
+        <h3 className="mt-4 mb-2 text-2xl text-black font-extrabold dark:text-white">Breach of Terms &amp; Legal Consequences</h3>
         <p>If you violate these terms of service, we have the right to suspend or delete your account at our discretion. If your actions are deemed illegal, we may report you to law enforcement agencies. Be aware that we are obligated to disclose your information to third parties when mandated by law.</p>
 
         <h3 className="mt-4 mb-2 text-2xl text-black font-extrabold dark:text-white">Service Costs</h3>

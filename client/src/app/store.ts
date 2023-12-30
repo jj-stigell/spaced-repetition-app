@@ -6,6 +6,7 @@ import { NODE_ENV } from '../config/environment'
 import accountReducer from '../features/accountSlice'
 import notificationReducer from '../features/notificationSlice'
 import rememberMeReducer from '../features/rememberMeSlice'
+import registerReducer from '../features/registerSlice'
 
 export const persistConfig = {
   key: 'root',
@@ -16,7 +17,8 @@ export const persistConfig = {
 const appReducer = combineReducers({
   account: accountReducer,
   notification: notificationReducer,
-  remember: rememberMeReducer
+  remember: rememberMeReducer,
+  register: registerReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, appReducer)

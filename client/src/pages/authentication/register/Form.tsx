@@ -1,29 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import * as yup from 'yup'
 import { useTranslation } from 'react-i18next'
 import { useFormik } from 'formik'
 import { Link } from 'react-router-dom'
 
-import { useAppDispatch } from 'src/app/hooks'
+import { useAppDispatch, useAppSelector } from 'src/app/hooks'
 import { constants } from 'src/config/constants'
 import axios from 'src/lib/axios'
 import { register } from 'src/config/api'
 import { setNotification } from 'src/features/notificationSlice'
-import Tos from '../../tos'
 import routes from 'src/config/routes'
-import Modal from 'src/components/Modal'
 import Button from 'src/components/Button'
 import InputField from 'src/components/InputField'
-
-interface IFormValues {
-  email: string
-  username: string
-  password: string
-  passwordConfirmation: string
-  allowNewsLetter: boolean
-  language: string
-}
+import { Register as RegisterInterface, resetRegister, setRegister } from 'src/features/registerSlice'
 
 interface IRegister {
   setRegisteredEmail: (email: string) => void
@@ -35,20 +25,16 @@ export default function Register ({ setRegisteredEmail }: IRegister): React.JSX.
   const [registering, setRegistering] = useState<boolean>(false)
   const [tosAccepted, setTosAccepted] = useState<boolean>(false)
   const [tosError, setTosError] = useState<boolean>(false)
-  const [showTos, setShowTos] = useState<boolean>(false)
-
-  const toggleModal = (): void => {
-    setShowTos(!showTos)
-  }
+  const { email, username, password, passwordConfirmation, language, allowNewsLetter } = useAppSelector((state) => state.register)
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      username: '',
-      password: '',
-      passwordConfirmation: '',
-      language: '',
-      allowNewsLetter: false
+      email,
+      username,
+      password,
+      passwordConfirmation,
+      language,
+      allowNewsLetter
     },
     validationSchema: yup.object({
       email: yup.string()
@@ -75,7 +61,7 @@ export default function Register ({ setRegisteredEmail }: IRegister): React.JSX.
         .oneOf([yup.ref('password'), ''], t('errors.ERR_PASSWORD_MISMATCH'))
         .required(t('errors.ERR_PASSWORD_CONFIRMATION_REQUIRED'))
     }),
-    onSubmit: (values: IFormValues, { resetForm }) => {
+    onSubmit: (values: RegisterInterface, { resetForm }) => {
       setRegistering(true)
 
       if (tosAccepted) {
@@ -88,6 +74,7 @@ export default function Register ({ setRegisteredEmail }: IRegister): React.JSX.
           language: 'EN'
         }).then(function () {
           resetForm()
+          dispatch(resetRegister())
           setRegisteredEmail(values.email)
         }).catch(function () {
         })
@@ -98,6 +85,10 @@ export default function Register ({ setRegisteredEmail }: IRegister): React.JSX.
       setRegistering(false)
     }
   })
+
+  useEffect(() => {
+    dispatch(setRegister(formik.values))
+  }, [formik.values])
 
   return (
     <>
