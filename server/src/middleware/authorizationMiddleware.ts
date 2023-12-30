@@ -1,18 +1,28 @@
 import { NextFunction, Request, Response } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
 
 import { generalErrors } from '../configs/errorCodes';
 import logger from '../configs/winston';
 import { findAccountById } from '../controllers/utils/account';
 import Account from '../database/models/account';
 import { ApiError } from '../class';
-import { JwtPayload } from 'jsonwebtoken';
 import { Role, HttpCode } from '../types';
 
 /**
- * Middleware function that checks if the user making the request has the required
- * role(s) to access the resource.
- * @param {Array<Role>} allowedRoles - An array of roles that are allowed to access the resource.
- * @returns {function} - Returns a middleware function that can be used in a route handler.
+ * Middleware function to enforce role-based access control.
+ * Checks if the authenticated user has one of the specified roles,
+ * allowing access to the resource only if the user's role matches the allowed roles.
+ *
+ * @param {Array<Role>} allowedRoles - An array of roles that are permitted to access the resource.
+ *                                     The roles are typically defined as an enumeration.
+ *
+ * @returns {function} - Returns an Express middleware function that takes standard `req`, `res`,
+ *                       and `next` parameters. The middleware function performs the following:
+ *                       1. Retrieves the authenticated user's information from the request.
+ *                       2. Validates if the user's role is included in the `allowedRoles`.
+ *                       3. If the user is not authorized (role not allowed), responds with
+ *                          an HTTP 403 Forbidden status and logs the unauthorized access attempt.
+ *                       4. If authorized, passes control to the next middleware in the stack.
  */
 export function authorizationMiddleware(
   allowedRoles: Array<Role>
