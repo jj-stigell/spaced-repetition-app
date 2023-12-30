@@ -31,9 +31,10 @@ export default function Button ({
   color = 'blue',
   type = 'button',
   className,
+  children,
   ...rest
 }: IButton): React.JSX.Element {
-  const colorClass = `bg-${color}-600 hover:bg-${color}-700`
+  const colorClass = (disabled ?? false) ? 'bg-gray-400' : `bg-${color}-600 hover:bg-${color}-700`
 
   return (
     <button
@@ -53,7 +54,11 @@ export default function Button ({
           {loadingText}
         </>
           )
-        : buttonText }
+        : <>
+          {children}
+          {buttonText}
+          </>
+        }
     </button>
   )
 }
