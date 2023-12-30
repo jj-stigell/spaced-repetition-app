@@ -1,17 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAppSelector } from 'src/app/hooks'
 import { RootState } from 'src/app/store'
 import ChangePassword from './ChangePassword'
 import ResetPassword from './ResetPassword'
+import Modal from 'src/components/Modal'
+import ChangeUsername from './ChangeUsername'
 
 export default function Account (): React.JSX.Element {
   const { t } = useTranslation()
   const { username, email, role } = useAppSelector((state: RootState) => state.account)
+  const [showUsernameModal, setShowUsernameModal] = useState(false)
+
+  const toggleUsernameModal = (): void => {
+    setShowUsernameModal(!showUsernameModal)
+  }
 
   return (
     <>
+    <Modal toggleModal={toggleUsernameModal} showModal={showUsernameModal}><ChangeUsername toggleModal={toggleUsernameModal} /></Modal>
       <div className="pt-4">
         <h1 className="py-2 text-2xl font-semibold">
           {t('pages.settings.accountInformation.title')}
@@ -36,7 +44,7 @@ export default function Account (): React.JSX.Element {
         <p className="text-gray-600">
           {t('pages.settings.accountInformation.usernameInfo')} <strong>{username}</strong>
         </p>
-        <button onClick={() => { alert('not implemented') }} className="inline-flex text-sm font-semibold text-blue-600 underline decoration-2">
+        <button onClick={toggleUsernameModal} className="inline-flex text-sm font-semibold text-blue-600 underline decoration-2">
           {t('pages.settings.accountInformation.changeButton')}
         </button>
       </div>

@@ -56,6 +56,12 @@ const accountSlice = createSlice({
         jlptLevel: action.payload
       }
     },
+    setUsername (state, action: PayloadAction<string>) {
+      return {
+        ...state,
+        username: action.payload
+      }
+    },
     setLanguage (state, action: PayloadAction<string>) {
       return {
         ...state,
@@ -73,6 +79,6 @@ const accountSlice = createSlice({
   }
 })
 
-export const { setJlptLevel, setAccount, resetAccount, setLanguage, updateStudySettings } = accountSlice.actions
+export const { setJlptLevel, setAccount, resetAccount, setUsername, setLanguage, updateStudySettings } = accountSlice.actions
 
 export default accountSlice.reducer

@@ -1,13 +1,13 @@
 import {CreationOptional, DataTypes, Model, ForeignKey, CreateOptions, Optional } from 'sequelize';
 
 import { sequelize } from '..';
-import { Account, JlptLevel, Role } from '../../types';
+import { Account as AccountType, JlptLevel, Role } from '../../types';
 import Language from './language';
 import { hashPassword } from '../../controllers/utils/password';
 
-export default class AccountModel extends Model<
-  Account,
-  Optional<Account,
+export default class Account extends Model<
+  AccountType,
+  Optional<AccountType,
   'id' | 'selectedJlptLevel' | 'emailVerified' | 'allowNewsLetter' |
   'tosAccepted' | 'member' | 'role' | 'languageId' | 'lastLogin' |
   'createdAt' | 'updatedAt' | 'deleteAccount' | 'usernameUpdatedAt'
@@ -31,7 +31,7 @@ export default class AccountModel extends Model<
   declare deleteAccount: CreationOptional<Date | null>;
 }
 
-AccountModel.init(
+Account.init(
   {
     id: {
       type: DataTypes.INTEGER,

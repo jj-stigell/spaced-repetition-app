@@ -139,6 +139,7 @@
         "languageSelectorInfo": "This value will be used as a default language for studying. If study material is not available in your language, the default study language will be set to English.",
         "changeUsernameTitle": "Change username",
         "changeUsernameDescription": "You can change your username once every 30 days.",
+        "usernameUpdated": "Username updated succesfully!",
         "updateProcessing": "Updating, please wait...",
         "update": "Update"
       },

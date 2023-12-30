@@ -2,11 +2,11 @@ import { CreationOptional, DataTypes, Model, ForeignKey, Optional } from 'sequel
 
 import { sequelize } from '..';
 import Account from './account';
-import { AccountAction, ActionType } from '../../types';
+import { AccountAction as AccountActionType, ActionType } from '../../types';
 
-export default class AccountActionModel extends Model<
-  AccountAction,
-  Optional<AccountAction, 'id' | 'createdAt' | 'updatedAt'>
+export default class AccountAction extends Model<
+  AccountActionType,
+  Optional<AccountActionType, 'id' | 'createdAt' | 'updatedAt'>
 > {
   declare id: CreationOptional<string>;
   declare accountId: ForeignKey<Account['id']>;
@@ -16,7 +16,7 @@ export default class AccountActionModel extends Model<
   declare updatedAt: CreationOptional<Date>;
 }
 
-AccountActionModel.init(
+AccountAction.init(
   {
     id: {
       type: DataTypes.UUID,

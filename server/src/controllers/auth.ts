@@ -11,14 +11,14 @@ import { JWT_SECRET, NODE_ENV } from '../configs/environment';
 import { sequelize } from '../database';
 import models from '../database/models';
 import Account from '../database/models/account';
-import UserAction from '../database/models/accountAction';
+import AccountAction from '../database/models/accountAction';
 import { accountErrors, validationErrors } from '../configs/errorCodes';
 import { ApiError, InvalidCredentials } from '../class';
 import { sendEmailConfirmation } from './utils/mailer';
 import UAParser, { IResult } from 'ua-parser-js';
 import Session from '../database/models/session';
 import { findAccountByEmail } from './utils/account';
-import { RegisterData, HttpCode, Role, LoginResult, ActionType } from '../type';
+import { RegisterData, HttpCode, Role, LoginResult, ActionType } from '../types';
 import { comparePassword } from './utils/password';
 
 /**
@@ -106,13 +106,13 @@ export async function register(req: Request, res: Response): Promise<void> {
       emailVerified: NODE_ENV === 'development'
     }, { transaction: t });
 
-    const confirmation: UserAction = await models.AccountAction.create({
+    const confirmation: AccountAction = await models.AccountAction.create({
       accountId: newAccount.id,
       type: ActionType.CONFIRM_EMAIL,
       expireAt: new Date(Date.now() + account.CONFIRMATION_EXPIRY_TIME)
     }, { transaction: t });
 
-    // After succesful commit. Not run if transaction is rolled back.
+    // After succesful commit. Not executed if transaction is rolled back i.e. failed.
     t.afterCommit(async () => {
       if (NODE_ENV === 'production') {
         await sendEmailConfirmation(

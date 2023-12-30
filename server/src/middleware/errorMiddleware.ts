@@ -4,7 +4,7 @@ import { ValidationError } from 'yup';
 import { generalErrors } from '../configs/errorCodes';
 import logger from '../configs/winston';
 import { ApiError } from '../class';
-import { HttpCode } from '../type';
+import { HttpCode } from '../types';
 
 /**
  * Middleware function that handles errors.

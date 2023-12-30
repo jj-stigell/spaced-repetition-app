@@ -1,13 +1,13 @@
 import { DataTypes, Model, ForeignKey, CreationOptional, Optional } from 'sequelize';
 
 import { sequelize } from '..';
-import { CardList, ReviewType } from '../../types';
+import { CardList as CardListType, ReviewType } from '../../types';
 import Deck from './deck';
 import Card from './card';
 
-export default class CardListModel extends Model<
-  CardList,
-  Optional<CardList, 'createdAt' | 'updatedAt'>
+export default class CardList extends Model<
+  CardListType,
+  Optional<CardListType, 'createdAt' | 'updatedAt'>
 > {
   declare deckId: ForeignKey<Deck['id']>;
   declare cardId: ForeignKey<Card['id']>;
@@ -18,7 +18,7 @@ export default class CardListModel extends Model<
   declare updatedAt: CreationOptional<Date>;
 }
 
-CardListModel.init(
+CardList.init(
   {
     deckId: {
       primaryKey: true,

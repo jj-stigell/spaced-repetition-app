@@ -2,13 +2,13 @@ import { CreationOptional, DataTypes, Model, ForeignKey, Optional } from 'sequel
 
 import { sequelize } from '..';
 import { bugs } from '../../configs/constants';
-import { BugReport, BugType } from '../../types';
+import { BugReport as BugReportType, BugType } from '../../types';
 import Account from './account';
 import Card from './card';
 
-export default class BugReportModel extends Model<
-  BugReport,
-  Optional<BugReport, 'id' | 'createdAt' | 'updatedAt' | 'solvedMessage' | 'solved' | 'cardId'>
+export default class BugReport extends Model<
+  BugReportType,
+  Optional<BugReportType, 'id' | 'createdAt' | 'updatedAt' | 'solvedMessage' | 'solved' | 'cardId'>
 > {
   declare id: CreationOptional<number>;
   declare accountId: ForeignKey<Account['id']>;
@@ -21,7 +21,7 @@ export default class BugReportModel extends Model<
   declare updatedAt: CreationOptional<Date>;
 }
 
-BugReportModel.init({
+BugReport.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

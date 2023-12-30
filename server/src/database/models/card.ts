@@ -2,11 +2,11 @@ import { CreationOptional, DataTypes, Model, ForeignKey, Optional } from 'sequel
 
 import { sequelize } from '..';
 import Language from './language';
-import { Card, CardType } from '../../types';
+import { Card as CardType, CardType as CardTypeType } from '../../types';
 
-export default class CardModel extends Model<
-  Card,
-  Optional<Card, 'id' | 'createdAt' | 'updatedAt'>
+export default class Card extends Model<
+  CardType,
+  Optional<CardType, 'id' | 'createdAt' | 'updatedAt'>
 > {
   declare id: CreationOptional<number>;
   declare type: string;
@@ -16,7 +16,7 @@ export default class CardModel extends Model<
   declare updatedAt: CreationOptional<Date>;
 }
 
-CardModel.init({
+Card.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -24,13 +24,13 @@ CardModel.init({
   },
   type: {
     type: DataTypes.ENUM(
-      CardType.KANJI,
-      CardType.KANA,
-      CardType.VOCABULARY,
-      CardType.SENTENCE,
-      CardType.GRAMMAR,
-      CardType.RECALL_KANJI_SENTENCE,
-      CardType.RECOGNIZE_KANJI_SENTENCE
+      CardTypeType.KANJI,
+      CardTypeType.KANA,
+      CardTypeType.VOCABULARY,
+      CardTypeType.SENTENCE,
+      CardTypeType.GRAMMAR,
+      CardTypeType.RECALL_KANJI_SENTENCE,
+      CardTypeType.RECOGNIZE_KANJI_SENTENCE
     ),
     allowNull: false
   },

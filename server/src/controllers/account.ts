@@ -16,7 +16,7 @@ import { sendDeletionNotice, sendEmailConfirmation, sendPasswordResetLink } from
 import { JwtPayload } from 'jsonwebtoken';
 import {
   ActionType, HttpCode, ResetPasswordData, ChangePasswordData, JlptLevel
-} from '../type';
+} from '../types';
 import { comparePassword } from './utils/password';
 
 /**
@@ -244,7 +244,11 @@ export async function updateUserData(req: Request, res: Response): Promise<void>
       })
       .oneOf(['EN', 'FI', 'VN'], validationErrors.ERR_LANGUAGE_ID_NOT_VALID)
       .typeError(validationErrors.ERR_INPUT_TYPE)
-      .notRequired()
+      .notRequired(),
+    username: yup.string()
+      .max(accountConstants.USERNAME_MAX_LENGTH, validationErrors.ERR_USERNAME_TOO_LONG)
+      .min(accountConstants.USERNAME_MIN_LENGTH, validationErrors.ERR_USERNAME_TOO_SHORT)
+      .typeError(validationErrors.ERR_INPUT_TYPE)
   });
 
   await requestSchema.validate(req.body, { abortEarly: false });
@@ -253,6 +257,32 @@ export async function updateUserData(req: Request, res: Response): Promise<void>
 
   if (!account.emailVerified) {
     throw new ApiError(accountErrors.ERR_EMAIL_NOT_CONFIRMED, HttpCode.Forbidden);
+  }
+
+  if (req.body.username) {
+    const now: Date = new Date();
+    const usernameLastUpdated: Date = new Date(account.usernameUpdatedAt);
+
+    const daysSinceLastUpdate: number =
+      (now.getTime() - usernameLastUpdated.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (daysSinceLastUpdate >= 30) {
+
+      const usernameTaken: Account | null = await models.Account.findOne({
+        where: {
+          username: req.body.username
+        }
+      });
+
+      if (usernameTaken) {
+        throw new ApiError(accountErrors.ERR_USERNAME_IN_USE, HttpCode.Conflict);
+      }
+      // Allow username update because it was last updated 30 or more days ago.
+      account.username = req.body.username;
+      account.usernameUpdatedAt = new Date();
+    } else {
+      throw new ApiError(accountErrors.ERR_USERNAME_CHANGE_INTERVAL, HttpCode.Forbidden);
+    }
   }
 
   account.update({
