@@ -1,7 +1,7 @@
 import { accountErrors } from '../../configs/errorCodes';
 import Account from '../../database/models/account';
 import { ApiError } from '../../class';
-import { HttpCode } from '../../type';
+import { HttpCode } from '../../types';
 
 /**
  * Finds a account by its ID.

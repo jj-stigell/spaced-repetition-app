@@ -1,7 +1,7 @@
 import supertest from 'supertest';
 
 import { app } from '../../src/app';
-import { HttpCode } from '../../src/type';
+import { HttpCode } from '../../src/types';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 

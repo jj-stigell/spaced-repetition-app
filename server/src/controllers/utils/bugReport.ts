@@ -1,7 +1,7 @@
 import { bugErrors } from '../../configs/errorCodes';
 import BugReport from '../../database/models/bugReport';
 import { ApiError } from '../../class';
-import { HttpCode } from '../../type';
+import { HttpCode } from '../../types';
 
 /**
  * Finds a bug report by its ID.

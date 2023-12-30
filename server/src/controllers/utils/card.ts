@@ -2,7 +2,7 @@
 import { cardErrors } from '../../configs/errorCodes';
 import Card from '../../database/models/card';
 import { ApiError } from '../../class';
-import { AnswerOption, CardType, HttpCode, ReviewType, StudyCard } from '../../type';
+import { AnswerOption, CardType, HttpCode, ReviewType, StudyCard } from '../../types';
 
 /**
  * Finds a card by its ID.

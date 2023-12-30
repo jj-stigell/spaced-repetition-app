@@ -10,7 +10,7 @@ import {
   newAccount, LOGIN_URI, LOGOUT_URI, REGISTER_URI, user
 } from '../utils/constants';
 import { checkErrors, getCookies, resetDatabase } from '../utils/helpers';
-import { HttpCode, JlptLevel } from '../../src/type';
+import { HttpCode, JlptLevel } from '../../src/types';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let account: Account;

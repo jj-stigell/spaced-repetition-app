@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 import models from '../database/models';
-import { HttpCode } from '../type';
+import { HttpCode } from '../types';
 import { idSchema } from './utils/validator';
 import { findDeckById } from './utils/deck';
 import Card from '../database/models/card';

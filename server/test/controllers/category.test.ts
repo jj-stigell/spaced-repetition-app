@@ -4,7 +4,7 @@ import supertest from 'supertest';
 import { app } from '../../src/app';
 import { CATEGORIES_URI } from '../utils/constants';
 import { checkErrors, getCookies, resetDatabase } from '../utils/helpers';
-import { HttpCode } from '../../src/type';
+import { HttpCode } from '../../src/types';
 import { redisClient } from '../../src/configs/redis';
 import { validationErrors } from '../../src/configs/errorCodes';
 

@@ -5,8 +5,8 @@ import Account from './Account'
 import Manage from './Manage'
 import Study from './Study'
 
-const activeTabStyle = 'inline-block p-4 text-black bg-red-200 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500'
-const inactiveTabStyle = 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-red-100 dark:hover:bg-gray-800 dark:hover:text-gray-300'
+const activeTabStyle = 'inline-block p-4 text-black bg-blue-200 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500'
+const inactiveTabStyle = 'inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-blue-100 dark:hover:bg-gray-800 dark:hover:text-gray-300'
 
 export default function Settings (): React.JSX.Element {
   const { t } = useTranslation()

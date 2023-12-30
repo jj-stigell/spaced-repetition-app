@@ -1,7 +1,7 @@
 import { deckErrors } from '../../configs/errorCodes';
 import { ApiError } from '../../class';
 import Deck from '../../database/models/deck';
-import { HttpCode } from '../../type';
+import { HttpCode } from '../../types';
 
 /**
  * Finds a deck by its ID.

@@ -2,7 +2,7 @@ import {
   AccountErrors, AdminErrors, BugErrors,
   CardErrors, DeckErrors, GeneralErrors,
   ReviewErrors, SessionErrors, ValidationErrors
-} from '../type';
+} from '../types';
 
 export const accountErrors: AccountErrors = {
   ERR_ACCOUNT_NOT_FOUND: 'ERR_ACCOUNT_NOT_FOUND',
@@ -18,6 +18,7 @@ export const accountErrors: AccountErrors = {
   ERR_EMAIL_OR_PASSWORD_INCORRECT: 'ERR_EMAIL_OR_PASSWORD_INCORRECT',
   ERR_PASSWORD_CURRENT_AND_NEW_EQUAL: 'ERR_PASSWORD_CURRENT_AND_NEW_EQUAL',
   ERR_PASSWORD_CURRENT_INCORRECT: 'ERR_PASSWORD_CURRENT_INCORRECT',
+  ERR_USERNAME_CHANGE_INTERVAL: 'ERR_USERNAME_CHANGE_INTERVAL'
 };
 
 export const adminErrors: AdminErrors = {

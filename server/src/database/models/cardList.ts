@@ -1,15 +1,13 @@
-import {
-  DataTypes, Model, InferAttributes, InferCreationAttributes, ForeignKey, CreationOptional
-} from 'sequelize';
+import { DataTypes, Model, ForeignKey, CreationOptional, Optional } from 'sequelize';
 
 import { sequelize } from '..';
-import { ReviewType } from '../../type';
+import { CardList, ReviewType } from '../../types';
 import Deck from './deck';
 import Card from './card';
 
-export default class CardList extends Model<
-  InferAttributes<CardList>,
-  InferCreationAttributes<CardList>
+export default class CardListModel extends Model<
+  CardList,
+  Optional<CardList, 'createdAt' | 'updatedAt'>
 > {
   declare deckId: ForeignKey<Deck['id']>;
   declare cardId: ForeignKey<Card['id']>;
@@ -20,7 +18,7 @@ export default class CardList extends Model<
   declare updatedAt: CreationOptional<Date>;
 }
 
-CardList.init(
+CardListModel.init(
   {
     deckId: {
       primaryKey: true,

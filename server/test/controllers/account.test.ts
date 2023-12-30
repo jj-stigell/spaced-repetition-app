@@ -12,7 +12,7 @@ import {
   CHANGE_PASSWORD_URI, LOGIN_URI, CHANGE_ACCOUNT_SETTINGS
 } from '../utils/constants';
 import { checkErrors, resetDatabase } from '../utils/helpers';
-import { HttpCode, JlptLevel } from '../../src/type';
+import { HttpCode, JlptLevel } from '../../src/types';
 
 const request: supertest.SuperTest<supertest.Test> = supertest(app);
 let account: Account;

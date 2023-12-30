@@ -8,7 +8,7 @@ function MainLayout (): JSX.Element {
   return (
     <>
       <Navigation />
-      <div className="p-6 mt-16 sm:ml-64 bg-rose-50">
+      <div className="p-6 mt-16 sm:ml-64 bg-blue-50">
         <Outlet/>
       </div>
     </>

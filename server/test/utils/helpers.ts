@@ -8,7 +8,7 @@ import logger from '../../src/configs/winston';
 import { sequelize } from '../../src/database';
 import models from '../../src/database/models';
 import Account from '../../src/database/models/account';
-import { Role, ApiErrorContent } from '../../src/type';
+import { Role, ApiErrorContent } from '../../src/types';
 import {
   adminRead, adminWrite, LOGIN_URI, REGISTER_URI, superuser, user, nonMember
 } from './constants';

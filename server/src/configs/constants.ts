@@ -1,7 +1,7 @@
 import {
   AccountConstants, BugConstants, CardConstants,
   RegexConstants, ReviewConstants
-} from '../type';
+} from '../types';
 
 export const account: AccountConstants = {
   USERNAME_MAX_LENGTH: 14,

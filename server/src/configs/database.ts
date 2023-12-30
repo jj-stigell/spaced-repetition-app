@@ -4,6 +4,13 @@ dotenv.config();
 import { NODE_ENV } from './environment';
 import logger from './winston';
 
+/**
+ * This module is dedicated to defining the database environment variables
+ * for configuring the PostgreSQL connection. The environment variables are
+ * encapsulated in this file because Sequelize directly loads the database
+ * configuration from here.
+ */
+
 const username: string | undefined = process.env.POSTGRES_USER;
 const password: string | undefined = process.env.POSTGRES_PASSWORD;
 const database: string | undefined = process.env.POSTGRES_DATABASE;

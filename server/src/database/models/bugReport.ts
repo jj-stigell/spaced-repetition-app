@@ -1,9 +1,8 @@
 import { CreationOptional, DataTypes, Model, ForeignKey, Optional } from 'sequelize';
-import { BugReport } from '@common/types';
 
 import { sequelize } from '..';
 import { bugs } from '../../configs/constants';
-import { BugType } from '../../type';
+import { BugReport, BugType } from '../../types';
 import Account from './account';
 import Card from './card';
 

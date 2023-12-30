@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "npx tsc && yarn run copy-locales && yarn run copy-templates",
-    "start": "node build/server/src/index.js",
+    "start": "node build/src/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "test": "NODE_ENV=test jest --verbose --detectOpenHandles --coverage --forceExit",
     "lint": "npx eslint `find . -name '*.ts' -not -path './node_modules/*'`",
@@ -20,8 +20,8 @@
     "migration:down:all": "npx sequelize-cli db:migrate:undo:all",
     "seed:up": "npx sequelize-cli db:seed:all",
     "seed:down": "npx sequelize-cli db:seed:undo",
-    "copy-locales": "cp -R ./src/controllers/utils/mailer/locales/ ./build/server/src/controllers/utils/mailer/locales/",
-    "copy-templates": "cp -R ./src/controllers/utils/mailer/templates/ ./build/server/src/controllers/utils/mailer/templates/"
+    "copy-locales": "cp -R ./src/controllers/utils/mailer/locales/ ./build/src/controllers/utils/mailer/locales/",
+    "copy-templates": "cp -R ./src/controllers/utils/mailer/templates/ ./build/src/controllers/utils/mailer/templates/"
   },
   "dependencies": {
     "@types/express": "^4.17.14",

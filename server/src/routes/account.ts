@@ -5,7 +5,7 @@ import {
   confirmEmail, resendConfirmEmail, requestResetPassword,
   resetPassword, changePassword, updateUserData, deleteAccount
 } from '../controllers/account';
-import { requestWrap } from '../util/requestWrap';
+import { requestWrap } from '../middleware/requestWrap';
 
 export const router: Router = Router();
 
@@ -294,7 +294,7 @@ router.patch(
  * /api/v1/account:
  *   patch:
  *     tags: [Account]
- *     description: Change account settings (JLPT level and language).
+ *     description: Change account settings (JLPT level, language, username).
  *     requestBody:
  *       description: Desired values to be changed.
  *       content:
@@ -312,6 +312,10 @@ router.patch(
  *                 example: 1
  *                 description: UI and study material language.
  *                 enum: [en, fi]
+ *               username:
+ *                 type: string
+ *                 example: shintaro
+ *                 description: New username for the account, allowed to update every 30 days.
  *     responses:
  *       200:
  *         description: Account details updated succesfully.

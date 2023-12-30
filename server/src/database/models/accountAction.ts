@@ -1,9 +1,8 @@
 import { CreationOptional, DataTypes, Model, ForeignKey, Optional } from 'sequelize';
-import { AccountAction } from '@common/types';
 
 import { sequelize } from '..';
 import Account from './account';
-import { ActionType } from '../../type';
+import { AccountAction, ActionType } from '../../types';
 
 export default class AccountActionModel extends Model<
   AccountAction,

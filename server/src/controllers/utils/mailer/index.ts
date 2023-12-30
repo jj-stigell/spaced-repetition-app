@@ -7,7 +7,7 @@ import { sendMail } from './emailClient';
 import confirmAccountTranslations from './locales/confirmAccount.json';
 import resetPasswordTranslations from './locales/resetPassword.json';
 import deleteAccount from './locales/deleteAccount.json';
-import { ConfirmEmailPayload, DeleteAccountPayload } from '../../../type';
+import { ConfirmEmailPayload, DeleteAccountPayload } from '../../../types';
 
 export async function sendEmailConfirmation(
   language: string, username: string, email: string, confirmationId: string

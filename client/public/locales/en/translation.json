@@ -136,7 +136,11 @@
         "changeButton": "Change",
         "manageMembershipButton": "Manage membership",
         "languageSelectorTitle": "Select UI & study language",
-        "languageSelectorInfo": "This value will be used as a default language for studying. If study material is not available in your language, the default study language will be set to English."
+        "languageSelectorInfo": "This value will be used as a default language for studying. If study material is not available in your language, the default study language will be set to English.",
+        "changeUsernameTitle": "Change username",
+        "changeUsernameDescription": "You can change your username once every 30 days.",
+        "updateProcessing": "Updating, please wait...",
+        "update": "Update"
       },
       "changePassword": {
         "title": "Change password",
@@ -423,6 +427,7 @@
     "ERR_NOT_VALID_EMAIL": "Email address not valid.",
     "ERR_PASSWORD_CURRENT_AND_NEW_EQUAL": "Current and new password cannot be the same.",
     "ERR_PASSWORD_CURRENT_INCORRECT": "Current password is incorrect.",
+    "ERR_USERNAME_CHANGE_INTERVAL": "Username can be changed once every 30 days.",
     "ERR_PASSWORD_CONFIRMATION_REQUIRED": "Password confirmation required.",
     "ERR_PASSWORD_LOWERCASE": "Password must include lowercase character(s).",
     "ERR_PASSWORD_MISMATCH": "Password and confirmation do not match.",

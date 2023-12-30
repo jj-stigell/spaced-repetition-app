@@ -1,4 +1,4 @@
-import { HttpCode } from '../type';
+import { HttpCode } from '../types';
 
 export class ApiError extends Error {
   public readonly statusCode: number;

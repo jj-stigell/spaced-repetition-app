@@ -6,7 +6,7 @@ import { findAccountById } from '../controllers/utils/account';
 import Account from '../database/models/account';
 import { ApiError } from '../class';
 import { JwtPayload } from 'jsonwebtoken';
-import { Role, HttpCode } from '../type';
+import { Role, HttpCode } from '../types';
 
 /**
  * Middleware function that checks if the user making the request has the required

@@ -3,7 +3,7 @@ import {
 } from 'sequelize';
 
 import { sequelize } from '..';
-import { DeckCategory, JlptLevel } from '../../type';
+import { DeckCategory, JlptLevel } from '../../types';
 import Language from './language';
 
 export default class Deck extends Model<

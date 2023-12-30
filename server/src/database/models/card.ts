@@ -1,14 +1,12 @@
-import {
-  CreationOptional, DataTypes, Model, InferAttributes, InferCreationAttributes, ForeignKey
-} from 'sequelize';
+import { CreationOptional, DataTypes, Model, ForeignKey, Optional } from 'sequelize';
 
 import { sequelize } from '..';
 import Language from './language';
-import { CardType } from '../../type';
+import { Card, CardType } from '../../types';
 
-export default class Card extends Model<
-  InferAttributes<Card>,
-  InferCreationAttributes<Card>
+export default class CardModel extends Model<
+  Card,
+  Optional<Card, 'id' | 'createdAt' | 'updatedAt'>
 > {
   declare id: CreationOptional<number>;
   declare type: string;
@@ -18,7 +16,7 @@ export default class Card extends Model<
   declare updatedAt: CreationOptional<Date>;
 }
 
-Card.init({
+CardModel.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -35,14 +33,6 @@ Card.init({
       CardType.RECOGNIZE_KANJI_SENTENCE
     ),
     allowNull: false
-  },
-  languageId: {
-    type: DataTypes.CHAR(2),
-    allowNull: false,
-    references: {
-      model: 'language',
-      key: 'id'
-    }
   },
   active: {
     type: DataTypes.BOOLEAN,

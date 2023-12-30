@@ -5,8 +5,8 @@ import {
   createBugReport, deleteBugReport, getBugReportById, getBugReports, updateBugReport
 } from '../controllers/bugReport';
 import { authorizationMiddleware } from '../middleware/authorizationMiddleware';
-import { Role } from '../type';
-import { requestWrap } from '../util/requestWrap';
+import { Role } from '../types';
+import { requestWrap } from '../middleware/requestWrap';
 
 export const router: Router = Router();
 

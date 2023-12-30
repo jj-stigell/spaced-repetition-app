@@ -7,7 +7,7 @@ import { redisClient } from '../configs/redis';
 import logger from '../configs/winston';
 import { sequelize } from '../database';
 import Account from '../database/models/account';
-import { Category, HttpCode, JlptLevel, JwtPayload, Role } from '../type';
+import { Category, HttpCode, JlptLevel, JwtPayload, Role } from '../types';
 import { findAccountById } from './utils/account';
 
 /**

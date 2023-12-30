@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import passport from 'passport';
 
-import { requestWrap } from '../util/requestWrap';
+import { requestWrap } from '../middleware/requestWrap';
 import { authorizationMiddleware } from '../middleware/authorizationMiddleware';
-import { Role } from '../type';
+import { Role } from '../types';
 import { cardsFromDeck, decks } from '../controllers/admin';
 
 export const router: Router = Router();

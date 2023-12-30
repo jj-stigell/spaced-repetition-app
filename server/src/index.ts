@@ -8,5 +8,5 @@ import logger from './configs/winston';
 app.listen(PORT, async () => {
   await connectToDatabase();
   await connectToRedis();
-  logger.info(`Application started on PORT: ${PORT} 🎉`);
+  logger.info(`Yomiko started on PORT: ${PORT}`);
 });

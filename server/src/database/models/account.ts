@@ -1,16 +1,17 @@
-import {
-  CreationOptional, DataTypes, Model, InferAttributes,
-  InferCreationAttributes, ForeignKey, CreateOptions
-} from 'sequelize';
+import {CreationOptional, DataTypes, Model, ForeignKey, CreateOptions, Optional } from 'sequelize';
 
 import { sequelize } from '..';
-import { JlptLevel, Role } from '../../type';
+import { Account, JlptLevel, Role } from '../../types';
 import Language from './language';
 import { hashPassword } from '../../controllers/utils/password';
 
-export default class Account extends Model<
-  InferAttributes<Account>,
-  InferCreationAttributes<Account>
+export default class AccountModel extends Model<
+  Account,
+  Optional<Account,
+  'id' | 'selectedJlptLevel' | 'emailVerified' | 'allowNewsLetter' |
+  'tosAccepted' | 'member' | 'role' | 'languageId' | 'lastLogin' |
+  'createdAt' | 'updatedAt' | 'deleteAccount' | 'usernameUpdatedAt'
+  >
 > {
   declare id: CreationOptional<number>;
   declare email: string;
@@ -26,10 +27,11 @@ export default class Account extends Model<
   declare lastLogin: CreationOptional<Date>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+  declare usernameUpdatedAt: CreationOptional<Date>;
   declare deleteAccount: CreationOptional<Date | null>;
 }
 
-Account.init(
+AccountModel.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -117,6 +119,11 @@ Account.init(
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
+    usernameUpdatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
     deleteAccount: {
       type: DataTypes.DATE,
       allowNull: true,

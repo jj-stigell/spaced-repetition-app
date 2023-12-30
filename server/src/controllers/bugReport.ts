@@ -11,7 +11,7 @@ import { idSchema } from './utils/validator';
 import { JwtPayload } from 'jsonwebtoken';
 import {
   BugReportQueryParams, BugReportOptions, HttpCode, BugReportData, SolvedBugReportData
-} from '../type';
+} from '../types';
 
 /**
  * Get all bugs, filtering by type and pagination optional.

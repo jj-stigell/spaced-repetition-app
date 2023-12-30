@@ -1,27 +1,222 @@
 import { FindOptions } from 'sequelize';
-
 declare module 'morgan';
 
+/**
+ * Represents an action or activity associated with a user account.
+ */
 export type AccountAction = {
-  id: number,
+  /**
+   * Unique identifier for the account action.
+   */
+  id: number;
+  /**
+   * Identifier of the account associated with this action.
+   */
   accountId: number;
+  /**
+   * Type of action to be performed on the account (e.g., password reset, email verification).
+   */
   type: string;
+  /**
+   * The date and time when the action is set to expire, if applicable.
+   */
   expireAt: Date;
+  /**
+   * The date and time when the action record was created.
+   */
   createdAt: Date;
+  /**
+   * The date and time when the action record was last updated.
+   */
   updatedAt: Date;
 };
 
-export type BugReport = {
+/**
+ * Represents a user account in the system.
+ */
+export type Account = {
+  /**
+   * Unique identifier for the account.
+   */
   id: number;
-  accountId: number;
-  cardId: number;
-  type: string;
-  bugMessage: string;
-  solvedMessage: string;
-  solved: boolean;
+  /**
+   * Email address associated with the account.
+   */
+  email: string;
+  /**
+   * Username chosen by the user for the account.
+   */
+  username: string;
+  /**
+   * Encrypted password for the account.
+   */
+  password: string;
+  /**
+   * The selected Japanese-Language Proficiency Test (JLPT) level of the user.
+   */
+  selectedJlptLevel: number;
+  /**
+   * Flag indicating whether the email address has been verified.
+   */
+  emailVerified: boolean;
+  /**
+   * Flag indicating whether the user has opted in to receive newsletters.
+   */
+  allowNewsLetter: boolean;
+  /**
+   * Flag indicating whether the user has accepted the terms of service.
+   */
+  tosAccepted: boolean;
+  /**
+   * Flag indicating whether the user is a member (e.g., of a specific service or group).
+   */
+  member: boolean;
+  /**
+   * The role of the user within the system (e.g., admin, user, moderator).
+   */
+  role: string;
+  /**
+   * Identifier for the language preference of the user.
+   */
+  languageId: string;
+  /**
+   * The date and time of the user's last login.
+   */
+  lastLogin: Date;
+  /**
+   * The date and time when the account was created.
+   */
   createdAt: Date;
+  /**
+   * The date and time when the account was last updated.
+   */
+  updatedAt: Date;
+  /**
+   * The date and time when the account username was updated last time.
+   */
+  usernameUpdatedAt: Date;
+  /**
+   * The date and time when the account is scheduled to be deleted, if applicable.
+   */
+  deleteAccount: Date | null;
+};
+
+/**
+ * Represents a report of a bug report created by the user and updated by the administrators.
+ */
+export type BugReport = {
+  /**
+   * Unique identifier for the bug report.
+   */
+  id: number;
+  /**
+   * Identifier for the account that reported the bug.
+   */
+  accountId: number;
+  /**
+   * Identifier for the card or related entity the bug is associated with.
+   */
+  cardId: number;
+  /**
+   * Type or category of the bug.
+   */
+  type: string;
+  /**
+   * Detailed message or description of the bug.
+   */
+  bugMessage: string;
+  /**
+   * Response or message regarding the resolution of the bug.
+   */
+  solvedMessage: string;
+  /**
+   * Flag indicating whether the bug has been solved.
+   */
+  solved: boolean;
+  /**
+   * The date and time when the bug report was created.
+   */
+  createdAt: Date;
+  /**
+   * The date and time when the bug report was last updated.
+   */
   updatedAt: Date;
 };
+
+/**
+ * Represents a card entity, which could be a part of a user interface or a data model.
+ */
+export type Card = {
+  /**
+   * Unique identifier for the card.
+   */
+  id: number;
+  /**
+   * Type of the card, which could describe its purpose or content (e.g., 'kanji', 'vocabulary').
+   */
+  type: string;
+  /**
+   * Flag indicating whether the card is currently active in use.
+   */
+  active: boolean;
+  /**
+   * The date and time when the card was created.
+   */
+  createdAt: Date;
+  /**
+   * The date and time when the card was last updated.
+   */
+  updatedAt: Date;
+};
+
+/**
+ * Represents a list or collection of cards, typically within a deck.
+ */
+export type CardList = {
+  /**
+   * Identifier of the deck to which this list of cards belongs.
+   */
+  deckId: number;
+  /**
+   * Unique identifier for each card in the list.
+   */
+  cardId: number;
+  /**
+   * Flag indicating whether the card is currently active or in use within the deck.
+   */
+  active: boolean;
+  /**
+   * Numeric order or sequence in which the card appears or is to be learned within the deck.
+   */
+  learningOrder: number;
+  /**
+   * Type of review or method of learning associated with the card (e.g., 'recall', 'recognize').
+   */
+  reviewType: string;
+  /**
+   * The date and time when the card was added to the list or deck.
+   */
+  createdAt: Date;
+  /**
+   * The date and time when the card's details in the list were last updated.
+   */
+  updatedAt: Date;
+};
+
+
+
+
+
+
+
+
+
+
+export type AnswerOption = {
+  option: string;
+  correct: boolean;
+  japanese: string;
+}
 
 export enum CardType {
   KANJI = 'KANJI',
@@ -54,6 +249,7 @@ export type AccountErrors = {
   readonly ERR_EMAIL_OR_PASSWORD_INCORRECT: string;
   readonly ERR_PASSWORD_CURRENT_AND_NEW_EQUAL: string;
   readonly ERR_PASSWORD_CURRENT_INCORRECT: string;
+  readonly ERR_USERNAME_CHANGE_INTERVAL: string;
 };
 
 export type AccountConstants = {
@@ -378,12 +574,6 @@ export type ValidationErrors = {
   readonly ERR_LANGUAGE_REQUIRED: string;
   readonly ERR_LANGUAGE_ID_NOT_VALID: string;
 };
-
-export type AnswerOption = {
-  option: string;
-  correct: boolean;
-  japanese: string;
-}
 
 export type KanaCard = {
   story: string;

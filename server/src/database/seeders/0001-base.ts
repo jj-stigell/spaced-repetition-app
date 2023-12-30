@@ -3,11 +3,11 @@ import path from 'path';
 import { QueryInterface, Transaction } from 'sequelize';
 
 const language: string = fs.readFileSync(
-  path.resolve(__dirname, '../../../../../dbBaseData/language.sql'), 'utf8'
+  path.resolve(__dirname, '../../../../dbBaseData/language.sql'), 'utf8'
 );
 
 const account: string = fs.readFileSync(
-  path.resolve(__dirname, '../../../../../dbBaseData/account.sql'), 'utf8'
+  path.resolve(__dirname, '../../../../dbBaseData/account.sql'), 'utf8'
 );
 
 /*

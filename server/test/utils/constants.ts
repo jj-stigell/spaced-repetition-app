@@ -1,4 +1,4 @@
-import { RegisterData } from '../../src/type';
+import { RegisterData } from '../../src/types';
 
 export const REGISTER_URI: string = '/api/v1/auth/register';
 export const LOGIN_URI: string = '/api/v1/auth/login';

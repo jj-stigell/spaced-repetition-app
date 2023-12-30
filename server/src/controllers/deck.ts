@@ -13,7 +13,7 @@ import {
   DeckCategory,
   DeckData, DeckTranslationData,
   FormattedDeckData, HttpCode, JlptLevel, JwtPayload, Role, StudyCard
-} from '../type';
+} from '../types';
 import { findAccountById } from './utils/account';
 import { idSchema } from './utils/validator';
 import { findDeckById } from './utils/deck';
