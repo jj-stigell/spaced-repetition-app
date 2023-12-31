@@ -7,18 +7,12 @@ import { ApiError } from '../class';
 import { HttpCode } from '../types';
 
 /**
- * Express middleware for centralized error handling.
- * This function intercepts errors thrown from anywhere in the application and formats
- * them into a consistent response structure. It also logs the error details using Winston.
- *
- * @param {unknown} err - The error object caught by this middleware. Its type is checked
- *                        to handle different error types (ApiError, ValidationError, etc.)
- *                        appropriately.
- * @param {Request} _req - The Express request object. Not used directly here, but necessary
- *                         for the middleware signature.
- * @param {Response} res - The Express response object. Used to send a structured error response.
- * @param {NextFunction} next - The next middleware function in the stack. Not used here, but
- *                              necessary for the middleware signature.
+ * Middleware function that handles errors.
+ * @param {unknown} err - The error that occurred.
+ * @param {Request} _req - The incoming request object.
+ * @param {Response} res - The outgoing response object.
+ * @param {NextFunction} next - The next middleware function in the request-response cycle.
+ * @returns - None.
  */
 export default function errorMiddleware(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
