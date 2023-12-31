@@ -59,7 +59,7 @@ export const constants = {
   notification: {
     defaultDuration: 3000
   },
-  homePage: 'https://www.yomiko.io/',
-  appName: 'Yomiko',
+  homePage: 'https://www.-.io/',
+  appName: '-',
   redirectTimeout: 5
 }

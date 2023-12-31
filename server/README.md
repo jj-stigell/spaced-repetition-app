@@ -1,7 +1,3 @@
-# Yomiko backend
-
-Backend for a [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetition) app for studying Japanese.
-
 # Table of Contents
 
 * [Running the app](#running-the-app)
@@ -126,13 +122,3 @@ in the root directory of your project and add the environment variables.
 - [Sequelize](https://sequelize.org/), modern TypeScript and Node.js ORM.
 - [JWT](https://jwt.io/) for user authentication. [MIT License](https://github.com/auth0/node-jsonwebtoken/blob/HEAD/LICENSE)
 - [Yup](https://www.npmjs.com/package/yup), Yup is a JavaScript schema builder for value parsing and validation. [MIT License](https://github.com/jquense/yup/blob/master/LICENSE.md)
-
-## TODOs
-
-Check code for TODOs
-
-## Deployment
-
-Deployment is automated from branch `backend-production`. If tests pass succesfully server code is pushed to the branch.
-[Render](https://render.com/) fetches automatically changes made to the branch and releases the newest version of the
-production version.

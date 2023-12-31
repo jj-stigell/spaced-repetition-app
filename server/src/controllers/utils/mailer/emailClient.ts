@@ -29,7 +29,7 @@ export async function sendMail<TemplateData>(
     const updatedData: Mail.Options = {
       to: data.to,
       html,
-      from: `Yomiko App <${EMAIL_ORIGIN}>`,
+      from: `- App <${EMAIL_ORIGIN}>`,
       subject: data.subject,
     };
 

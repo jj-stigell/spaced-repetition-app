@@ -5,6 +5,6 @@ export const definition: OAS3Definition = {
   info: {
     version: '1.0.0',
     title: 'API Documentation',
-    description: 'Yomiko API'
+    description: '- API'
   }
 };

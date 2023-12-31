@@ -43,8 +43,8 @@ function TosDialog (
           ref={descriptionElementRef}
           tabIndex={-1}
         >
-          <p>This is a legal agreement between users of this service (&quot;you&quot; or &quot;your&quot;) and Yomiko. This agreement governs your usage of Yomiko.io (&quot;the service&quot;).</p>
-          <p>In this document, &quot;we&quot; and &quot;our&quot; refers to Yomiko, its staff, and trusted third-party contractors.</p>
+          <p>This is a legal agreement between users of this service (&quot;you&quot; or &quot;your&quot;) and -. This agreement governs your usage of -.io (&quot;the service&quot;).</p>
+          <p>In this document, &quot;we&quot; and &quot;our&quot; refers to -, its staff, and trusted third-party contractors.</p>
 
           <h3>Legal Age</h3>
           <p>If you are not old enough to legally agree to this document, please have a parent or guardian agree on your behalf.</p>
@@ -53,7 +53,7 @@ function TosDialog (
           <p>Please see our privacy policy to understand the information we store when you use the service, why we store it, and the limited ways in which we share it.</p>
 
           <h3>Account Expiry</h3>
-          <p>As Yomiko is a free service, we need to periodically delete unused account data to keep costs down. Non-paying accounts are deleted if they are not accessed for 12 months or longer.</p>
+          <p>As - is a free service, we need to periodically delete unused account data to keep costs down. Non-paying accounts are deleted if they are not accessed for 12 months or longer.</p>
 
           <h3>Appropriate Content</h3>
           <p>When you upload or input any material onto our website, you affirm that it does not contain:</p>
@@ -69,7 +69,7 @@ function TosDialog (
           </ul>
 
           <h3>Using the Service</h3>
-          <p>You can use Yomiko straight from your browser. This service is currently free of charge. However, we hold the right to suspend or terminate your access to the service according to our sole discretion.</p>
+          <p>You can use - straight from your browser. This service is currently free of charge. However, we hold the right to suspend or terminate your access to the service according to our sole discretion.</p>
 
           <h3>Breach of Terms &amp; Legal Consequences</h3>
           <p>If you violate these terms of service, we have the right to suspend or delete your account at our discretion. If your actions are deemed illegal, we may report you to law enforcement agencies. Be aware that we are obligated to disclose your information to third parties when mandated by law.</p>
@@ -84,7 +84,7 @@ function TosDialog (
           <p>In the event of a company acquisition, restructure, or bankruptcy, we may transfer your data to a different legal entity. The new legal entity shall respect your privacy in the same way and notify you if they wish to use your data in a way not described here.</p>
 
           <h3>Contact</h3>
-          <p>If you have any questions, please contact us via email: <a href="mailto:support@yomiko.io">support@yomiko.io</a></p>
+          <p>If you have any questions, please contact us via email: <a href="mailto:support@-.io">support@-.io</a></p>
 
           <h3>Disclaimer of Warranties</h3>
           <p>Use of the service is at your own risk. While we endeavor to ensure the integrity of your data, ultimately the responsibility is in your hands.</p>

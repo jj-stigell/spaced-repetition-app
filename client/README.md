@@ -1,8 +1,4 @@
-# Yomiko frontend
-
-Frontend for a [spaced repetition](https://en.wikipedia.org/wiki/Spaced_repetition) app for studying Japanese.
-
-## Table of Contents
+# Table of Contents
 
 * [Running the app](#running-the-app)
     * [Environment variables](#environment-variables)
@@ -78,15 +74,3 @@ App will run in the localhost port [3000](http://localhost:3000/)
 - Stylized components with [MUI](https://github.com/mui/material-ui)
 - State management with [React Redux](https://react-redux.js.org/)
 - Localization with [i18next](https://www.i18next.com/).
-
-## TODOs
-
-* Captcha to prevent bots, [reCAPTCHA](https://www.google.com/recaptcha/about/).
-* Testing, unit, integration, E2E.
-* Add password strength indicator in form.
-
-## Deployment
-
-Deployment is automated from branch `frontend-production`. If tests pass succesfully server code is pushed to the branch.
-[Render](https://render.com/) fetches automatically changes made to the branch and releases the newest version of the
-production version.
