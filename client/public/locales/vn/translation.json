@@ -1,0 +1,340 @@
+{
+  "title": "Ứng dụng Yomiko SRS để học tiếng Nhật",
+  "navbar": {
+    "dashboard": "Bảng điều khiển",
+    "study": "Học",
+    "achievements": "Thành tựu",
+    "statistics": "Thống kê",
+    "reviews": "Đánh giá",
+    "kanji": "Kanji",
+    "news": "Tin tức",
+    "settings": "Cài đặt",
+    "account": "Tài khoản",
+    "decks": "Bộ thẻ",
+    "logout": "Đăng xuất",
+    "jlptLevel": "Cấp độ JLPT"
+  },
+  "pages": {
+    "dashboard": {
+      "title": "Đây là trang bảng điều khiển",
+      "jlptSelectorButton": "JLPT N{{level}} - Nhấp để thay đổi",
+      "goToStudyButton": "Đi học",
+      "revHistoryTitle": "Lịch sử đánh giá và đánh giá sắp tới"
+    },
+    "login": {
+      "title": "Đăng nhập vào tài khoản của bạn",
+      "lastLogin": "Lần đăng nhập gần đây nhất vào",
+      "logInButton": "Đăng nhập",
+      "welcomeBack": "Chào mừng trở lại!",
+      "enterCredentials": "Nhập thông tin đăng nhập để tiếp tục",
+      "rememberMe": "Ghi nhớ tôi",
+      "resendVerificationLink": "Gửi lại liên kết xác minh",
+      "linkToLogin": "Quay lại trang đăng nhập, nhấp vào đây.",
+      "emailNotVerifiedMessage": "Địa chỉ email chưa được xác minh. Vui lòng kiểm tra email của bạn để nhận liên kết xác minh, hãy kiểm tra cả thư mục spam. Nếu bạn không nhận được liên kết, bạn có thể gửi lại liên kết xác minh từ đây:"
+    },
+    "register": {
+      "title": "Tạo tài khoản mới và bắt đầu học",
+      "successTitle": "Tạo tài khoản mới thành công!",
+      "success": "Tạo người dùng mới thành công với địa chỉ email {{email}}. Chúng tôi đã gửi cho bạn một liên kết xác nhận qua email (chỉ để kiểm tra thư mục spam), vui lòng xác nhận email của bạn và bắt đầu học. Đang chuyển hướng đến trang đăng nhập trong {{redirectTimeout}} giây.",
+      "registerButton": "Đăng ký",
+      "noAccount": "Chưa có tài khoản? Đăng ký",
+      "haveAccount": "Đã có tài khoản?",
+      "enterCreds": "Nhập thông tin đăng nhập để tiếp tục",
+      "agreeWith": "Tôi đã đọc và đồng ý với",
+      "TOS": "Điều khoản Dịch vụ",
+      "cancelSuccessDisplay": "Nếu bạn muốn quay lại mẫu đăng ký, nhấp vào đây"
+    },
+    "confirm": {
+      "title": "Xác nhận địa chỉ email",
+      "successTitle": "Xác nhận địa chỉ email thành công!",
+      "failureTitle": "Xác nhận địa chỉ email không thành công",
+      "success": "Xác nhận địa chỉ email của bạn thành công. Đang chuyển hướng đến trang đăng nhập trong {{redirectTimeout}} giây.",
+      "resend": {
+        "resendConfirmButton": "Gửi lại mã xác nhận",
+        "resendConfirmDescription": "Mã xác nhận không thành công, vui lòng gửi lại mã xác nhận bằng cách nhập địa chỉ email của bạn dưới đây.",
+        "resendSuccess": "Mã xác nhận mới đã được gửi đến địa chỉ email {{email}}. Đang chuyển hướng đến trang đăng nhập trong {{redirectTimeout}} giây."
+      }
+    },
+    "password": {
+      "forgotPassword": {
+        "title": "Đặt lại mật khẩu tài khoản",
+        "resetDescription": "Để đặt lại mật khẩu tài khoản, nhập địa chỉ email bạn sử dụng cho tài khoản vào ô bên dưới.",
+        "successTitle": "Liên kết đặt lại mật khẩu đã được gửi thành công. Vui lòng kiểm tra hộp thư đến của bạn.",
+        "failureTitle": "Xác nhận địa chỉ email không thành công",
+        "resetButton": "Gửi liên kết đặt lại"
+      },
+      "resetPassword": {
+        "title": "Đặt mật khẩu mới",
+        "resetDescription": "Nhập mật khẩu mới và xác nhận mật khẩu dưới đây và gửi để thay đổi mật khẩu",
+        "successTitle": "Đổi mật khẩu thành công. Đang chuyển hướng đến trang đăng nhập trong {{redirectTimeout}} giây.",
+        "failureTitle": "Cập nhật mật khẩu không thành công, vui lòng thử lại.",
+        "resetButton": "Đặt mật khẩu mới"
+      }
+    },
+    "notFound": {
+      "title": "Oops!",
+      "description": "Xin lỗi, trang bạn đã cố truy cập không được tìm thấy.",
+      "link": "Nhấp để quay lại trang chủ"
+    },
+    "error": {
+      "title": "Oops!",
+      "description": "Xin lỗi, đã xảy ra lỗi không mong muốn.",
+      "errorMessage": "Gặp lỗi sau: ",
+      "link": "Nhấp để quay lại trang chủ",
+      "unknowError": "Lỗi không xác định"
+    },
+    "settings": {
+      "title": "Hồ sơ và cài đặt",
+      "accountInformation": {
+        "title": "Thông tin tài khoản",
+        "username": "Tên người dùng",
+        "email": "Địa chỉ email",
+        "memberStatus": "Trạng thái thành viên",
+        "active": "Hoạt động",
+        "expired": "Hết hạn",
+        "languageSelectorTitle": "Chọn ngôn ngữ giao diện và học",
+        "languageSelectorInfo": "Giá trị này sẽ được sử dụng làm ngôn ngữ mặc định cho việc học. Nếu tài liệu học không có sẵn bằng ngôn ngữ của bạn, ngôn ngữ học mặc định sẽ được đặt là Tiếng Anh."
+      },
+      "changePassword": {
+        "title": "Thay đổi mật khẩu",
+        "button": "Thay đổi mật khẩu",
+        "passwordChangeSuccess": "Thay đổi mật khẩu thành công"
+      }
+    },
+    "categories": {
+      "kanji": {
+        "title": "Chữ kanji cấp độ N{{jlptLevel}}",
+        "description": "Học tất cả các chữ Kanji cấp độ N{{jlptLevel}}, có {{amount}} bộ thẻ để học."
+      },
+      "kana": {
+        "title": "Ký tự kana cấp độ N{{jlptLevel}}",
+        "description": "Học tất cả các ký tự Kana cấp độ N{{jlptLevel}}, có {{amount}} bộ thẻ để học."
+      },
+      "vocabulary": {
+        "title": "Từ vựng cấp độ N{{jlptLevel}}",
+        "description": "Học tất cả các từ vựng cấp độ N{{jlptLevel}} một cách vui nhộn và dễ dàng, có {{amount}} bộ thẻ để học."
+      },
+      "grammar": {
+        "title": "Ngữ pháp cấp độ N{{jlptLevel}}",
+        "description": "Học tất cả các điểm ngữ pháp cấp độ N{{jlptLevel}} một cách hiệu quả, có {{amount}} bộ thẻ để học."
+      },
+      "returnButton": "Quay lại bảng điều khiển",
+      "studyButton": "Học",
+      "missing": "Không tìm thấy danh mục"
+    },
+    "decks": {
+      "title": "Bộ thẻ có sẵn",
+      "deck": {
+        "translationAvailable": "Có bản dịch",
+        "translationNotAvailable": "Không có bản dịch, sử dụng tiếng Anh"
+      },
+      "returnButton": "Quay lại chọn danh mục",
+      "studyButton": "Bắt đầu học"
+    },
+    "review": {
+      "loadingMessage": "Đang tải thẻ",
+      "view": {
+        "nextCardButton": "Thẻ tiếp theo",
+        "answerOptionsTab": {
+          "button": "Lựa chọn câu trả lời"
+        },
+        "detailsOptionsTab": {
+          "button": "Chi tiết"
+        },
+        "dialMenu": {
+          "backToDeck": "Quay lại chọn bộ thẻ",
+          "bugReport": "Gửi báo cáo lỗi"
+        }
+      },
+      "reviewFinished": {
+        "title": "Đã xem xét tất cả thẻ, làm việc tốt!",
+        "redirectMessage": "Đang chuyển hướng trở lại trang bộ thẻ trong {{count}} giây",
+        "redirectImmediately": "Nhấp vào liên kết bên dưới để chuyển ngay lập tức:",
+        "redirectLink": "Quay lại bộ thẻ"
+      },
+      "buttons": {
+        "result": {
+          "again": "Làm lại",
+          "hard": "Khó",
+          "easy": "Dễ"
+        }
+      },
+      "help": {
+        "showHint": "Hiển thị gợi ý"
+      },
+      "tabs": {
+        "grammar": {
+          "title": "Ngữ pháp"
+        },
+        "examples": {
+          "title": "Ví dụ"
+        },
+        "edit": {
+          "title": "Chỉnh sửa"
+        }
+      }
+    }
+  },
+  "modals": {
+    "jlptSelector": {
+      "title": "Chọn cấp độ JLPT"
+    },
+    "studySelector": {
+      "title": "Chọn phong cách học",
+      "studyDueAndNew": "Chỉ thẻ mới và thẻ đến hạn",
+      "studyAll": "Tất cả thẻ"
+    },
+    "tos": {
+      "title": "Điều khoản Dịch vụ (chỉ có bằng tiếng Anh)",
+      "lastUpdated": "Cập nhật lần cuối",
+      "closeButton": "Đóng"
+    },
+    "bugReport": {
+      "title": "Để gửi báo cáo lỗi mới, vui lòng điền đầy đủ thông tin và nhấp gửi. Cảm ơn bạn!",
+      "sendSuccess": "Cảm ơn bạn đã gửi báo cáo lỗi! Điều này sẽ giúp chúng tôi cung cấp trải nghiệm tốt hơn! Bạn có thể đóng cửa sổ này bằng cách nhấp đóng.",
+      "sendButton": "Gửi báo cáo",
+      "closeButton": "Đóng",
+      "description": "Mô tả lỗi",
+      "category": {
+        "title": "Chọn danh mục lỗi",
+        "translation": "Bản dịch không hợp lệ",
+        "ui": "Giao diện người dùng",
+        "functionality": "Chức năng",
+        "other": "Khác"
+      }
+    }
+  },
+  "stats": {
+    "radarChart": {
+      "title": "Tiến độ JLPT N{{level}}",
+      "studyTip": "Bạn đang biểu diễn kém nhất ở danh mục {{category}}, hãy xem xét việc học thêm một chút.",
+      "labels": {
+        "kanji": "Kanji",
+        "kana": "Kana",
+        "vocabulary": "Từ vựng",
+        "grammar": "Ngữ pháp",
+        "listening": "Nghe hiểu",
+        "reading": "Đọc hiểu"
+      }
+    }
+  },
+  "deck": {
+    "settings": {
+      "title": "Cài đặt cho bộ thẻ:",
+      "dayoff": "Ngày nghỉ",
+      "settings": "Cài đặt",
+      "optimize": "Tối ưu hóa",
+      "favorite": "Bộ thẻ yêu thích:",
+      "newCardsPerDay": "Thẻ mới hàng ngày:",
+      "reviewInterval": "Khoảng thời gian xem xét tối đa:",
+      "reviewsPerDay": "Số lần xem xét tối đa hàng ngày:",
+      "favoriteInfo": "Nếu bạn đặt bộ thẻ là yêu thích, nó sẽ được hiển thị trên trang chủ, giúp truy cập nhanh hơn.",
+      "newCardsPerDayInfo": "Bạn muốn xem xét bao nhiêu thẻ mới từ bộ thẻ này hàng ngày? Có thể đặt trong khoảng {{minNewReviews}} - {{maxNewReviews}}",
+      "reviewIntervalInfo": "Khoảng thời gian xem xét là thời gian tối đa giữa các lần xem xét. Có thể đặt trong khoảng {{minReviewInterval}} - {{maxReviewInterval}}",
+      "reviewsPerDayInfo": "Bạn muốn thực hiện bao nhiêu lần xem xét từ bộ thẻ này hàng ngày? Có thể đặt trong khoảng {{minLimitReviews}} - {{maxLimitReviews}}",
+      "settingsChangeSuccess": "Cập nhật cài đặt thành công!",
+      "settingsChangeError": "Đã xảy ra lỗi khi cập nhật cài đặt!"
+    },
+    "dueAndNewCards": "Thẻ đến hạn: {{old}} cũ, {{new}} mới",
+    "onlyNewCards": "Thẻ đến hạn: {{new}} mới"
+  },
+  "buttonGeneral": {
+    "delete": "Xóa",
+    "cancel": "Hủy",
+    "logout": "Đăng xuất",
+    "close": "Đóng",
+    "update": "Cập nhật"
+  },
+  "notification": {
+    "success": "Thành công",
+    "error": "Lỗi"
+  },
+  "session": {
+    "id": "ID",
+    "browser": "Trình duyệt",
+    "os": "Hệ điều hành",
+    "device": "Thiết bị",
+    "createdAt": "Đã tạo lúc",
+    "expireAt": "Hết hạn lúc",
+    "delete": "Xóa phiên",
+    "current": "phiên hiện tại",
+    "sessionWarning": "Đây là phiên hiện tại trên thiết bị này. Nếu bạn xóa phiên này, bạn sẽ bị đăng xuất khỏi thiết bị này."
+  },
+  "passwordStrength": {
+    "poor": "Yếu",
+    "weak": "Yếu",
+    "normal": "Bình thường",
+    "good": "Tốt",
+    "strong": "Mạnh"
+  },
+  "misc": {
+    "username": "Tên người dùng",
+    "email": "Địa chỉ email",
+    "password": "Mật khẩu",
+    "passwordConfirm": "Xác nhận mật khẩu",
+    "passwordForgot": "Quên mật khẩu?",
+    "currentPassword": "Mật khẩu hiện tại",
+    "newPassword": "Mật khẩu mới",
+    "confirmNewPassword": "Xác nhận mật khẩu mới",
+    "warning": "Cảnh báo!",
+    "clickHere": "nhấp vào đây",
+    "redirectMessage": "Nếu trang không chuyển hướng tự động, "
+  },
+  "placeholder": {
+    "username": "vd. User23494",
+    "email": "Email của bạn",
+    "password": "Mật khẩu của bạn",
+    "passwordConfirm": "Xác nhận mật khẩu"
+  },
+  "construction": {
+    "title": "Trang đang được xây dựng",
+    "body1": "Cảm ơn bạn đã ghé thăm trang web của chúng tôi. Hiện tại chúng tôi đang tiến hành xây dựng và thiết kế trang web mới, và xin lỗi vì sự bất tiện này.",
+    "body2": "Chúng tôi đang làm việc chăm chỉ để mang đến cho bạn một trang web hoàn chỉnh và dễ sử dụng càng sớm càng tốt. Trong thời gian chờ đợi, xin vui lòng thông cảm khi chúng tôi hoàn thành quá trình này.",
+    "body3": "Vui lòng kiểm tra lại sớm để xem sản phẩm hoàn thiện."
+  },
+  "errors": {
+    "ERR_ACCEPT_TOS_REQUIRED": "Phải chấp nhận Điều khoản Dịch vụ.",
+    "ERR_CHECK_CONNECTION": "Đã xảy ra lỗi, vui lòng kiểm tra kết nối và thử lại.",
+    "ERR_CONFIRMATION_CODE_EXPIRED": "Mã xác nhận đã hết hạn.",
+    "ERR_CONFIRMATION_CODE_NOT_FOUND": "Không tìm thấy mã xác nhận.",
+    "ERR_CONFIRMATION_CODE_REQUIRED": "Yêu cầu mã xác nhận.",
+    "ERR_DATE_REQUIRED": "Yêu cầu ngày",
+    "ERR_DECK_EMPTY": "Không có thẻ nào trong bộ thẻ yêu cầu.",
+    "ERR_DECK_ID_MISSING_OR_INVALID": "ID bộ thẻ không hợp lệ hoặc bị thiếu, vui lòng không cố gắng truy cập vào bộ thẻ qua trường URL.",
+    "ERR_EMAIL_ALREADY_CONFIRMED": "Địa chỉ email đã được xác minh.",
+    "ERR_EMAIL_IN_USE": "Địa chỉ email đã được sử dụng, vui lòng chọn một địa chỉ email khác.",
+    "ERR_EMAIL_NOT_CONFIRMED": "Địa chỉ email chưa được xác minh.",
+    "ERR_EMAIL_NOT_FOUND": "Email không được tìm thấy.",
+    "ERR_EMAIL_OR_PASSWORD_INCORRECT": "Địa chỉ email hoặc mật khẩu không chính xác.",
+    "ERR_EMAIL_REQUIRED": "Yêu cầu địa chỉ email.",
+    "ERR_EMAIL_TOO_LONG": "Địa chỉ email quá dài.",
+    "ERR_FORBIDDEN": "Cấm.",
+    "ERR_INPUT_TYPE": "Kiểu đầu vào không chính xác.",
+    "ERR_INPUT_VALUE_MISSING": "Thiếu giá trị đầu vào.",
+    "ERR_INVALID_DATE": "Ngày không hợp lệ.",
+    "ERR_INVALID_JLPT_LEVEL": "Cấp độ JLPT không tồn tại.",
+    "ERR_INVALID_LANGUAGE_ID": "Ngôn ngữ đã chọn không khả dụng.",
+    "ERR_MEMBER_FEATURE": "Tính năng này chỉ dành cho thành viên.",
+    "ERR_NOT_VALID_EMAIL": "Địa chỉ email không hợp lệ.",
+    "ERR_PASSWORD_CURRENT_AND_NEW_EQUAL": "Mật khẩu hiện tại và mật khẩu mới không thể giống nhau.",
+    "ERR_PASSWORD_CURRENT_INCORRECT": "Mật khẩu hiện tại không chính xác.",
+    "ERR_PASSWORD_CONFIRMATION_REQUIRED": "Yêu cầu xác nhận mật khẩu.",
+    "ERR_PASSWORD_LOWERCASE": "Mật khẩu phải chứa ký tự thường.",
+    "ERR_PASSWORD_MISMATCH": "Mật khẩu và xác nhận không khớp.",
+    "ERR_PASSWORD_NUMBER": "Mật khẩu phải chứa số.",
+    "ERR_PASSWORD_REQUIRED": "Yêu cầu mật khẩu.",
+    "ERR_PASSWORD_TOO_LONG": "Mật khẩu quá dài.",
+    "ERR_PASSWORD_TOO_SHORT": "Mật khẩu quá ngắn.",
+    "ERR_PASSWORD_UPPERCASE": "Mật khẩu phải chứa ký tự in hoa.",
+    "ERR_RESULT_TYPE_REQUIRED": "Yêu cầu loại kết quả xem xét.",
+    "ERR_TOS_NOT_ACCEPTED": "Chưa chấp nhận Điều khoản Dịch vụ.",
+    "ERR_UNAUTHORIZED": "Không được phép.",
+    "ERR_UNAUTHENTICATED": "Chưa xác thực.",
+    "ERR_USERNAME_IN_USE": "Tên người dùng đã được sử dụng, vui lòng chọn một tên khác.",
+    "ERR_USERNAME_REQUIRED": "Yêu cầu tên người dùng.",
+    "ERR_USERNAME_TOO_LONG": "Tên người dùng quá dài.",
+    "ERR_USERNAME_TOO_SHORT": "Tên người dùng quá ngắn.",
+    "ERR_ZERO_OR_NEGATIVE_NUMBER": "Giá trị không thể là số không hoặc số âm.",
+    "INTERNAL_SERVER_ERROR": "Lỗi máy chủ nội bộ."
+  }
+}
